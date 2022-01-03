@@ -1,1 +1,1 @@
-export const Prod = "http://localhost:4000/api";
+export const Prod = "https://vitalsportal.com/v1/api";
