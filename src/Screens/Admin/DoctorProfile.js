@@ -141,7 +141,7 @@ const DoctorProfile = (props) => {
                                             <td style={{fontWeight: 'bold'}}>{index + 1}</td>
                                             <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}}>{patient?.firstname} {patient?.lastname}</Link></td>
                                             <td>{patient?.email}</td>
-                                            {patient?.gender === 'Male' ? <td className="male-tag"> <i class='bx bx-male'></i> {patient?.gender}</td> : <td className="female-tag"> <i class='bx bx-female'></i> {patient?.gender}</td>}
+                                            {patient?.gender === 'Male' ? <td className="male-tag"> <i className='bx bx-male'></i> {patient?.gender}</td> : <td className="female-tag"> <i className='bx bx-female'></i> {patient?.gender}</td>}
                                             <td>{patient?.contactno}</td>
                                             <td>{patient?.preferredlanguage}</td>
                                             <td>

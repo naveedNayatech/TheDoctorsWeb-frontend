@@ -3,7 +3,7 @@ import MetaData from '../../layouts/MetaData';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData } from '../../actions/adminActions';
+import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, getAllDevices} from '../../actions/adminActions';
 import insuranceLogo from '../../assets/Images/aetna.png';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +21,8 @@ const PatientProfile = (props) => {
 
     const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
+    const { devices} = useSelector(state => state.devices);
+
     const [tabMode, setTabMode] = useState('telemetaryData');
 
     const [deviceId, setDeviceId] = useState('');
@@ -31,6 +33,9 @@ const PatientProfile = (props) => {
             return alert.error(error);
         }
 
+        if(deviceId) {
+            console.log('Device Id is ' + deviceId);
+        }
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(deviceid,patientid))
         
@@ -130,13 +135,13 @@ const PatientProfile = (props) => {
                                              <hr />
 
                                              <b>Phone No. (primary): </b>
-                                             <p className="patient-profile-card-text">{patient?.contactno}</p>
+                                             <p className="patient-profile-card-text">{patient?.contactno === ' ' ? 'N/A' : patient?.contactno}</p>
 
                                              <b>Phone No. (Secondary): </b>
-                                             <p className="patient-profile-card-text">{patient?.phone1}</p>
+                                             <p className="patient-profile-card-text">{patient?.phone1 === '' ? 'N/A' : patient?.phone1}</p>
 
                                              <b>Fax Number: </b>
-                                             <p className="patient-profile-card-text">{patient?.phone2}</p>
+                                             <p className="patient-profile-card-text">{patient?.phone2 === '' ? 'N/A' : patient?.phone2}</p>
                                     </div>
 
                                     <div className="col-md-3 ">
@@ -177,14 +182,15 @@ const PatientProfile = (props) => {
                                         value={deviceId}
                                         onChange={(e) => setDeviceId(e.target.value)}
                                         >
-                                            <option value="201213000046">201213000046</option>
-                                            <option value="100213700004">100213700004</option>
-                                            <option value="201213000047">201213000047</option>
+                                            {devices && devices.map((device, index) => (
+                                                <option key={index} value={device?.deviceId}>{device?.deviceId}</option>
+                                            ))}
+                                            
                                         </select>
 
                                         <br />    
                                         <button className="btn btn-danger" onClick={() => assignDevice()}> Assign </button>   
-                                    </Fragment> : <Fragment>
+                                        </Fragment> : <Fragment>
                                         <small style={{color: 'green'}}>Device already assigned</small>
                                         <br/>
                                         <p><i>{patient?.deviceid}</i></p>
@@ -235,11 +241,13 @@ const PatientProfile = (props) => {
 
                             </div>
 
+
                             {deviceData && deviceData.length > 0 ? <Fragment>
+                                <hr style={{backgroundColor: '#F95800', height: '2px'}}/>
                                 <div>
                                     <div className="row">
                                             <div className="col-md-6">
-                                                <strong>Device Readings </strong>         
+                                                <strong>Device Readings <span className="old-history-span-tag"> ( Complete history )</span></strong>         
                                             </div>
 
                                             <div className="col-md-2">
@@ -256,12 +264,12 @@ const PatientProfile = (props) => {
                                         </div> 
                                     
                                     <hr /> 
-
                                         {tabMode === 'telemetaryData' ? <Fragment>
                                             {deviceData && deviceData.map((devicedata, index) => (
                                             <Fragment>
                                                 {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia && devicedata?.telemetaryData?.pul ? <Fragment>
-                                                    <table class="table table-bordered" key={index}>
+                                                    
+                                                    <table className="table table-bordered" key={index}>
                                                         <tbody>
                                                             <tr>
                                                                 <th scope="col-md-2">User</th>
@@ -321,7 +329,7 @@ const PatientProfile = (props) => {
                                         {deviceData && deviceData.map((devicedata, index) => (
                                             <Fragment>
                                                     {devicedata?.telemetaryData?.wt ? <Fragment>
-                                                <table class="table table-bordered" key={index}>
+                                                <table className="table table-bordered" key={index}>
                                                         <tbody>
                                                             <tr>
                                                                 <th scope="col-md-3">wt</th>

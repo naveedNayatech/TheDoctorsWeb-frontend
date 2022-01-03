@@ -29,6 +29,15 @@ import {
     GET_PATIENT_DEVICE_DATA_REQUEST,
     GET_PATIENT_DEVICE_DATA_SUCCESS,
     GET_PATIENT_DEVICE_DATA_FAIL,
+    GET_DEVICES_LIST_REQUEST,
+    GET_DEVICES_LIST_SUCCESS,
+    GET_DEVICES_LIST_FAIL,
+    GET_DEVICE_DETAILS_REQUEST,
+    GET_DEVICE_DETAILS_SUCCESS,
+    GET_DEVICE_DETAILS_FAIL,
+    ADD_RPM_DEVICE_REQUEST,
+    ADD_RPM_DEVICE_SUCCESS,
+    ADD_RPM_DEVICE_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -132,9 +141,6 @@ export const updateDoctor = (id, firstName, lastName, email, gender, contactno, 
         })
       }
     }
-
-
-
 
 
 // Get patient profile => admin
@@ -289,9 +295,6 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
-       console.log('Patient ID is ' + patientId);
-       console.log('Device ID is ' + deviceId);
-
        const { data } = await axios.post(`${Prod}/v1/devicedata`, {
                deviceId: deviceId,
                patientId: patientId
@@ -311,7 +314,88 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
+// Get all devices list
+export const getAllDevices = () => async(dispatch) => {
+    try {
+        dispatch({ type: GET_DEVICES_LIST_REQUEST })
+        
+        const { data } = await axios.get(`${Prod}/v1/devices`);
+        
+        dispatch({
+            type: GET_DEVICES_LIST_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: GET_DEVICES_LIST_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
+// Get device details => admin
+export const getDeviceDetails = (id) => async(dispatch) => {
+    try {
+        dispatch({ 
+            type: GET_DEVICE_DETAILS_REQUEST 
+        })
+        
+        const { data } = await axios.post(`${Prod}/v1/device`, {
+            deviceId: id
+        });
+        
+        dispatch({
+            type: GET_DEVICE_DETAILS_SUCCESS,
+            loading: false,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: GET_DEVICE_DETAILS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const addRPMDevice = (deviceId, imei, modelNumber, status, signal, battery, modemVersion, firmwareVersion, manufecture, connectionStatus, hardwareVersion, user, iccid, imsi, lastActivated) => async(dispatch) => {
+    try {
+        
+        dispatch({ 
+            type: ADD_RPM_DEVICE_REQUEST
+        });
+
+            const {data} = await axios.post(`${Prod}/v1/device/add`, {
+                deviceId: deviceId,
+                imei: imei,
+                modelNumber:modelNumber,
+                status: status,
+                lastActive: lastActivated,
+                signal: signal,
+                battery:battery,
+                modemVersion:modemVersion,
+                firmwareVersion:firmwareVersion,
+                manufecture:manufecture,
+                connectionStatus:connectionStatus,
+                hardwareVersion:hardwareVersion,
+                User:user,
+                iccid:iccid,
+                imsi:imsi
+        });
+        
+        dispatch({
+            type: ADD_RPM_DEVICE_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ADD_RPM_DEVICE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 // Clear errors
 export const clearErrors = () => async(dispatch) => {

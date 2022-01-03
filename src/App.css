@@ -4,8 +4,8 @@
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
-  
 }
+
 
 .admindashboardbody {
   overflow-x:hidden;
@@ -1292,26 +1292,26 @@ nav .profile-details i {
   font-weight: 500;
   height:50px;
   width: 50px;
-  background: #cce5ff; 
-  color: #66b0ff;
+  background: #fb8b24; 
+  color: #FFF;
   line-height: 50px;
   text-align: center;
   border-radius: 12px;
 }
 
 .overview-boxes .box .cart.two{
-  background: #2BD47D;
-  color: #C0F2D8;
+  background: #0f4c5c;
+  color: #FFF;
 }
 
 .overview-boxes .box .cart.three{
-  color: #FFC233;
-  background: #FFE8B3;
+  background: #5f0f40;
+  color: #FFF;
 }
 
 .overview-boxes .box .cart.four{
-  color: #E05260;
-  background: #f7d4d7;
+  color: #FFF;
+  background: #fdc500;
 }
 
 .sales-boxes .recent-sale .title {
@@ -1626,4 +1626,9 @@ tr {
 .patient-profile-insurance-logo {
   border-radius: 50%;
   width: 100%
+}
+
+.old-history-span-tag {
+  color: dodgerblue;
+  font-size: 12px;
 }

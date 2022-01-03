@@ -28,6 +28,16 @@ import {
     GET_PATIENT_DEVICE_DATA_REQUEST,
     GET_PATIENT_DEVICE_DATA_SUCCESS,
     GET_PATIENT_DEVICE_DATA_FAIL,
+    GET_DEVICES_LIST_REQUEST,
+    GET_DEVICES_LIST_SUCCESS,
+    GET_DEVICES_LIST_FAIL,
+    GET_DEVICE_DETAILS_REQUEST,
+    GET_DEVICE_DETAILS_SUCCESS,
+    GET_DEVICE_DETAILS_FAIL,
+    ADD_RPM_DEVICE_REQUEST,
+    ADD_RPM_DEVICE_SUCCESS,
+    ADD_RPM_DEVICE_FAIL,
+    ADD_RPM_DEVICE_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -268,3 +278,102 @@ export const deviceDataReducers = (state = { deviceData: []}, action) => {
          return state;
     }
 } 
+
+export const devicesReducers = (state = { devices: []}, action) => {
+    switch(action.type) {
+        case GET_DEVICES_LIST_REQUEST:
+        return { 
+            loading: true,      
+        }
+
+        case GET_DEVICES_LIST_SUCCESS:  
+        return { 
+            loading: false,  
+            deviceCount: action.payload.deviceCount,
+            devices: action.payload.devices        
+        }
+
+
+        case GET_DEVICES_LIST_FAIL: 
+        return { 
+            loading: false,  
+            error: action.payload        
+        }
+
+        case CLEAR_ERRORS: 
+        return { 
+            ...state,
+            error: null 
+        }
+
+        default: 
+         return state;
+    }
+} 
+
+export const deviceDetailsReducers = (state = {deviceDetails: {}}, action) => {
+    switch (action.type) {
+        case GET_DEVICE_DETAILS_REQUEST: 
+            return {
+                loading: true,
+            }
+        
+        case GET_DEVICE_DETAILS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                success: action.payload.success,
+                deviceDetails: action.payload.findDevice,
+            }
+        
+        case GET_DEVICE_DETAILS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }    
+        default: 
+            return state; 
+    } 
+}
+
+export const newDeviceReducers = (state = {devices: {} }, action) => {
+    switch (action.type) {
+ 
+     case ADD_RPM_DEVICE_REQUEST: 
+      return {
+          ...state,
+          loading: true
+      }
+ 
+     case ADD_RPM_DEVICE_SUCCESS: 
+         return {
+             loading: false,
+             success: action.payload.success,
+         }  
+     
+     case ADD_RPM_DEVICE_FAIL:
+         return {
+             ...state,
+             error: action.payload
+         }    
+     
+    case ADD_RPM_DEVICE_RESET: 
+         return { 
+             ...state,
+          success: false
+         }    
+     
+     case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }    
+     default: 
+        return state; 
+    } 
+ }

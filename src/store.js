@@ -8,7 +8,10 @@ import { doctorProfileReducers } from './reducers/adminReducers';
 import { patientProfileReducers } from './reducers/adminReducers';
 import { doctorReducers } from './reducers/adminReducers';
 import { deviceDataReducers } from './reducers/adminReducers';
- 
+import { devicesReducers } from './reducers/adminReducers';
+import { deviceDetailsReducers } from './reducers/adminReducers';
+import { newDeviceReducers } from './reducers/adminReducers';
+
 const reducer = combineReducers({
     admin: adminReducers,
     auth: authReducers,
@@ -16,7 +19,10 @@ const reducer = combineReducers({
     doctorProfile: doctorProfileReducers,
     patientProfile: patientProfileReducers,
     doctor: doctorReducers,
-    deviceData: deviceDataReducers 
+    deviceData: deviceDataReducers,
+    devices: devicesReducers,
+    deviceDetails: deviceDetailsReducers,
+    device : newDeviceReducers
 })
 
 let initialState = {}

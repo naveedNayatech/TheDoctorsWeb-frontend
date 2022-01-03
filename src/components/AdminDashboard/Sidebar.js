@@ -32,7 +32,7 @@ const Sidebar = () => {
                 <li>
                     <Link key="patients" to="/patients">
                     <i className='bx bx-list-ul'></i>
-                        <span className="link_name">Patients List</span>
+                        <span className="link_name">Patients</span>
                     </Link>
                 </li>
 
@@ -43,12 +43,6 @@ const Sidebar = () => {
                     </Link>
                 </li>
 
-                <li>
-                    <Link key="hr" to="#">
-                        <i className="bx bx-box"></i>
-                        <span className="link_name">Human Resource (HR)</span>
-                    </Link>
-                </li>
 
                 <li>
                     <Link key="rpm_devices" to="/devices">
@@ -57,6 +51,13 @@ const Sidebar = () => {
                     </Link>
                 </li>
 
+                <li>
+                    <Link key="hr" to="#">
+                        <i className="bx bx-box"></i>
+                        <span className="link_name">Human Resource (HR)</span>
+                    </Link>
+                </li>
+                
                 <li>
                     <Link key="inventory" to="#">
                         <i className="bx bx-coin-stack"></i>

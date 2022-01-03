@@ -1,0 +1,86 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-datetime-picker
+
+PATH: 
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Brackets\command;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\wamp64\bin\php\php5.6.40;C:\composer;C:\Program Files\OpenSSL-Win64\bin;C:\Program Files\Git\cmd;C:\Users\Syed Naveed\AppData\Roaming\npm;C:\Users\Syed Naveed\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Syed Naveed\AppData\Roaming\Composer\vendor\bin;C:\Users\Syed Naveed\AppData\Local\Microsoft\WindowsApps;C:\Users\Syed Naveed\.dotnet\tools;C:\Program Files\heroku\bin;
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@testing-library%2fjest-dom: tunneling socket could not be established, cause=getaddrinfo ENOTFOUND 4000
+      at ClientRequest.onError (C:\Program Files (x86)\Yarn\lib\cli.js:152234:17)
+      at Object.onceWrapper (events.js:422:26)
+      at ClientRequest.emit (events.js:315:20)
+      at Socket.socketErrorListener (_http_client.js:426:9)
+      at Socket.emit (events.js:315:20)
+      at emitErrorNT (internal/streams/destroy.js:92:8)
+      at emitErrorAndCloseNT (internal/streams/destroy.js:60:3)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+      "@testing-library/jest-dom": "^5.11.4",
+      "@testing-library/react": "^11.1.0",
+      "@testing-library/user-event": "^12.1.10",
+      "axios": "^0.24.0",
+      "jquery": "^3.6.0",
+      "moment": "^2.29.1",
+      "react": "^17.0.2",
+      "react-alert": "^7.0.3",
+      "react-alert-template-basic": "^1.0.2",
+      "react-bootstrap": "^2.0.2",
+      "react-dom": "^17.0.2",
+      "react-helmet": "^6.1.0",
+      "react-multiple-select-dropdown-lite": "^2.0.4",
+      "react-redux": "^7.2.6",
+      "react-router": "^6.0.1",
+      "react-router-dom": "^5.2.0",
+      "react-scripts": "4.0.3",
+      "redux": "^4.1.2",
+      "redux-devtools-extension": "^2.13.9",
+      "redux-thunk": "^2.4.0",
+      "web-vitals": "^1.0.1"
+    },
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+      "extends": [
+        "react-app",
+        "react-app/jest"
+      ]
+    },
+    "browserslist": {
+      "production": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+      ],
+      "development": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+      ]
+    },
+    "proxy": "http://localhost:4000"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

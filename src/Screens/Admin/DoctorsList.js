@@ -86,7 +86,7 @@ const DoctorsList = () => {
                                 <td style={{fontWeight: 'bold'}}>{index + 1}</td>
                                 <td><Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> {doctor?.firstname} {doctor?.lastname}  </Link></td>
                                 <td>{doctor?.email}</td>
-                                {doctor?.gender === 'Male' ? <td className="male-tag"> <i class='bx bx-male'></i> {doctor?.gender}</td> : <td className="female-tag"> <i class='bx bx-female'></i> {doctor?.gender}</td>}
+                                {doctor?.gender === 'Male' ? <td className="male-tag"> <i className='bx bx-male'></i> {doctor?.gender}</td> : <td className="female-tag"> <i className='bx bx-female'></i> {doctor?.gender}</td>}
                                 <td>{doctor?.contactno}</td>
                                 <td>{doctor?.npinumber}</td>
                                 <td>

@@ -16,6 +16,7 @@ import EditDoctor from './Screens/Admin/EditDoctor';
 import AssignDoctorToPatient from './Screens/Admin/AssignDoctorToPatient';
 import RPMDevices from './Screens/Admin/RPMDevices';
 import DevicesDetails from './Screens/Admin/DevicesDetails';
+import AddRPMDevice from './Screens/Admin/AddRPMDevice';
  
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <ProtectedRoute exact path='/assigndoctor' isAdmin={true} component={AssignDoctorToPatient} />
         <ProtectedRoute exact path='/devices' isAdmin={true} component={RPMDevices} />
         <ProtectedRoute exact path='/devicedetails' isAdmin={true} component={DevicesDetails} />
+        <ProtectedRoute exact path='/device' isAdmin={true} component={AddRPMDevice} />
     </Router>
   )      
 };
