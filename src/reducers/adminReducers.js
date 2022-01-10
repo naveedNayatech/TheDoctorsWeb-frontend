@@ -72,6 +72,7 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
             return { 
                 loading: false,  
                 doctorCount: action.payload.doctorCount,
+                resPerPage: action.payload.resPerPage,
                 doctors: action.payload.doctors 
             }
             

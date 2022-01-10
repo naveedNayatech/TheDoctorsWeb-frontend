@@ -66,15 +66,7 @@
   margin: 10px
 }
 
-.patient-profile-doctor-assigned {
-  color: green;
-  font-weight: bold;
-}
 
-.patient-profile-doctor-not-assigned {
-  color: red;
-  font-weight: bold;
-}
 /* ---------------------------------------------------------------
   Label Icons
 ------------------------------------------------------------------*/
@@ -227,15 +219,46 @@
 }
 
 .female-tag {
-  background-color: pink;
-  padding: 4px;
-  color: #FFF
+  width: 50px;
+  font-size: 12px;
+  margin: 0 auto
 }
 
 .male-tag {
-  background-color: dodgerblue;
-  padding: 4px;
-  color: #FFF
+  width: 40px;
+  font-size: 12px;
+  margin: 0 auto
+}
+
+.assigned-tag {
+  width: 70px;
+  font-size: 12px;
+  margin: 0 auto
+}
+
+.not-assigned-tag {
+  width: 90px;
+  font-size: 12px;
+  margin: 0 auto
+}
+
+.signed-icon {
+  color: dodgerblue;
+  font-size: 18px
+}
+
+.not-signed-icon {
+  color: red;
+  font-size: 18px
+}
+
+.insurance-companies-table {
+  color: dodgerblue;
+  margin: 0
+}
+
+.authorize-icon{
+  color: green
 }
 
 /**
@@ -1346,7 +1369,6 @@ nav .profile-details i {
 
 /* table classes */
 table {
-  font-size: 14px;
   text-align: center;
   justify-content: center;  
   padding: 10px 0;
@@ -1363,14 +1385,14 @@ table tr td{
 } */
 
 th {
-  background-color: #F5F6F8;
-  color: #000;
+  background-color: #09425A;
+  color: #FFF;
   font-size: 12px;
 }
 
 tr {
   color: gray;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .profile-btn {
@@ -1595,13 +1617,13 @@ tr {
 }
 
 
-.card-border-right {
+/* .card-border-right {
   border-right: 2px solid #DCDCDC;
-}
+} */
 
 .patient-profile-col-heading {
-  background-color: #DCDCDC;
-  color: #000;
+  background-color: #14ACDD;
+  color: #FFF;
   padding: 10px;
   border-radius: 25px;
   font-size: 14px;
@@ -1612,11 +1634,11 @@ tr {
 }
 
 .patient-profile-disease-span {
-  background-color: #081D45;
+  background-color: #D9FBFF;
   display: inline-block;
   padding: 8px;
   border-radius: 20px;
-  color: #FFF;
+  color: #000;
   font-size: 14px;
   margin: 5px;
   flex-wrap: wrap;
@@ -1631,4 +1653,118 @@ tr {
 .old-history-span-tag {
   color: dodgerblue;
   font-size: 12px;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+  background-color: #337AB7;
+  border-color: #D3D3D3;
+}
+
+#search_btn {
+  background-color: #0A2558;
+  color: #FFF;
+}
+
+.input-group {
+  width: 90%;
+  margin-right: 35%;
+}
+
+
+.list-box-header {
+  margin-top: -25px;
+  margin-bottom: 10px;
+}
+
+.header-group {
+  flex-direction: row;
+  justify-content:flex-end;
+}
+
+.go-back-btn {
+  background-color: #14ACDD;
+  color: #FFF;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+  float: right
+}
+
+.go-back-btn:hover {
+  background-color: dodgerblue;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.refresh-btn {
+  background-color: #14ACDD;
+  color: #FFF;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+  float: right
+}
+
+.refresh-btn:hover {
+  background-color: dodgerblue;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.add-staff-btn {
+  background-color: #14ACDD;
+  color: #FFF;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+  float: left
+}
+
+.add-staff-btn:hover {
+  background-color: dodgerblue;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.check-icon {
+  background-color: limegreen;
+  color: #FFF;
+  border-radius: 20px;
+  padding: 7px
+}
+
+.cross-icon {
+  background-color: orangered;
+  color: #FFF;
+  border-radius: 20px;
+  padding: 7px
+}
+
+.systolic-image {
+  width: 80px;
+  height: 80px
+}
+
+.normalBP {
+  color: green;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 10px 
+}
+
+.elevatedBP {
+  color: orangered;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 10px
+}
+
+.devicedata-createddata{
+  background-color: #14ACDD;
+  border-radius: 15px;
+  color: #FFF;
+  padding: 10px;
+  margin-left: 70%;
+  
 }

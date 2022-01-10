@@ -63,11 +63,11 @@ export const getPatients = () => async(dispatch) => {
 }
 
 // Get list of all doctors => admin
-export const getDoctors = () => async(dispatch) => {
+export const getDoctors = (keyword = '', currentPage = 1) => async(dispatch) => {
     try {
         dispatch({ type: ALL_DOCTORS_REQUEST })
         
-        const { data } = await axios.get(`${Prod}/v1/admin/doctorslist`);
+        const { data } = await axios.get(`${Prod}/v1/admin/doctorslist?keyword=${keyword}&page=${currentPage}`);
         
         dispatch({
             type: ALL_DOCTORS_SUCCESS,
@@ -285,7 +285,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
-   export const getPatientTelemetryData = (deviceId, patientId) => async(dispatch) => {
+   export const getPatientTelemetryData = (deviceId, patientId, sort) => async(dispatch) => {
     
     console.log('deviceId is ' + deviceId);
     console.log('patientId is ' + patientId);
@@ -297,7 +297,39 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
        
        const { data } = await axios.post(`${Prod}/v1/devicedata`, {
                deviceId: deviceId,
-               patientId: patientId
+               patientId: patientId,
+               sort
+           });
+   
+       dispatch({
+           type: GET_PATIENT_DEVICE_DATA_SUCCESS,
+           loading: false,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_PATIENT_DEVICE_DATA_FAIL,
+           payload: error.response.data.message
+       })
+    }   
+   }
+
+//    Search Device Data by Date 
+   export const getDeviceDataByDate = (deviceId, patientId, searchDate) => async(dispatch) => {
+    
+    console.log('deviceId is ' + deviceId);
+    console.log('patientId is ' + patientId);
+
+    try {
+       dispatch({ 
+           type: GET_PATIENT_DEVICE_DATA_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod}/v1/getdevicedataforpatient`, {
+               deviceid: deviceId,
+               patientid: patientId,
+               date: searchDate
            });
    
        dispatch({
