@@ -1,56 +1,45 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, {Fragment, useEffect, useState} from 'react'
+import  Sidebar from '../../components/Staff/Sidebar';
+import TopBar from '../../components/Staff/TopBar';
 import MetaData from '../../layouts/MetaData';
-import Sidebar from '../../components/AdminDashboard/Sidebar';
-import TopBar from '../../components/AdminDashboard/TopBar';
-import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, getAllDevices, getDeviceDataByDate} from '../../actions/adminActions';
-import insuranceLogo from '../../assets/Images/aetna.png';
 import Loader from '../../layouts/Loader';
-import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
-import { Link } from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+import { patientProfile, getPatientTelemetryData, insertComment} from '../../actions/adminActions';
+import patientProfileImg from '../../assets/Images/patientProfile.png';
+import insuranceLogo from '../../assets/Images/aetna.png';
 import moment from 'moment';
 import { Form, Image, Button } from 'react-bootstrap';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Link } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
-const PatientProfile = (props) => {
-
+const StaffPatientProfile = (props) => {
+    
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    let searchedDate;
-    let patientid = props?.location?.state?.patientid;
-     let deviceid = props?.location?.state?.deviceid;
 
+    let patientid = props?.location?.state?.patientid;
 
     const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
 
-    const { devices} = useSelector(state => state.devices);
+
     const [sort, setSort] = useState(1);
-
     const [tabMode, setTabMode] = useState('telemetaryData');
-
     const [deviceId, setDeviceId] = useState('');
-    const [searchDate, setSearchDate] = useState(new Date());
+    const [comment, setComment] = useState('');
 
-    
     useEffect(() => {
         if(error){
             return alert.error(error);
         }
 
-        if(deviceId) {
-            console.log('Device Id is ' + deviceid);
-        }
-
         dispatch(patientProfile(patientid));
 
-        dispatch(getPatientTelemetryData(patientid))
+         dispatch(getPatientTelemetryData(patientid))
         
         if(isUpdated) {
             alert.success('Updated Successfully');
@@ -58,39 +47,31 @@ const PatientProfile = (props) => {
 
     }, [dispatch, alert, error, isUpdated]);
 
-    const assignDevice = () => {
-        dispatch(assignDeviceToPatient(patientid, deviceId));
-    }
-
-    const removeAssignDevice = (deviceid) => {
-        console.log('Device id is ' + deviceid);
-        console.log('Patient id is ' + patientid);
-
-         dispatch(removeAssignedDevice(deviceid, patientid));
-    }
-
-    const refreshTelemetaryData =() => {
-        dispatch(getPatientTelemetryData(patientid, sort))
-    }
 
     const sortData = (event) => {
         setSort(event.target.value);
         dispatch(getPatientTelemetryData(patientid,sort))
     }
 
-    const searchByDate = (e) => {
-        e.preventDefault();
-        console.log('Date for search is ' + searchDate);
-
-        let searchedDate = (moment(searchDate).format("YYYY-MM-DD"));
-        console.log('Date for search is ' + searchedDate);
-
-        dispatch(getDeviceDataByDate(deviceid, patientid, searchedDate))
+    const refreshTelemetaryData =() => {
+        dispatch(getPatientTelemetryData(patientid, sort))
     }
+
+    const submitCommentHandler = (deviceid) => {
+        // e.preventDefault();
+        if(comment === '') {
+            return alert.error('Comment Cannot be Empty')
+        }
+
+        dispatch(insertComment(deviceid, comment, patientid));
+
+    }
+
 
     return (
         <Fragment>
-            <MetaData title="Patient Profile"/>
+           <MetaData title="Patient Profile"/>
+
                 <Sidebar />    
 
                 <section className="home-section">
@@ -108,7 +89,7 @@ const PatientProfile = (props) => {
                                     <h5 className="pt-2 mt-2">Patient Details  </h5>
                                 </div>
 
-                                <div className="col-md-2">
+                                {/* <div className="col-md-2">
                                     <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Patient Notes </small></Link>
                                 </div>
 
@@ -128,7 +109,7 @@ const PatientProfile = (props) => {
 
                                 <div className="col-md-3">
                                     <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Update Patient Info </small> </Link>
-                                </div>
+                                </div> */}
 
                             </div>
                                         
@@ -146,8 +127,6 @@ const PatientProfile = (props) => {
                                                     <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">{patient?.readingsperday}</i></p>
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
-                                                    
-
                                                 </Fragment>
                                         </div>    
                                  </div>
@@ -220,9 +199,7 @@ const PatientProfile = (props) => {
                                             <hr/>
                                             {patient?.deviceassigned && patient?.deviceassigned.map((deviceass, index) => (
                                                 <Fragment>
-                                                <p key={index}><i>{deviceass?.deviceid}</i> <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
-                                                    <i className="bx bx-trash"></i>
-                                                </button></p>
+                                                <p key={index}><i>{deviceass?.deviceid}</i></p>
                                                 
                                                 </Fragment>
                                             ))}
@@ -235,20 +212,7 @@ const PatientProfile = (props) => {
                                     <span className="patient-profile-col-heading">Assign Device</span>                                 
                                     <hr />
                                     {/* Assign a device */}
-                                    <b>Device: </b>
-                                        <select 
-                                        name="deviceId"
-                                        className="form-control"
-                                        value={deviceId}
-                                        onChange={(e) => setDeviceId(e.target.value)}
-                                        >
-                                            {devices && devices.map((device, index) => (
-                                                <option key={index} value={device?.deviceId}>{device?.deviceId}</option>
-                                            ))} 
-                                        </select>   
-
-                                        <br />    
-                                        <button className="btn btn-danger" onClick={() => assignDevice()}> Assign </button>     
+                                         
                                     
                                 </div>
 
@@ -278,12 +242,12 @@ const PatientProfile = (props) => {
                                 <hr style={{backgroundColor: '#F95800', height: '2px'}}/>
                                 <div>
                                     <div className="row">
-                                            <div className="col-md-7">
+                                            <div className="col-md-9">
                                                 <strong>Device Readings <span className="old-history-span-tag"> ( Complete history )</span></strong>         
                                             </div>
 
                                             
-                                            <div className="col-md-2">
+                                            <div className="col-md-3">
                                                 <select className="form-control" 
                                                     placeholder="Sort By" 
                                                     value={sort}
@@ -295,22 +259,7 @@ const PatientProfile = (props) => {
                                                 </select>
                                             </div>
 
-                                            <form onSubmit={searchByDate}>
-                                                <div className="col-md-12">
-                                                    <Form.Group>
-                                                        <DatePicker  
-                                                        placeholder="Search By Date" 
-                                                        className="form-control"
-                                                        selected={searchDate}
-                                                        onChange={(date) => setSearchDate(date)}
-                                                        />
-                                                        
-                                                    </Form.Group>
-                                                   
-                                                    <Button className="btn btn-small" type="submit">Search</Button>                                                    
-                                                </div>
-                                            </form>
-
+                                            
                                             {/* <div className="col-md-2">
                                                 <button className={tabMode === 'telemetaryData' ? 'btn btn-primary' : 'btn btn-link'} onClick={() => setTabMode('telemetaryData')}>TelemetaryData </button>         
                                             </div>
@@ -369,8 +318,24 @@ const PatientProfile = (props) => {
                                                     <div>
                                                         <small className="devicedata-createddata"><i>Created At: {moment(devicedata?.createdAt).format("lll")}</i></small>
                                                     </div>
+                                                    {devicedata?.comments ? <Fragment> <span style={{fontWeight: 'bold'}}><i>Comment By Physician:</i> </span> {devicedata?.comments} </Fragment> : <Fragment>
+                                                        <br/>
+                                                        <div className="row">
+                                                            <div className="col-md-10">
+                                                                <input type="text"
+                                                                key={index} 
+                                                                placeholder="Type your comment here"
+                                                                className="form-control"
+                                                                onChange={(e) => setComment(e.target.value)}
+                                                                />
+                                                            </div>
 
-                                                   {devicedata?.comments ? <Fragment> <span style={{fontWeight: 'bold'}}><i>Comment By Physician:</i> </span> {devicedata?.comments} </Fragment>: null }             
+                                                            <div className="col-md-2">
+                                                                <button className="btn btn-info" onClick={() => submitCommentHandler(devicedata?._id)}> Comment </button>
+                                                            </div>
+                                                        </div>
+                                                    </Fragment> }  
+
                                                 </Fragment> : ''} <hr />
                                         </Fragment>
                                         ))}
@@ -421,11 +386,10 @@ const PatientProfile = (props) => {
                            
                            </div>
                          </Fragment> 
-                         }         
+                         }
                 </section>
-                            
         </Fragment>
     )
 }
 
-export default PatientProfile
+export default StaffPatientProfile

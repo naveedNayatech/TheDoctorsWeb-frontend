@@ -7,6 +7,11 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     LOGOUT_FAIL,
+    STAFF_LOGIN_REQUEST,
+    STAFF_LOGIN_SUCCESS,
+    STAFF_LOGIN_FAIL,
+    STAFF_LOGOUT_SUCCESS,
+    STAFF_LOGOUT_FAIL,
     ADMIN_PASSWORD_UPDATE_REQUEST,
     ADMIN_PASSWORD_UPDATE_SUCCESS,
     ADMIN_PASSWORD_UPDATE_FAIL,
@@ -45,6 +50,39 @@ export const login = (email, password, role) => async(dispatch) => {
         })
     }
 }
+
+// Staff Login 
+export const staffLogin = (email, password, role) => async(dispatch) => {
+    try {
+       dispatch({
+           type: STAFF_LOGIN_REQUEST
+       })     
+
+       const config = {
+           headers: {
+               'Content-Type': 'application/json'
+           }
+       }
+
+       const { data } = await axios.post(`${Prod}/v1/login`, {
+           email,
+           password,
+           role
+       }, config);
+
+       dispatch({
+           type: STAFF_LOGIN_SUCCESS,
+           payload: data.doctor
+       })
+       
+    } catch (error) {
+        dispatch({
+            type: STAFF_LOGIN_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 
 // Update Password -> ADMIN 
 export const updatePassword = (id, oldpassword, password) => async(dispatch) => {
@@ -92,6 +130,24 @@ export const logout = () => async(dispatch) => {
     } catch (error) {
         dispatch({
             type: LOGOUT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+// Logout 
+export const staffLogout = () => async(dispatch) => {
+    try {
+       await axios.get(`${Prod}/v1/stafflogout`);
+
+       dispatch({
+           type: STAFF_LOGOUT_SUCCESS
+       })
+       
+    } catch (error) {
+        dispatch({
+            type: STAFF_LOGOUT_FAIL,
             payload: error.response.data.message
         })
     }

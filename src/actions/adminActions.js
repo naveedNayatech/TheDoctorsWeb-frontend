@@ -240,9 +240,9 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
            type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
        });
    
-       const { data } = await axios.put(`${Prod}/v1/admin/patient`, {
-               id: patientid,
-               deviceId: deviceid
+       const { data } = await axios.post(`${Prod}/v1/admin/assignDeviceToPatient`, {
+               patientid: patientid,
+               deviceid: deviceid
            });
    
        dispatch({
@@ -260,15 +260,15 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    }
    
 
-   export const removeAssignedDevice = (patientid) => async(dispatch) => {
+   export const removeAssignedDevice = (deviceid, patientid) => async(dispatch) => {
     try {
        dispatch({ 
            type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
        });
    
-       const { data } = await axios.put(`${Prod}/v1/admin/patient`, {
-               id: patientid,
-               deviceId: null
+       const { data } = await axios.post(`${Prod}/v1/admin/removeDeviceFromPatient`, {
+            deviceid: deviceid,      
+            patientid: patientid
            });
    
        dispatch({
@@ -285,18 +285,14 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
-   export const getPatientTelemetryData = (deviceId, patientId, sort) => async(dispatch) => {
+   export const getPatientTelemetryData = (patientId, sort) => async(dispatch) => {
     
-    console.log('deviceId is ' + deviceId);
-    console.log('patientId is ' + patientId);
-
     try {
        dispatch({ 
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
        const { data } = await axios.post(`${Prod}/v1/devicedata`, {
-               deviceId: deviceId,
                patientId: patientId,
                sort
            });
@@ -314,6 +310,30 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
        })
     }   
    }
+
+   
+   export const insertComment = (deviceid, comment, patientid) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: GET_PATIENT_DEVICE_DATA_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod}/v1/admin/commentdevicedata`, {
+               id : deviceid,
+               comment: comment
+           });
+   
+        dispatch(getPatientTelemetryData(patientid))    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_PATIENT_DEVICE_DATA_FAIL,
+           payload: error.response.data.message
+       })
+    }   
+   }
+
 
 //    Search Device Data by Date 
    export const getDeviceDataByDate = (deviceId, patientId, searchDate) => async(dispatch) => {

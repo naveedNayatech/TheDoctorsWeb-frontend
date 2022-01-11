@@ -12,6 +12,9 @@ import { devicesReducers } from './reducers/adminReducers';
 import { deviceDetailsReducers } from './reducers/adminReducers';
 import { newDeviceReducers } from './reducers/adminReducers';
 
+import {staffAuthReducers} from './reducers/authReducers';
+
+
 const reducer = combineReducers({
     admin: adminReducers,
     auth: authReducers,
@@ -22,7 +25,8 @@ const reducer = combineReducers({
     deviceData: deviceDataReducers,
     devices: devicesReducers,
     deviceDetails: deviceDetailsReducers,
-    device : newDeviceReducers
+    device : newDeviceReducers,
+    staffAuth: staffAuthReducers
 })
 
 let initialState = {}

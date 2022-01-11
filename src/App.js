@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import {BrowserRouter as Router, Route } from 'react-router-dom';
 import ProtectedRoute from './components/route/ProtectedRoute';
+import StaffProtectedRoute from './components/route/StaffProtectedRoute';
 // Admin Dashboard Components
 import AdminDashboard from './components/AdminDashboard/Dashboard';
 import Profile from './Screens/Admin/Profile';
@@ -17,7 +18,13 @@ import AssignDoctorToPatient from './Screens/Admin/AssignDoctorToPatient';
 import RPMDevices from './Screens/Admin/RPMDevices';
 import DevicesDetails from './Screens/Admin/DevicesDetails';
 import AddRPMDevice from './Screens/Admin/AddRPMDevice';
- 
+// Staff Screens
+import StaffLogin from './Screens/Staff/StaffLogin';
+import StaffDashboard from './Screens/Staff/StaffDashboard';
+import StaffProfile from './Screens/Staff/StaffProfile';
+import StaffPatient from './Screens/Staff/StaffPatients';
+import StaffPatientProfile from './Screens/Staff/StaffPatientProfile';
+
 
 function App() {
   return (
@@ -36,6 +43,13 @@ function App() {
         <ProtectedRoute exact path='/devices' isAdmin={true} component={RPMDevices} />
         <ProtectedRoute exact path='/devicedetails' isAdmin={true} component={DevicesDetails} />
         <ProtectedRoute exact path='/device' isAdmin={true} component={AddRPMDevice} />
+
+        {/*  */}
+        <Route exact path="/stafflogin" component={StaffLogin} />
+        <Route exact path="/Dashboard" component={StaffDashboard} />
+        <Route exact path="/staffProfile" component={StaffProfile} />
+        <Route exact path="/staffPatients" component={StaffPatient} />
+        <Route exact path="/staffPatientProfile" component={StaffPatientProfile} />
     </Router>
   )      
 };

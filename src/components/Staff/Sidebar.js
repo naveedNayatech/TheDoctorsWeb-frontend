@@ -1,14 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { logout } from '../../actions/authActions';
+import { staffLogout } from '../../actions/authActions';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
 
+    const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+		
+		if(isAuthenticated === false) {
+			props?.history?.push("/stafflogin");
+		}
+	}, [isAuthenticated])
+
+
     const logoutHandler = () => {
-        dispatch(logout());
+        dispatch(staffLogout());
     }
 
 
@@ -22,39 +32,28 @@ const Sidebar = () => {
 
             <ul className="nav-links">
                 <li>
-                    <Link key="admindashboard" to="/adminDashboard">
-                        <i className="bx bx-grid-alt"></i>
-                        <span className="link_name">Dashboard</span>
-                    </Link>
-                </li>
-
-
-                <li>
-                    <Link key="patients" to="/patients">
+                    <Link key="dashboard" to="/Dashboard">
                     <i className='bx bx-list-ul'></i>
-                        <span className="link_name">Patients</span>
+                        <span className="link_name">My Dashboard</span>
                     </Link>
                 </li>
 
                 <li>
-                    <Link key="doctors" to="/doctors">
+                    <Link key="staffPatients" to="/staffPatients">
+                    <i className='bx bx-list-ul'></i>
+                        <span className="link_name">My Patients</span>
+                    </Link>
+                </li>
+
+                <li>
+                    <Link key="doctors" to="/staffProfile">
                         <i className="bx bx-user"></i>
-                        <span className="link_name">Doctors</span>
+                        <span className="link_name">My Profile</span>
                     </Link>
                 </li>
 
-
-                <li>
-                    <Link key="rpm_devices" to="/devices">
-                        <i className="bx bx-pie-chart-alt-2"></i>
-                        <span className="link_name">RPM Devices</span>
-                    </Link>
-                </li>
-
-               
-
-                <br/>
-                <li>
+ 
+                <li style={{backgroundColor: 'orangered'}}>
                     <Link key="logout" to="#" onClick={logoutHandler}>
                         <i className="bx bx-log-out"></i>
                         <span className="link_name">Logout</span>
