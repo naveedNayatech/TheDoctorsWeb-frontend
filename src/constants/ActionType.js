@@ -1,2 +1,2 @@
-export const Prod = "https://vitalsportal.com/v1/api";
-// https://vitalsportal.com/v1/api
+export const Prod = "https://vitalsportal.com/api";
+// https://vitalsportal.com/api

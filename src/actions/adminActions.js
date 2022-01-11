@@ -319,12 +319,12 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
-       const { data } = await axios.post(`${Prod}/v1/admin/commentdevicedata`, {
+        await axios.post(`${Prod}/v1/admin/commentdevicedata`, {
                id : deviceid,
                comment: comment
            });
    
-        dispatch(getPatientTelemetryData(patientid))    
+        // dispatch(getPatientTelemetryData(patientid))    
    
     } catch (error) {
        dispatch({
