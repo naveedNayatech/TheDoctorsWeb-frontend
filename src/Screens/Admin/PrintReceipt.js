@@ -25,7 +25,7 @@ const PrintReceipt = (props) => {
                     
                     <h5 style={{color: 'gray'}}>Assigned To</h5>
                      <b>Patient Name : </b> <span>{patient?.title} {patient?.firstname} {patient?.lastname}</span> <br/>
-                     <b>Address : </b> <span>{patient?.address}</span> <br />   
+                     <b>Address : </b> <span>{patient?.address} {patient?.line2} {patient?.city} {patient?.state} {patient?.zipCode}  </span> <br />   
 
                     <hr/>
                      <h5 style={{color: 'gray'}}>Device Details</h5>

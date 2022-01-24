@@ -462,7 +462,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         });
 
         
-        const {data} = await axios.post(`http://vitalsportal.com/api/device/update/${deviceId}`, {
+        const {data} = await axios.post(`${Prod}/v1/device/update/${deviceId}`, {
             assigned_patient_id: patientId,
         });
         
