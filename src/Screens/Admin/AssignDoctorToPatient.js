@@ -76,7 +76,7 @@ const AssignDoctorToPatient = (props) => {
                                 onChange={(e) => setPatientId(e.target.value)}
                                 >
                                 {patients && patients.map((patient, index) => (
-                                    <option value={patient?._id} key={index}> {patient?.email} </option>
+                                    <option value={patient?._id} key={index}> {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                 ))}    
                                 
                             </select> 
