@@ -38,6 +38,9 @@ import {
     ADD_RPM_DEVICE_SUCCESS,
     ADD_RPM_DEVICE_FAIL,
     ADD_RPM_DEVICE_RESET,
+    UPDATE_DEVICE_REQUEST,
+    UPDATE_DEVICE_SUCCESS,
+    UPDATE_DEVICE_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -346,6 +349,7 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
     switch (action.type) {
  
      case ADD_RPM_DEVICE_REQUEST: 
+     case UPDATE_DEVICE_REQUEST:
       return {
           ...state,
           loading: true
@@ -356,8 +360,15 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
              loading: false,
              success: action.payload.success,
          }  
+
+    case UPDATE_DEVICE_SUCCESS: 
+         return {
+             loading: false,
+             isUpdated: true
+         }    
      
      case ADD_RPM_DEVICE_FAIL:
+     case UPDATE_DEVICE_FAIL:
          return {
              ...state,
              error: action.payload

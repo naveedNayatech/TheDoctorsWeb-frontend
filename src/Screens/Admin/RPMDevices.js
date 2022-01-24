@@ -8,6 +8,7 @@ import { getAllDevices } from '../../actions/adminActions';
 import { useAlert } from 'react-alert'; 
 import Loader from '../../layouts/Loader';
 import moment from 'moment';
+import { Badge } from 'react-bootstrap';
 
 const RPMDevices = () => {
 
@@ -58,27 +59,28 @@ const RPMDevices = () => {
                          <Fragment>
                          {devices && <Fragment>
                             <table className="table table-sm table-striped">
-                            <thead align="center">
-                                <th>SERIAL NUMBER </th>  
+                            <tr>
+                                <th>Device ID</th>
                                 <th>IMEI</th>
-                                <th>MODEL NUMBER</th>
-                                <th>STATUS </th>
-                                <th>LAST ACTIVE</th>
-                                <th>SIGNAL</th>
-                                <th>BATTERY</th>
-                                <th>ACTION</th> 
-                            </thead>
+                                <th>Device Type </th>
+                                <th>Broken</th>
+                                <th>Firmware Version</th>
+                                <th>Hardware Version</th>
+                                <th>Action</th>
+                            </tr> 
 
                             <tbody>      
                             {devices && devices.map((device, index) => (                      
                                 <tr align="center" key={device}>
                                     <td><Link to={{ pathname:"/devicedetails", state: {deviceid: device?.deviceId}}}>{device?.deviceId}</Link></td>
-                                    <td>{device?.imei}</td>
-                                    <td>{device?.modelNumber}</td>
-                                    {device?.status === true ? <td style={{color: 'green', fontWeight: 'bold'}}>Activated</td> : <td style={{color: 'red', fontWeight: 'bold'}}>Deactivated</td>}
-                                    <td>{moment(device?.lastActive).format("lll")}</td>
-                                    <td style={{color: 'red'}}>{device?.signal}</td>
-                                    <td>{device?.battery}%</td>
+                                    <td>{device?.imei ? device?.imei : 'N/A'}</td>
+                                    {device?.deviceType === 'bp' ? 
+                                    <td><Badge bg="warning text-white" className="male-tag">cuff</Badge></td>
+                                        : device.deviceType === 'spo2' ? <td><Badge bg="info text-white" className="male-tag">Spo2</Badge></td> : 
+                                        <td><Badge bg="danger text-white" className="male-tag">Weight</Badge></td>}
+                                    {device?.broken === true ? <td style={{color: 'red', fontWeight: 'bold'}}>Broken</td> : <td>unbroken</td> }
+                                    <td>{device?.firmwareVersion ? device?.firmwareVersion : 'N/A'}</td>
+                                    {device?.assigned_patient_id ? <td style={{color: 'gray', fontWeight: 'bold'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
                                     <td>
                                         <Link to={{ pathname:"/devicedetails", state: {deviceid: device?.deviceId}}} className="rounded-button-profile"><i className='bx bx-list-ul'></i></Link>
                                         <Link to="/devices" className="rounded-button-deactivate"><i className='bx bx-power-off'></i></Link>

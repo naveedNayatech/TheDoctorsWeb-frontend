@@ -38,6 +38,9 @@ import {
     ADD_RPM_DEVICE_REQUEST,
     ADD_RPM_DEVICE_SUCCESS,
     ADD_RPM_DEVICE_FAIL,
+    UPDATE_DEVICE_REQUEST,
+    UPDATE_DEVICE_SUCCESS,
+    UPDATE_DEVICE_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -445,6 +448,36 @@ export const addRPMDevice = (deviceId, imei, modelNumber, status, signal, batter
         dispatch({
             type: ADD_RPM_DEVICE_FAIL,
             payload: error.response.data.message
+        })
+    }
+}
+
+
+// Assign RPM Device To Patient
+export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch) => {
+    
+    try {
+        dispatch({ 
+            type: UPDATE_DEVICE_REQUEST
+        });
+
+        
+        const {data} = await axios.post(`http://vitalsportal.com/api/device/update/${deviceId}`, {
+            assigned_patient_id: patientId,
+        });
+        
+        dispatch({
+            type: UPDATE_DEVICE_SUCCESS,
+            payload: data
+        })
+
+        
+    } catch (error) {
+        console.log(error);
+        debugger
+        dispatch({
+            type: UPDATE_DEVICE_FAIL,
+            payload: error
         })
     }
 }

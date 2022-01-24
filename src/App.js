@@ -18,6 +18,7 @@ import AssignDoctorToPatient from './Screens/Admin/AssignDoctorToPatient';
 import RPMDevices from './Screens/Admin/RPMDevices';
 import DevicesDetails from './Screens/Admin/DevicesDetails';
 import AddRPMDevice from './Screens/Admin/AddRPMDevice';
+import PrintReceipt from './Screens/Admin/PrintReceipt';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -43,6 +44,7 @@ function App() {
         <ProtectedRoute exact path='/devices' isAdmin={true} component={RPMDevices} />
         <ProtectedRoute exact path='/devicedetails' isAdmin={true} component={DevicesDetails} />
         <ProtectedRoute exact path='/device' isAdmin={true} component={AddRPMDevice} />
+        <ProtectedRoute exact path='/printReceipt' isAdmin={true} component={PrintReceipt} />
 
         {/*  */}
         <Route exact path="/stafflogin" component={StaffLogin} />

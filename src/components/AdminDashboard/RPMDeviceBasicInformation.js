@@ -1,9 +1,57 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
+import { Badge } from 'react-bootstrap';
+import {useDispatch, useSelector} from 'react-redux';
+import { getPatients, patientProfile, assignRPMDeviceToPatient } from '../../actions/adminActions';
+import { useAlert } from 'react-alert';
+import patientProfileImg from '../../assets/Images/patientProfile.png';
+import { ADD_RPM_DEVICE_RESET } from '../../constants/adminConstants';
+import { Link } from 'react-router-dom';
+
 
 const RPMDeviceBasicInformation = (props) => {
 
+    const alert = useAlert();
+    const dispatch = useDispatch();
+
     let deviceDetails = props?.deviceData;
+
+    const { error, patients} = useSelector(state => state.admin);
+    const { patient } = useSelector(state => state.patientProfile);
+    const { error: deviceError, isUpdated} = useSelector(state => state.device);
+
+    const [patientId, setPatientId] = useState('');
+
+    useEffect(() => {
+        if(error){
+            return alert.error(error);
+        }
+
+        if(deviceError){
+            return alert.error(error);
+        }
+
+        dispatch(getPatients());
+
+        if(patientId){
+            dispatch(patientProfile(patientId))
+        }
+
+        if(isUpdated) {
+            alert.success('Updated');
+            // history.push('/devices');
+            dispatch({
+                type: ADD_RPM_DEVICE_RESET
+            });
+        }
+        
+    }, [dispatch, alert, error, isUpdated, patientId]);
+
+    const AssignDeviceToPatient = () => {
+        console.log('Patient ID is ' + patientId);
+        console.log('Device Id is ' + deviceDetails?._id);
+        dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));
+    }
 
     return (
         <Fragment>
@@ -12,76 +60,96 @@ const RPMDeviceBasicInformation = (props) => {
                     <tbody>
                         <tr>
                             <th scope="col-md-3">Model Number</th>
-                            <td scope="col-md-3">{deviceDetails?.modelNumber}</td>
-                            <th scope="col-md-3">Manufecturer</th>
-                            <td scope="col-md-3">{deviceDetails?.manufecture}</td>
+                            <td scope="col-md-3">{deviceDetails?.modelNumber ? deviceDetails?.modelNumber : 'N/A'}</td>
+                            <th scope="col-md-3">IMEI</th>
+                            <td scope="col-md-3">{deviceDetails?.imei ? deviceDetails?.imei : 'N/A'}</td>
                         </tr>
 
                         <tr>
-                            <th scope="col-md-3">Serial Number</th>
-                            <td scope="col-md-3">{deviceDetails?.deviceId}</td>
-                            <th scope="col-md-3">Status</th>
-                            <td scope="col-md-3" style={{color: deviceDetails?.status === true ? 'green': 'red'}}><b>{deviceDetails?.status === true ? 'Activated' : 'De-Activated'}</b></td>
+                            <th scope="col-md-3">Type</th>
+                            {deviceDetails?.deviceType === 'bp' ? <td scope="col-md-3"><Badge bg="warning text-white" className="male-tag">cuff</Badge></td> : <td><Badge bg="info text-white" className="male-tag">Weight</Badge></td>}
+                            <th scope="col-md-3">Broken Status</th>
+                            <td scope="col-md-3" style={{color: deviceDetails?.broken === true ? 'red': 'green'}}><b>{deviceDetails?.broken  === true ? 'broken' : 'unbroken'}</b></td>
                         </tr>
 
                         <tr>
                             <th scope="col-md-3">Created At</th>
                             <td scope="col-md-3">{moment(deviceDetails?.createdAt).format("lll")}</td>
-                            <th scope="col-md-3">Activated At</th>
-                            <td scope="col-md-3">2021-10-26 08:31:17</td>
-                        </tr>
-
-                        <tr>
-                            <th scope="col-md-3">Last Active</th>
-                            <td scope="col-md-3">{deviceDetails?.lastActive}</td>
-                            <th scope="col-md-3">Connection Status</th>
-                            <td scope="col-md-3" style={{color: 'red'}}><b>{deviceDetails?.connectionStatus}</b></td>
-                        </tr>
-
-                        <tr>
-                            <th scope="col-md-3">Application Version</th>
-                            <td scope="col-md-3"><b>-</b></td>
-                            <th scope="col-md-3">MCU version</th>
-                            <td scope="col-md-3"><b>-</b></td>
-                        </tr>
-
-                        <tr>
-                            <th scope="col-md-3">Modem Version</th>
-                            <td scope="col-md-3">{deviceDetails?.modemVersion}</td>
-                            <th scope="col-md-3">hardware Version</th>
-                            <td scope="col-md-3">{deviceDetails?.hardwareVersion}</td>
-                        </tr>
-
-                        <tr>
                             <th scope="col-md-3">Firmware Version</th>
-                            <td scope="col-md-3">{deviceDetails?.firmwareVersion}</td>
-                            <th scope="col-md-3">User</th>
-                            <td scope="col-md-3">{deviceDetails?.User}</td>
+                            <td scope="col-md-3">{deviceDetails?.firmwareVersion ? deviceDetails?.firmwareVersion : 'N/A'}</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="col-md-3">hardware Version</th>
+                            <td scope="col-md-3">{deviceDetails?.hardwareVersion ? deviceDetails?.hardwareVersion : 'N/A'}</td>
+                            <th scope="col-md-3">Patient Assigned Status</th>
+                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id ? <span style={{color: '#F95800', fontWeight: 'bold'}}>Assigned</span> : <span style={{color: 'green', fontWeight: 'bold'}}>In Stock</span> }</td>
                         </tr>
                     </tbody>
                 </table>
-                
-                <br/>    
-                <small><b>More Information</b></small>
 
-                <table className="table table-bordered">
-                    <tbody>
-                            <tr>
-                                <th scope="col-md-3">IMEI</th>
-                                <td scope="col-md-3">{deviceDetails?.imei}</td>
-                                <th scope="col-md-3">IMSI</th>
-                                <td scope="col-md-3">{deviceDetails?.imsi === ' ' ? deviceDetails?.imsi : 'N/A'}</td>
-                            </tr>
+                <div>
 
-                            <tr>
-                                <th scope="col-md-3">ICCID</th>
-                                <td scope="col-md-3">{deviceDetails?.iccid === ' ' ? deviceDetails?.iccid : 'N/A'}</td>
-                                <th scope="col-md-3">Battery Level</th>
-                                <td scope="col-md-3">{deviceDetails?.battery}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                           
+                <small><b>Assign Device to Patient</b></small>
+
+                <div className="row">
+                    <div className="col-md-4">
+                        <label className="form-label mt-3">Select Patient</label>
+                        <select 
+                            name="patientlist"
+                            className="form-control"
+                            defaultValue={'Select Patient'} 
+                            onChange={(e) => setPatientId(e.target.value)}
+                            >
+                                <option disabled>Select Patient</option>
+                                    {patients && patients.map((patient, index) => (
+                                        <option value={patient?._id} key={index} > {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
+                                    ))}    
+                        </select>
+                    </div>
+
+                    {/* Patient Profile */}
+                    <div className="col-md-8">
+
+                    {patientId && patient && <Fragment>
+
+                                    <div className="col-md-12">
+                                        <div className="row">
+                                    
+                                        <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
+                                    
+                                        <p className="profile-name pl-3 pb-2">{patient?.title} {patient?.firstname} {patient?.lastname} </p>
+                                    </div>
+                                    <br />
+                                <div className="row">
+                                    <div className="col-md-4">    
+                                    <span className="profile-label">Gender: </span>
+                                            <p className="profile-value-text">{patient?.gender}</p>
+
+                                            <span className="profile-label">DOB: </span>
+                                            <p className="profile-value-text">{patient?.DOB}</p>
+
+                                    </div>
+
+                                    <div className="col-md-4">    
+                                    <span className="profile-label">Zip Code: </span>
+                                        <p className="profile-value-text">{patient?.zipCode }</p>
+
+                                        <span className="profile-label">SSN Number: </span>
+                                        <p className="profile-value-text">{patient?.ssn}</p>                                 
+                                    </div>
+
+                                    <br/>
+                                    <div style={{ display: "flex" }}>
+                                        <button className="submit-btn ml-3" onClick={AssignDeviceToPatient}>Assign </button>
+                                        <Link to={{ pathname: "/printReceipt", state: {deviceAssigned: deviceDetails, patientDetails: patient }}} className="ml-3 mt-2">Print Receipt</Link>
+                                    </div>
+                                </div>
+                            </div>                             
+                        </Fragment> }
+                    </div>
+                </div> 
+            </div> 
         </Fragment>
     )
 }
