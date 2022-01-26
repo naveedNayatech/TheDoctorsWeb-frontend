@@ -18,7 +18,9 @@ import AssignDoctorToPatient from './Screens/Admin/AssignDoctorToPatient';
 import RPMDevices from './Screens/Admin/RPMDevices';
 import DevicesDetails from './Screens/Admin/DevicesDetails';
 import AddRPMDevice from './Screens/Admin/AddRPMDevice';
+import UpdateRPMDevice from './Screens/Admin/UpdateRPMDevice';
 import PrintReceipt from './Screens/Admin/PrintReceipt';
+import AddPatient from './Screens/Admin/AddPatient';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -45,13 +47,14 @@ function App() {
         <ProtectedRoute exact path='/devicedetails' isAdmin={true} component={DevicesDetails} />
         <ProtectedRoute exact path='/device' isAdmin={true} component={AddRPMDevice} />
         <ProtectedRoute exact path='/printReceipt' isAdmin={true} component={PrintReceipt} />
-
+        <ProtectedRoute exact path='/updatedevice' isAdmin={true} component={UpdateRPMDevice} />
+        <ProtectedRoute exact path='/addpatient' isAdmin={true} component={AddPatient} />
         {/*  */}
         <Route exact path="/stafflogin" component={StaffLogin} />
-        <Route exact path="/Dashboard" component={StaffDashboard} />
-        <Route exact path="/staffProfile" component={StaffProfile} />
-        <Route exact path="/staffPatients" component={StaffPatient} />
-        <Route exact path="/staffPatientProfile" component={StaffPatientProfile} />
+        <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
+        <StaffProtectedRoute exact path="/staffProfile" component={StaffProfile} />
+        <StaffProtectedRoute exact path="/staffPatients" component={StaffPatient} />
+        <StaffProtectedRoute exact path="/staffPatientProfile" component={StaffPatientProfile} />
     </Router>
   )      
 };

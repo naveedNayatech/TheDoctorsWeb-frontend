@@ -120,41 +120,48 @@ const Header = () => {
    {/* Home Section  */}
   <section id="home" className="d-flex align-items-center">
     <div className="container">
-      <h1>RPM Solutions,  <br /> for Physicians</h1>
-      <h2>Lorem ipsum dolor sit amet consectetur <br/> adipisicing elit. Iste eius, ipsa quo nam animi <br/>  expedita? Optio qui totam expedita sunt sit laborum <br/>"Your devotion and care bring healing, comfort and hope."</h2>
+    <h1 className="text-white">RPM <span style={{color: '#F95800'}}>Solutions</span>,  <br /> for Physicians</h1>
+    <h2 className="text-white">We Provide the Best Monitoring Devices
+        with <br /> the help of experienced and qualified
+        medical <br/> staff right at your door steps
+        "Your devotion <br/> and care bring healing, comfort and hope."</h2>
       <a href="#about" className="btn-get-started scrollto">View More</a>
     </div>
   </section>
   {/*  End Home  */}
     
     
-    <main id="main">
-         {/******************** Featured Services Section  ***********************/}
-        <section id="featured-services" className="section featured-services">
+  <main id="main">
+        <section id="featured-services" className="featured-services">
           <div className="container" data-aos="fade-up">
     
             <div className="row">
-              <div className="col-md-8 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-                <div className="icon-box" data-aos="fade-up" data-aos-delay="100">
+              <div className="col-md-8 col-lg-4 d-flex align-items-stretch">
+                <div className="icon-box icon-box-active" data-aos="fade-up" data-aos-delay="100">
                   <div className="icon"><i className='bx bx-devices'></i></div>
-                  <h4 className="title"><a href=""> Monitoring Devices</a></h4>
-                  <p className="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. At labore molestiae fugit impedit quis beatae. Odio quis dignissimos nulla, illo, maiores sit provident iure eveniet ex repellat veniam ipsam obcaecati?</p>
+                  <strong className="title pl-3"> Monitoring Devices</strong>
+                  <p className="description pl-3 mt-3">High quality, envoirnmental friendly Monitoring Devices are at your service. 
+                  Quick installation through skilled friendly, tolerent medical staff .</p>
                 </div>
               </div>
     
               <div className="col-md-8 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-                <div className="icon-box" data-aos="fade-up" data-aos-delay="400">
+                <div className="icon-box bordered-box" data-aos="fade-up" data-aos-delay="400">
                   <div className="icon"><i className='bx bx-dna'></i></div>
-                  <h4 className="title"><a href="">Reporting Analytics</a></h4>
-                  <p className="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero illo, repellendus animi, sequi fugit laboriosam reprehenderit eum optio perspiciatis odit odio ab quibusdam corrupti iure facere provident veritatis corporis aut.</p>
+                  <strong className="title text-white pl-3">Reporting Analytics</strong>
+                  <p className="description pl-3 mt-3 text-white">
+                  The readings are noted and reported very quick and in efficient manner. Moreover, irregular, 
+                  emergent and critical readings are identified and notified to the staff for quick response.
+                  </p>
                 </div>
               </div>
               
               <div className="col-md-8 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
                 <div className="icon-box" data-aos="fade-up" data-aos-delay="300">
                   <div className="icon"><i className='bx bx-support' ></i></div>
-                  <h4 className="title"><a href="">Support Scheduling</a></h4>
-                  <p className="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil numquam corporis consequatur nisi fuga. Temporibus adipisci ex, doloribus neque sit tenetur maiores fugit dolorem qui illum recusandae eum quas? At!</p>
+                  <strong className="title text-white pl-3">Support Scheduling</strong>
+                  <p className="description pl-3 mt-3 text-white">Experienced staff is available to get you educatied over the phone 
+                  and in-person real quick for your Monitoring program.</p>
                 </div>
               </div>
             </div>
@@ -163,7 +170,7 @@ const Header = () => {
       </section>
       </main>
 
-      {/* End Featured Services Section */}
+     
     </Fragment>
     )
 }

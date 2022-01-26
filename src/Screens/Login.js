@@ -1,23 +1,30 @@
-import React, { useState, Fragment, useEffect } from 'react'
-import AdminLoginImg from '../assets/Images/admin-login.jpg';
+import React, { Fragment, useEffect } from 'react'
 import { Link  } from 'react-router-dom';
+import TextField from '../components/Form/TextField';
+import Selectbox from '../components/Form/Selectbox';
 import MetaData from '../layouts/MetaData';
 import Loader from '../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 
 import { login, clearErrors } from '../actions/authActions'; 
 
 const Login = ({ history }) => {
-
-
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [role, setRole] = useState('admin');
+    
+	const validate = Yup.object().shape({
+		email: Yup.string().email('Invalid email').required('Email is Required'),
+		password: Yup.string() 
+		  .min(6, 'Too Short!')
+		  .max(20, 'Too Long!')
+		  .required('Password is Required'),
+		role:Yup.string().required('Select Role')
+	  });
 
 	const { isAuthenticated, error, loading } = useSelector(state => state.auth);
 
@@ -28,7 +35,6 @@ const Login = ({ history }) => {
 		}
 
 		if(error){
-			
 			alert.error(<div style={{ width: 230 }}>{error}</div>);
 			dispatch(clearErrors());
 		}
@@ -36,9 +42,8 @@ const Login = ({ history }) => {
 	}, [dispatch, alert, isAuthenticated, error, history])
 	
 	
-	const submitHandler = (e) => {
-        e.preventDefault();
-		dispatch(login(email, password, role));
+	const submitHandler = (values) => {
+		dispatch(login(values));
 	}
 	
     return (
@@ -48,75 +53,65 @@ const Login = ({ history }) => {
 				<div className="login-section">
 					<div className="container">
 						<div className="row content">
-							<div className="col-md-6 mb-3">
-								<img src={AdminLoginImg} className="img-fluid login-card-img" alt="img" />
-							</div>
-
-							<div className="vl"></div>
-
-							<div className="col-md-1 mb-3">
 								
-							</div>	
+							<div className="col-md-12" >
+								<h3 className="signin-text">Sign <span style={{color: '#F95800'}}>in</span></h3>
+								<small style={{color: 'dodgerblue'}}>Enter valid credentials to log into your account.</small>
 
-							<div className="col-md-4" >
-								<h3 className="signin-text mb-3">Login</h3>
-								<hr />
-									<form onSubmit={submitHandler} >
-											<div className="form-group">
-												<label htmlFor="email"><i className='bx bx-envelope label-icons'></i> Email</label>
-													<input 
-													type="email" 
+								<Formik initialValues={{
+									email: '',
+									password: '', 
+									role: 'admin'
+								}}
+								validationSchema={validate}
+								onSubmit={values => {
+									submitHandler(values)
+								}}
+								>
+									{ formik => (
+										<div>
+											<Form>
+												<TextField 
+													label="Email Address" 
 													name="email" 
-													className="form-control" 
-													autoComplete="off" 
-													placeholder="Email"
-													value={email}		
-													onChange={(e) => setEmail(e.target.value)}
-													/>
-											</div>
-											
-											<div className="form-group">
-												<label htmlFor="password"><i className='bx bx-lock-alt label-icons'></i> Password</label>
-													<input 
-													type="password" 
-													name="password" 
-													className="form-control" 
-													autoComplete="off" 
-													placeholder="Password"
-													value={password}
-													onChange={(e) => setPassword(e.target.value)}
-													/>
-											</div>
+													type="email" 
+													placeholder="Enter Email"
+												/>
 
-											<div className="form-group">
-												<label htmlFor="role"><i className='bx bx-user label-icons'></i> Role</label>
-												<select 
-													name="role" 
-													className="form-control" 
-													value={role} 
-													onChange={(e) => setRole(e.target.value)}
-													>
-													<option value="admin">admin</option>
-													<option value="doctor">HR</option>
-												</select>
-											</div>
-											
-											<div className="form-group">
+												<TextField 
+													label="Password" 
+													name="password" 
+													type="password"	
+													placeholder="Enter Password"
+												/>
+
+												<Selectbox 
+													label="Select Role"
+													name="role"
+												/>
+
+												
 												<Link to="/login">
 													<span className="forgot-password-link">Forgot Password?</span>
 												</Link>
-											</div>
+												
+												<br/><br/>
+												
 
-											<br />
-											<div className="form-group form-check">
-												<input type="checkbox" name="checkbox" className="form-check-input" id="checkbox" />
-												<label className="form-check-label" htmlFor="checkbox">Remember Me</label>
-											</div>
-											
-											<button className="btn login-btn-class" type="submit"> 
-												Login
-											</button>
-									</form>	
+												<div className="row-class" style={{justifyContent: 'space-between'}}>
+													<button className="reset-btn" type="reset">Reset</button>
+													<button className="submit-btn ml-3" type="submit" disabled={loading ? true : false}>Login</button>
+												</div>
+											</Form>
+
+											<br/><br/><br/>
+												<div className="row" style={{justifyContent: 'space-between'}}>
+													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
+													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Staff</Link></small>
+												</div>
+										</div>
+									)}
+								</Formik>											
 							</div>
 						</div>
 					</div>

@@ -3,22 +3,24 @@ import MetaData from '../../layouts/MetaData';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { doctorProfile } from '../../actions/adminActions';
+import { doctorProfile, getDoctorPatients } from '../../actions/adminActions';
 import doctorProfileImg from '../../assets/Images/doctorprofile.jpg';
 import folderImg from '../../assets/Images/folder.png';
 import Loader from '../../layouts/Loader';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import {Badge} from 'react-bootstrap';
 
 const DoctorProfile = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    let id = props?.location?.state?.id;
+    let docId = props?.location?.state?.id;
 
     
-    const { loading, error, doctor, docpatients} = useSelector(state => state.doctorProfile);
+    const { loading, error, doctor } = useSelector(state => state.doctorProfile);
+    const { doctorpatients } = useSelector(state => state.docPatients);
 
 
     useEffect(() => {
@@ -26,7 +28,9 @@ const DoctorProfile = (props) => {
             return alert.error(error);
         }
 
-        dispatch(doctorProfile(id));
+        console.log('Dr id is ' + docId);
+        dispatch(doctorProfile(docId));
+        dispatch(getDoctorPatients(docId));
     }, [dispatch, alert, error]);
 
 
@@ -45,35 +49,28 @@ const DoctorProfile = (props) => {
                         <div className="home-content">
                         <div className="container">
                          <div className="row">
-                             <div className="col-md-8">
-                                <h5 className="pt-2 mt-2">Doctor Details  </h5> 
+                             <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                                <h5 className="pt-2 mt-2">Doctor <span style={{color: '#F95800'}}> Details </span></h5> 
                              </div>
 
-                             <div className="col-md-4">
-                                 <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} className="btn btn-info mt-2">Assign Patient to Dr. {doctor?.firstname}</Link>
+                             <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                 <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
+                                 className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
+                                 </Link>
                              </div>
                          </div>   
 
-                         <hr />
+                         <hr className="blue-hr"/>
                         
 
                         {doctor && <Fragment>
                             <div className="row">
                             <div className="col-md-4">
                                 <div>
-                                    <img src={doctor?.avatar?.url ? doctor?.avatar?.url : doctorProfileImg} className="img-responsive profile-card-img"/>
+                                    <img src={doctor?.avatar?.url ? doctor?.avatar?.url : 'https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png'} className="img-responsive profile-card-img"/>
                                         
-                                    <p className="profile-name">{doctor?.title}. {doctor?.firstname} {doctor?.lastname} </p>
+                                    <p className="profile-name">Dr. {doctor?.firstname} {doctor?.lastname} </p>
                                     
-                                    
-                                    {doctor.specialization && doctor?.specialization.map((spec, index) => (
-                                        
-                                            <Fragment key={spec?._id}>
-                                                <p className="doctor-specilizations">{spec?.fieldname }</p>
-                                                <br />
-                                            </Fragment>
-                        
-                                    ))}
                                 </div>
                             </div>
 
@@ -81,36 +78,38 @@ const DoctorProfile = (props) => {
                                 <div>
                                     <div className="card-inner-margin">
                                         <div className="row">
-                                            <div className="col-md-6">
+                                        <div className="col-md-4">
                                             <span className="profile-label">Email: </span>
-                                                <p className="profile-value-text">{doctor?.email}</p>
+                                            <p className="profile-value-text">{doctor?.email}</p>
 
-                                                <span className="profile-label">Gender: </span>
-                                                <p className="profile-value-text">{doctor?.gender}</p>
+                                            <span className="profile-label">Gender: </span>
+                                            <p className="profile-value-text">{doctor?.gender}</p>
 
-                                                <span className="profile-label">Contact #: </span>
-                                                <p className="profile-value-text">{doctor?.contactno ? doctor?.contactno : 'N/A'}</p>
-
-                                                <span className="profile-label">Phone # 1: </span>
-                                                <p className="profile-value-text">{doctor?.phone1 !== '' ? doctor?.phone1 : 'N/A'}</p>
+                                            <span className="profile-label">License Number: </span>
+                                            <p className="profile-value-text">{doctor?.licensenumber ? doctor?.licensenumber : 'N/A'}</p>
+                                            
                                             </div>
 
 
-                                            <div className="col-md-6">
-                                            <span className="profile-label">Phone # 2: </span>
-                                                <p className="profile-value-text"> {doctor?.phone2 !== '' ? doctor?.phone2 : 'N/A'} </p>
+                                            <div className="col-md-4">
+                                                <span className="profile-label">DOB : </span>
+                                                <p className="profile-value-text">{moment(doctor.DOB).format("ll")}</p>
 
-                                                <span className="profile-label">License #: </span>
-                                                <p className="profile-value-text">{doctor?.npinumber}</p>
+                                                <span className="profile-label">Phone 1: </span>
+                                                <p className="profile-value-text">{doctor?.phone1 ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.phone1} </span> : 'N/A'}</p>
+                                                
+                                                <span className="profile-label">Created At: </span>
+                                                <p className="profile-value-text">{moment(doctor?.createdAt).format("lll")}</p>
+                                            
+                                            </div>
 
+                                            <div className="col-md-4">
                                                 <span className="profile-label">NPI #: </span>
                                                 <p className="profile-value-text">{doctor?.licensenumber}</p>
 
-                                                <span className="profile-label">Account Created Date: </span>
-                                                <p className="profile-value-text">{moment(doctor?.createdAt).format("lll")}</p>
+                                                <span className="profile-label">Mobile No: </span>
+                                                <p className="profile-value-text">{doctor?.mobileNo ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.mobileNo} </span> : 'N/A'}</p>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -119,35 +118,40 @@ const DoctorProfile = (props) => {
                         
                         
                         {/* Patient List Card */}
-                        {docpatients?.length > 0 ? (<Fragment>
-                            <h5 className="pt-2 mt-2">Patient's List ({docpatients && docpatients.length})</h5> 
-                            <hr />
+
+
+                        {/* paste patients list fragment here */}
+                        {doctorpatients && doctorpatients?.length > 0 ? (<Fragment>
+                            <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
+                            <hr className="blue-hr"/>
 
                                 <div className="col-md-12">
                                     <Fragment>
                                         <table className="table table-sm table-striped">
                                         <thead align="center">
-                                            <th>REG </th>  
-                                            <th>NAME</th>
-                                            <th>EMAIL</th>
-                                            <th>GENDER </th>
-                                            <th>CONTACT NO</th>
-                                            <th>PREFERRED LANGUAGE</th>
-                                            <th>ACTION</th> 
+                                            <tr>  
+                                            <th>Name</th>
+                                            <th>Contact No </th>
+                                            <th>Email</th>
+                                            <th>Phy. Status</th>
+                                            <th>Insurance Company</th>
+                                            <th>Consent Status</th>
+                                            <th>Action</th>
+                                            </tr> 
                                         </thead>
                                         <tbody>
-                                        {docpatients && docpatients.map((patient, index) => ( 
-                                            <tr align="center" key={doctor?._id}>
-                                            <td style={{fontWeight: 'bold'}}>{index + 1}</td>
-                                            <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}}>{patient?.firstname} {patient?.lastname}</Link></td>
+                                        {doctorpatients && doctorpatients.map((patient, index) => ( 
+                                            <tr align="center" key={index}>
+                                            <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
+                                            <td>{patient?.contactno} <p>(English)</p></td>
                                             <td>{patient?.email}</td>
-                                            {patient?.gender === 'Male' ? <td className="male-tag"> <i className='bx bx-male'></i> {patient?.gender}</td> : <td className="female-tag"> <i className='bx bx-female'></i> {patient?.gender}</td>}
-                                            <td>{patient?.contactno}</td>
-                                            <td>{patient?.preferredlanguage}</td>
+                                            <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
+                                            <td>{patient?.insurancecompany.map((insurance, index) => ( <p key={index} className="insurance-companies-table">{insurance.companyname} </p>))}</td>
+                                            <td>{patient?.rpmconsent === true ? <div><i className='bx bx-pen signed-icon'></i><p>Signed</p></div> : <div><i className='bx bxs-pencil not-signed-icon'></i><p>Not Signed</p></div>}</td>
                                             <td>
                                             <Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                                 <Link to={{ pathname: "/editDoctor", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp;
-                                                <Link className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp;
+                                                <Link to="/#" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp;
                                             </td>
                                         </tr> 
                                         
@@ -161,14 +165,17 @@ const DoctorProfile = (props) => {
 
                         <div>    
                         <h5 className="pt-2 mt-2">Patient's List </h5> 
-                            <hr />
+                            <hr className="blue-hr"/>
                                            
                                 <img src={folderImg} className="no-record-found-img"/>
                                 <p className="doctor-specilizations">No Patient Assigned Yet...</p>
                             
                              
                         </div>
-                        </Fragment> }                
+                        </Fragment> }               
+
+
+                        {/* paste patients list fragment here */}
                         </Fragment>}
                         
                         </div>

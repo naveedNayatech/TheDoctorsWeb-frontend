@@ -13,9 +13,7 @@ const AboutUs = () => {
                 <div className="about_us_points">
                     <p className="about-us-point">Remote Patient Monitoring</p>
                     <p className="about-us-point">Chronic Care Management</p>
-                    <p className="about-us-point">Remote Annual Wellness Visit</p>
-                    <p className="about-us-point">Behavioral Health Integration</p>
-                    <p className="about-us-point">Remote Weight Monitoring</p>
+                    <p className="about-us-point">Telemedicine</p>
                 </div>
                 
                 </div>

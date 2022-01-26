@@ -31,7 +31,8 @@ export const authReducers = (state = { user: {}, isAuthenticated: false, loading
             ...state,
             loading: false,
             isAuthenticated: true,
-            user: action.payload
+            user: action.payload.Admin,
+            token: action.payload.tokens.access.token
         }
     
     case LOGIN_FAIL:

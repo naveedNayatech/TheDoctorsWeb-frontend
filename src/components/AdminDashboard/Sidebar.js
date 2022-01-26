@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
 import { useDispatch } from 'react-redux';
 
@@ -11,54 +11,53 @@ const Sidebar = () => {
         dispatch(logout());
     }
 
-
     return (
         <Fragment>
             <div className="sidebar">
             <div className="logo-details">
                 <i className="bx bxl-c-plus-plus"></i>
-                <span className="logo_name">TheDoctorsWeb</span>
+                <span className="logo_name">THEDOCTORS<span style={{color: '#F95800'}}>WEB</span></span>
             </div>
 
             <ul className="nav-links">
-                <li>
-                    <Link key="admindashboard" to="/adminDashboard">
+                <li className="nav_link">
+                    <NavLink key="admindashboard" to="/adminDashboard" activeClassName="link-name-active">
                         <i className="bx bx-grid-alt"></i>
                         <span className="link_name">Dashboard</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
 
-                <li>
-                    <Link key="patients" to="/patients">
+                <li className="nav_link">
+                    <NavLink key="patients" to="/patients" activeClassName="link-name-active">
                     <i className='bx bx-list-ul'></i>
                         <span className="link_name">Patients</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
-                <li>
-                    <Link key="doctors" to="/doctors">
+                <li className="nav_link">
+                    <NavLink key="doctors" to="/doctors" activeClassName="link-name-active">
                         <i className="bx bx-user"></i>
                         <span className="link_name">Doctors</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
 
-                <li>
-                    <Link key="rpm_devices" to="/devices">
+                <li className="nav_link">
+                    <NavLink key="inventory" to="/devices" activeClassName="link-name-active">
                         <i className="bx bx-pie-chart-alt-2"></i>
-                        <span className="link_name">RPM Devices</span>
-                    </Link>
+                        <span className="link_name">Inventory</span>
+                    </NavLink>
                 </li>
 
                
 
                 <br/>
                 <li>
-                    <Link key="logout" to="#" onClick={logoutHandler}>
-                        <i className="bx bx-log-out"></i>
-                        <span className="link_name">Logout</span>
-                    </Link>
+                    <NavLink key="logout" to="#" onClick={logoutHandler}>
+                        <i className="bx bx-log-out" style={{color: 'red'}}></i>
+                        <span className="link_name" style={{color: 'red'}}>Logout</span>
+                    </NavLink>
                 </li>
             </ul>
         </div>    

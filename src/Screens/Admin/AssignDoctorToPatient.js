@@ -7,6 +7,7 @@ import patientProfileImg from '../../assets/Images/patientProfile.png';
 import Loader from '../../layouts/Loader';
 import {useDispatch, useSelector} from 'react-redux';
 import { useAlert } from 'react-alert';
+import moment from 'moment';
 
 const AssignDoctorToPatient = (props) => {
 
@@ -31,7 +32,7 @@ const AssignDoctorToPatient = (props) => {
         }
 
         dispatch(getPatients());
-        
+
         if(patientId){
             dispatch(patientProfile(patientId))
         }
@@ -50,6 +51,8 @@ const AssignDoctorToPatient = (props) => {
     }
 
     const assignDoctor = (id) => {
+        console.log('Doctor ID is ' + id);
+        console.log('Patient Id is  '+ patientId);
         dispatch(assignPatientToDoctor(id, patientId))
     }
 
@@ -65,16 +68,18 @@ const AssignDoctorToPatient = (props) => {
             <div className="col-md-0 shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">
                 <div className="row">
                     <div className="col-md-4">
-                        <h5 className="pt-2 mt-2">Select Patient  </h5>
+                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Patient </span></h5>
                         <hr />
 
                         <form onSubmit={getPatientProfile}>
                             <select 
                                 name="patientlist"
                                 className="form-control"
+                                defaultValue={'Select Patient'}
                                 value={patientId} 
                                 onChange={(e) => setPatientId(e.target.value)}
                                 >
+                                <option disabled> Select Patient</option>    
                                 {patients && patients.map((patient, index) => (
                                     <option value={patient?._id} key={index}> {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                 ))}    
@@ -84,56 +89,47 @@ const AssignDoctorToPatient = (props) => {
                     </div>
 
                     <div className="col-md-8">
-                        <h5 className="pt-2 mt-2">Patient Details  </h5>
+                        <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
                         <hr />
 
                         {patientId && patient && <Fragment>
                 
-                                        <div className="col-md-12">
-                                    <div className="row">
-                                        <div className="col-md-4">
+                                    <div className="col-md-12">
+                                        <div className="row">
                                             <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
+                                            <p className="profile-name pl-3 pb-2">{patient?.title} {patient?.firstname} {patient?.lastname} </p>
                                         </div>
 
-                                        <div className="col-md-4">        
-                                            <p className="profile-name">{patient?.title} {patient?.firstname} {patient?.lastname} </p>
-
-                                            <Fragment>
-                                                <p className="doctor-specilizations">{patient?.email}</p>
-                                                <br />
-                                            </Fragment>
-                                        </div>
-                                    </div>
+                                        <br />
 
                                     <div className="row">
                                         <div className="col-md-4">    
-                                                <small><b>Phone Number (Primary)</b></small>
-                                                <p>{patient?.contactno}</p>
+                                        <span className="profile-label">Email Address: </span>
+                                        <p className="profile-value-text">{patient?.email ? patient?.email : 'N/A'}</p>
 
-                                                <small><b>Phone Number (Secondary)</b></small>
-                                                <p>{patient?.phone1 !== '' ? patient?.phone1 : 'N/A' }</p>
-
+                                        <span className="profile-label">Address: </span>
+                                        <p className="profile-value-text">{patient?.address} , {patient?.state}</p>
+    
                                         </div>
 
                                         <div className="col-md-4">    
-                                            <small><b>Fax</b></small>
-                                            <p>{patient?.phone2 !== '' ? patient?.phone2 : 'N/A' }</p>
+                                        <span className="profile-label">D.O.B: </span>
+                                        <p className="profile-value-text">{moment(patient?.DOB).format("ll")}</p>
 
-                                            <small><b>Consent Doctor ID</b></small>
-                                            <p>{patient?.consentdocid}</p>                                 
+                                        <span className="profile-label">Role: </span>
+                                            <p className="profile-value-text">{patient?.role}</p>                                 
                                         </div>
 
                                         <div className="col-md-4">    
-                                            <small><b>PCP</b></small>
-                                            <p>{patient?.pcp }</p>
+                                        <span className="profile-label">Gender: </span>
+                                            <p className="profile-value-text">{patient?.gender}</p>
 
-                                            <small><b>Insurance Status</b></small>
-                                            <p>{patient?.insurancestatus}</p>                                 
+                                            <span className="profile-label">SSN: </span>
+                                            <p className="profile-value-text">{patient?.ssn}</p>                                
                                         </div>
                                     </div>
                             </div>
-
-                            <button className="btn btn-danger" onClick={() => assignDoctor(id)}> Assign {patient?.title} {patient?.firstname} {patient?.lastname} to Dr. {firstName && firstName} {lastName && lastName} </button>                        
+                            <button className="add-staff-btn mr-5" style={{ float: 'right' }} onClick={() => assignDoctor(id)}> Assign {patient?.title} {patient?.firstname} to Dr. {firstName && firstName} {lastName && lastName} </button>             
                         </Fragment>}
                     </div>
                 </div>

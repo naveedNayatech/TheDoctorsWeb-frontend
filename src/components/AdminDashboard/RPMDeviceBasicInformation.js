@@ -83,8 +83,20 @@ const RPMDeviceBasicInformation = (props) => {
                             <th scope="col-md-3">hardware Version</th>
                             <td scope="col-md-3">{deviceDetails?.hardwareVersion ? deviceDetails?.hardwareVersion : 'N/A'}</td>
                             <th scope="col-md-3">Patient Assigned Status</th>
-                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id ? <span style={{color: '#F95800', fontWeight: 'bold'}}>Assigned</span> : <span style={{color: 'green', fontWeight: 'bold'}}>In Stock</span> }</td>
+                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id ? <span style={{color: '#F95800', fontWeight: 'bold'}}>Assigned
+                            </span> : <span style={{color: 'green', fontWeight: 'bold'}}>In Stock</span>
+                             } 
+                             </td>
                         </tr>
+
+                        {deviceDetails?.assigned_patient_id && <Fragment>
+                            <tr>
+                            <th scope="col-md-3">Assigned To: </th>
+                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname} ( {deviceDetails?.assigned_patient_id?.gender} )</td>
+                        </tr>
+                        </Fragment> 
+                        }
+                        
                     </tbody>
                 </table>
 

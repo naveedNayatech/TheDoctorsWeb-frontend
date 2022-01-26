@@ -10,18 +10,20 @@ import Loader from '../../layouts/Loader';
 
 const DevicesDetails = (props) => {
 
-    let deviceId = props?.location?.state?.deviceid;
+    let deviceId = props?.location?.state?.id;
 
     const alert = useAlert();
     const dispatch = useDispatch();
     const { loading, error, deviceDetails} = useSelector(state => state.deviceDetails);
 
+    console.log('Device ID is ' + deviceId);
 
     useEffect(() => {
         if(error){
             return alert.error(error);
         }
 
+        console.log('Device ID is ' + deviceId);
         dispatch(getDeviceDetails(deviceId));
     }, [dispatch, alert, error]);
 
@@ -37,13 +39,13 @@ const DevicesDetails = (props) => {
                     {loading ? <Loader /> : <Fragment>
                     <div className="shadow-lg p-3 mb-2 mr-4 ml-4 rounded">
                             <div className="home-content">
-                                <h5 className="pt-2">Device Details (SN: {deviceDetails?.deviceId})</h5>
+                                <h5 className="pt-2">Device Details <span style={{color: '#F95800'}}>(SN: {deviceId})</span></h5>
                                 <hr /> 
 
                                 <RPMDeviceBasicInformation deviceData={deviceDetails}/>    
                             </div>
                     </div>
-                    </Fragment>}
+                    </Fragment> }
 
                 </section>        
         </Fragment>

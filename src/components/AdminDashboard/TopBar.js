@@ -47,9 +47,9 @@ const TopBar = () => {
 
                     <div className="dropdown-menu">
                                     
-                        <Link className="dropdown-item" to="/me">My Profile</Link>
+                        <Link className="dropdown-item" to="/me"><small>My Profile</small></Link>
 
-                        <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}>Logout</Link>
+                        <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}><small>Logout</small></Link>
                     </div>
                 </nav>
                 <br />

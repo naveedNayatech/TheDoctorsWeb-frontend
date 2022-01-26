@@ -12,6 +12,10 @@ import {
     DOCTOR_PROFILE_REQUEST,
     DOCTOR_PROFILE_SUCCESS,
     DOCTOR_PROFILE_FAIL,
+    DOCTOR_PATIENTS_REQUEST,
+    DOCTOR_PATIENTS_SUCCESS,
+    DOCTOR_PATIENTS_FAIL,
+    FETCH_DOCTOR_PATIENTS_SUCCESS,
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
@@ -41,6 +45,20 @@ import {
     UPDATE_DEVICE_REQUEST,
     UPDATE_DEVICE_SUCCESS,
     UPDATE_DEVICE_FAIL,
+    SORT_DEVICES_BY_BROKEN_REQUEST,
+    SORT_DEVICES_BY_BROKEN_SUCCESS,
+    SORT_DEVICES_BY_BROKEN_FAIL,
+    SORT_DEVICES_REQUEST,
+    SORT_DEVICES_SUCCESS,
+    SORT_DEVICES_FAIL,
+    DELETE_RPM_DEVICE_REQUEST,
+    DELETE_RPM_DEVICE_SUCCESS,
+    DELETE_RPM_DEVICE_FAIL,
+    DELETE_RPM_DEVICE_RESET,
+    ADD_PATIENT_REQUEST,
+    ADD_PATIENT_SUCCESS,
+    ADD_PATIENT_FAIL,
+    PATIENT_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -55,8 +73,7 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
         case ALL_PATIENTS_SUCCESS: 
         return { 
             loading: false,  
-            patientCount: action.payload.patientCount,
-            patients: action.payload.patients        
+            patients: action.payload       
         }
 
         case ALL_PATIENTS_FAIL: 
@@ -74,9 +91,7 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
         case ALL_DOCTORS_SUCCESS:
             return { 
                 loading: false,  
-                doctorCount: action.payload.doctorCount,
-                resPerPage: action.payload.resPerPage,
-                doctors: action.payload.doctors 
+                doctors: action.payload 
             }
             
         case ALL_DOCTORS_FAIL:
@@ -98,20 +113,18 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
     }
 } 
 
-export const newDoctorReducers = (state = {doctors: {} }, action) => {
+export const newDoctorReducers = (state = {}, action) => {
     switch (action.type) {
  
      case ADD_DOCTOR_REQUEST: 
       return {
-          ...state,
           loading: true
       }
  
      case ADD_DOCTOR_SUCCESS: 
          return {
              loading: false,
-             success: action.payload.success,
-             doctor: action.payload.doctor
+             success: true,
          }  
      
      case ADD_DOCTOR_FAIL:
@@ -123,7 +136,8 @@ export const newDoctorReducers = (state = {doctors: {} }, action) => {
      case ADD_DOCTOR_RESET: 
      return {
          ...state,
-         success: false
+         success: false,
+         loading: false
      }    
      
      case CLEAR_ERRORS: 
@@ -147,9 +161,8 @@ export const newDoctorReducers = (state = {doctors: {} }, action) => {
             return {
                 ...state,
                 loading: false,
-                success: action.payload.success,
-                doctor: action.payload.doctor,
-                docpatients: action.payload.docpatients
+                success: true,
+                doctor: action.payload
             }
         
         case DOCTOR_PROFILE_FAIL:
@@ -157,6 +170,7 @@ export const newDoctorReducers = (state = {doctors: {} }, action) => {
                 loading: false,
                 error: action.payload
             }
+
         case CLEAR_ERRORS: 
          return {
             ...state,
@@ -167,6 +181,37 @@ export const newDoctorReducers = (state = {doctors: {} }, action) => {
     } 
 }
 
+export const doctorpatientsReducers = (state = {}, action) => {
+    switch (action.type) {
+        case DOCTOR_PATIENTS_REQUEST: 
+            return {
+                loading: true,
+            }
+        
+        case DOCTOR_PATIENTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                success: true,
+                doctorpatients: action.payload
+            }
+        
+        case DOCTOR_PATIENTS_SUCCESS:
+            return {
+                loading: false,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }    
+
+        default: 
+            return state; 
+    } 
+}
 
 export const doctorReducers = (state = {doctor: {}}, action) => {
     switch(action.type) {
@@ -221,7 +266,7 @@ export const patientProfileReducers = (state = {patient: {}}, action) => {
             return {
                 ...state,
                 loading: false,
-                success: action.payload.success,
+                success: true,
                 patient: action.payload
             }
         
@@ -230,8 +275,8 @@ export const patientProfileReducers = (state = {patient: {}}, action) => {
         return {
             ...state,
             loading: false,
-            success: action.payload.success,
-            patient: action.payload,
+            success: true,
+            // patient: action.payload,
             isUpdated: true
         }    
         
@@ -286,6 +331,9 @@ export const deviceDataReducers = (state = { deviceData: []}, action) => {
 export const devicesReducers = (state = { devices: []}, action) => {
     switch(action.type) {
         case GET_DEVICES_LIST_REQUEST:
+        case SORT_DEVICES_REQUEST:
+        case SORT_DEVICES_BY_BROKEN_REQUEST:     
+        case DELETE_RPM_DEVICE_REQUEST:
         return { 
             loading: true,      
         }
@@ -293,12 +341,39 @@ export const devicesReducers = (state = { devices: []}, action) => {
         case GET_DEVICES_LIST_SUCCESS:  
         return { 
             loading: false,  
-            deviceCount: action.payload.deviceCount,
+            deviceCount: action.payload.count,
             devices: action.payload.devices        
         }
 
+        case SORT_DEVICES_BY_BROKEN_SUCCESS: 
+        return {
+            loading: false, 
+            devices: action.payload
+        }
+
+        case SORT_DEVICES_SUCCESS: 
+        return {
+            loading: false, 
+            devices: action.payload,
+        }
+
+        case DELETE_RPM_DEVICE_SUCCESS: 
+        return {
+            loading: false, 
+            isDeleted: true
+        }
+
+        case DELETE_RPM_DEVICE_RESET: 
+        return { 
+            ...state,
+         loading: false,
+         isDeleted: false
+        }
 
         case GET_DEVICES_LIST_FAIL: 
+        case SORT_DEVICES_BY_BROKEN_FAIL:
+        case SORT_DEVICES_FAIL:
+        case DELETE_RPM_DEVICE_FAIL:
         return { 
             loading: false,  
             error: action.payload        
@@ -326,8 +401,8 @@ export const deviceDetailsReducers = (state = {deviceDetails: {}}, action) => {
             return {
                 ...state,
                 loading: false,
-                success: action.payload.success,
-                deviceDetails: action.payload.findDevice,
+                success: true,
+                deviceDetails: action.payload,
             }
         
         case GET_DEVICE_DETAILS_FAIL:
@@ -358,7 +433,7 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
      case ADD_RPM_DEVICE_SUCCESS: 
          return {
              loading: false,
-             success: action.payload.success,
+             success: true,
          }  
 
     case UPDATE_DEVICE_SUCCESS: 
@@ -373,12 +448,15 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
              ...state,
              error: action.payload
          }    
-     
+    
+
     case ADD_RPM_DEVICE_RESET: 
-         return { 
-             ...state,
-          success: false
-         }    
+        return { 
+            ...state,
+        loading: false,
+        success: false,
+        isUpdated: false
+        }      
      
      case CLEAR_ERRORS: 
          return {
@@ -389,3 +467,32 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
         return state; 
     } 
  }
+
+ export const patientReducers =  (state = {}, action) => {
+    switch (action.type) {
+        case ADD_PATIENT_REQUEST: 
+         return {
+             ...state,
+             loading: true
+         }
+
+         case ADD_PATIENT_SUCCESS: 
+        return {
+            loading: false,
+             isAdded: true
+        }
+
+        case ADD_PATIENT_FAIL: 
+        return {
+            error: action.payload
+        }
+
+        case PATIENT_RESET: 
+        return {
+            isAdded: false,
+            loading: false,
+        }
+        default: // need this for default case
+        return state 
+    }
+}

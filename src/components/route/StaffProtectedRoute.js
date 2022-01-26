@@ -2,7 +2,7 @@ import React, {Fragment } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const StaffProtectedRoute = ({component: Component, ...rest }) => {
+const StaffProtectedRoute = ({isStaff, component: Component, ...rest}) => {
     
     const { isAuthenticated, error, loading, staff } = useSelector(state => state.staffAuth);
 
@@ -11,19 +11,17 @@ const StaffProtectedRoute = ({component: Component, ...rest }) => {
             
             {loading === false && (
                 <Route {...rest} render={props => {
-
                     if(isAuthenticated === false){
                         return <Redirect to="/stafflogin" />
                     }
-                    
-                    
-                    if(staff.role === 'HR'){
-                        return <Redirect to="/Dashboard" />
+
+                    if(isStaff === true && staff.role === 'Doctor'){
+                        return <Redirect to="/adminDashboard" />
                     }
 
-                     return <Component {...props} /> 
+                    return <Component {...props} /> 
                 }}
-                />
+             />
             )}
         </Fragment>
     )

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Form, Image, Button } from 'react-bootstrap';
+import { Form, Image, Button, Badge } from 'react-bootstrap';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
@@ -50,7 +50,7 @@ const PatientProfile = (props) => {
 
         dispatch(patientProfile(patientid));
 
-        dispatch(getPatientTelemetryData(patientid))
+        // dispatch(getPatientTelemetryData(patientid))
         
         if(isUpdated) {
             alert.success('Updated Successfully');
@@ -62,31 +62,31 @@ const PatientProfile = (props) => {
         dispatch(assignDeviceToPatient(patientid, deviceId));
     }
 
-    const removeAssignDevice = (deviceid) => {
-        console.log('Device id is ' + deviceid);
-        console.log('Patient id is ' + patientid);
+    // const removeAssignDevice = (deviceid) => {
+    //     console.log('Device id is ' + deviceid);
+    //     console.log('Patient id is ' + patientid);
 
-         dispatch(removeAssignedDevice(deviceid, patientid));
-    }
+    //      dispatch(removeAssignedDevice(deviceid, patientid));
+    // }
 
-    const refreshTelemetaryData =() => {
-        dispatch(getPatientTelemetryData(patientid, sort))
-    }
+    // const refreshTelemetaryData =() => {
+    //     dispatch(getPatientTelemetryData(patientid, sort))
+    // }
 
-    const sortData = (event) => {
-        setSort(event.target.value);
-        dispatch(getPatientTelemetryData(patientid,sort))
-    }
+    // const sortData = (event) => {
+    //     setSort(event.target.value);
+    //     dispatch(getPatientTelemetryData(patientid,sort))
+    // }
 
-    const searchByDate = (e) => {
-        e.preventDefault();
-        console.log('Date for search is ' + searchDate);
+    // const searchByDate = (e) => {
+    //     e.preventDefault();
+    //     console.log('Date for search is ' + searchDate);
 
-        let searchedDate = (moment(searchDate).format("YYYY-MM-DD"));
-        console.log('Date for search is ' + searchedDate);
+    //     let searchedDate = (moment(searchDate).format("YYYY-MM-DD"));
+    //     console.log('Date for search is ' + searchedDate);
 
-        dispatch(getDeviceDataByDate(deviceid, patientid, searchedDate))
-    }
+    //     dispatch(getDeviceDataByDate(deviceid, patientid, searchedDate))
+    // }
 
     return (
         <Fragment>
@@ -105,31 +105,8 @@ const PatientProfile = (props) => {
                             {patient && <Fragment>
                             <div className="row">
                                 <div className="col-md-3">
-                                    <h5 className="pt-2 mt-2">Patient Details  </h5>
+                                    <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
                                 </div>
-
-                                <div className="col-md-2">
-                                    <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Patient Notes </small></Link>
-                                </div>
-
-                                <div className="col-md-2">
-                                <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Messages(s)</small></Link>
-                                </div>
-
-                                <div className="col-md-2">
-                                    {patient?.doctorid === null ? <Link to="/patientProfile" className="btn btn-link pt-2 mt-2">
-                                        <small style={{color: 'red'}}>Phy. not assigned</small>
-                                        </Link> : <Link to={{ pathname: "/doctorProfile", state: {id: patient?.doctorid}}} className="btn btn-link pt-2 mt-2">
-                                        
-                                        <i className="bx bx-user"> Phy. Details </i>
-                                    </Link>}
-                                    
-                                </div>
-
-                                <div className="col-md-3">
-                                    <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Update Patient Info </small> </Link>
-                                </div>
-
                             </div>
                                         
                             <hr />
@@ -137,55 +114,51 @@ const PatientProfile = (props) => {
                                 <div className="row">
                                     <div className="col-md-3">
                                         <div>
-                                            <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
+                                            <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
                                             
-                                                <p className="profile-name">{patient?.title}. {patient?.firstname} {patient?.lastname} </p>
+                                                <p className="patient-profile-name">{patient?.firstname} {patient?.lastname} </p>
                                         
                                                 <Fragment>
-                                                    <p className="doctor-specilizations">{patient?.email}</p>
+                                                    <p className="patient-email">{patient?.email}</p>
                                                     <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">{patient?.readingsperday}</i></p>
+                                                    <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
-                                                    
-
                                                 </Fragment>
                                         </div>    
                                  </div>
 
                                     <div className="col-md-3">
-                                            <span className="patient-profile-col-heading">Practice Address</span>                                 
+                                            <span className="patient-profile-col-heading">Address</span>                                 
                                              <hr />
 
-                                             <b>Address: </b>
-                                             <p className="patient-profile-card-text">651A Colony Island Ave, 2nd floor</p>
+                                             <span className="profile-label">Address: </span>
+                                             <p className="patient-profile-card-text">{patient?.address}, {patient?.city}</p>
 
-                                             <b>City: </b>
-                                             <p className="patient-profile-card-text">Brooklyn</p>
+                                             <span className="profile-label">State: </span>
+                                             <p className="patient-profile-card-text">{patient?.state} , {patient?.zipCode}</p>
 
-                                             <b>State: </b>
-                                             <p className="patient-profile-card-text">New York</p>
+                                             <span className="profile-label">Line 2: </span>
+                                             <p className="patient-profile-card-text">{patient?.line2}</p>
                                     </div>
 
                                     <div className="col-md-3">
-                                            <span className="patient-profile-col-heading">Patient Contact Information</span>                                 
+                                            <span className="patient-profile-col-heading">Contact Information</span>                                 
                                              <hr />
 
-                                             <b>Phone No. (primary): </b>
-                                             <p className="patient-profile-card-text">{patient?.contactno === ' ' ? 'N/A' : patient?.contactno}</p>
+                                             <span className="profile-label">Phone 1 </span>
+                                             <p className="patient-profile-card-text">{patient?.phone1 ? patient?.phone1 : 'N/A'}</p>
 
-                                             <b>Phone No. (Secondary): </b>
-                                             <p className="patient-profile-card-text">{patient?.phone1 === '' ? 'N/A' : patient?.phone1}</p>
-
-                                             <b>Fax Number: </b>
-                                             <p className="patient-profile-card-text">{patient?.phone2 === '' ? 'N/A' : patient?.phone2}</p>
+                                             <span className="profile-label">Mobile No </span>
+                                             <p className="patient-profile-card-text">{patient?.mobileNo ? patient?.mobileNo : 'N/A' } </p>
                                     </div>
+
 
                                     <div className="col-md-3 ">
                                             <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
                                              <hr />
-                                            {patient?.diseases && patient?.diseases.map((disease, index) => (
+                                            {patient?.diseases && patient?.diseases.map((diseases, index) => (
                                                 <Fragment key={index}>
-                                                     <span className="patient-profile-disease-span"> {disease?.diseasename} </span>   
+                                                     <span className="patient-profile-disease-span"> {diseases} </span>   
                                                 </Fragment>
                                             ))}
                                     </div>
@@ -194,23 +167,21 @@ const PatientProfile = (props) => {
                                  <br />   
                                 <div className="row">
                                 <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Practice Contact Information</span>                                 
+                                    <span className="patient-profile-col-heading">Physician Information</span>                                 
                                         <hr />
 
-                                    <b>Name: </b>
-                                    <p className="patient-profile-card-text">Diago A Diaz</p>
+                                    <span className="profile-label">Name</span>
+                                    <p className="patient-profile-card-text">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
 
-                                    <b>Practice: </b>
-                                    <p className="patient-profile-card-text">Sunset Sleep Diagnostics</p>
+                                    <span className="profile-label">Gender</span>
+                                    <p className="patient-profile-card-text"><Badge bg="info text-white" className="male-tag">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.gender}</Badge> </p>
 
-                                    <b>Physician NPI: </b>
-                                    <p className="patient-profile-card-text">Sunset Sleep Diagnostics</p>
                                 </div>
 
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">RPM Integration</span>                                 
                                         <hr />
-                                        {patient?.deviceassigned && patient?.deviceassigned.length === 0 ? <Fragment>
+                                         {/* {patient?.deviceassigned && patient?.deviceassigned.length === 0 ? <Fragment>
                                             <b>No Device Assigned Yet</b>
                                             
 
@@ -218,16 +189,16 @@ const PatientProfile = (props) => {
                                             </Fragment> : <Fragment>
                                             <b>Assigned Devices (0{patient.deviceassigned && patient?.deviceassigned.length})</b>
                                             <hr/>
-                                            {patient?.deviceassigned && patient?.deviceassigned.map((deviceass, index) => (
+                                             {patient?.deviceassigned && patient?.deviceassigned.map((deviceass, index) => (
                                                 <Fragment>
                                                 <p key={index}><i>{deviceass?.deviceid}</i> <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
                                                     <i className="bx bx-trash"></i>
                                                 </button></p>
                                                 
                                                 </Fragment>
-                                            ))}
+                                            ))} 
                                                 
-                                        </Fragment>}            
+                                        </Fragment>}  */}           
                                     
                                 </div>
 
@@ -256,169 +227,18 @@ const PatientProfile = (props) => {
                                     <span className="patient-profile-col-heading">Insurance companies</span>                                 
                                         <hr />
                                     <div className="row">    
-                                    <div className="col-md-4">
-                                     <img src={insuranceLogo} className="patient-profile-insurance-logo" alt="insurance-logo" />   
-                                     </div>
-
                                      <div className="col-md-7">
-                                        <span>Aetna</span> 
-                                        <p>4788547755552458</p>   
+                                     <p className="patient-profile-card-text">AETNA</p>
+                                     <p className="patient-profile-card-text">584750054874500
+                                     </p>   
                                     </div>    
                                     </div>
                                    
-                                  </div>
-                                 </div>
-                                </Fragment> }
-                            </div>
-
-                            </div>
-
-
-                            {deviceData && deviceData.length > 0 ? <Fragment>
-                                <hr style={{backgroundColor: '#F95800', height: '2px'}}/>
-                                <div>
-                                    <div className="row">
-                                            <div className="col-md-7">
-                                                <strong>Device Readings <span className="old-history-span-tag"> ( Complete history )</span></strong>         
-                                            </div>
-
-                                            
-                                            <div className="col-md-2">
-                                                <select className="form-control" 
-                                                    placeholder="Sort By" 
-                                                    value={sort}
-                                                    onChange={sortData}
-                                                    >
-                                                    <option selected disabled>Sort By</option>
-                                                    <option value="1">Ascending Order</option>
-                                                    <option value="-1">Descending Order</option>
-                                                </select>
-                                            </div>
-
-                                            <form onSubmit={searchByDate}>
-                                                <div className="col-md-12">
-                                                    <Form.Group>
-                                                        <DatePicker  
-                                                        placeholder="Search By Date" 
-                                                        className="form-control"
-                                                        selected={searchDate}
-                                                        onChange={(date) => setSearchDate(date)}
-                                                        />
-                                                        
-                                                    </Form.Group>
-                                                   
-                                                    <Button className="btn btn-small" type="submit">Search</Button>                                                    
-                                                </div>
-                                            </form>
-
-                                            {/* <div className="col-md-2">
-                                                <button className={tabMode === 'telemetaryData' ? 'btn btn-primary' : 'btn btn-link'} onClick={() => setTabMode('telemetaryData')}>TelemetaryData </button>         
-                                            </div>
-
-                                            <div className="col-md-2">
-                                                <button className={tabMode === 'sphygmomanometer' ? 'btn btn-primary' : 'btn btn-link'} onClick={() => setTabMode('sphygmomanometer')}>Sphygmomanometer </button>         
-                                            </div>
-
-                                            <div className="col-md-2">
-                                                <button className='btn btn-link' onClick={() => {refreshTelemetaryData()}}>Refresh </button>         
-                                            </div> */}
-                                        </div> 
-                                        <hr />
-                                    
-                                        {tabMode === 'telemetaryData' ? <Fragment>
-                                            {deviceData && deviceData.map((devicedata, index) => (
-                                            <Fragment>
-                                                {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia && devicedata?.telemetaryData?.pul ? <Fragment>
-                                                    <div className="row">
-                                                        <div className="col-md-1">
-                                                            <Image src={systolicImg} className="systolic-image" />    
-                                                        </div>
-
-                                                        
-                                                        <div className="col-md-3">
-                                                            <b>Systolic: {devicedata?.telemetaryData?.sys}</b>
-                                                            {devicedata?.telemetaryData?.sys <= 120 && devicedata?.telemetaryData?.sys >= 80 ? 
-                                                            <p className="normalBP">Normal</p> : devicedata?.telemetaryData?.sys >= 120 && devicedata?.telemetaryData?.sys ? <p className="elevatedBP">Elevated</p> : 
-                                                            devicedata?.telemetaryData?.sys >= 130 && devicedata?.telemetaryData?.sys <= 140 ? <p>High BP</p> : 
-                                                            devicedata?.telemetaryData?.sys >= 140 ? <p>Hypertension</p> : <p>Hypertensive Crisis</p>}
-                                                        </div>
-
-                                                        <div className="col-md-1">
-                                                            <Image src={diastolicImg} className="systolic-image" />    
-                                                        </div>
-
-                                                        <div className="col-md-3">
-                                                            <b>Diastolic: {devicedata?.telemetaryData?.dia}</b>
-                                                            {devicedata?.telemetaryData?.dia < 120 && devicedata?.telemetaryData?.dia > 80 ? 
-                                                            <p className="normalBP">Normal</p> : devicedata?.telemetaryData?.dia > 120 && devicedata?.telemetaryData?.dia ? <p className="elevatedBP">Elevated</p> : 
-                                                            devicedata?.telemetaryData?.dia > 130 && devicedata?.telemetaryData?.dia < 140 ? <p>High BP</p> : 
-                                                            devicedata?.telemetaryData?.dia > 140 ? <p>Hypertension</p> : <p>Hypertensive Crisis</p>}
-                                                        </div>
-
-                                                        <div className="col-md-1">
-                                                            <Image src={pulseImg} className="systolic-image" />    
-                                                        </div>
-
-                                                        <div className="col-md-3">
-                                                            <b>Pulse {devicedata?.telemetaryData?.pul}</b>
-                                                            <p className="normalBP">Normal</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <br/>            
-                                                    <div>
-                                                        <small className="devicedata-createddata"><i>Created At: {moment(devicedata?.createdAt).format("lll")}</i></small>
-                                                    </div>
-
-                                                   {devicedata?.comments ? <Fragment> <span style={{fontWeight: 'bold'}}><i>Comment By Physician:</i> </span> {devicedata?.comments} </Fragment>: null }             
-                                                </Fragment> : ''} <hr />
-                                        </Fragment>
-                                        ))}
-                                          
-                                        </Fragment> : ''
-                                       
-                                        }         
-                                         
-                                        
-
-                                        {tabMode === 'sphygmomanometer' ? <Fragment>
-                                        {deviceData && deviceData.map((devicedata, index) => (
-                                            <Fragment>
-                                                    {devicedata?.telemetaryData?.wt ? <Fragment>
-                                                <table className="table table-bordered" key={index}>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th scope="col-md-3">wt</th>
-                                                                <td scope="col-md-3">{devicedata?.telemetaryData?.wt}</td>
-                                                                <th scope="col-md-3">bmi</th>
-                                                                <td scope="col-md-3">{devicedata?.telemetaryData?.bmi}</td>
-                                                                <th scope="col-md-2">fat</th>
-                                                                <td scope="col-md-2">{devicedata?.telemetaryData?.fat}</td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <th scope="col-md-3">bm</th>
-                                                                <td scope="col-md-3">{devicedata?.telemetaryData?.bm}</td>
-                                                                <th scope="col-md-3">mus</th>
-                                                                <td scope="col-md-3">{devicedata?.telemetaryData?.mus}</td>
-                                                                <th scope="col-md-2">ts</th>
-                                                                <td scope="col-md-2">{devicedata?.telemetaryData?.ts}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>        
-                                                    </Fragment> : '' }
-                                            </Fragment>
-                                        ))}
-                                        </Fragment> : ''}
-                                    </div>
-
-                            </Fragment> : <Fragment>
-                                <div style={{textAlign: 'center'}}>
-                                    <p>No Data Found</p>
-                                    <button className="btn btn-primary" onClick={() => {refreshTelemetaryData()}}> Refresh Data</button>                        
+                                         </div>
+                                        </div>
+                                    </Fragment> }
                                 </div>
-                                </Fragment>}
-                           
+                              </div>                           
                            </div>
                          </Fragment> 
                          }         

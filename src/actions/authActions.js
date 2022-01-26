@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Prod } from '../constants/ActionType';
+import { Prod, Prod01 } from '../constants/ActionType';
 
 import { 
     LOGIN_REQUEST,
@@ -20,65 +20,74 @@ import {
 
 
 // Login 
-export const login = (email, password, role) => async(dispatch) => {
+export const login = (values) => async(dispatch) => {
+    const { email, password, role} = values;
     try {
        dispatch({
            type: LOGIN_REQUEST
        })     
 
-       const config = {
-           headers: {
-               'Content-Type': 'application/json'
-           }
+       
+
+       const res  = await axios.post(`${Prod01}/admin/login`, {
+           email,
+           password
+       });
+      
+       if (res.data) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(res.data.tokens.access.token)
+        );
+        localStorage.setItem(
+          "admin",
+          JSON.stringify(res.data.Admin)
+        );
        }
 
-       const { data } = await axios.post(`${Prod}/v1/adminlogin`, {
-           email,
-           password,
-           role
-       }, config);
 
        dispatch({
            type: LOGIN_SUCCESS,
-           payload: data.admin
+           payload: res.data
        })
        
     } catch (error) {
         dispatch({
             type: LOGIN_FAIL,
-            payload: error.response.data.message
+            payload: error.message
         })
     }
 }
 
 // Staff Login 
-export const staffLogin = (email, password, role) => async(dispatch) => {
+export const staffLogin = (values) => async(dispatch) => {
     try {
        dispatch({
            type: STAFF_LOGIN_REQUEST
        })     
 
-       const config = {
-           headers: {
-               'Content-Type': 'application/json'
-           }
-       }
+       const res = await axios.post(`${Prod01}/doctor/login`, values);
 
-       const { data } = await axios.post(`${Prod}/v1/login`, {
-           email,
-           password,
-           role
-       }, config);
+       if (res.data) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(res.data.tokens.access.token)
+        );
+        localStorage.setItem(
+          "doctor",
+          JSON.stringify(res.data.doctor)
+        );
+       }
 
        dispatch({
            type: STAFF_LOGIN_SUCCESS,
-           payload: data.doctor
+           payload: res.data.doctor
        })
        
     } catch (error) {
         dispatch({
             type: STAFF_LOGIN_FAIL,
-            payload: error.response.data.message
+            payload: error.message
         })
     }
 }

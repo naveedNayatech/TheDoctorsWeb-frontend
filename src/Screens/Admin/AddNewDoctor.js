@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addDoctor, clearErrors } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
 import { ADD_DOCTOR_RESET} from '../../constants/adminConstants';
-import defaultDoctorImg from '../../assets/Images/default.jpg';
+import TextField from '../../components/Form/TextField';
+import GenderSelectbox from '../../components/Form/GenderSelectbox';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 
 const AddNewDoctor = ({ history }) => {
 
@@ -17,36 +20,45 @@ const AddNewDoctor = ({ history }) => {
 
     const { loading, error, success} = useSelector(state => state.newDoctor);
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [gender, setGender] = useState('Male'); 
-    const [contactno, setContactno] = useState('');
-    const [phone1, setPhone1] = useState('');
-    const [phone2, setPhone2] = useState('');
-    const [npi, setNpi] = useState('');
-    const [licenseNumber, setLicenseNumber] = useState('');
-    const [specialization, setSpecialization] = useState();
-    const [avatar, setAvatar] = useState('https://th.bing.com/th/id/OIP.Ghae4OEdb4UmC3hkqpFvLAHaGd?pid=ImgDet&rs=1');
-    const [avatarPreview, setAvatarPreview] = useState('https://th.bing.com/th/id/OIP.Ghae4OEdb4UmC3hkqpFvLAHaGd?pid=ImgDet&rs=1');
+    const validate = Yup.object().shape({
+		firstname: Yup.string()
+        .required('First Name is required')
+        .min(2, 'Should be atleast 2 characters')
+        .max(20, 'Should be less than 20 characters'),
+		lastname: Yup.string() 
+		  .min(2, 'Should be atleast 2 characters')
+		  .max(20, 'Should be less than 20 characters')
+		  .required('Last Name is Required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),  
+		password: Yup.string()
+        .min(6, 'Minimum 6 characters')
+        .max(20, 'Maximum 20 characters')
+        .required('Password is Required'),
+        DOB:Yup.string().required('DOB is required'),
+        mobileNo: Yup.string(),
+        phone1: Yup.string(),
+        gender: Yup.string(),
+        npinumber: Yup.string(),
+        licensenumber: Yup.string()
+	  });
 
-  const  handleOnchange  =  val  => {
-    setSpecialization(val)
-  }
-
-  const  options  = [
-    { label:  'MBBS', value:  'MBBS'  },
-    { label:  'FCPS', value:  'FCPS'  },
-    { label:  'HMS', value:  'HMS'  },
-    { label:  'Dermatologists', value:  'Dermatologist'  },
-    { label:  'Ophthalmologists', value:  'Ophthalmologists'  },
-  ]
-
-  useEffect(() => {
-    if(error){
-        alert.error(error);
-        dispatch(clearErrors());
+    const  handleOnchange  =  val  => {
+        setSpecialization(val)
     }
+
+    const  options  = [
+        { label:  'MBBS', value:  'MBBS'  },
+        { label:  'FCPS', value:  'FCPS'  },
+        { label:  'HMS', value:  'HMS'  },
+        { label:  'Dermatologists', value:  'Dermatologist'  },
+        { label:  'Ophthalmologists', value:  'Ophthalmologists'  },
+    ]
+
+    useEffect(() => {
+        if(error){
+            alert.error(error);
+            dispatch(clearErrors());
+        }
 
     if(success){
         alert.success('Doctor Added');
@@ -57,22 +69,9 @@ const AddNewDoctor = ({ history }) => {
     }
 }, [dispatch, alert, error, success, history]);
 
-
-    const submitHandler = (e) => {
-        e.preventDefault(); 
-		dispatch(addDoctor(firstName, lastName, email, gender, contactno, phone1, phone2, npi, licenseNumber, avatar, specialization));
+    const submitHandler = (values) => {
+		dispatch(addDoctor(values));
     }
-
-    const onImageChange = e => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            if(reader.readyState === 2){
-                setAvatarPreview(reader.result);
-                setAvatar(reader.result);
-            }
-        }
-            reader.readAsDataURL(e.target.files[0]);    
-        }
 
     return (
         <Fragment>
@@ -86,191 +85,131 @@ const AddNewDoctor = ({ history }) => {
 
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add Doctor</h5>
-                        <hr />
+                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}> Doctor</span></h5>
+                        <hr className="blue-hr" />
 
-                        <form onSubmit={submitHandler} encType='multipart/form-data'>
+                        <Formik initialValues={{ }}
+                         validationSchema={validate}
+                         onSubmit={values => {
+                            submitHandler(values)
+                        }}
+                         >   
+                         { formik => (
+                             <div>
+                             <Form>
+                                 <div className="row">
+                                     {/* First Name */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="First Name" 
+                                             name="firstname" 
+                                             type="text" 
+                                             placeholder="First Name"
+                                         />
+                                     </div>
 
-                            <div className="col-md-12">
-                            <div style={{textAlign: 'center'}}>
-                                <div>
-                                    <figure>
-                                        <img
-                                            src={avatarPreview}
-                                            className='rounded-circle'
-                                            alt='Avatar Preview'
+                                     {/* Last Name */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="Last Name" 
+                                             name="lastname" 
+                                             type="text" 
+                                             placeholder="Last Name"
+                                         />
+                                     </div>
+
+                                     {/* Gender */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <GenderSelectbox 
+                                        label="Gender"
+                                        name="gender"
+                                    />
+                                    </div>
+
+                                     {/* DOB */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <TextField 
+                                            label="DOB" 
+                                            name="DOB" 
+                                            type="date" 
                                         />
-                                    </figure>
-                                </div>
+                                    </div>
 
+                                     {/* Email */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="Email" 
+                                             name="email" 
+                                             type="email" 
+                                             placeholder="Email Address"
+                                         />
+                                     </div>
 
-                                <div className='custom-file col-md-3 m-2'>
-                                        <input
-                                            type='file'
-                                            name='avatar'
-                                            className='custom-file-input'
-                                            id='customFile'
-                                            accept='image/*'
-                                            onChange={onImageChange}
+                                     {/* Password */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="Password" 
+                                             name="password" 
+                                             type="text" 
+                                             placeholder="Password"
+                                         />
+                                     </div>
+
+                                     {/* Phone1 */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="Phone 1" 
+                                             name="phone1" 
+                                             type="text" 
+                                             placeholder="Phone 1"
+                                         />
+                                     </div>
+
+                                     {/* Mobile Number */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="Mobile Number" 
+                                             name="mobileNo" 
+                                             type="text" 
+                                             placeholder="Mobile Number"
+                                         />
+                                     </div>
+
+                                    {/* NPI Number */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <TextField 
+                                            label="NPI Number" 
+                                            name="npinumber" 
+                                            type="text"
+                                            placeholder="NPI Number" 
                                         />
-                                        <label className='custom-file-label' style={{textAlign: 'left'}} htmlFor='customFile'>
-                                            Choose Avatar ...
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br/>
-
-
-                            <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="firstname"><i className='bx bx-user label-icons'></i> First Name</label>
-                                                <input 
-                                                type="text" 
-                                                name="firstname" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="First Name"
-                                                required
-                                                value={firstName}		
-                                                onChange={(e) => setFirstName(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="email"><i className='bx bx-envelope label-icons'></i> Email Address</label>
-                                                <input 
-                                                type="email" 
-                                                name="email" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Email Address"
-                                                required
-                                                value={email}		
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                                <label><i className='bx bx-cog label-icons'></i> Specialization</label>
-                                                <div>
-                                                    <span>{specialization}</span>
-                                                </div>
-
-                                                <MultiSelect
-                                                    onChange={handleOnchange}
-                                                    style={{width: '100%', backgroundColor: '#FFF'}}
-                                                    options={options}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                        <label htmlFor="phone1"><i className='bx bx-phone label-icons'></i> Phone 1</label>
-                                                <input 
-                                                type="number" 
-                                                name="phone1" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Phone 1"
-                                                value={phone1}		
-                                                onChange={(e) => setPhone1(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                        <label htmlFor="npi"><i className='bx bx-id-card label-icons'></i> NPI Number</label>
-                                                <input 
-                                                type="number" 
-                                                name="npi" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="NPI NUmber"
-                                                required
-                                                value={npi}		
-                                                onChange={(e) => setNpi(e.target.value)}
-                                                />
-                                        </div>
-                                        
                                     </div>
 
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label htmlFor="lastname"><i className='bx bx-user label-icons'></i> Last Name</label>
-                                            <input 
-                                            type="text" 
-                                            name="lastname" 
-                                            className="form-control" 
-                                            autoComplete="off" 
-                                            placeholder="Last Name"
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
-                                            />
+                                     {/* license Number */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                         <TextField 
+                                             label="license Number" 
+                                             name="licensenumber" 
+                                             type="text" 
+                                             placeholder="License Number"
+                                         />
+                                     </div>
+
+
+                                    </div> {/* row ends here */}
+
+                                    {/* Buttons */}
+                                    <div className="row mr-3" style={{ float: 'right'}}>
+                                        <button className="reset-btn" type="reset">Reset</button>
+                                        <button className="submit-btn ml-3" type="submit">Add Doctor</button>
                                     </div>
 
-                                        <div className="form-group">
-                                                <label htmlFor="gender"><i className='bx bx-male label-icons'></i> Gender</label>
-                                                <select 
-                                                    name="gender" 
-                                                    className="form-control" 
-                                                    value={gender} 
-                                                    onChange={(e) => setGender(e.target.value)}
-                                                    >
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                        </div>
+                                    <br/><br/>
+                            </Form>
+                        </div>   
+                        )}
+                        </Formik>
 
-                                        <div className="form-group">
-                                        <label htmlFor="contactno"><i className='bx bx-phone label-icons'></i> Contact No</label>
-                                                <input 
-                                                type="number" 
-                                                name="contactno" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Contact No"
-                                                required
-                                                value={contactno}		
-                                                onChange={(e) => setContactno(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                        <label htmlFor="phone2"><i className='bx bx-phone label-icons'></i> Phone 2</label>
-                                                <input 
-                                                type="number" 
-                                                name="phone2" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Phone 2"
-                                                value={phone2}		
-                                                onChange={(e) => setPhone2(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <div className="form-group">
-                                        <label htmlFor="licensenumber"><i className='bx bx-id-card label-icons'></i> License Number</label>
-                                                <input 
-                                                type="number" 
-                                                name="licensenumber" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="License NUmber"
-                                                required
-                                                value={licenseNumber}		
-                                                onChange={(e) => setLicenseNumber(e.target.value)}
-                                                />
-                                        </div>
-
-                                        <button className="btn login-btn-class" type="submit"> 
-                                            Save
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </section>

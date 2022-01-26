@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -30,17 +31,17 @@ const Footer = () => {
                 <div className="col-lg-4 col-md-6 footer-links">
                     <h4>Quick Links</h4>
                     <ul>
-                    <li><i className="bx bx-chevron-right"></i> <a href="#about">Who we help?</a></li>
-                    <li><i className="bx bx-chevron-right"></i> <a href="#services">How it works?</a></li>
-                    <li><i className="bx bx-chevron-right"></i> <a href="#doctor">RPM Devices</a></li>
-                    <li><i className="bx bx-chevron-right"></i> <a href="#contact">Telemedicine</a></li>
-                    <li><i className="bx bx-chevron-right"></i> <a href="#contact">Login</a></li>
+                    <li><i className="bx bx-chevron-right"></i> <a href="#about-us">About Us</a></li>
+                    <li><i className="bx bx-chevron-right"></i> <a href="#how_it_works">How it works?</a></li>
+                    <li><i className="bx bx-chevron-right"></i> <a href="#rpm_devices">RPM Devices</a></li>
+                    <li><i className="bx bx-chevron-right"></i> <a href="#telemedicine">Telemedicine</a></li>
+                    <li><i className="bx bx-chevron-right"></i> <Link to="/login" className="nav-link">Login</Link></li>
                     </ul>
                 </div> 
 
                 <div className="col-lg-4 col-md-6 footer-newsletter">
                     <h4>Our Newsletter</h4>
-                    <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                    <p>Please subscribe to our news letter</p>
                     <form action="" method="post">
                     <input type="email" name="email" /><input type="submit" value="Subscribe" />
                     </form>
