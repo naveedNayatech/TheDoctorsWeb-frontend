@@ -13,7 +13,7 @@ import GenderSelectbox from '../../components/Form/GenderSelectbox';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
-const AddNewDoctor = ({ history }) => {
+const AddNewDoctor = ({ history }) => { 
 
     const dispatch = useDispatch();
     const alert = useAlert();
@@ -42,17 +42,17 @@ const AddNewDoctor = ({ history }) => {
         licensenumber: Yup.string()
 	  });
 
-    const  handleOnchange  =  val  => {
-        setSpecialization(val)
-    }
+    // const  handleOnchange  =  val  => {
+    //     setSpecialization(val)
+    // }
 
-    const  options  = [
-        { label:  'MBBS', value:  'MBBS'  },
-        { label:  'FCPS', value:  'FCPS'  },
-        { label:  'HMS', value:  'HMS'  },
-        { label:  'Dermatologists', value:  'Dermatologist'  },
-        { label:  'Ophthalmologists', value:  'Ophthalmologists'  },
-    ]
+    // const  options  = [
+    //     { label:  'MBBS', value:  'MBBS'  },
+    //     { label:  'FCPS', value:  'FCPS'  },
+    //     { label:  'HMS', value:  'HMS'  },
+    //     { label:  'Dermatologists', value:  'Dermatologist'  },
+    //     { label:  'Ophthalmologists', value:  'Ophthalmologists'  },
+    // ]
 
     useEffect(() => {
         if(error){
