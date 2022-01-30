@@ -27,8 +27,7 @@ const DoctorProfile = (props) => {
         if(error){
             return alert.error(error);
         }
-
-        console.log('Dr id is ' + docId);
+        
         dispatch(doctorProfile(docId));
         dispatch(getDoctorPatients(docId));
     }, [dispatch, alert, error]);

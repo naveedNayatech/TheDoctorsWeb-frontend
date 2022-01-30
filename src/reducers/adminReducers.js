@@ -59,6 +59,18 @@ import {
     ADD_PATIENT_SUCCESS,
     ADD_PATIENT_FAIL,
     PATIENT_RESET,
+    ALL_HRS_REQUEST,
+    ALL_HRS_SUCCESS,
+    ALL_HRS_FAIL,
+    ADD_HR_REQUEST,
+    ADD_HR_SUCCESS,
+    ADD_HR_FAIL,
+    UPDATE_HR_REQUEST,
+    UPDATE_HR_SUCCESS,
+    UPDATE_HR_FAIL,
+    ASSIGN_DOCTOR_TO_HR_REQUEST,
+    ASSIGN_DOCTOR_TO_HR_SUCCESS,
+    ASSIGN_DOCTOR_TO_HR_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -282,7 +294,7 @@ export const patientProfileReducers = (state = {patient: {}}, action) => {
         
         case PATIENT_PROFILE_FAIL:
         case ASSIGN_PATIENT_TO_DOCTOR_FAIL:
-            case ASSIGN_DEVICE_TO_PATIENT_FAIL:
+        case ASSIGN_DEVICE_TO_PATIENT_FAIL:
             return {
                 loading: false,
                 error: action.payload
@@ -308,7 +320,7 @@ export const deviceDataReducers = (state = { deviceData: []}, action) => {
         case GET_PATIENT_DEVICE_DATA_SUCCESS: 
         return { 
             loading: false,  
-            deviceData: action.payload.data        
+            deviceData: action.payload        
         }
 
         case GET_PATIENT_DEVICE_DATA_FAIL: 
@@ -492,6 +504,55 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
             isAdded: false,
             loading: false,
         }
+        default: // need this for default case
+        return state 
+    }
+}
+
+// HRs Reducers
+export const hrsReducers =  (state = { hrs: []}, action) => {
+    switch (action.type) {
+        case ALL_HRS_REQUEST: 
+        case ADD_HR_REQUEST:
+        case UPDATE_HR_REQUEST:
+        case ASSIGN_DOCTOR_TO_HR_REQUEST:
+         return {
+             loading: true
+         }
+
+        case ALL_HRS_SUCCESS: 
+            return {
+                loading: false,
+                hrs: action.payload
+            }
+         
+        case ADD_HR_SUCCESS: 
+         return {
+            loading: false,
+            isAdded: true
+         }   
+
+         case UPDATE_HR_SUCCESS: 
+             return {
+                 loading: false,
+                 isUpdated: true
+             }
+
+         case ASSIGN_DOCTOR_TO_HR_SUCCESS: 
+            return { 
+             loading: false,
+             isAssigned: true,
+            }
+
+
+        case ALL_HRS_FAIL:
+        case ADD_HR_FAIL:
+        case UPDATE_HR_FAIL: 
+        case ASSIGN_DOCTOR_TO_HR_FAIL:
+        return {
+            error: action.payload
+        }
+
         default: // need this for default case
         return state 
     }

@@ -147,7 +147,7 @@ const RPMDevices = (props) => {
                                         <td><Badge bg="danger text-white" className="male-tag">Weight</Badge></td>}
                                     {device?.broken === true ? <td style={{color: 'red', fontWeight: 'bold'}}>Broken</td> : <td>unbroken</td> }
                                     <td>{device?.firmwareVersion ? device?.firmwareVersion : 'N/A'}</td>
-                                    {device?.assigned_patient_id ? <td style={{color: 'gray', fontWeight: 'bold'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
+                                    {device?.assigned_patient_id ? <td style={{backgroundColor: 'gray', color: '#FFF'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
                                     <td>
                                         <Link to={{ pathname:"/devicedetails", state: {id: device?._id}}} className="rounded-button-profile"><i className='bx bx-list-ul'></i></Link>
                                         <Link to={{ pathname:"/updatedevice", state: {deviceDetails: device}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>                       

@@ -16,14 +16,12 @@ const DevicesDetails = (props) => {
     const dispatch = useDispatch();
     const { loading, error, deviceDetails} = useSelector(state => state.deviceDetails);
 
-    console.log('Device ID is ' + deviceId);
 
     useEffect(() => {
         if(error){
             return alert.error(error);
         }
 
-        console.log('Device ID is ' + deviceId);
         dispatch(getDeviceDetails(deviceId));
     }, [dispatch, alert, error]);
 

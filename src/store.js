@@ -14,6 +14,7 @@ import { newDeviceReducers } from './reducers/adminReducers';
 import { patientReducers } from './reducers/adminReducers';
 import { doctorpatientsReducers } from './reducers/adminReducers';
 import {staffAuthReducers} from './reducers/authReducers';
+import { hrsReducers } from './reducers/adminReducers';
 
 
 const reducer = combineReducers({
@@ -29,7 +30,8 @@ const reducer = combineReducers({
     device : newDeviceReducers,
     staffAuth: staffAuthReducers,
     patientCRUD: patientReducers,
-    docPatients: doctorpatientsReducers
+    docPatients: doctorpatientsReducers,
+    hrslist: hrsReducers
 })
 
 let initialState = {}

@@ -42,6 +42,13 @@ const Sidebar = () => {
                     </NavLink>
                 </li>
 
+                <li className="nav_link">
+                    <NavLink key="hr" to="/hrlist" activeClassName="link-name-active">
+                        <i className="bx bx-user"></i>
+                        <span className="link_name">HR</span>
+                    </NavLink>
+                </li>
+
 
                 <li className="nav_link">
                     <NavLink key="inventory" to="/devices" activeClassName="link-name-active">

@@ -5,7 +5,7 @@ import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import doctorProfileImg from '../../assets/Images/doctorprofile.jpg';
+import doctorProfileImg from '../../assets/Images/patientProfile.png';
 
 const StaffProfile = ({ history }) => {
 
@@ -36,11 +36,11 @@ const StaffProfile = ({ history }) => {
                         <div className="container">
                          <div className="row">
                              <div className="col-md-12">
-                                <h5 className="pt-2 mt-2">My Profile </h5> 
+                                <h5 className="pt-2 mt-2">My <span style={{color: '#F95800'}}>Profile</span> </h5> 
                              </div>
                          </div>   
 
-                         <hr />
+                         <hr/>
                         
 
                         {staff && <Fragment>
@@ -49,7 +49,7 @@ const StaffProfile = ({ history }) => {
                                 <div>
                                     <img src={staff?.avatar?.url ? staff?.avatar?.url : doctorProfileImg} className="img-responsive profile-card-img"/>
                                         
-                                    <p className="profile-name">{staff?.title}. {staff?.firstname} {staff?.lastname} </p>
+                                    <p className="profile-name">Dr. {staff?.firstname} {staff?.lastname} </p>
                                     
                                     
                                     {staff.specialization && staff?.specialization.map((spec, index) => (

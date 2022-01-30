@@ -56,6 +56,18 @@ import {
     ADD_PATIENT_REQUEST,
     ADD_PATIENT_SUCCESS,
     ADD_PATIENT_FAIL,
+    ALL_HRS_REQUEST,
+    ALL_HRS_SUCCESS,
+    ALL_HRS_FAIL,
+    ADD_HR_REQUEST,
+    ADD_HR_SUCCESS,
+    ADD_HR_FAIL,
+    UPDATE_HR_REQUEST,
+    UPDATE_HR_SUCCESS,
+    UPDATE_HR_FAIL,
+    ASSIGN_DOCTOR_TO_HR_REQUEST,
+    ASSIGN_DOCTOR_TO_HR_SUCCESS,
+    ASSIGN_DOCTOR_TO_HR_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -83,6 +95,35 @@ export const getPatients = () => async(dispatch) => {
             type: ALL_PATIENTS_FAIL,
             payload: error.response.data.message
         })
+    }
+}
+
+export const updatePatientConsentStatus = (patientId) => async(dispatch) => {
+    try {
+        // dispatch({
+        //     type: UPDATE_PATIENT_REQUEST,
+        // })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
+            rpmconsent : true
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        // dispatch({
+        //     type: ALL_PATIENTS_SUCCESS,
+        //     payload: data
+        // })
+        
+    } catch (error) {
+        // dispatch({
+        //     type: ALL_PATIENTS_FAIL,
+        //     payload: error.response.data.message
+        // })
     }
 }
 
@@ -114,6 +155,69 @@ export const getDoctors = () => async(dispatch) => {
         })
     }
 }
+
+
+// Get list of all HRs => admin
+export const getHrLists = () => async(dispatch) => {
+
+    const token = JSON. parse(localStorage.getItem('token'));
+
+    try {
+        dispatch({ type: ALL_HRS_REQUEST })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.get(`${Prod01}/hr/list`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: ALL_HRS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_HRS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+// Add New HR => admin
+export const addHR = (values) => async(dispatch) => {
+    try {
+        dispatch({ 
+            type: ADD_HR_REQUEST
+        });
+
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const {data} = await axios.post(`${Prod01}/hr/signup`, values, {
+                headers: {
+                "Authorization":`Bearer ${token}`
+            }
+            });
+        
+        dispatch({
+            type: ADD_HR_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ADD_HR_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+
 
 // Get doctor profile => admin
 export const doctorProfile = (id) => async(dispatch) => {
@@ -295,6 +399,66 @@ export const assignPatientToDoctor = (doctorid, patientid) => async(dispatch) =>
  }   
 }
 
+export const assignDoctorToHR = (hrId, doctorId) => async(dispatch) => {
+    try {
+       dispatch({ 
+           type: ASSIGN_DOCTOR_TO_HR_REQUEST
+       });
+   
+       const token = JSON. parse(localStorage.getItem('token'));
+   
+       const { data } = await axios.put(`${Prod01}/hr/edit/${hrId}`, {
+           assigned_doctor_id: doctorId
+       },{
+           headers: {
+               "Authorization":`Bearer ${token}`
+               }
+           });
+   
+       dispatch({
+           type: ASSIGN_DOCTOR_TO_HR_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: ASSIGN_DOCTOR_TO_HR_FAIL,
+           payload: error.response.data.message
+       })
+    }   
+}
+
+
+export const assignPatientToHR = (hrId, patientId) => async(dispatch) => {
+    try {
+       dispatch({ 
+           type: ASSIGN_DOCTOR_TO_HR_REQUEST
+       });
+   
+       const token = JSON. parse(localStorage.getItem('token'));
+   
+       const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
+        assigned_hr_id: hrId
+       },{
+           headers: {
+               "Authorization":`Bearer ${token}`
+               }
+           });
+   
+       dispatch({
+           type: ASSIGN_DOCTOR_TO_HR_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: ASSIGN_DOCTOR_TO_HR_FAIL,
+           payload: error.response.data.message
+       })
+    }   
+}
+
+
 export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) => {
     try {
        dispatch({ 
@@ -346,21 +510,24 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
-   export const getPatientTelemetryData = (patientId, sort) => async(dispatch) => {
+   export const getPatientTelemetryData = (patientId) => async(dispatch) => {
     
     try {
        dispatch({ 
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
-       const { data } = await axios.post(`${Prod}/v1/devicedata`, {
-               patientId: patientId,
-               sort
+       const token = JSON. parse(localStorage.getItem('token'));
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData`, {
+               patientId: patientId
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+                }
            });
    
        dispatch({
            type: GET_PATIENT_DEVICE_DATA_SUCCESS,
-           loading: false,
            payload: data
        })    
    
@@ -637,6 +804,48 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
     }
 }
 
+// Update HR 
+export const updateHR = (id, firstname, lastname, email, gender, DOB, phone1, mobileNo) => async(dispatch) => {
+    
+    try {
+        dispatch({ 
+            type: UPDATE_HR_REQUEST
+        });
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const {data} = await axios.put(`${Prod01}/hr/edit/${id}`, {
+                firstname: firstname,
+                lastname:lastname,
+                email: email,
+                gender: gender,
+                DOB: DOB,
+                phone1:phone1,
+                mobileNo: mobileNo
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: UPDATE_HR_SUCCESS,
+            payload: data
+        })
+
+        // console.log(data);
+        
+    } catch (error) {
+        dispatch({
+            type: UPDATE_HR_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
+
 // Delete RPM Device 
 export const deleteRPMDevice = (id) => async(dispatch) => {
     
@@ -647,7 +856,7 @@ export const deleteRPMDevice = (id) => async(dispatch) => {
 
         const token = JSON. parse(localStorage.getItem('token'));
         
-        console.log('Device ID is ' + id);    
+    
         await axios.delete(`${Prod01}/device/delete/${id}`, { 
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -672,28 +881,48 @@ export const deleteRPMDevice = (id) => async(dispatch) => {
 export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch) => {
     
     try {
-        dispatch({ 
-            type: UPDATE_DEVICE_REQUEST
+        // dispatch({ 
+        //     type: UPDATE_DEVICE_REQUEST
+        // });
+
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const data = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
+            assigned_devices: [{
+                deviceObjectId: deviceId
+            }],
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            } 
         });
 
+        let device;
+
+        if(data.status === 201){
+            console.log('Putting PatientId in device');
+            device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
+                assigned_patient_id: patientId 
+            }, {
+                headers: {
+                    "Authorization":`Bearer ${token}`
+                }  
+            })
+        } 
         
-        const {data} = await axios.post(`${Prod}/v1/device/update/${deviceId}`, {
-            assigned_patient_id: patientId,
-        });
-        
-        dispatch({
-            type: UPDATE_DEVICE_SUCCESS,
-            payload: data
-        })
+        // console.log(device);
+        // dispatch({
+        //     type: UPDATE_DEVICE_SUCCESS,
+        //     payload: data
+        // })
 
         
     } catch (error) {
         console.log(error);
-        debugger
-        dispatch({
-            type: UPDATE_DEVICE_FAIL,
-            payload: error
-        })
+        // dispatch({
+        //     type: UPDATE_DEVICE_FAIL,
+        //     payload: error
+        // })
     }
 }
 

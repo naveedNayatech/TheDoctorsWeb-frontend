@@ -127,7 +127,7 @@ const StaffPatientProfile = (props) => {
                                         
                                                 <Fragment>
                                                     <p className="patient-email">{patient?.email}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
+                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i className='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
                                                 </Fragment>

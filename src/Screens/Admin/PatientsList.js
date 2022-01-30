@@ -1,10 +1,10 @@
-import React, {useEffect, Fragment} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPatients } from '../../actions/adminActions';
+import { getPatients, updatePatientConsentStatus } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import {Badge, Table } from 'react-bootstrap';
@@ -15,7 +15,8 @@ const PatientsList = () => {
     const dispatch = useDispatch();
 
     const alert = useAlert();
-    const { loading, error, patients} = useSelector(state => state.admin)
+    const { loading, error, patients} = useSelector(state => state.admin);
+    const [patientId, setPatientId] = useState('');
         
     useEffect(() =>{
         if(error){
@@ -25,6 +26,11 @@ const PatientsList = () => {
         dispatch(getPatients());
 
     }, [dispatch, alert, error])
+
+    const changeConsentStatus = (id) => {
+        console.log('patient Id is' + id);
+        dispatch(updatePatientConsentStatus(id))
+    }
 
     return (
         <Fragment>
@@ -91,13 +97,37 @@ const PatientsList = () => {
                             <tbody>
                                 {patients && patients.map((patient, index) => (
                                     <tr key={index}>  
-                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>{moment(patient?.DOB).format("ll")}</p></Link></td>
+                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>{moment(patient?.DOB).format("ll")}</p></Link></td>
                                     <td>{patient?.phone1} <p>(English)</p></td> 
                                     <td>{patient?.email}</td>
                                     <td>{patient?.assigned_doctor_id ? <Badge bg="info text-white" className="assigned-tag">Assigned</Badge> : <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge>}</td>
                                     <td>{patient?.role}</td>
-                                    <td>{patient?.rpmconsent === true ? <div><i className='bx bx-pen signed-icon'></i><p>Signed</p></div> : <div><i className='bx bxs-pencil not-signed-icon'></i><p>Not Signed</p></div>}</td>
-                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceid}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
+                                    {patient?.rpmconsent === true ? <td>
+                                        <div className="custom-control custom-switch">
+                                            <input 
+                                                type="checkbox" 
+                                                disabled
+                                                className="custom-control-input" 
+                                                checked="true"
+                                                style={{border: 'none', backgroundColor: 'red'}}
+                                            />
+                                            <label className="custom-control-label" htmlFor={index}>Signed</label>
+                                        </div>
+                                    </td> : 
+                                        <td>
+                                        <div className="custom-control custom-switch">
+                                            <input 
+                                                type="checkbox" 
+                                                className="custom-control-input" 
+                                                id={index}
+                                                onChange={() => changeConsentStatus(patient?._id)}
+                                            />
+                                            <label className="custom-control-label" htmlFor={index}>Not Signed</label>
+                                        </div>
+                                    </td>
+                                    }
+                                    
+                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     <Link disabled className="rounded-button-edit" to="/patients"><i className='bx bx-edit-alt'></i></Link>
                                     <Link className="rounded-button-delete" to="/patients"><i className='bx bxs-user-minus'></i></Link>
                                     </td>

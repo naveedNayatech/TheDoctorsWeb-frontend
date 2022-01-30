@@ -29,19 +29,14 @@ const TopBar = () => {
             <nav>
                     <div className="sidebar-button">
                         <i className="bx bx-menu sidebarBtn"></i>
-                        <span className="dashboard">Dashboard</span>    
+                        <span className="dashboard">Doctor <span style={{color: '#F95800'}}>Dashboard</span></span>    
                     </div>
 
 
-                    <div className="search-box">
-                        <input type="text" placeholder="Search here..." autoComplete="off" />
-                        <i className="bx bx-search"></i>
-                    </div>
-
-                    <div className="profile-details btn dropdown-toggle" type="button" 
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
-                        <img src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg" alt="profileimg" />
-                        <span className="admin-name">{isAuthenticated == true && staff && staff?.firstname}</span>
+                        <div className="profile-details btn dropdown-toggle" type="button" 
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
+                        <img src="https://i.stack.imgur.com/l60Hf.png" alt="profileimg" />
+                        <span className="admin-name">{isAuthenticated == true && staff && <Fragment>{staff?.firstname} {staff?.lastname}</Fragment>}</span>
                            
                     </div>
 
@@ -52,7 +47,7 @@ const TopBar = () => {
                         <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}>Logout</Link>
                     </div>
                 </nav>
-                <br />
+                <hr className="blue-hr"/>
         </Fragment>
     )
 }

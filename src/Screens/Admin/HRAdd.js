@@ -1,24 +1,34 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import MetaData from '../../layouts/MetaData';
+import React, {useEffect, Fragment} from 'react';
+import { addHR } from '../../actions/adminActions';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
-import MultiSelect from  'react-multiple-select-dropdown-lite'
-import  'react-multiple-select-dropdown-lite/dist/index.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { addDoctor, clearErrors } from '../../actions/adminActions';
-import { useAlert } from 'react-alert';
-import { ADD_DOCTOR_RESET} from '../../constants/adminConstants';
+import MetaData from '../../layouts/MetaData';
 import TextField from '../../components/Form/TextField';
 import GenderSelectbox from '../../components/Form/GenderSelectbox';
+import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useAlert } from 'react-alert';
 
-const AddNewDoctor = ({ history }) => { 
+const HRAdd = (props) => {
 
     const dispatch = useDispatch();
+    const { loading, error, isAdded} = useSelector(state => state.hrslist);
     const alert = useAlert();
 
-    const { loading, error, success} = useSelector(state => state.newDoctor);
+    useEffect(() =>{
+        if(error){
+            return alert.error(error);
+        }
+
+        if(isAdded){
+            alert.success('HR ADDED');
+            props?.history?.push('/hrlist');
+        }
+
+    }, [dispatch, error, isAdded]);
+
+
 
     const validate = Yup.object().shape({
 		firstname: Yup.string()
@@ -37,55 +47,35 @@ const AddNewDoctor = ({ history }) => {
         DOB:Yup.string().required('DOB is required'),
         mobileNo: Yup.string(),
         phone1: Yup.string(),
-        gender: Yup.string(),
-        npinumber: Yup.string(),
-        licensenumber: Yup.string()
+        gender: Yup.string().required('Gender is Required')
 	  });
 
-
-    useEffect(() => {
-        if(error){
-            alert.error(error);
-            dispatch(clearErrors());
-        }
-
-    if(success){
-        alert.success('Doctor Added');
-        history.push('/doctors');
-        dispatch({
-            type: ADD_DOCTOR_RESET
-        });
-    }
-}, [dispatch, alert, error, success, history]);
-
-    const submitHandler = (values) => {
-		dispatch(addDoctor(values));
+      const submitHandler = (values) => {
+		dispatch(addHR(values));
     }
 
-    return (
-        <Fragment>
-            <MetaData title="Add Doctor"/>
+
+  return <Fragment>
+      <MetaData title="Add HR"/>
                 <Sidebar />    
 
                 <section className="home-section">
                 {/* TopBar */}
                 <TopBar />
 
-
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}> Doctor</span></h5>
+                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}> HR</span></h5>
                         <hr className="blue-hr" />
-
+                        
                         <Formik initialValues={{ }}
                          validationSchema={validate}
                          onSubmit={values => {
                             submitHandler(values)
-                        }}
-                         >   
-                         { formik => (
-                             <div>
-                             <Form>
+                        }}>
+                        { formik => (
+                            <div>
+                                <Form>
                                  <div className="row">
                                      {/* First Name */}
                                      <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -163,47 +153,26 @@ const AddNewDoctor = ({ history }) => {
                                              placeholder="Mobile Number"
                                          />
                                      </div>
+                                   </div> {/* row ends here*/}
 
-                                    {/* NPI Number */}
-                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <TextField 
-                                            label="NPI Number" 
-                                            name="npinumber" 
-                                            type="text"
-                                            placeholder="NPI Number" 
-                                        />
-                                    </div>
-
-                                     {/* license Number */}
-                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                         <TextField 
-                                             label="license Number" 
-                                             name="licensenumber" 
-                                             type="text" 
-                                             placeholder="License Number"
-                                         />
-                                     </div>
-
-
-                                    </div> {/* row ends here */}
-
-                                    {/* Buttons */}
-                                    <div className="row mr-3" style={{ float: 'right'}}>
+                                   {/* Buttons */}
+                                   <div className="row mr-3" style={{ float: 'right'}}>
                                         <button className="reset-btn" type="reset">Reset</button>
-                                        <button className="submit-btn ml-3" type="submit">Add Doctor</button>
+                                        <button className="submit-btn ml-3" type="submit">Add HR</button>
                                     </div>
 
                                     <br/><br/>
-                            </Form>
-                        </div>   
+
+                                </Form>
+                            </div>
                         )}
                         </Formik>
 
-                        </div>
-                    </div>
-                </section>
-        </Fragment>
-    )
-}
 
-export default AddNewDoctor
+                    </div>
+                </div>
+                </section>
+  </Fragment>;
+};
+
+export default HRAdd;

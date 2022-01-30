@@ -39,7 +39,8 @@ const RPMDeviceBasicInformation = (props) => {
 
         if(isUpdated) {
             alert.success('Updated');
-            // history.push('/devices');
+            // props?.history?.('/devicedetails');
+
             dispatch({
                 type: ADD_RPM_DEVICE_RESET
             });
@@ -48,8 +49,6 @@ const RPMDeviceBasicInformation = (props) => {
     }, [dispatch, alert, error, isUpdated, patientId]);
 
     const AssignDeviceToPatient = () => {
-        console.log('Patient ID is ' + patientId);
-        console.log('Device Id is ' + deviceDetails?._id);
         dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));
     }
 
@@ -83,16 +82,14 @@ const RPMDeviceBasicInformation = (props) => {
                             <th scope="col-md-3">hardware Version</th>
                             <td scope="col-md-3">{deviceDetails?.hardwareVersion ? deviceDetails?.hardwareVersion : 'N/A'}</td>
                             <th scope="col-md-3">Patient Assigned Status</th>
-                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id ? <span style={{color: '#F95800', fontWeight: 'bold'}}>Assigned
-                            </span> : <span style={{color: 'green', fontWeight: 'bold'}}>In Stock</span>
+                            {deviceDetails?.assigned_patient_id ?  <td scope="col-md-3"><Badge bg="info text-white"> Assigned</Badge></td> : <td><Badge bg="success text-white"> In Stock</Badge></td>
                              } 
-                             </td>
                         </tr>
 
                         {deviceDetails?.assigned_patient_id && <Fragment>
                             <tr>
                             <th scope="col-md-3">Assigned To: </th>
-                            <td scope="col-md-3">{deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname} ( {deviceDetails?.assigned_patient_id?.gender} )</td>
+                            <td scope="col-md-3" style={{backgroundColor: '#F95800', color: '#FFF', letterSpacing:1}}>{deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname} ( {deviceDetails?.assigned_patient_id?.gender} )</td>
                         </tr>
                         </Fragment> 
                         }
@@ -111,6 +108,7 @@ const RPMDeviceBasicInformation = (props) => {
                             name="patientlist"
                             className="form-control"
                             defaultValue={'Select Patient'} 
+                            value={patientId}
                             onChange={(e) => setPatientId(e.target.value)}
                             >
                                 <option disabled>Select Patient</option>
@@ -135,20 +133,24 @@ const RPMDeviceBasicInformation = (props) => {
                                     <br />
                                 <div className="row">
                                     <div className="col-md-4">    
-                                    <span className="profile-label">Gender: </span>
-                                            <p className="profile-value-text">{patient?.gender}</p>
+                                        <span className="profile-label">Gender: </span>
+                                        <p className="profile-value-text">{patient?.gender === 'male' ? <Badge bg="info text-white" className="male-tag">Male</Badge> : <Badge bg="danger text-white" className="female-tag">Female</Badge>}</p>
 
-                                            <span className="profile-label">DOB: </span>
-                                            <p className="profile-value-text">{patient?.DOB}</p>
-
+                                        <span className="profile-label">DOB: </span>
+                                        <p className="profile-value-text">{moment(patient?.DOB).format("ll")}</p>
                                     </div>
 
                                     <div className="col-md-4">    
-                                    <span className="profile-label">Zip Code: </span>
-                                        <p className="profile-value-text">{patient?.zipCode }</p>
+                                        <span className="profile-label">Email Address: </span>
+                                        <p className="profile-value-text">{patient?.email ? patient?.email : 'N/A' }</p>
 
                                         <span className="profile-label">SSN Number: </span>
-                                        <p className="profile-value-text">{patient?.ssn}</p>                                 
+                                        <p className="profile-value-text">{patient?.ssn ? patient?.ssn : 'N/A'}</p>                                 
+                                    </div>
+
+                                    <div className="col-md-4">    
+                                        <span className="profile-label">Phone 1: </span>
+                                        <p className="profile-value-text">{patient?.phone1 ? patient?.phone1 : 'N/A' }</p>
                                     </div>
 
                                     <br/>
