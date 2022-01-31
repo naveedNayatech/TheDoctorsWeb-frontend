@@ -534,7 +534,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     } catch (error) {
        dispatch({
            type: GET_PATIENT_DEVICE_DATA_FAIL,
-           payload: error.response.data.message
+           payload: error.message
        })
     }   
    }

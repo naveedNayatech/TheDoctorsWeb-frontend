@@ -3,6 +3,7 @@ import React from 'react';
 import {BrowserRouter as Router, Route } from 'react-router-dom';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import StaffProtectedRoute from './components/route/StaffProtectedRoute';
+import HRProtectedRoute from './components/route/HRProtectedRoute';
 // Admin Dashboard Components
 import AdminDashboard from './components/AdminDashboard/Dashboard';
 import Profile from './Screens/Admin/Profile';
@@ -33,7 +34,12 @@ import StaffDashboard from './Screens/Staff/StaffDashboard';
 import StaffProfile from './Screens/Staff/StaffProfile';
 import StaffPatient from './Screens/Staff/StaffPatients';
 import StaffPatientProfile from './Screens/Staff/StaffPatientProfile';
-
+// HR Screens
+import HrLogin from './Screens/HR/HrLogin';
+import HRDashboard from './Screens/HR/HRDashboard'; 
+import HRPatientsList from './Screens/HR/HRPatientsList';
+import HRPatientProfile from './Screens/HR/HRPatientProfile';
+import HR from './Screens/HR/HR';
 
 function App() {
   return (
@@ -61,12 +67,18 @@ function App() {
         <ProtectedRoute exact path='/hrProfile' isAdmin={true} component={HRProfile} />
         <ProtectedRoute exact path='/assignDrToHr' isAdmin={true} component={AssignDrToHr} />
         <ProtectedRoute exact path='/assignPatientToHr' isAdmin={true} component={AssignPatientToHr} />
-        {/*  */}
+        {/* Staff Routes */}
         <Route exact path="/stafflogin" component={StaffLogin} />
         <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
         <StaffProtectedRoute exact path="/staffProfile" component={StaffProfile} />
         <StaffProtectedRoute exact path="/staffPatients" component={StaffPatient} />
         <StaffProtectedRoute exact path="/staffPatientProfile" component={StaffPatientProfile} />
+        {/* HR Routes */}
+        <Route exact path="/hrLogin" component={HrLogin} />
+        <HRProtectedRoute exact path="/HrDashboard" isHR={true} component={HRDashboard} />
+        <HRProtectedRoute exact path="/HrPatients" isHR={true} component={HRPatientsList} />
+        <HRProtectedRoute exact path="/hrpatientProfile" isHR={true} component={HRPatientProfile} />
+        <HRProtectedRoute exact path="/hr" isHR={true} component={HR} />
     </Router>
   )      
 };

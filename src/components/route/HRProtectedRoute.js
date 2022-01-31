@@ -2,20 +2,21 @@ import React, {Fragment } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const StaffProtectedRoute = ({isStaff, component: Component, ...rest}) => {
+const HRProtectedRoute = ({isHR, component: Component, ...rest}) => {
     
-    const { isAuthenticated, error, loading, staff } = useSelector(state => state.staffAuth);
+    const { isAuthenticated, error, loading, hr } = useSelector(state => state.hrAuth);
 
     return (
         <Fragment> 
             {loading === false && (
                 <Route {...rest} render={props => {
                     if(isAuthenticated === false){
-                        return <Redirect to="/stafflogin" />
+                        return props?.history.push('/hrLogin')
                     }
 
-                    if(isStaff === true && staff.role === 'Doctor'){
-                        return <Redirect to="/adminDashboard" />
+                    if(isHR === true && hr.role === 'HrMedical'){
+                        // return props?.history.push('/HrDashboard')
+                        <Redirect to="/HrDashboard" />
                     }
 
                     return <Component {...props} /> 
@@ -26,4 +27,4 @@ const StaffProtectedRoute = ({isStaff, component: Component, ...rest}) => {
     )
 }
 
-export default StaffProtectedRoute;
+export default HRProtectedRoute;

@@ -10,9 +10,14 @@ import {
     STAFF_LOGIN_REQUEST,
     STAFF_LOGIN_SUCCESS,
     STAFF_LOGIN_FAIL,
+    HR_LOGIN_REQUEST,
+    HR_LOGIN_SUCCESS,
+    HR_LOGIN_FAIL,
     CLEAR_ERRORS,
     STAFF_LOGOUT_SUCCESS,
-    STAFF_LOGOUT_FAIL
+    STAFF_LOGOUT_FAIL,
+    HR_LOGOUT_SUCCESS,
+    HR_LOGOUT_FAIL,
 } from '../constants/authConstants';
 
 
@@ -124,6 +129,56 @@ export const staffAuthReducers = (state = { staff: {}, isAuthenticated: false, l
         ...state,
         error: action.payload
     }
+    case CLEAR_ERRORS: 
+    return {
+        ...state,
+        error: null
+    }    
+    default:
+        return state
+    }
+}
+
+export const hrAuthReducers = (state = { hr: {}, isAuthenticated: false, loading: false}, action) => {
+    
+   switch(action.type){
+    
+   case HR_LOGIN_REQUEST: 
+    return {
+        loading: true,
+        isAuthenticated: false,
+    }
+
+    case HR_LOGIN_SUCCESS:
+        return {
+            ...state,
+            loading: false,
+            isAuthenticated: true,
+            hr: action.payload
+        }
+    
+    case HR_LOGIN_FAIL:
+        return {
+            ...state,
+            loading: false,
+            isAuthenticated: false,
+            hr: null,
+            error: action.payload
+        }    
+
+    case HR_LOGOUT_SUCCESS: 
+    return {
+        loading: false,
+        isAuthenticated: false,
+        hr: null
+    }   
+    
+    case HR_LOGOUT_FAIL: 
+    return {
+        ...state,
+        error: action.payload
+    }
+
     case CLEAR_ERRORS: 
     return {
         ...state,

@@ -1,99 +1,64 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, {useEffect, Fragment} from 'react';
 import MetaData from '../../layouts/MetaData';
-import Sidebar from '../../components/AdminDashboard/Sidebar';
-import TopBar from '../../components/AdminDashboard/TopBar';
-import patientProfileImg from '../../assets/Images/patientProfile.png';
-import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData'; 
-import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, getAllDevices, getDeviceDataByDate} from '../../actions/adminActions';
+import  HRSidebar from '../../components/HR/HRSidebar';
+import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
-import { useDispatch, useSelector } from 'react-redux';
+import { patientProfile, getPatientTelemetryData} from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { Form, Image, Button, Badge , Tabs, Tab} from 'react-bootstrap';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch, useSelector } from 'react-redux';
+import patientProfileImg from '../../assets/Images/patientProfile.png';
+import { Badge, Tabs, Tab } from 'react-bootstrap';
+import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
+import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData'; 
+import { COMMENT_RESET } from '../../constants/HRConstants';
 
-const PatientProfile = (props) => {
-
-    const dispatch = useDispatch();
+const HRPatientProfile = (props) => {
     const alert = useAlert();
 
-    let searchedDate;
-    let patientid = props?.location?.state?.patientid;
-    let deviceid = props?.location?.state?.deviceid;
+  let patientid = props?.location?.state?.patientid;
+  
+  const dispatch = useDispatch();
+  
+  const { loading, error, patient} = useSelector(state => state.patientProfile);
+  const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
+  const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
 
-
-    const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
-    const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
-
-    
-    useEffect(() => {
-        if(error){
-            return alert.error(error);
-        }
-
-        dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
-        
-        
-        if(isUpdated) {
-            alert.success('Updated Successfully');
-        }
-
-    }, [dispatch, alert, error, isUpdated]);
-
-    const assignDevice = () => {
-        dispatch(assignDeviceToPatient(patientid, deviceid));
+  useEffect(() => {
+    if(error){
+        return alert.error(error);
     }
 
-    // const removeAssignDevice = (deviceid) => {
-    //     console.log('Device id is ' + deviceid);
-    //     console.log('Patient id is ' + patientid);
+    dispatch(patientProfile(patientid));
+    dispatch(getPatientTelemetryData(patientid))
 
-    //      dispatch(removeAssignedDevice(deviceid, patientid));
-    // }
+    if(commentSuccess) {
+        alert.success('Comment added');
+        dispatch({ type: COMMENT_RESET });
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
+    }
 
-    // const refreshTelemetaryData =() => {
-    //     dispatch(getPatientTelemetryData(patientid, sort))
-    // }
+}, [dispatch, alert, error, commentSuccess]);
 
-    // const sortData = (event) => {
-    //     setSort(event.target.value);
-    //     dispatch(getPatientTelemetryData(patientid,sort))
-    // }
 
-    // const searchByDate = (e) => {
-    //     e.preventDefault();
-    //     console.log('Date for search is ' + searchDate);
+  return <Fragment>
+      <MetaData title="Patients Profile"/>
+        <HRSidebar />    
 
-    //     let searchedDate = (moment(searchDate).format("YYYY-MM-DD"));
-    //     console.log('Date for search is ' + searchedDate);
+        <section className="home-section">
+        {/* TopBar */}
+        <HRTopBar />
 
-    //     dispatch(getDeviceDataByDate(deviceid, patientid, searchedDate))
-    // }
-
-    return (
-        <Fragment>
-            <MetaData title="Patient Profile"/>
-                <Sidebar />    
-
-                <section className="home-section">
-                {/* TopBar */}
-                <TopBar />
-                
-                {loading ? <Loader /> : <Fragment>
+        {loading ? <Loader /> : <Fragment>
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
                         <div className="home-content">
                             <div className="container">    
 
                             {patient && <Fragment>
                                 <div className="col-md-3">
-                                    <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
+                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
                                 </div>
-                                        
-                            <hr />
+                                <hr />
 
                                 <div className="row">
                                     <div className="col-md-3">
@@ -109,7 +74,8 @@ const PatientProfile = (props) => {
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
                                                 </Fragment>
                                         </div>    
-                                 </div>
+                                    </div>
+
 
                                     <div className="col-md-3">
                                             <span className="patient-profile-col-heading">Address</span>                                 
@@ -136,7 +102,6 @@ const PatientProfile = (props) => {
                                              <p className="patient-profile-card-text">{patient?.mobileNo ? patient?.mobileNo : 'N/A' } </p>
                                     </div>
 
-
                                     <div className="col-md-3 ">
                                             <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
                                              <hr />
@@ -146,7 +111,8 @@ const PatientProfile = (props) => {
                                                 </Fragment>
                                             ))}
                                     </div>
-                                </div>
+                                 </div> {/* first row ends here */}
+
 
                                  <br />   
                                 <div className="row">
@@ -159,11 +125,10 @@ const PatientProfile = (props) => {
 
                                     <span className="profile-label">Gender</span>
                                     <p className="patient-profile-card-text"><Badge bg="info text-white" className="male-tag">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.gender}</Badge> </p>
-
                                 </div>
 
                                 <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">RPM Integration</span>                                 
+                                    <span className="patient-profile-col-heading">Devices Assigned</span>                                 
                                         <hr />
                                          {patient?.assigned_devices && patient?.assigned_devices.length === 0 ? <Fragment>
                                             <b>No Device Assigned Yet</b>
@@ -180,69 +145,68 @@ const PatientProfile = (props) => {
                                                 </p>
                                                 
                                                 </Fragment>
-                                            ))} 
-                                                
-                                        </Fragment>}            
-                                    
-                                </div>
+                                            ))}           
+                                        </Fragment>}      
+                                        </div>
 
-                                <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Insurance companies</span>                                 
-                                        <hr />
-                                    <div className="row">    
-                                     <div className="col-md-7">
-                                     <p className="patient-profile-card-text">01 - AETNA</p>
-                                     <p className="patient-profile-card-text">02 - Medicare
-                                     </p>   
-                                </div>    
-                            </div>
+
+                                        <div className="col-md-3">
+                                            <span className="patient-profile-col-heading">Insurance companies</span>                                 
+                                            <hr />
+                                                <div className="row">    
+                                                    <div className="col-md-7">
+                                                        <p className="patient-profile-card-text">01 - AETNA</p>
+                                                        <p className="patient-profile-card-text">02 - Medicare</p>   
+                                                    </div>
+                                                </div>                      
+                                        </div>
+                                </div> {/* Second row ends here*/}
+
+
+
+                                {/* Patient Telemetary Data */}
+                        <div className="col-md-3">
+                            <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                        </div>
+
+
+                        <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
+                            <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
+                            {deviceData && deviceData.map((devicedata, index) => (
+                                <div key={index}>
+                                    {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
+                                        <CuffTelemetaryData healthData= {devicedata} isAdmin={false} />
+                                    </Fragment> : ''}
+                                </div>
+                            ))}
+                            </Tab>
+
+                            <Tab eventKey="weight" title="Weight ( Telemetary Data )">
+                                {deviceData && deviceData.map((devicedata, index) => (
+                                    <div key={index}>
+                                        {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
+                                            <WeightTelemetaryData healthData={devicedata} />
+                                        </Fragment> : ''}   
+                                    </div>
+                                ))}
+                            </Tab>
+                        </Tabs>   
+
+
+
+
+                        </Fragment>
+                        }
                         </div>
                     </div>
-
-                    <div className="col-md-3">
-                        <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
-                    </div>
-
-                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
-                        <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
-                        {deviceData && deviceData.map((devicedata, index) => (
-                            <div key={index}>
-                                {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
-                                    <CuffTelemetaryData healthData= {devicedata} isAdmin={true} />
-                                </Fragment> : ''}
-                            </div>
-                        ))}
-                        </Tab>
-                        
-                        <Tab eventKey="weight" title="Weight ( Telemetary Data )">
-                        {deviceData && deviceData.map((devicedata, index) => (
-                            <div key={index}>
-                                 {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
-                                    <WeightTelemetaryData healthData={devicedata} />
-                                </Fragment> : ''}   
-                            </div>
-                        ))}
-                        </Tab>
-                        <Tab eventKey="spo2" title="Spo2 ( Telemetary Data )">
-                            Spo2 Data
-                        </Tab>
-                    </Tabs>
-
-
-                    </Fragment> }
                 </div>
-                
-                <br /><br />
-            </div>                           
-        </div>
-    </Fragment> 
+                </Fragment>
+                }
 
-    
-    }         
+
+
     </section>
-                            
-        </Fragment>
-    )
-}
+  </Fragment>;
+};
 
-export default PatientProfile
+export default HRPatientProfile;

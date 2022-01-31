@@ -5,13 +5,13 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/Form/TextField';
 import { useAlert } from 'react-alert';
-import { staffLogin, clearErrors } from '../../actions/authActions';
+import { hrLogin, clearErrors } from '../../actions/authActions';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Spinner } from 'react-bootstrap'
 
 
-const StaffLogin = ({ history }) => {
+const HrLogin = ({ history }) => {
 
     const alert = useAlert();
 	const dispatch = useDispatch();
@@ -26,12 +26,12 @@ const StaffLogin = ({ history }) => {
 
     
 
-    const { isAuthenticated, error, loading } = useSelector(state => state.staffAuth);
+    const { isAuthenticated, error, loading } = useSelector(state => state.hrAuth);
 
     useEffect(() => {
 		
 		if(isAuthenticated === true) {
-			history.push("/Dashboard");
+			history.push("/HrDashboard");
 		}
 
 		if(error){			
@@ -42,20 +42,20 @@ const StaffLogin = ({ history }) => {
 	}, [dispatch, alert, isAuthenticated, error, history])
 
 	const submitHandler = (values) => {
-		dispatch(staffLogin(values));
+		dispatch(hrLogin(values));
 	}
 
 
     return (
         <Fragment>
-        <MetaData title="Doctor Login" />
+        <MetaData title="HR Login" />
 		 <Fragment>
 			<div className="login-section">
 					<div className="container">
 						<div className="row content">
 								
 							<div className="col-md-12" >
-								<h3 className="signin-text">Doctor <span style={{color: '#F95800'}}> Sign in</span></h3>
+								<h3 className="signin-text">HR <span style={{color: '#F95800'}}> Sign in</span></h3>
 								<small style={{color: 'dodgerblue'}}>Enter valid credentials to log into your account.</small>
 
 								<hr />
@@ -102,7 +102,7 @@ const StaffLogin = ({ history }) => {
 											<br/><br/><br/>
 												<div className="row" style={{justifyContent: 'space-between'}}>
 													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
-													<small>Login as <Link to="/hrLogin" style={{textDecoration: 'none'}}>HR</Link></small>
+													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Staff</Link></small>
 												</div>
 										</div>
 									)}
@@ -117,4 +117,4 @@ const StaffLogin = ({ history }) => {
     )
 }
 
-export default StaffLogin;
+export default HrLogin;

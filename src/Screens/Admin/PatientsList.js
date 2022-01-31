@@ -86,6 +86,7 @@ const PatientsList = () => {
                         {patients && <Fragment>
                             <Table striped hover>
                             <thead align="center">
+                                <tr>
                                 <th>Name</th>
                                 <th>Contact No </th>
                                 <th>Email</th>
@@ -93,6 +94,7 @@ const PatientsList = () => {
                                 <th>Role</th>
                                 <th>Consent Status</th>
                                 <th>ACTION</th> 
+                                </tr>
                             </thead>
                             <tbody>
                                 {patients && patients.map((patient, index) => (
@@ -128,8 +130,8 @@ const PatientsList = () => {
                                     }
                                     
                                     <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
-                                    <Link disabled className="rounded-button-edit" to="/patients"><i className='bx bx-edit-alt'></i></Link>
-                                    <Link className="rounded-button-delete" to="/patients"><i className='bx bxs-user-minus'></i></Link>
+                                    {/* <Link disabled className="rounded-button-edit" to="/patients"><i className='bx bx-edit-alt'></i></Link> */}
+                                    {/* <Link className="rounded-button-delete" to="/patients"><i className='bx bxs-user-minus'></i></Link> */}
                                     </td>
                                 </tr>    
                                 ))}

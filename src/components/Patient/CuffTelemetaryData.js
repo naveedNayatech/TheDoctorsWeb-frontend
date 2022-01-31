@@ -1,17 +1,36 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
 import { Image, Badge } from 'react-bootstrap';
 import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
+import { commentOnReading } from '../../actions/HRActions';
+import {COMMENT_RESET} from '../../constants/HRConstants';
+import {useAlert } from 'react-alert';
 
-const CuffTelemetaryData = ({healthData}) => {
+
+
+const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
+
+    const  dispatch = useDispatch();
+    const alert = useAlert();
+
+    const { hr} = useSelector(state => state.hrAuth);
+
     let telemetaryData = healthData?.telemetaryData?.telemetaryData;
     let patientInfo = healthData?.assigned_patient_id;
     let deviceDetails = healthData?.deviceId;
+    let notes = healthData?.notes;
+
+    const [comment, setComment] = useState('');
+
+    const commentHandler = (readingId) => {
+        dispatch(commentOnReading(readingId, hr?.id, comment));
+    }
 
   return <Fragment>
-      <br /><br />
+        <br />
           <div className="row">
             <div className="col-md-1">
                 <Image src={systolicImg} className="systolic-image" />    
@@ -69,19 +88,47 @@ const CuffTelemetaryData = ({healthData}) => {
                     <span className="vl"></span>
 
                     <span className="profile-label ml-2">Created At: </span>
-                    <span className="profile-label"> {moment(healthData?.createdAt).format("lll")}</span>
+                    <span className="profile-label"> {moment(healthData?.createdAt).format("ll")}</span>
                 </div>
             </div>
 
-            {/* Comment */}
-            {healthData?.conclusion ? <Fragment>
-                    <div className="bubble bubble-alt bubble-green"> <p>
-                        {healthData?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{healthData?.conslusionTimeDate}</span> 
-                        </p>
-                        </div>
-            </Fragment> : ''}
 
-             <br/>       
+            
+            {isAdmin ===true ? <Fragment>
+            </Fragment> : 
+                <div className="row">
+                    <div className="col-md-10">
+                        <input type="text" 
+                        className="form-control mt-1"
+                        placeholder="Enter your comment here ....."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        key={telemetaryData?._id}
+                        />
+                    </div>
+    
+                    <div className="col-md-2">
+                        <button className="submit-btn" type="submit" onClick={() => commentHandler(healthData?._id)}>Submit</button>
+                    </div>
+                </div>
+            } 
+
+
+            {/* Comment on Reading */}
+            
+            {/* Comment Section */}
+
+
+            {/* Comment */}
+            {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
+                <div className="bubble bubble-alt bubble-green"> <p>
+                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).format("lll")}</span> 
+                    </p>
+                </div>
+                <br/><br/><br/>
+            </div> 
+            ))}
+                    
     </Fragment>;
 };
 

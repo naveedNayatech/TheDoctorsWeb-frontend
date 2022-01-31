@@ -129,8 +129,8 @@ const DoctorsList = ({match}) => {
                                 <td className="authorize-icon"><i class='bx bxs-circle'></i><p>Authorized</p></td>
                                 <td>
                                     <Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
-                                    <Link to={{ pathname: "/#", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
-                                    <Link className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link>
+                                    {/* <Link to={{ pathname: "/#", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> */}
+                                    {/* <Link className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> */}
                                 </td>
                             </tr> 
                             

@@ -12,9 +12,14 @@ import {
     STAFF_LOGIN_FAIL,
     STAFF_LOGOUT_SUCCESS,
     STAFF_LOGOUT_FAIL,
+    HR_LOGIN_REQUEST,
+    HR_LOGIN_SUCCESS,
+    HR_LOGIN_FAIL,
     ADMIN_PASSWORD_UPDATE_REQUEST,
     ADMIN_PASSWORD_UPDATE_SUCCESS,
     ADMIN_PASSWORD_UPDATE_FAIL,
+    HR_LOGOUT_SUCCESS,
+    HR_LOGOUT_FAIL,
     CLEAR_ERRORS
 } from '../constants/authConstants';
 
@@ -92,6 +97,53 @@ export const staffLogin = (values) => async(dispatch) => {
     }
 }
 
+// HR Login 
+export const hrLogin = (values) => async(dispatch) => {
+    try {
+       dispatch({
+           type: HR_LOGIN_REQUEST
+       })     
+
+       const res = await axios.post(`${Prod01}/hr/login`, values);
+
+       if (res.data) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(res.data.tokens.access.token)
+        );
+        localStorage.setItem(
+          "hr",
+          JSON.stringify(res.data.hr)
+        );
+       }
+
+       dispatch({
+           type: HR_LOGIN_SUCCESS,
+           payload: res.data.hr
+       })
+       
+    } catch (error) {
+        dispatch({
+            type: HR_LOGIN_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+// HR Logout 
+export const hrLogout = () => async(dispatch) => {
+    try {
+       dispatch({
+           type: HR_LOGOUT_SUCCESS
+       })
+       
+    } catch (error) {
+        dispatch({
+            type: HR_LOGOUT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 // Update Password -> ADMIN 
 export const updatePassword = (id, oldpassword, password) => async(dispatch) => {
@@ -130,8 +182,6 @@ export const updatePassword = (id, oldpassword, password) => async(dispatch) => 
 // Logout 
 export const logout = () => async(dispatch) => {
     try {
-       await axios.get(`${Prod}/v1/adminlogout`);
-
        dispatch({
            type: LOGOUT_SUCCESS
        })
@@ -148,8 +198,6 @@ export const logout = () => async(dispatch) => {
 // Logout 
 export const staffLogout = () => async(dispatch) => {
     try {
-       await axios.get(`${Prod}/v1/stafflogout`);
-
        dispatch({
            type: STAFF_LOGOUT_SUCCESS
        })
