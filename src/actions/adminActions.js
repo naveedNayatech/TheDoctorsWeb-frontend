@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Alert } from 'react-bootstrap';
 import { Prod, Prod01 } from '../constants/ActionType';
 
 import { 
@@ -487,16 +488,36 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    }
    
 
-   export const removeAssignedDevice = (deviceid, patientid) => async(dispatch) => {
+   export const removeAssignedDevice = (Device, patientId) => async(dispatch) => {
     try {
-       dispatch({ 
-           type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
-       });
-   
-       const { data } = await axios.post(`${Prod}/v1/admin/removeDeviceFromPatient`, {
-            deviceid: deviceid,      
-            patientid: patientid
-           });
+    //    dispatch({ 
+    //        type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
+    //    });
+   debugger
+       const token = JSON. parse(localStorage.getItem('token'));
+
+        const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
+            "assignDevice":false,
+            "deviceId":Device._id
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            } 
+        });
+
+        let device;
+
+        if(data.status === 201){
+         
+            console.log('Putting PatientId in device');
+            device = await axios.put(`${Prod01}/device/edit/${Device.deviceObjectId._id}`, {
+                assigned_patient_id: null 
+            }, {
+                headers: {
+                    "Authorization":`Bearer ${token}`
+                }  
+            })
+        } 
    
        dispatch({
            type: ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
@@ -917,10 +938,9 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
 
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const data = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
-            assigned_devices: [{
-                deviceObjectId: deviceId
-            }],
+        const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
+            "assignDevice":true,
+            "deviceId":deviceId
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -930,6 +950,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         let device;
 
         if(data.status === 201){
+         
             console.log('Putting PatientId in device');
             device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
                 assigned_patient_id: patientId 
@@ -949,6 +970,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         
     } catch (error) {
         console.log(error);
+    
         // dispatch({
         //     type: UPDATE_DEVICE_FAIL,
         //     payload: error

@@ -48,12 +48,12 @@ const PatientProfile = (props) => {
         dispatch(assignDeviceToPatient(patientid, deviceid));
     }
 
-    // const removeAssignDevice = (deviceid) => {
-    //     console.log('Device id is ' + deviceid);
-    //     console.log('Patient id is ' + patientid);
+    const removeAssignDevice = (device,patientId) => {
+        console.log('Device id is ' + device._id);
+        console.log('Patient id is ' + patientId);
 
-    //      dispatch(removeAssignedDevice(deviceid, patientid));
-    // }
+         dispatch(removeAssignedDevice(device, patientid));
+    }
 
     // const refreshTelemetaryData =() => {
     //     dispatch(getPatientTelemetryData(patientid, sort))
@@ -106,7 +106,7 @@ const PatientProfile = (props) => {
                                                     <p className="patient-email">{patient?.email}</p>
                                                     <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
-                                                    {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
+                                                    {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : 'Not added yet'}
                                                 </Fragment>
                                         </div>    
                                  </div>
@@ -170,9 +170,9 @@ const PatientProfile = (props) => {
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                                 <Fragment>
                                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                                {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
+                                                <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass,patientid)}>
                                                     <i className="bx bx-trash"></i>
-                                                </button> */}
+                                                </button>
                                                 </p>
                                                 
                                                 </Fragment>
