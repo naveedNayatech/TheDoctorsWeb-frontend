@@ -1,7 +1,7 @@
 import React, {useEffect, Fragment} from 'react';
-import Sidebar from '../../components/AdminDashboard/Sidebar';
+import Sidebar from '../../components/Staff/Sidebar';
+import TopBar from '../../components/Staff/TopBar';
 import MetaData from '../../layouts/MetaData';
-import TopBar from '../../components/AdminDashboard/TopBar';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import TextField from '../../components/Form/TextField';
@@ -11,7 +11,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import { useAlert } from 'react-alert';
 import { PATIENT_RESET } from '../../constants/adminConstants';
 
-const AddPatient = (props) => {
+
+const DoctorAddPatient = (props) => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
@@ -25,7 +26,7 @@ const AddPatient = (props) => {
 
         if(isAdded) {
             alert.success('Patient Added');
-            props?.history.push('/patients');
+            props?.history.push('/staffPatients');
             dispatch({
                 type: PATIENT_RESET
             });   
@@ -51,15 +52,18 @@ const AddPatient = (props) => {
         city:Yup.string(),
         state:Yup.string(),
         line2: Yup.string(),
-        ssn:Yup.string()
+        ssn:Yup.string(),
+        insurancecompany: Yup.string(),
+        diseases: Yup.string()
 	  });
 
-      const submitHandler = (values) => {
+    const submitHandler = (values) => {
         dispatch(addPatient(values));
     }
 
+
   return <Fragment>
-      <MetaData title="Add Patient"/>
+       <MetaData title="My Patients"/>
                 <Sidebar />    
 
                 <section className="home-section">
@@ -69,7 +73,7 @@ const AddPatient = (props) => {
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
                     <div className="home-content">
                         <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Patient </span></h5>
-                        <hr className="blue-hr"/>
+                        <hr />
 
                         <Formik initialValues={{
                              firstname: '',
@@ -204,6 +208,26 @@ const AddPatient = (props) => {
                                         />
                                     </div>
 
+                                     {/* Insurance Companies */}
+                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <TextField 
+                                                label="Insurance Companies" 
+                                                name="insurancecompany" 
+                                                type="text" 
+                                                placeholder="Insurance company"
+                                        />
+                                    </div>
+
+                                    {/* Diseases */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <TextField 
+                                                label="Diseases" 
+                                                name="diseases" 
+                                                type="text" 
+                                                placeholder="Diseases"
+                                        />
+                                    </div>
+
                                 </div>{/* row ends here */}
 
                                  {/* Buttons */}
@@ -222,7 +246,7 @@ const AddPatient = (props) => {
                 </div>
 
                 </section>
-  </Fragment>;
+  </Fragment>
 };
 
-export default AddPatient;
+export default DoctorAddPatient;

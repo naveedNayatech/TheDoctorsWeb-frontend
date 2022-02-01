@@ -8,6 +8,11 @@ import {
     ADDING_COMMENT_REQUEST,
     ADDING_COMMENT_SUCCESS,
     ADDING_COMMENT_FAIL,
+    ADDING_TIME_SPENT_SUCCESS,
+    ADDING_TIME_SPENT_FAIL,
+    TIME_REPORT_REQUEST,
+    TIME_REPORT_SUCCESS,
+    TIME_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -71,6 +76,71 @@ export const commentOnReading = (readingId, hrId, comment) => async(dispatch) =>
     }   
    }
 
+
+
+// Time Spent on Patient
+export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) => {
+    
+    try {
+    
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
+                assigned_patient_id : patientId,
+                timeSpentInMinutes:values.timespent,
+                conclusion: values.conclusion
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: ADDING_TIME_SPENT_SUCCESS,
+            payload: data
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: ADDING_TIME_SPENT_FAIL,
+           payload: error.message
+       })
+    }   
+   }
+
+
+   
+export const getTimeReport = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
+    try {
+
+        dispatch({ 
+            type: TIME_REPORT_REQUEST
+        });
+
+
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime/${hrId}/${patientId}`, {
+                    startDate:startDate,
+                    endDate: endDate
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: TIME_REPORT_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: TIME_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+   }
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({

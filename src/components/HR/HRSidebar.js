@@ -45,6 +45,13 @@ const HRSidebar = (props) => {
                 </li>
 
                 <li>
+                    <Link key="timeReport" to="/timeReport">
+                    <i className='bx bx-list-ul'></i>
+                        <span className="link_name">Time Report</span>
+                    </Link>
+                </li>
+
+                <li>
                     <Link key="doctors" to="/hr">
                         <i className="bx bx-user"></i>
                         <span className="link_name">My Profile</span>

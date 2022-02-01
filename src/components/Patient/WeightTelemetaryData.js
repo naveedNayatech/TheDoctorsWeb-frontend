@@ -1,15 +1,37 @@
-import React, {Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import weightImg from '../../assets/Images/scale.png';
 import fatImg from '../../assets/Images/fat.png';
 import bmiImg from '../../assets/Images/bmi.png';
 import { Image, Badge } from 'react-bootstrap';
 import moment from 'moment';
+import { commentOnReading } from '../../actions/HRActions';
+import {COMMENT_RESET} from '../../constants/HRConstants';
+import { useSelector, useDispatch } from 'react-redux';
 
-const WeightTelemetaryData = ({healthData}) => {
+const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
+
+    const dispatch = useDispatch();
+
+    console.log('isAdmin is ' + isAdmin);
+    const { hr} = useSelector(state => state.hrAuth);
+    const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
 
     let telemetaryData = healthData?.telemetaryData?.telemetaryData;
     let patientInfo = healthData?.assigned_patient_id;
     let deviceDetails = healthData?.deviceId;
+    let notes = healthData?.notes;
+
+    const [comment, setComment] = useState('');
+
+    const commentHandler = (readingId) => {
+        if(hr?._id === undefined){
+            // console.log('Doctor is commenting')
+            dispatch(commentOnReading(readingId, staff?.id, comment));
+        } else {
+            // console.log('HR is commenting')
+            dispatch(commentOnReading(readingId, hr?.id, comment));
+        }
+    }
 
   return <Fragment>
       <br /><br /> 
@@ -75,6 +97,38 @@ const WeightTelemetaryData = ({healthData}) => {
                     <span className="profile-label"> {moment(healthData?.createdAt).format("lll")}</span>
                 </div>
             </div>
+
+
+            {/* Comment on reading */}
+            {isAdmin === true ? <Fragment>
+            </Fragment> : 
+                <div className="row">
+                    <div className="col-md-10">
+                        <input type="text" 
+                        className="form-control mt-1"
+                        placeholder="Enter your comment here ....."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        key={telemetaryData?._id}
+                        />
+                    </div>
+    
+                    <div className="col-md-2">
+                        <button className="submit-btn" type="submit" onClick={() => commentHandler(healthData?._id)}>Submit</button>
+                    </div>
+                </div>
+            }
+
+            {/* Comment */}
+            {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
+                <div className="bubble bubble-alt bubble-green"> <p>
+                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).format("ll")}</span> 
+                    </p>
+                </div>
+                <br/><br/><br/>
+            </div> 
+            ))}
+
 
             {/* Comment */}
             {healthData?.conclusion ? <Fragment>

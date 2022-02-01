@@ -55,11 +55,16 @@ const HRPatientsList = () => {
                         <div className="home-content">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="col-md-9">
                                         <h5 className="pt-2 mt-2">My Patients ({hrpatients && hrpatients.length}) </h5> 
-                                        <hr />
+                    
+                                    </div>
+
+                                    <div className="col-md-3">
+                                         <Link to="/Hr/AddPatient" className="add-staff-btn">Enroll New Patient</Link> 
                                     </div>
                                 </div> 
+                                <hr />
                                 
                                 {hrpatients?.length > 0 ? (<Fragment>
                                 <div className="col-md-12">

@@ -45,7 +45,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box0">
                         <div className="left-side">
                             <div className="box_topic">My Patients</div>
-                            <div className="number">15</div>
+                            <div className="number">{hrpatients && hrpatients.length}</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -57,7 +57,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box1">
                         <div className="left-side">
                             <div className="box_topic">Devices Assigned</div>
-                            <div className="number">15</div>
+                            <div className="number">00</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -69,7 +69,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box2">
                         <div className="left-side">
                             <div className="box_topic">Total Staff</div>
-                            <div className="number">120</div>
+                            <div className="number">00</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>

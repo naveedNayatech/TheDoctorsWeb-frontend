@@ -18,15 +18,12 @@ const StaffPatients = ({ history }) => {
     let id = staff._id;
 
     useEffect(() => {
-        console.log('id is ' + id);
         dispatch(getDoctorPatients(id));
-
 	}, [dispatch])
 
     return (
         <Fragment>
            <MetaData title="My Patients"/>
-
                 <Sidebar />    
 
                 <section className="home-section">
@@ -38,11 +35,15 @@ const StaffPatients = ({ history }) => {
                         <div className="home-content">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="col-md-9">
                                         <h5 className="pt-2 mt-2">My Patients <span style={{color: '#F95800'}}> ({doctorpatients && doctorpatients.length}) </span></h5> 
-                                        <hr />
                                     </div>
-                                </div> 
+
+                                    <div className="col-md-3">
+                                        <Link to="/doctor/Addpatient" className="add-staff-btn">Enroll New Patient</Link>
+                                    </div>
+                                </div>
+                                <hr /> 
                                 
                                 {doctorpatients?.length > 0 ? (<Fragment>
                                 <div className="col-md-12">
@@ -66,12 +67,12 @@ const StaffPatients = ({ history }) => {
                                             <td>{patient?.contactno} <p>(English)</p></td>
                                             <td>{patient?.email}</td>
                                             <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
-                                            <td>{patient?.insurancecompany.map((insurance, index) => ( <p key={index} className="insurance-companies-table">{insurance.companyname} </p>))}</td>
-                                            <td>{patient?.rpmconsent === true ? <div><i className='bx bx-pen signed-icon'></i><p>Signed</p></div> : <div><i className='bx bxs-pencil not-signed-icon'></i><p>Not Signed</p></div>}</td>
+                                            <td>{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'} </td>
+                                            <td>{patient?.rpmconsent === true ? <p>Signed</p> : <p>Not Signed</p>}</td>
                                             <td>
                                             <Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                                 {/* <Link to={{ pathname: "/staffPatients", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp;
+                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
                                             </td>
                                         </tr> 
                                         

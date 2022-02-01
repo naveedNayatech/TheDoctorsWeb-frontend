@@ -8,16 +8,19 @@ import Loader from '../../layouts/Loader';
 import {useDispatch, useSelector} from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
+import { RESET_ASSIGN_PATIENT_TO_HR } from '../../constants/adminConstants';
 
 const AssignPatientToHr = (props) => {
 
-    let hrId = props?.location?.state?.id;
-    let firstName = props?.location?.state?.firstName;
-    let lastName = props?.location?.state?.lastName;
+    let id = props?.location?.state?.id;
+    let hrId = props?.location?.state?.id?._id;
+    let firstName = props?.location?.state?.id?.firstname;
+    let lastName = props?.location?.state?.id?.lastname;
 
 
     const dispatch = useDispatch();
     const alert = useAlert();    
+
     
     const [patientId, setPatientId] = useState('');
 
@@ -41,7 +44,10 @@ const AssignPatientToHr = (props) => {
 
         if(isAssigned === true){
             alert.success('Doctor Assigned');
-            props.history.push({pathname: '/hrlist'});
+            props.history.push({pathname: "/hrProfile", state: {hr: id}});
+            dispatch({
+                type: RESET_ASSIGN_PATIENT_TO_HR
+            })
         }
         
     }, [dispatch, alert, error, patientId, isAssigned]);

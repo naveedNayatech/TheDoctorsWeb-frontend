@@ -22,14 +22,19 @@ const PatientsList = () => {
         if(error){
             return alert.error(error);
         }
-
         dispatch(getPatients());
 
     }, [dispatch, alert, error])
 
+    
+    const getPatientsList = () => {
+       dispatch(getPatients());
+    }
+
     const changeConsentStatus = (id) => {
-        console.log('patient Id is' + id);
-        dispatch(updatePatientConsentStatus(id))
+        dispatch(updatePatientConsentStatus(id));
+        getPatientsList();
+        alert.success('Status Changed');
     }
 
     return (

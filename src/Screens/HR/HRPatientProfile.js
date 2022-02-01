@@ -1,16 +1,20 @@
-import React, {useEffect, Fragment} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import MetaData from '../../layouts/MetaData';
 import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
 import { patientProfile, getPatientTelemetryData} from '../../actions/adminActions';
+import { timeSpentOnPatient } from '../../actions/HRActions';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge, Tabs, Tab } from 'react-bootstrap';
+import { Badge, Tabs, Tab, Modal, Spinner } from 'react-bootstrap';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData'; 
-import { COMMENT_RESET } from '../../constants/HRConstants';
+import { COMMENT_RESET, ADDING_TIME_SPENT_RESET } from '../../constants/HRConstants';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import TextField from '../../components/Form/TextField';
 
 const HRPatientProfile = (props) => {
     const alert = useAlert();
@@ -18,15 +22,27 @@ const HRPatientProfile = (props) => {
   let patientid = props?.location?.state?.patientid;
   
   const dispatch = useDispatch();
-  
+  const [addTimeShow, setAddTimeShow] = useState(false);
+
+
   const { loading, error, patient} = useSelector(state => state.patientProfile);
   const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
   const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
-
+  const {isSuccessful } = useSelector(state => state.timeSpent);
+  const {hr} = useSelector(state => state.hrAuth);  
+  
   useEffect(() => {
     if(error){
         return alert.error(error);
     }
+
+    const validate = Yup.object().shape({
+		timeSpent: Yup.string().required('Required'),
+		conclusion: Yup.string() 
+		  .min(6, 'Too Short!')
+		  .max(150, 'Too Long!')
+		  .required('Password is Required')
+	  });
 
     dispatch(patientProfile(patientid));
     dispatch(getPatientTelemetryData(patientid))
@@ -38,8 +54,26 @@ const HRPatientProfile = (props) => {
         dispatch(getPatientTelemetryData(patientid))
     }
 
-}, [dispatch, alert, error, commentSuccess]);
+    if(isSuccessful) {
+        setAddTimeShow(false);
+        alert.success('added');
+        dispatch({ type: ADDING_TIME_SPENT_RESET})
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
+    }
 
+}, [dispatch, alert, error, commentSuccess, isSuccessful]);
+
+
+    const handleClose = () => setAddTimeShow(false);
+    const handleShow = () => setAddTimeShow(true);
+
+    const submitTimeSpent = (values) => {
+        if(values.timespent === ''){
+            return
+        } 
+        dispatch(timeSpentOnPatient(patient?._id, hr?._id ,values));
+    }
 
   return <Fragment>
       <MetaData title="Patients Profile"/>
@@ -49,14 +83,67 @@ const HRPatientProfile = (props) => {
         {/* TopBar */}
         <HRTopBar />
 
+        <Modal show={addTimeShow} onHide={handleClose}>
+            <Modal.Body>
+                <h5>Add <span style={{color: '#F95800'}}> Time </span></h5>
+                <hr />
+
+                <Formik initialValues={{
+                    timeSpent: '',
+                    colclusion: '', 
+                }}
+                // validationSchema={validate}
+                onSubmit={values => {
+                    submitTimeSpent(values)
+                }}
+                >
+
+                { formik => (
+                    <div>
+                        <Form>
+                            <TextField 
+                                label="Time Spent" 
+                                name="timespent" 
+                                type="text" 
+                                placeholder="Time Spent"
+                            />
+                            
+
+                            <TextField 
+                                label="Conclusion" 
+                                name="conclusion" 
+                                type="text"	
+                                placeholder="Type your conclusion here .... "
+                            />
+
+                    <div className="row-class" style={{justifyContent: 'space-between'}}>
+                            <button className="reset-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Submit'}</button>
+                        </div>
+
+                        </Form>
+
+
+                    </div>
+                )}
+                    
+                </Formik>   
+            </Modal.Body>
+        </Modal>
+
         {loading ? <Loader /> : <Fragment>
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
                         <div className="home-content">
                             <div className="container">    
 
                             {patient && <Fragment>
-                                <div className="col-md-3">
+                                <div className="row">
+                                <div className="col-md-10">
                                     <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
+                                </div>
+
+                                <div className="col-md-2">
+                                    <button className="submit-btn mt-2" onClick={handleShow}>Add Time</button>
+                                </div>
                                 </div>
                                 <hr />
 
@@ -185,7 +272,7 @@ const HRPatientProfile = (props) => {
                                 {deviceData && deviceData.map((devicedata, index) => (
                                     <div key={index}>
                                         {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
-                                            <WeightTelemetaryData healthData={devicedata} />
+                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false}/>
                                         </Fragment> : ''}   
                                     </div>
                                 ))}
@@ -202,9 +289,6 @@ const HRPatientProfile = (props) => {
                 </div>
                 </Fragment>
                 }
-
-
-
     </section>
   </Fragment>;
 };

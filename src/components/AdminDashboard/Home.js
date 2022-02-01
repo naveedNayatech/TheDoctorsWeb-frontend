@@ -2,7 +2,7 @@ import React, { useEffect,  Fragment } from 'react';
 import TopBar from '../AdminDashboard/TopBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getPatients, getAllDevices } from '../../actions/adminActions';
+import { getPatients, getAllDevices, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import {Table, Badge} from 'react-bootstrap';
 import DashboardAlerts from '../AdminDashboard/DashboardAlerts';
@@ -15,11 +15,12 @@ const Home = () => {
 
     const { patients} = useSelector(state => state.admin);
     const { deviceCount, devices} = useSelector(state => state.devices);
+    const { totalPatients, totalHrs, totalDrs, totalDevices } = useSelector(state => state.adminStat)
 
     useEffect(() => {
           dispatch(getPatients());
           dispatch(getAllDevices());
-        
+          dispatch(getAdminStats())
     }, [dispatch]);
 
 
@@ -35,7 +36,7 @@ const Home = () => {
                 <div className="box box0">
                         <div className="left-side">
                             <div className="box_topic">Total Patients</div>
-                            <div className="number">{patients && patients?.length < 10 ? '0'+patients?.length : patients?.length }</div>
+                            <div className="number">{totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients }</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -47,7 +48,7 @@ const Home = () => {
                     <div className="box box1">
                         <div className="left-side">
                             <div className="box_topic">Inventory</div>
-                            <div className="number">{deviceCount && deviceCount < 10 ? '0'+deviceCount : deviceCount }</div>
+                            <div className="number">{totalDevices && totalDevices < 10 ? '0'+totalDevices : totalDevices }</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -58,8 +59,8 @@ const Home = () => {
 
                     <div className="box box2">
                         <div className="left-side">
-                            <div className="box_topic">Total Staff</div>
-                            <div className="number">120</div>
+                            <div className="box_topic">Total Doctors</div>
+                            <div className="number">{totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -70,8 +71,8 @@ const Home = () => {
 
                     <div className="box box3">
                         <div className="left-side">
-                            <div className="box_topic">Total Profit</div>
-                            <div className="number">63,300</div>
+                            <div className="box_topic">Total HRs</div>
+                            <div className="number">{totalHrs && totalHrs < 10 ? '0'+totalHrs : totalHrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-down-arrow-alt down"></i>
                                 <span className="text">Up from Yesterday</span>

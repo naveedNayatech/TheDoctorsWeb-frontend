@@ -114,7 +114,6 @@ const DoctorsList = ({match}) => {
                                     <th>Gender </th>
                                     <th>NPI Number</th>
                                     <th>Phone 1</th>
-                                    <th>RPM Consent</th>
                                     <th>Action</th>
                                 </tr> 
                             </thead>
@@ -126,7 +125,6 @@ const DoctorsList = ({match}) => {
                                 {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
                                 <td>{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</td>
                                 <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
-                                <td className="authorize-icon"><i class='bx bxs-circle'></i><p>Authorized</p></td>
                                 <td>
                                     <Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     {/* <Link to={{ pathname: "/#", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> */}

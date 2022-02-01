@@ -17,6 +17,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
     const alert = useAlert();
 
     const { hr} = useSelector(state => state.hrAuth);
+    const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
 
     let telemetaryData = healthData?.telemetaryData?.telemetaryData;
     let patientInfo = healthData?.assigned_patient_id;
@@ -26,7 +27,13 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
     const [comment, setComment] = useState('');
 
     const commentHandler = (readingId) => {
-        dispatch(commentOnReading(readingId, hr?.id, comment));
+        if(hr?._id === undefined){
+            // console.log('Doctor is commenting')
+            dispatch(commentOnReading(readingId, staff?.id, comment));
+        } else {
+            // console.log('HR is commenting')
+            dispatch(commentOnReading(readingId, hr?.id, comment));
+        }
     }
 
   return <Fragment>
@@ -88,7 +95,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
                     <span className="vl"></span>
 
                     <span className="profile-label ml-2">Created At: </span>
-                    <span className="profile-label"> {moment(healthData?.createdAt).format("ll")}</span>
+                    <span className="profile-label"> {moment(healthData?.createdAt).format("lll")}</span>
                 </div>
             </div>
 
@@ -122,7 +129,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             {/* Comment */}
             {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
                 <div className="bubble bubble-alt bubble-green"> <p>
-                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).format("lll")}</span> 
+                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).format("ll")}</span> 
                     </p>
                 </div>
                 <br/><br/><br/>

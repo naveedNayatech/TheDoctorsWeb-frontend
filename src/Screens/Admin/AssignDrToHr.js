@@ -8,12 +8,14 @@ import Loader from '../../layouts/Loader';
 import {useDispatch, useSelector} from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
+import { RESET_ASSIGN_PATIENT_TO_HR } from '../../constants/adminConstants';
 
 const AssignDrToHr = (props) => {
 
-    let hrId = props?.location?.state?.id;
-    let firstName = props?.location?.state?.firstName;
-    let lastName = props?.location?.state?.lastName;
+    let id = props?.location?.state?.id;
+    let hrId = props?.location?.state?.id?._id;
+    let firstName = props?.location?.state?.id?.firstname;
+    let lastName = props?.location?.state?.id?.lastname;
 
 
     const dispatch = useDispatch();
@@ -37,13 +39,15 @@ const AssignDrToHr = (props) => {
         dispatch(getDoctors());
 
         if(doctorId){
-            console.log('Doctor ID is ' + doctorId);
             dispatch(doctorProfile(doctorId))
         }
 
         if(isAssigned === true){
-            alert.success('Doctor Assigned');
-            props.history.push({pathname: '/hrlist'});
+            alert.success('Assigned');
+            props.history.push({pathname: '/hrProfile', state: {hr: id}});
+            dispatch({
+                type: RESET_ASSIGN_PATIENT_TO_HR
+            })
         }
         
     }, [dispatch, alert, error, doctorId, isAssigned]);
@@ -62,6 +66,9 @@ const AssignDrToHr = (props) => {
             <TopBar />
 
             <div className="col-md-0 shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">
+                
+                <p style={{ color: 'gray', textTransform: 'uppercase', fontSize: '14px'}}>Assign Doctor To HR</p>
+                <hr />
                 <div className="row">
                     <div className="col-md-4">
                         <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Doctor </span></h5>
@@ -74,7 +81,7 @@ const AssignDrToHr = (props) => {
                                 value={doctorId} 
                                 onChange={(e) => setDoctorId(e.target.value)}
                                 >
-                                <option disabled value="Select Doctor">Select Doctor</option>    
+                                <option value="Select Doctor">Select Doctor</option>    
                                 {doctors && doctors.map((doc, index) => (
                                     <option value={doc?._id} key={index}> {doc?.firstname} {doc?.lastname} {doc?.npinumber} </option>
                                 ))}    

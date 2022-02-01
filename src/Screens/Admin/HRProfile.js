@@ -6,12 +6,10 @@ import Loader from '../../layouts/Loader';
 import moment from 'moment';
 import {Link} from 'react-router-dom';
 
-
 const HRProfile = (props) => {
 
   let hrInfo = props?.location?.state?.hr;
   let doctor = props?.location?.state?.hr?.assigned_doctor_id;
-
 
   return <Fragment>
       <MetaData title="HR Profile"/>
@@ -30,13 +28,13 @@ const HRProfile = (props) => {
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                        <Link to={{ pathname: "/assignDrToHr", state: {id: hrInfo?._id, firstName: hrInfo?.firstname, lastName: hrInfo?.lastname}}} 
+                        <Link to={{ pathname: "/assignDrToHr", state: {id: hrInfo}}} 
                             className="add-staff-btn mt-2">Assign Doctor to Hr. {hrInfo?.lastname}
                         </Link>
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                        <Link to={{ pathname: "/assignPatientToHr", state: {id: hrInfo?._id, firstName: hrInfo?.firstname, lastName: hrInfo?.lastname}}} 
+                        <Link to={{ pathname: "/assignPatientToHr", state: {id: hrInfo}}} 
                             className="add-staff-btn mt-2">Assign patient to Hr. {hrInfo?.lastname}
                         </Link>
                     </div>

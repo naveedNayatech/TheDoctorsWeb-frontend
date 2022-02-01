@@ -140,11 +140,7 @@ const PatientProfile = (props) => {
                                     <div className="col-md-3 ">
                                             <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
                                              <hr />
-                                            {patient?.diseases && patient?.diseases.map((diseases, index) => (
-                                                <Fragment key={index}>
-                                                     <span className="patient-profile-disease-span"> {diseases} </span>   
-                                                </Fragment>
-                                            ))}
+                                                <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'}  </span>   
                                     </div>
                                 </div>
 
@@ -166,7 +162,7 @@ const PatientProfile = (props) => {
                                     <span className="patient-profile-col-heading">RPM Integration</span>                                 
                                         <hr />
                                          {patient?.assigned_devices && patient?.assigned_devices.length === 0 ? <Fragment>
-                                            <b>No Device Assigned Yet</b>
+                                            <span className="profile-label">No Device Assigned Yet</span>
                                            
                                             </Fragment> : <Fragment>
                                             <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
@@ -208,7 +204,7 @@ const PatientProfile = (props) => {
                         {deviceData && deviceData.map((devicedata, index) => (
                             <div key={index}>
                                 {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
-                                    <CuffTelemetaryData healthData= {devicedata} isAdmin={true} />
+                                    <CuffTelemetaryData healthData={devicedata} isAdmin={true} />
                                 </Fragment> : ''}
                             </div>
                         ))}
@@ -218,7 +214,7 @@ const PatientProfile = (props) => {
                         {deviceData && deviceData.map((devicedata, index) => (
                             <div key={index}>
                                  {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
-                                    <WeightTelemetaryData healthData={devicedata} />
+                                    <WeightTelemetaryData healthData={devicedata} isAdmin={true} />
                                 </Fragment> : ''}   
                             </div>
                         ))}

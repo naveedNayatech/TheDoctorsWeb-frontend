@@ -34,12 +34,16 @@ import StaffDashboard from './Screens/Staff/StaffDashboard';
 import StaffProfile from './Screens/Staff/StaffProfile';
 import StaffPatient from './Screens/Staff/StaffPatients';
 import StaffPatientProfile from './Screens/Staff/StaffPatientProfile';
+import DoctorAddPatient from './Screens/Staff/DoctorAddPatient';
 // HR Screens
 import HrLogin from './Screens/HR/HrLogin';
 import HRDashboard from './Screens/HR/HRDashboard'; 
 import HRPatientsList from './Screens/HR/HRPatientsList';
 import HRPatientProfile from './Screens/HR/HRPatientProfile';
 import HR from './Screens/HR/HR';
+import TimeReport from './Screens/HR/TimeReport';
+import PrintReport from './Screens/HR/PrintReport';
+import HRAddPatient from './Screens/HR/HRAddPatient';
 
 function App() {
   return (
@@ -73,12 +77,16 @@ function App() {
         <StaffProtectedRoute exact path="/staffProfile" component={StaffProfile} />
         <StaffProtectedRoute exact path="/staffPatients" component={StaffPatient} />
         <StaffProtectedRoute exact path="/staffPatientProfile" component={StaffPatientProfile} />
+        <StaffProtectedRoute exact path="/doctor/Addpatient" component={DoctorAddPatient} />
         {/* HR Routes */}
         <Route exact path="/hrLogin" component={HrLogin} />
         <HRProtectedRoute exact path="/HrDashboard" isHR={true} component={HRDashboard} />
         <HRProtectedRoute exact path="/HrPatients" isHR={true} component={HRPatientsList} />
         <HRProtectedRoute exact path="/hrpatientProfile" isHR={true} component={HRPatientProfile} />
         <HRProtectedRoute exact path="/hr" isHR={true} component={HR} />
+        <HRProtectedRoute exact path="/timeReport" isHR={true} component={TimeReport} />
+        <HRProtectedRoute exact path="/printReport" isHR={true} component={PrintReport} />
+        <Route exact path="/Hr/AddPatient" component={HRAddPatient} />
     </Router>
   )      
 };

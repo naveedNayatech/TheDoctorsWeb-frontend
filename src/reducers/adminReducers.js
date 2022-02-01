@@ -26,6 +26,7 @@ import {
     ASSIGN_PATIENT_TO_DOCTOR_REQUEST,
     ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
     ASSIGN_PATIENT_TO_DOCTOR_FAIL,
+    RESET_ASSIGN_PATIENT_TO_HR,
     ASSIGN_DEVICE_TO_PATIENT_REQUEST,
     ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
     ASSIGN_DEVICE_TO_PATIENT_FAIL,
@@ -71,6 +72,8 @@ import {
     ASSIGN_DOCTOR_TO_HR_REQUEST,
     ASSIGN_DOCTOR_TO_HR_SUCCESS,
     ASSIGN_DOCTOR_TO_HR_FAIL,
+    ADMIN_STATS_SUCCESS,
+    ADMIN_STATS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -543,6 +546,12 @@ export const hrsReducers =  (state = { hrs: []}, action) => {
              loading: false,
              isAssigned: true,
             }
+            
+        case RESET_ASSIGN_PATIENT_TO_HR:
+            return { 
+                isAssigned: false,
+            }
+
 
 
         case ALL_HRS_FAIL:
@@ -555,5 +564,28 @@ export const hrsReducers =  (state = { hrs: []}, action) => {
 
         default: // need this for default case
         return state 
+    }
+}
+
+export const adminStatsReducers = (state = { totalPatients:0, totalHrs: 0, totalDrs:0, totalDevices:0  }, action) => {
+    switch (action.type) {
+        case ADMIN_STATS_SUCCESS: 
+            return {
+                loading: false,
+                totalPatients: action.payload.totalPatients,
+                totalHrs: action.payload.totalHrs, 
+                totalDrs: action.payload.totalDrs,
+                totalDevices: action.payload.totalDevices
+            }
+
+        case ADMIN_STATS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            } 
+            
+        default: // need this for default case
+        return state 
+    
     }
 }

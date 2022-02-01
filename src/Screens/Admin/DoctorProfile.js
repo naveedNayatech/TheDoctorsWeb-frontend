@@ -145,12 +145,12 @@ const DoctorProfile = (props) => {
                                             <td>{patient?.contactno} <p>(English)</p></td>
                                             <td>{patient?.email}</td>
                                             <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
-                                            <td>{patient?.insurancecompany.map((insurance, index) => ( <p key={index} className="insurance-companies-table">{insurance.companyname} </p>))}</td>
-                                            <td>{patient?.rpmconsent === true ? <div><i className='bx bx-pen signed-icon'></i><p>Signed</p></div> : <div><i className='bx bxs-pencil not-signed-icon'></i><p>Not Signed</p></div>}</td>
+                                            <td>{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</td> 
+                                            <td>{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</td>
                                             <td>
                                             <Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
-                                                <Link to={{ pathname: "/editDoctor", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp;
-                                                <Link to="/#" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp;
+                                                {/* <Link to={{ pathname: "/editDoctor", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
+                                                {/* <Link to="/#" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
                                             </td>
                                         </tr> 
                                         

@@ -6,12 +6,11 @@ import Loader from '../../layouts/Loader';
 import {useSelector, useDispatch} from 'react-redux';
 import { patientProfile, getPatientTelemetryData, insertComment} from '../../actions/adminActions';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import insuranceLogo from '../../assets/Images/aetna.png';
+import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
+import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
 import moment from 'moment';
-import { Form, Image, Button, Badge } from 'react-bootstrap';
-import systolicImg from '../../assets/Images/blood-pressure.png';
-import diastolicImg from '../../assets/Images/diastolic.png';
-import pulseImg from '../../assets/Images/pulse.png';
+import { COMMENT_RESET } from '../../constants/HRConstants';
+import { Badge, Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 
@@ -24,13 +23,11 @@ const StaffPatientProfile = (props) => {
     let patientid = props?.location?.state?.patientid;
 
     const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
-    // const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
+    const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
+    const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
     const { isAuthenticated} = useSelector(state => state.staffAuth);
 
-    const [sort, setSort] = useState(1);
-    const [tabMode, setTabMode] = useState('telemetaryData');
-    const [deviceId, setDeviceId] = useState('');
-    const [comment, setComment] = useState('');
+    const [addTimeShow, setAddTimeShow] = useState(false);
 
     useEffect(() => {
         if(isAuthenticated === false) {
@@ -41,35 +38,27 @@ const StaffPatientProfile = (props) => {
             return alert.error(error);
         }
 
-        dispatch(patientProfile(patientid));
 
-        // dispatch(getPatientTelemetryData(patientid))
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
         
+        if(commentSuccess) {
+            alert.success('Comment added');
+            dispatch({ type: COMMENT_RESET });
+            dispatch(patientProfile(patientid));
+            dispatch(getPatientTelemetryData(patientid))
+        }
+
         if(isUpdated) {
             alert.success('Updated Successfully');
         }
 
-    }, [dispatch, alert, error, isUpdated]);
+    }, [dispatch, alert, error, isUpdated, commentSuccess,]);
 
+    const handleClose = () => setAddTimeShow(false);
+    const handleShow = () => setAddTimeShow(true);
 
-    // const sortData = (event) => {
-    //     setSort(event.target.value);
-    //     dispatch(getPatientTelemetryData(patientid,sort))
-    // }
-
-    // const refreshTelemetaryData =() => {
-    //     dispatch(getPatientTelemetryData(patientid, sort))
-    // }
-
-    // const submitCommentHandler = (deviceid) => {
-    //     // e.preventDefault();
-    //     if(comment === '') {
-    //         return alert.error('Comment Cannot be Empty')
-    //     }
-
-    //     dispatch(insertComment(deviceid, comment, patientid));
-    // }
-
+    
 
     return (
         <Fragment>
@@ -88,35 +77,15 @@ const StaffPatientProfile = (props) => {
 
                             {patient && <Fragment>
                             <div className="row">
-                                <div className="col-md-3">
-                                    <h5 className="pt-2 mt-2">Patient <span style={{color: '#F95800'}}>Details</span>  </h5>
+                                <div className="col-md-10">
+                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
                                 </div>
 
                                 {/* <div className="col-md-2">
-                                    <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Patient Notes </small></Link>
-                                </div>
-
-                                <div className="col-md-2">
-                                <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Messages(s)</small></Link>
-                                </div>
-
-                                <div className="col-md-2">
-                                    {patient?.doctorid === null ? <Link to="/patientProfile" className="btn btn-link pt-2 mt-2">
-                                        <small style={{color: 'red'}}>Phy. not assigned</small>
-                                        </Link> : <Link to={{ pathname: "/doctorProfile", state: {id: patient?.doctorid}}} className="btn btn-link pt-2 mt-2">
-                                        
-                                        <i className="bx bx-user"> Phy. Details </i>
-                                    </Link>}
-                                    
-                                </div>
-
-                                <div className="col-md-3">
-                                    <Link to="/patientProfile" className="btn btn-link pt-2 mt-2"><small>Update Patient Info </small> </Link>
+                                    <button className="submit-btn mt-2" onClick={handleShow}>Add Time</button>
                                 </div> */}
-
-                            </div>
-                                        
-                            <hr className="blue-hr"/>
+                                </div>
+                            <hr />
 
                                 <div className="row">
                                 <div className="col-md-3">
@@ -162,11 +131,8 @@ const StaffPatientProfile = (props) => {
                                     <div className="col-md-3 ">
                                             <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
                                              <hr />
-                                            {patient?.diseases && patient?.diseases.map((diseases, index) => (
-                                                <Fragment key={index}>
-                                                     <span className="patient-profile-disease-span"> {diseases} </span>   
-                                                </Fragment>
-                                            ))}
+                                            <span className="patient-profile-card-text"> {patient?.diseases} </span>   
+                                                
                                     </div>
                                 </div>
 
@@ -181,28 +147,28 @@ const StaffPatientProfile = (props) => {
 
                                     <span className="profile-label">Gender</span>
                                     <p className="patient-profile-card-text"><Badge bg="info text-white" className="male-tag">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.gender}</Badge> </p>
-
                                 </div>
 
                                 <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">RPM Integration</span>                                 
+                                    <span className="patient-profile-col-heading">Devices Assigned</span>                                 
                                         <hr />
                                         {patient?.assigned_devices && patient?.assigned_devices.length === 0 ? <Fragment>
-                                            <span className="profile-label">No device assigned yet</span>
-                                            
-
-                                            
+                                            <b>No Device Assigned Yet</b>
+                                           
                                             </Fragment> : <Fragment>
-                                            <b>Assigned Devices (0{patient.assigned_devices && patient?.assigned_devices.length})</b>
-                                            <hr/>
-                                            {patient?.deviceassigned && patient?.deviceassigned.map((deviceass, index) => (
+                                            <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
+                                            
+                                             {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                                 <Fragment>
-                                                <p key={index}><i>{deviceass?.deviceid}</i></p>
+                                                <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
+                                                {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
+                                                    <i className="bx bx-trash"></i>
+                                                </button> */}
+                                                </p>
                                                 
                                                 </Fragment>
-                                            ))}
-                                                
-                                        </Fragment>}            
+                                            ))}           
+                                        </Fragment>}             
                                     
                                 </div>
 
@@ -219,14 +185,45 @@ const StaffPatientProfile = (props) => {
                                         <hr />
                                         <div className="row">    
                                         <div className="col-md-12">
-                                        <p className="patient-profile-card-text">AETNA</p>
-                                        <p className="patient-profile-card-text">584750054874500
-                                        </p>   
+                                        <p className="profile-label">{patient?.insurance ? patient?.insurance : 'N/A'}</p>
+                                        
                                         </div>    
                                     </div>
                                    
                                   </div>
-                                 </div>
+                                  </div> {/* row ends here */}
+
+                                  {/* Patient Telemetary Data */}
+                                    <div className="col-md-3">
+                                        <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                                    </div>
+
+
+                                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
+                                        <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
+                                            {deviceData && deviceData.map((devicedata, index) => (
+                                                <div key={index}>
+                                                    {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
+                                                        <CuffTelemetaryData healthData= {devicedata} isAdmin={false} />
+                                                    </Fragment> : ''}
+                                                </div>
+                                            ))}
+                                            </Tab>
+
+                                            <Tab eventKey="weight" title="Weight ( Telemetary Data )">
+                                                {deviceData && deviceData.map((devicedata, index) => (
+                                                    <div key={index}>
+                                                        {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
+                                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false}/>
+                                                        </Fragment> : ''}   
+                                                    </div>
+                                                ))}
+                                            </Tab>
+                                        </Tabs>   
+
+
+
+
                                 </Fragment> }
                             </div>
 

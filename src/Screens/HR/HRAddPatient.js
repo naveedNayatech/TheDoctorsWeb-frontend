@@ -1,7 +1,7 @@
 import React, {useEffect, Fragment} from 'react';
-import Sidebar from '../../components/AdminDashboard/Sidebar';
+import HRSidebar from '../../components/HR/HRSidebar';
+import HRTopbar from '../../components/HR/HRTopbar';
 import MetaData from '../../layouts/MetaData';
-import TopBar from '../../components/AdminDashboard/TopBar';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import TextField from '../../components/Form/TextField';
@@ -11,7 +11,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import { useAlert } from 'react-alert';
 import { PATIENT_RESET } from '../../constants/adminConstants';
 
-const AddPatient = (props) => {
+
+const HRAddPatient = (props) => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
@@ -20,17 +21,20 @@ const AddPatient = (props) => {
 
     useEffect(() => {
         if(error){
-            return alert.error(error);
+            alert.error('Patient Not Added');
+            props?.history.push('/HrPatients');
+            dispatch({
+                type: PATIENT_RESET
+            });
         }
 
         if(isAdded) {
             alert.success('Patient Added');
-            props?.history.push('/patients');
+            props?.history.push('/HrPatients');
             dispatch({
                 type: PATIENT_RESET
             });   
         }
-
     }, [dispatch, alert, error, isAdded]);
 
     const validate = Yup.object().shape({
@@ -54,22 +58,23 @@ const AddPatient = (props) => {
         ssn:Yup.string()
 	  });
 
-      const submitHandler = (values) => {
+    const submitHandler = (values) => {
         dispatch(addPatient(values));
     }
 
+
   return <Fragment>
-      <MetaData title="Add Patient"/>
-                <Sidebar />    
+       <MetaData title="My Patients"/>
+                <HRSidebar />    
 
                 <section className="home-section">
                 {/* TopBar */}
-                <TopBar />
+                <HRTopbar />
 
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
                     <div className="home-content">
                         <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Patient </span></h5>
-                        <hr className="blue-hr"/>
+                        <hr />
 
                         <Formik initialValues={{
                              firstname: '',
@@ -204,6 +209,8 @@ const AddPatient = (props) => {
                                         />
                                     </div>
 
+                                     
+
                                 </div>{/* row ends here */}
 
                                  {/* Buttons */}
@@ -222,7 +229,7 @@ const AddPatient = (props) => {
                 </div>
 
                 </section>
-  </Fragment>;
+  </Fragment>
 };
 
-export default AddPatient;
+export default HRAddPatient;

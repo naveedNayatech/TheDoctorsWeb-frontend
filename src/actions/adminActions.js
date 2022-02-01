@@ -68,6 +68,8 @@ import {
     ASSIGN_DOCTOR_TO_HR_REQUEST,
     ASSIGN_DOCTOR_TO_HR_SUCCESS,
     ASSIGN_DOCTOR_TO_HR_FAIL,
+    ADMIN_STATS_SUCCESS,
+    ADMIN_STATS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -619,6 +621,34 @@ export const getAllDevices = () => async(dispatch) => {
         })
     }
 }
+
+// Get Admin Stats 
+export const getAdminStats = () => async(dispatch) => {
+    try {
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.get(`${Prod01}/admin/stats`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
+
+        dispatch({
+            type: ADMIN_STATS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ADMIN_STATS_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+
+
 
 // Get device details => admin
 export const getDeviceDetails = (id) => async(dispatch) => {

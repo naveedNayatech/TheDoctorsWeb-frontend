@@ -44,7 +44,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box0">
                         <div className="left-side">
                             <div className="box_topic">My Patients</div>
-                            <div className="number">15</div>
+                            <div className="number">{doctorpatients && doctorpatients.length}</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -56,7 +56,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box1">
                         <div className="left-side">
                             <div className="box_topic">Devices Assigned</div>
-                            <div className="number">15</div>
+                            <div className="number">00</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -68,7 +68,7 @@ const StaffDashboard = (props) => {
                     <div className="box staff-box2">
                         <div className="left-side">
                             <div className="box_topic">Total Staff</div>
-                            <div className="number">120</div>
+                            <div className="number">00</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt"></i>
                                 <span className="text">Up from Yesterday</span>
@@ -103,10 +103,10 @@ const StaffDashboard = (props) => {
                                         <thead align="center">
                                         <tr>  
                                             <th>Name</th>
+                                            <th>Gender</th>
                                             <th>Contact No </th>
                                             <th>Email</th>
                                             <th>Phy. Status</th>
-                                            <th>Insurance Company</th>
                                             <th>Consent Status</th>
                                             <th>Action</th>
                                         </tr> 
@@ -115,23 +115,17 @@ const StaffDashboard = (props) => {
                                         {doctorpatients && doctorpatients.map((patient, index) => ( 
                                             <tr align="center" key={index}>
                                             <td><Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
-                                            <td>{patient?.contactno} <p>(English)</p></td>
+                                            <td>{patient?.phone1} <p>(English)</p></td>
+                                            <td>{patient?.gender ? patient?.gender : 'N/A'}</td>
                                             <td>{patient?.email}</td>
-                                            <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
-                                            {patient?.insurancecompany?.length > 0 ? <td>{patient?.insurancecompany.map((insurance, index) => ( <p key={index} className="insurance-companies-table">{insurance.companyname} </p>))}</td> : <td>N/A</td>}
-                                            <td>
-                                            <div className="custom-control custom-switch">
-                                            <input type="checkbox" className="custom-control-input" id={index} />
-                                            <label className="custom-control-label" htmlFor={index}>RPM Consent</label>
-                                            </div>
-                                            </td>
+                                            <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td> 
+                                            <td>{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</td>
                                             <td>
                                             <Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                                 {/* <Link to={{ pathname: "/staffPatients", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp;
+                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
                                             </td>
                                         </tr> 
-                                        
                                         ))}
                                         
                                         </tbody>
