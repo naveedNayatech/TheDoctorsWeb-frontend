@@ -187,9 +187,7 @@ const PatientProfile = (props) => {
                                         <hr />
                                     <div className="row">    
                                      <div className="col-md-7">
-                                     <p className="patient-profile-card-text">01 - AETNA</p>
-                                     <p className="patient-profile-card-text">02 - Medicare
-                                     </p>   
+                                     <p className="patient-profile-card-text">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A' }</p> 
                                 </div>    
                             </div>
                         </div>

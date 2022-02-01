@@ -55,7 +55,10 @@ const HRAddPatient = (props) => {
         city:Yup.string(),
         state:Yup.string(),
         line2: Yup.string(),
-        ssn:Yup.string()
+        ssn:Yup.string(),
+        diseases: Yup.string(),
+        insurancecompany: Yup.string(),
+
 	  });
 
     const submitHandler = (values) => {
@@ -206,6 +209,26 @@ const HRAddPatient = (props) => {
                                                 name="ssn" 
                                                 type="text" 
                                                 placeholder="SSN"
+                                        />
+                                    </div>
+
+                                    {/* Diseases */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <TextField 
+                                                label="Diseases" 
+                                                name="diseases" 
+                                                type="text" 
+                                                placeholder="Diseases"
+                                        />
+                                    </div>
+
+                                    {/* Insurance Company */}
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <TextField 
+                                                label="Insurance Company" 
+                                                name="insurancecompany" 
+                                                type="text" 
+                                                placeholder="Insurance Company"
                                         />
                                     </div>
 
