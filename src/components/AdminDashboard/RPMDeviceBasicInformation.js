@@ -111,7 +111,7 @@ const RPMDeviceBasicInformation = (props) => {
                             value={patientId}
                             onChange={(e) => setPatientId(e.target.value)}
                             >
-                                <option disabled>Select Patient</option>
+                                <option >Select Patient</option>
                                     {patients && patients.map((patient, index) => (
                                         <option value={patient?._id} key={index} > {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                     ))}    

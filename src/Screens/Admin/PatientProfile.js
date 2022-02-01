@@ -48,12 +48,12 @@ const PatientProfile = (props) => {
         dispatch(assignDeviceToPatient(patientid, deviceid));
     }
 
-    // const removeAssignDevice = (deviceid) => {
-    //     console.log('Device id is ' + deviceid);
-    //     console.log('Patient id is ' + patientid);
+    const removeAssignDevice = (device,patientId) => {
+        console.log('Device id is ' + device._id);
+        console.log('Patient id is ' + patientId);
 
-    //      dispatch(removeAssignedDevice(deviceid, patientid));
-    // }
+         dispatch(removeAssignedDevice(device, patientid));
+    }
 
     // const refreshTelemetaryData =() => {
     //     dispatch(getPatientTelemetryData(patientid, sort))
@@ -174,9 +174,9 @@ const PatientProfile = (props) => {
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                                 <Fragment>
                                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                                {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
+                                                <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass,patientid)}>
                                                     <i className="bx bx-trash"></i>
-                                                </button> */}
+                                                </button>
                                                 </p>
                                                 
                                                 </Fragment>
