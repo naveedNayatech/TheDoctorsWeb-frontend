@@ -256,7 +256,7 @@ const HRPatientProfile = (props) => {
                             <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
                             {deviceData && deviceData.map((devicedata, index) => (
                                 <div key={index}>
-                                    {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
+                                    {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
                                         <CuffTelemetaryData healthData= {devicedata} isAdmin={false} />
                                     </Fragment> : ''}
                                 </div>
