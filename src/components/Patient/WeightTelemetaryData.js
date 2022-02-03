@@ -16,7 +16,7 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
     const { hr} = useSelector(state => state.hrAuth);
     const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
 
-    let telemetaryData = healthData?.telemetaryData?.telemetaryData;
+    let telemetaryData = healthData?.telemetaryData;
     let patientInfo = healthData?.assigned_patient_id;
     let deviceDetails = healthData?.deviceId;
     let notes = healthData?.notes;

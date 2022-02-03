@@ -201,7 +201,7 @@ const PatientProfile = (props) => {
                         <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
                         {deviceData && deviceData.map((devicedata, index) => (
                             <div key={index}>
-                                {devicedata?.telemetaryData?.telemetaryData?.sys && devicedata?.telemetaryData?.telemetaryData?.dia ? <Fragment>
+                                {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
                                     <CuffTelemetaryData healthData={devicedata} isAdmin={true} />
                                 </Fragment> : ''}
                             </div>
@@ -211,7 +211,7 @@ const PatientProfile = (props) => {
                         <Tab eventKey="weight" title="Weight ( Telemetary Data )">
                         {deviceData && deviceData.map((devicedata, index) => (
                             <div key={index}>
-                                 {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
+                                 {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
                                     <WeightTelemetaryData healthData={devicedata} isAdmin={true} />
                                 </Fragment> : ''}   
                             </div>
