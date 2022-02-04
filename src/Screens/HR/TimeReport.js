@@ -33,9 +33,6 @@ const TimeReport = () => {
 	}, [dispatch])
 
     const submitHandler = () => {
-        console.log('patient Id is ' + patientId);
-        console.log('Start Date is ' + startDate);
-        console.log('End Date is ' + endDate);
         dispatch(getTimeReport(patientId, id, startDate, endDate));
     }
 

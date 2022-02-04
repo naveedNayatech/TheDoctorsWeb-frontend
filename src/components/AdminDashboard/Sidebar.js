@@ -44,15 +44,22 @@ const Sidebar = () => {
 
                 <li className="nav_link">
                     <NavLink key="hr" to="/hrlist" activeClassName="link-name-active">
-                        <i className="bx bx-user"></i>
+                         <i class='bx bxs-user'></i>
                         <span className="link_name">HR</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
+                    <NavLink key="timereport" to="/Admin/Report" activeClassName="link-name-active">
+                        <i className='bx bx-time-five'></i>
+                        <span className="link_name">Time Report</span>
                     </NavLink>
                 </li>
 
 
                 <li className="nav_link">
                     <NavLink key="inventory" to="/devices" activeClassName="link-name-active">
-                        <i className="bx bx-pie-chart-alt-2"></i>
+                         <i class='bx bxs-data'></i>
                         <span className="link_name">Inventory</span>
                     </NavLink>
                 </li>

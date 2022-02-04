@@ -28,6 +28,8 @@ import UpdateHR from './Screens/Admin/UpdateHR';
 import HRProfile from './Screens/Admin/HRProfile';
 import AssignDrToHr from './Screens/Admin/AssignDrToHr';
 import AssignPatientToHr from './Screens/Admin/AssignPatientToHR';
+import AdminTimeReport from './Screens/Admin/AdminTimeReport';
+import AdminPrintReport from './Screens/Admin/AdminPrintReport';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -71,6 +73,8 @@ function App() {
         <ProtectedRoute exact path='/hrProfile' isAdmin={true} component={HRProfile} />
         <ProtectedRoute exact path='/assignDrToHr' isAdmin={true} component={AssignDrToHr} />
         <ProtectedRoute exact path='/assignPatientToHr' isAdmin={true} component={AssignPatientToHr} />
+        <ProtectedRoute exact path="/Admin/Report" isAdmin={true} component={AdminTimeReport} />
+        <ProtectedRoute exact path='/Admin/Report/Print' isAdmin={true} component={AdminPrintReport} />
         {/* Staff Routes */}
         <Route exact path="/stafflogin" component={StaffLogin} />
         <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
