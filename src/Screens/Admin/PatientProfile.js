@@ -5,7 +5,8 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData'; 
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, getAllDevices, getDeviceDataByDate} from '../../actions/adminActions';
+import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData} from '../../actions/adminActions';
+import { getPatientCarePlan } from '../../actions/HRActions';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
@@ -27,7 +28,7 @@ const PatientProfile = (props) => {
 
     const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
-
+    const { careplan } = useSelector(state => state.careplan);
     
     useEffect(() => {
         if(error){
@@ -36,7 +37,7 @@ const PatientProfile = (props) => {
 
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid))
-        
+        dispatch(getPatientCarePlan(patientid));
         
         if(isUpdated) {
             alert.success('Updated Successfully');
@@ -54,25 +55,6 @@ const PatientProfile = (props) => {
 
          dispatch(removeAssignedDevice(device, patientid));
     }
-
-    // const refreshTelemetaryData =() => {
-    //     dispatch(getPatientTelemetryData(patientid, sort))
-    // }
-
-    // const sortData = (event) => {
-    //     setSort(event.target.value);
-    //     dispatch(getPatientTelemetryData(patientid,sort))
-    // }
-
-    // const searchByDate = (e) => {
-    //     e.preventDefault();
-    //     console.log('Date for search is ' + searchDate);
-
-    //     let searchedDate = (moment(searchDate).format("YYYY-MM-DD"));
-    //     console.log('Date for search is ' + searchedDate);
-
-    //     dispatch(getDeviceDataByDate(deviceid, patientid, searchedDate))
-    // }
 
     return (
         <Fragment>
@@ -188,10 +170,25 @@ const PatientProfile = (props) => {
                                     <div className="row">    
                                      <div className="col-md-7">
                                      <p className="patient-profile-card-text">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A' }</p> 
-                                </div>    
+                                        </div>    
+                                    </div>
+                                </div>
+                                
+
+                                <div className="col-md-3">
+                                    <span className="patient-profile-col-heading">Patient Careplan</span>                                 
+                                    <hr /> 
+                                    {careplan && ( <Fragment>
+                                        <small>{careplan && careplan?.Description}</small>            
+                                        <small style={{float: 'right', marginTop: 10}}>
+                                            <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
+                                            &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                            </i>
+                                        </small>  
+                                    </Fragment>)}
+                                </div>
+
                             </div>
-                        </div>
-                    </div>
 
                     <div className="col-md-3">
                         <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>

@@ -13,6 +13,14 @@ import {
     TIME_REPORT_SUCCESS,
     TIME_REPORT_FAIL,
     RESET_TIME_REPORT_DATA,
+    ADDING_CARE_PLAN_SUCCESS,
+    ADDING_CARE_PLAN_FAIL,
+    ADDING_CARE_PLAN_RESET,
+    PATIENT_CARE_PLAN_SUCCESS,
+    PATIENT_CARE_PLAN_FAIL,
+    UPDATE_CARE_PLAN_SUCCESS,
+    UPDATE_CARE_PLAN_FAIL,
+    UPDATE_CARE_PLAN_RESET,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -85,7 +93,7 @@ export const commentReducers = (state = {loading: false, commentSuccess: false},
     } 
 }
 
-export const hrtimeSpentReducers = (state = {loading: false, isSuccessful: false}, action) => {
+export const hrtimeSpentReducers = (state = {loading: false, isSuccessful: false, carePlanAdded: false}, action) => {
     switch (action.type) {
     
         case ADDING_TIME_SPENT_SUCCESS:
@@ -99,6 +107,24 @@ export const hrtimeSpentReducers = (state = {loading: false, isSuccessful: false
             return {
                 loading: false,
                 isSuccessful:false,
+            }
+
+        case ADDING_CARE_PLAN_SUCCESS: 
+            return{
+                loading: false,
+                carePlanAdded: true
+            }
+        
+        case ADDING_CARE_PLAN_FAIL: 
+        return {
+            loading: false,
+            error: action.payload
+        }
+    
+        case ADDING_CARE_PLAN_RESET: 
+            return{
+                loading: false,
+                carePlanAdded: false
             }
 
         case CLEAR_ERRORS: 
@@ -159,3 +185,41 @@ export const hrTimeReportReducers = (state = {targets:{}}, action) => {
     } 
 }
 
+export const carePlanReducers = (state={careplan:{}}, action) => {
+    switch (action.type) {
+        
+        case PATIENT_CARE_PLAN_SUCCESS:
+            return {
+                careplan: action.payload
+        }
+
+        case PATIENT_CARE_PLAN_FAIL:
+            return {
+                error: action.payload
+            }
+
+        case UPDATE_CARE_PLAN_SUCCESS: 
+            return {
+                isUpdated: true
+            }
+
+        case UPDATE_CARE_PLAN_FAIL: 
+            return {
+                error: action.payload
+            }
+
+        case UPDATE_CARE_PLAN_RESET: 
+            return {
+                isUpdated: false
+            }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }
+         
+    default: 
+    return state;
+    }
+}

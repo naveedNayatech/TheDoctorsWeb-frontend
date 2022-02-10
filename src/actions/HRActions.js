@@ -13,6 +13,12 @@ import {
     TIME_REPORT_REQUEST,
     TIME_REPORT_SUCCESS,
     TIME_REPORT_FAIL,
+    ADDING_CARE_PLAN_SUCCESS,
+    ADDING_CARE_PLAN_FAIL,
+    PATIENT_CARE_PLAN_SUCCESS,
+    PATIENT_CARE_PLAN_FAIL,
+    UPDATE_CARE_PLAN_SUCCESS,
+    UPDATE_CARE_PLAN_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -80,9 +86,7 @@ export const commentOnReading = (readingId, hrId, comment) => async(dispatch) =>
 
 // Time Spent on Patient
 export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) => {
-    
     try {
-    
        const token = JSON. parse(localStorage.getItem('token'));
 
        const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
@@ -106,10 +110,37 @@ export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) =
            payload: error.message
        })
     }   
-   }
+}
 
 
-   
+export const carePlanOfPatient = (patientId, hrId, description) => async(dispatch) => {
+    let data ; 
+    try {
+       const token = JSON. parse(localStorage.getItem('token'));
+
+        data = await axios.post(`${Prod01}/patient/addCarePlan`, {
+                assigned_hr_id : hrId,
+                assigned_patient_id:patientId,
+                Description: description
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: ADDING_CARE_PLAN_SUCCESS,
+            payload: data
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: ADDING_CARE_PLAN_FAIL,
+           payload: 'Care plan already exists'
+       })
+    }   
+}
+
 export const getTimeReport = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
     try {
 
@@ -140,7 +171,56 @@ export const getTimeReport = (patientId, hrId, startDate, endDate) => async(disp
            payload: error.message
        })
     }   
-   }
+}
+
+export const getPatientCarePlan = (patientId) => async(dispatch) => {    
+    try {
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.get(`${Prod01}/patient/CarePlan/${patientId}` , {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: PATIENT_CARE_PLAN_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: PATIENT_CARE_PLAN_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+export const updateCarePan = (description, careplanId) => async(dispatch) => {    
+    try {
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.put(`${Prod01}/patient/editcareplan/${careplanId}`,{
+           Description: description,
+       }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: UPDATE_CARE_PLAN_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: UPDATE_CARE_PLAN_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({

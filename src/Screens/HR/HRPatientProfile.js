@@ -4,16 +4,16 @@ import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
 import { patientProfile, getPatientTelemetryData} from '../../actions/adminActions';
-import { timeSpentOnPatient } from '../../actions/HRActions';
+import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan} from '../../actions/HRActions';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge, Tabs, Tab, Modal, Spinner } from 'react-bootstrap';
+import { Badge, Tabs, Tab, Modal, Spinner, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData'; 
-import { COMMENT_RESET, ADDING_TIME_SPENT_RESET } from '../../constants/HRConstants';
+import { COMMENT_RESET, ADDING_TIME_SPENT_RESET, ADDING_CARE_PLAN_RESET } from '../../constants/HRConstants';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import {Link} from 'react-router-dom';
 import TextField from '../../components/Form/TextField';
 
 const HRPatientProfile = (props) => {
@@ -23,29 +23,30 @@ const HRPatientProfile = (props) => {
   
   const dispatch = useDispatch();
   const [addTimeShow, setAddTimeShow] = useState(false);
-
+  const [carePlanShow ,setCarePlanShow] = useState(false);
+  const [description, setDescription] = useState('');
 
   const { loading, error, patient} = useSelector(state => state.patientProfile);
-  const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
-  const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
-  const {isSuccessful } = useSelector(state => state.timeSpent);
+  const { deviceData } = useSelector(state => state.deviceData);
+  const { commentSuccess} = useSelector(state => state.comments);
+  const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
   const {hr} = useSelector(state => state.hrAuth);  
+  const { careplan } = useSelector(state => state.careplan);
   
   useEffect(() => {
     if(error){
         return alert.error(error);
     }
 
-    const validate = Yup.object().shape({
-		timeSpent: Yup.string().required('Required'),
-		conclusion: Yup.string() 
-		  .min(6, 'Too Short!')
-		  .max(150, 'Too Long!')
-		  .required('Password is Required')
-	  });
+    if(careplanerror) {
+        alert.error(careplanerror);
+        dispatch({ type: ADDING_CARE_PLAN_RESET })
+        setCarePlanShow(false);
+    }
 
     dispatch(patientProfile(patientid));
     dispatch(getPatientTelemetryData(patientid))
+    dispatch(getPatientCarePlan(patientid));
 
     if(commentSuccess) {
         alert.success('Comment added');
@@ -62,17 +63,37 @@ const HRPatientProfile = (props) => {
         dispatch(getPatientTelemetryData(patientid))
     }
 
-}, [dispatch, alert, error, commentSuccess, isSuccessful]);
+    if(carePlanAdded){
+        setCarePlanShow(false);
+        alert.success('Care plan added');
+        dispatch({ type: ADDING_CARE_PLAN_RESET })
+        setDescription(''); 
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
+    }
+
+}, [dispatch, alert, error, commentSuccess, isSuccessful,carePlanAdded, careplanerror]);
 
 
     const handleClose = () => setAddTimeShow(false);
     const handleShow = () => setAddTimeShow(true);
+    const handleCarePlanModalClose = () => setCarePlanShow(false);
+    const handleCarePlanModalShow = () => setCarePlanShow(true);
 
     const submitTimeSpent = (values) => {
         if(values.timespent === ''){
             return
         } 
         dispatch(timeSpentOnPatient(patient?._id, hr?._id ,values));
+    }
+
+    const submitCarePlan = () => {
+        if(description === '') {
+            setCarePlanShow(false);
+            alert.error('Description is required');
+            return
+        }
+        dispatch(carePlanOfPatient(patient?._id, hr?._id, description))
     }
 
   return <Fragment>
@@ -83,21 +104,19 @@ const HRPatientProfile = (props) => {
         {/* TopBar */}
         <HRTopBar />
 
+        {/* Time spent Modal */}
         <Modal show={addTimeShow} onHide={handleClose}>
             <Modal.Body>
                 <h5>Add <span style={{color: '#F95800'}}> Time </span></h5>
                 <hr />
-
                 <Formik initialValues={{
                     timeSpent: '',
                     colclusion: '', 
                 }}
-                // validationSchema={validate}
                 onSubmit={values => {
                     submitTimeSpent(values)
                 }}
                 >
-
                 { formik => (
                     <div>
                         <Form>
@@ -108,7 +127,6 @@ const HRPatientProfile = (props) => {
                                 placeholder="Time Spent"
                             />
                             
-
                             <TextField 
                                 label="Conclusion" 
                                 name="conclusion" 
@@ -116,19 +134,53 @@ const HRPatientProfile = (props) => {
                                 placeholder="Type your conclusion here .... "
                             />
 
-                    <div className="row-class" style={{justifyContent: 'space-between'}}>
+                        <div className="row-class" style={{justifyContent: 'space-between'}}>
                             <button className="reset-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Submit'}</button>
                         </div>
-
                         </Form>
-
-
                     </div>
-                )}
-                    
+                )}   
                 </Formik>   
             </Modal.Body>
         </Modal>
+        {/* Time spent Modal ended here */}
+        
+        {/* Careplan Modal */}
+        <Modal show={carePlanShow} onHide={handleCarePlanModalClose}>
+            <Modal.Body>
+                <h5>Add <span style={{color: '#F95800'}}> Care Plan </span></h5>
+                <hr />
+                <Formik initialValues={{
+                    description: '', 
+                }}
+                onSubmit={values => {
+                    submitCarePlan(values)
+                }}
+                >
+                { formik => (
+                    <div>
+                        <Form>
+                        <label htmlFor="description" className="form-label mt-3">Description</label>
+                            <textarea 
+                                label="Description" 
+                                name="description"
+                                className="form-control"
+                                rows="4"	
+                                value={description} 
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Type description here .... "
+                            />
+                        <br/>
+                        <div className="row-class" style={{justifyContent: 'space-between'}}>
+                            <button className="reset-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Submit'}</button>
+                        </div>
+                        </Form>
+                    </div>
+                )}   
+                </Formik>   
+            </Modal.Body>
+        </Modal>
+        {/* Careplan Modal ends here*/}
 
         {loading ? <Loader /> : <Fragment>
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
@@ -137,13 +189,24 @@ const HRPatientProfile = (props) => {
 
                             {patient && <Fragment>
                                 <div className="row">
-                                <div className="col-md-10">
+                                <div className="col-md-8">
                                     <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
                                 </div>
 
                                 <div className="col-md-2">
-                                    <button className="submit-btn mt-2" onClick={handleShow}>Add Time</button>
+                                    <button className="submit-btn mt-2" onClick={handleShow}><small>Add Time</small></button>
                                 </div>
+                                
+                                {careplan ? <Fragment>
+                                    <div className="col-md-2">
+                                        <button disabled className="btn btn-outline-danger mt-2"><small>Careplan Added</small></button>
+                                    </div>
+                                </Fragment> : <Fragment>
+                                    <div className="col-md-2">
+                                        <button className="reset-btn mt-2" onClick={handleCarePlanModalShow}>Add Careplan</button>
+                                    </div>    
+                                </Fragment>}
+                                
                                 </div>
                                 <hr />
 
@@ -242,11 +305,27 @@ const HRPatientProfile = (props) => {
                                                     </div>
                                                 </div>                      
                                         </div>
+
+                                        <div className="col-md-3">
+                                            <span className="patient-profile-col-heading">Patient Careplan</span>                                 
+                                            <hr />        
+                                                
+                                            {careplan && ( <Fragment>
+                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.Description}</small>            
+                                                <small style={{float: 'right', marginTop: 10}}>
+                                                    <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
+                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                                    </i>
+                                                </small>    
+                                                <br/><br/>
+                                                <Link to={{pathname: "/HR/Careplan/Details", state: {patientId: patientid}}} className="btn btn-dark btn-block"> Read More</Link>
+                                            </Fragment>)}
+                                        </div>
                                 </div> {/* Second row ends here*/}
 
 
 
-                                {/* Patient Telemetary Data */}
+                        {/* Patient Telemetary Data */}
                         <div className="col-md-3">
                             <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
                         </div>
@@ -273,10 +352,6 @@ const HRPatientProfile = (props) => {
                                 ))}
                             </Tab>
                         </Tabs>   
-
-
-
-
                         </Fragment>
                         }
                         </div>

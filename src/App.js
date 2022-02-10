@@ -46,6 +46,7 @@ import HR from './Screens/HR/HR';
 import TimeReport from './Screens/HR/TimeReport';
 import PrintReport from './Screens/HR/PrintReport';
 import HRAddPatient from './Screens/HR/HRAddPatient';
+import CareplanDetails from './Screens/HR/CareplanDetails';
 
 function App() {
   return (
@@ -90,7 +91,8 @@ function App() {
         <HRProtectedRoute exact path="/hr" isHR={true} component={HR} />
         <HRProtectedRoute exact path="/timeReport" isHR={true} component={TimeReport} />
         <HRProtectedRoute exact path="/printReport" isHR={true} component={PrintReport} />
-        <Route exact path="/Hr/AddPatient" component={HRAddPatient} />
+        <HRProtectedRoute exact path="/Hr/AddPatient" component={HRAddPatient} />
+        <HRProtectedRoute exact path="/HR/Careplan/Details" isHR={true} component={CareplanDetails} />
     </Router>
   )      
 };
