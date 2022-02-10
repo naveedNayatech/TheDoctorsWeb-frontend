@@ -1606,8 +1606,12 @@ tr {
 
 /* Pagination */
 .page-item.active .page-link {
-  background-color: #337AB7;
+  background-color: #F95800;
   border-color: #D3D3D3;
+}
+
+.page-link {
+  color: #000
 }
 
 #search_btn {

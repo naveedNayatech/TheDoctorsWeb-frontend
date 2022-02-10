@@ -618,13 +618,13 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    }
 
 // Get all devices list
-export const getAllDevices = () => async(dispatch) => {
+export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
     try {
         dispatch({ type: GET_DEVICES_LIST_REQUEST })
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/device/list/50/1`, {
+        const { data } = await axios.get(`${Prod01}/device/list/${resperpage}/${currentpage}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -753,7 +753,33 @@ export const sortRPMDevices = (stock) => async(dispatch) => {
     }
 }
 
+// Search RPM Devices
+export const searchRPMDevices = (searchValue) => async(dispatch) => {
+    try {
+        dispatch({ type: SORT_DEVICES_REQUEST })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
 
+        const { data } = await axios.post(`${Prod01}/device/search`, {
+            search: searchValue
+        },{
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        },);
+        
+        dispatch({
+            type: SORT_DEVICES_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: SORT_DEVICES_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 
 export const addRPMDevice = (values) => async(dispatch) => {

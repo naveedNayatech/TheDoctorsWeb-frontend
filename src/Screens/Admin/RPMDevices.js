@@ -4,10 +4,10 @@ import TopBar  from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllDevices, sortRPMDevicesByBroken, sortRPMDevices, deleteRPMDevice } from '../../actions/adminActions';
+import { getAllDevices, sortRPMDevicesByBroken, sortRPMDevices, deleteRPMDevice, searchRPMDevices } from '../../actions/adminActions';
 import { useAlert } from 'react-alert'; 
 import Loader from '../../layouts/Loader';
-import moment from 'moment';
+import Pagination from 'react-js-pagination';
 import { Badge, Modal } from 'react-bootstrap';
 import { DELETE_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 
@@ -21,6 +21,9 @@ const RPMDevices = (props) => {
 
     const [deviceModel, setDeviceModel] = useState(null);
     const [deviceToDelete, setDeviceToDelete] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1); //for pagination, current page
+    const [resPerPage, setResPerPage] = useState(10); //for pagination, how many responses we want to show
+    const [search, setSearch] = useState(''); 
 
     const [smShow, setSmShow] = useState(false); //small confirm modal
 
@@ -38,8 +41,9 @@ const RPMDevices = (props) => {
             setSmShow(false);    
         }
 
-        dispatch(getAllDevices());
-    }, [dispatch, alert, error, isDeleted])
+        dispatch(getAllDevices(resPerPage, currentPage));
+
+    }, [dispatch, alert, error, isDeleted, currentPage])
 
     const sortDevices = (event) => {
         let updatedValue = event.target.value;
@@ -47,7 +51,6 @@ const RPMDevices = (props) => {
         if (updatedValue === "true" || updatedValue == "false") {
             updatedValue = JSON.parse(updatedValue);
         }
-
         dispatch(sortRPMDevices(updatedValue));
     }
 
@@ -62,9 +65,25 @@ const RPMDevices = (props) => {
     }
 
     const deleteHandler = () => {
-        console.log('Deleted');
         dispatch(deleteRPMDevice(deviceToDelete));
     }
+
+    function setCurrentPageNumber(pageNumber) {
+        setCurrentPage(pageNumber);
+    } 
+
+    const searchDevice = (searchValue) => {
+        // console.log('Value is' + searchValue);
+        if (searchValue === undefined || searchValue === "") {
+            dispatch(getAllDevices(resPerPage, currentPage));
+            // setisSearch(false)
+
+        }
+        else {
+            // setisSearch(true);
+            dispatch(searchRPMDevices(searchValue));
+        }
+    };
 
     return (
         <Fragment>
@@ -79,12 +98,24 @@ const RPMDevices = (props) => {
                 
                     <div className="home-content">
                     <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-4">
                                         {deviceCount ? 
                                         <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount < 10 ? '0'+deviceCount : deviceCount} )</span> </h5> : null
                                         }
-                                        
                                     </div>
+
+                                    <div className="col-md-2">
+                                        <input 
+                                        type="text"
+                                        className="form-control shadow-none"
+                                        placeholder="Search By ID ..."
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        onBlur={(e) => {searchDevice(e.target.value)}}
+                                        style={{outline: 'none'}}
+                                         />
+                                    </div>
+
 
                                     <div className="col-md-2">
                                         <select name="listDevice" 
@@ -157,6 +188,24 @@ const RPMDevices = (props) => {
                             ))}
                              </tbody>
                             </table>   
+
+                            {resPerPage <= devices?.length && (
+                            <div className="d-flex justify-content-center mt-5"> 
+                                <Pagination activePage={currentPage} 
+                                itemsCountPerPage={resPerPage} 
+                                totalItemsCount = {deviceCount}
+                                onChange={setCurrentPageNumber} 
+                                nextPageText = {'⟩'}
+                                prevPageText = {'⟨'}
+                                firstPageText = {'«'}
+                                lastPageText = {'»'}
+                                itemClass='page-item'
+                                linkClass="page-link"
+                                />           
+                            </div>
+                            )}  
+
+
                             </Fragment> 
                             } 
                           </Fragment>                
