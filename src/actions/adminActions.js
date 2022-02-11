@@ -82,7 +82,7 @@ export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, {
+        const { data } = await axios.get(`${Prod01}/patient/list`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -170,7 +170,7 @@ export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/list/${resPerPage}/${currentPage}`, {
+        const { data } = await axios.get(`${Prod01}/doctor/list`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
