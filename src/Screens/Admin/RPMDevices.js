@@ -8,7 +8,7 @@ import { getAllDevices, sortRPMDevicesByBroken, sortRPMDevices, deleteRPMDevice,
 import { useAlert } from 'react-alert'; 
 import Loader from '../../layouts/Loader';
 import Pagination from 'react-js-pagination';
-import { Badge, Modal } from 'react-bootstrap';
+import { Badge, Modal, Table } from 'react-bootstrap';
 import { DELETE_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 
 const RPMDevices = (props) => {
@@ -154,7 +154,7 @@ const RPMDevices = (props) => {
                           <div className="col-md-12">
                          <Fragment>
                          {devices && <Fragment>
-                            <table className="table table-sm table-striped">
+                            <Table className="table table-sm table-striped">
                             <thead align="center">
                                 <tr>
                                     <th>Device ID</th>
@@ -187,9 +187,10 @@ const RPMDevices = (props) => {
                                 </tr>                      
                             ))}
                              </tbody>
-                            </table>   
+                            </Table>  
+                            <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small>  
 
-                            {resPerPage <= devices?.length && (
+                            {resPerPage <= deviceCount && (
                             <div className="d-flex justify-content-center mt-5"> 
                                 <Pagination activePage={currentPage} 
                                 itemsCountPerPage={resPerPage} 

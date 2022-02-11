@@ -74,7 +74,7 @@ import {
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
-export const getPatients = () => async(dispatch) => {
+export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
     try {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
@@ -82,7 +82,37 @@ export const getPatients = () => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/patient/list`, {
+        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: ALL_PATIENTS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_PATIENTS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Search Patient By Name
+export const searchPatient = (searchValue) => async(dispatch) => {
+    try {
+        dispatch({
+            type: ALL_PATIENTS_REQUEST,
+        })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.post(`${Prod01}/patient/search`,{
+            search: searchValue
+        }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -131,7 +161,7 @@ export const updatePatientConsentStatus = (patientId) => async(dispatch) => {
 }
 
 // Get list of all doctors => admin
-export const getDoctors = () => async(dispatch) => {
+export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
 
     const token = JSON. parse(localStorage.getItem('token'));
 
@@ -140,7 +170,36 @@ export const getDoctors = () => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/list`, {
+        const { data } = await axios.get(`${Prod01}/doctor/list/${resPerPage}/${currentPage}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: ALL_DOCTORS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_DOCTORS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+// Search Doctors by Admin
+
+export const searchDoctor = (value) => async(dispatch) => {
+    try {
+        dispatch({ type: ALL_DOCTORS_REQUEST })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.post(`${Prod01}/doctor/search`,{
+            search: value
+        }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }

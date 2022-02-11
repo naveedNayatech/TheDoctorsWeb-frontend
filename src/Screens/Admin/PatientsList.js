@@ -4,11 +4,12 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPatients, updatePatientConsentStatus } from '../../actions/adminActions';
+import { getPatients, updatePatientConsentStatus, searchPatient } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import {Badge, Table } from 'react-bootstrap';
 import moment from 'moment';
+import Pagination from 'react-js-pagination';
 
 const PatientsList = () => {
 
@@ -16,26 +17,47 @@ const PatientsList = () => {
 
     const alert = useAlert();
     const { loading, error, patients} = useSelector(state => state.admin);
-    const [patientId, setPatientId] = useState('');
+    const { totalPatients } = useSelector(state => state.adminStat);
+    const [keyword, setKeyword] = useState('');
+    const [isSearch, setIsSearch] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [resPerPage, setResPerPage] = useState(10);
         
     useEffect(() =>{
         if(error){
             return alert.error(error);
         }
-        dispatch(getPatients());
+        dispatch(getPatients(resPerPage, currentPage));
 
-    }, [dispatch, alert, error])
+    }, [dispatch, alert, error, currentPage])
 
     
     const getPatientsList = () => {
-       dispatch(getPatients());
+       dispatch(getPatients(resPerPage, currentPage));
     }
 
     const changeConsentStatus = (id) => {
         dispatch(updatePatientConsentStatus(id));
-        getPatientsList();
+        getPatientsList(resPerPage, currentPage);
         alert.success('Status Changed');
     }
+
+    function setCurrentPageNumber(pageNumber) {
+        setCurrentPage(pageNumber);
+    }
+
+    const searchhandler = (searchValue) => {
+        if (searchValue === undefined || searchValue === "") {
+            getPatientsList(resPerPage, currentPage);
+            setIsSearch(false)
+
+        }
+        else {
+            setIsSearch(true);
+            dispatch(searchPatient(searchValue));
+        }
+    }  
+
 
     return (
         <Fragment>
@@ -49,7 +71,7 @@ const PatientsList = () => {
                 {loading ? <Loader /> : (
                 <Fragment>   
                 {/*  patients List Filter Section */}
-                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
+                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
                     <div className="home-content">
                         
                     <div className="row list-box-header">
@@ -60,26 +82,26 @@ const PatientsList = () => {
                             
                             <Link to="adminDashboard" className="go-back-btn"><i class='bx bx-arrow-back' ></i></Link> &nbsp;
                             <button className="btn refresh-btn"><i class='bx bx-refresh'></i></button> &nbsp;
-                            <Link to="/addpatient" className="add-staff-btn">Enroll New Patient</Link>
+                            <Link to="/addpatient" className="add-staff-btn">Add New Patient</Link>
                                                         
                         </div>
 
                         <div className="row">
-                            <div className="col-md-7">
-                                <h5 className="pt-2 mt-2">Patients List <span style={{color: '#F95800'}}>( {patients && patients?.length < 10 ? '0'+patients?.length : patients?.length} )</span></h5>
-                            </div>
-
-                            <div className="col-md-2">
-                                <select className="form-control" placeholder="Sort By" >
-                                    <option selected disabled>Sort By</option>
-                                    <option>Ascending Order</option>
-                                    <option>Descending Order</option>
-                                </select>
+                            <div className="col-md-9">
+                                <h5 className="pt-2 mt-2">Patients List <span style={{color: '#F95800'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
                             </div>
                              
                             <div className="col-md-2">
                                 <div style={{width: 200}}>
-                                    <input type="text" name="search patient" className="form-control" placeholder="Search patient..." />
+                                    <input type="text" 
+                                    name="search patient" 
+                                    className="form-control shadow-none" 
+                                    placeholder="Search patient..." 
+                                    value={keyword}
+                                    onChange={(e) => setKeyword(e.target.value)}
+                                    onBlur={(e) => {searchhandler(e.target.value)}}
+                                    style={{outline: 'none'}}
+                                    />
                                 </div>
                             </div>
                         
@@ -141,7 +163,25 @@ const PatientsList = () => {
                                 </tr>    
                                 ))}
                             </tbody>
-                            </Table>    
+                            </Table>
+                            <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small> 
+
+                            {/* Pagination */}
+                                {!isSearch && resPerPage <= totalPatients && (
+                                    <div className="d-flex justify-content-center mt-5"> 
+                                    <Pagination activePage={currentPage} 
+                                    itemsCountPerPage={resPerPage} 
+                                    totalItemsCount = {totalPatients}
+                                    onChange={setCurrentPageNumber} 
+                                    nextPageText = {'⟩'}
+                                    prevPageText = {'⟨'}
+                                    firstPageText = {'«'}
+                                    lastPageText = {'»'}
+                                    itemClass='page-item'
+                                    linkClass="page-link"
+                                    />           
+                            </div>
+                                )}      
                         </Fragment>}                      
                         </div>
                     </div>

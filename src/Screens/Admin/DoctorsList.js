@@ -4,43 +4,56 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctors } from '../../actions/adminActions';
+import { getDoctors, searchDoctor } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import Pagination from 'react-js-pagination';
 import {Badge, Table } from 'react-bootstrap';
 import moment from 'moment';
 
-const DoctorsList = ({match}) => {
+const DoctorsList = () => {
 
     const dispatch = useDispatch();
 
     const alert = useAlert();
     const [currentPage, setCurrentPage] = useState(1);
+    const [resPerPage, setResPerPage] = useState(10);
     const [keyword, setKeyword] = useState('');
+    const [isSearch, setIsSearch] = useState(false);
 
     const { loading, error, doctors} = useSelector(state => state.admin);
-    // const keyword = match.params.keyword;
+    const { totalDrs } = useSelector(state => state.adminStat);
         
     useEffect(() =>{
         if(error){
             return alert.error(error);
         }
-        dispatch(getDoctors());
+        dispatch(getDoctors(resPerPage, currentPage));
 
-    }, [dispatch, alert, error ]);
+    }, [dispatch, alert, error, currentPage ]);
 
     function setCurrentPageNumber(pageNumber) {
         setCurrentPage(pageNumber);
     }
 
-    const searchhandler = (e) => {
-        e.preventDefault();
+    const searchhandler = (searchValue) => {
+        if (searchValue === undefined || searchValue === "") {
+            dispatch(getDoctors(resPerPage, currentPage));
+            setIsSearch(false)
 
-        if(keyword.trim()){
-            dispatch(getDoctors());
         }
-    }    
+        else {
+            setIsSearch(true);
+            dispatch(searchDoctor(searchValue));
+        }
+    }  
+
+    const refreshHandler = () => {
+        dispatch(getDoctors(resPerPage, currentPage));
+        setIsSearch(false);
+        setKeyword('');
+
+    }
 
     return (
         <Fragment>
@@ -54,54 +67,42 @@ const DoctorsList = ({match}) => {
                 {loading ? <Loader /> : (
                 <Fragment>   
                 {/*  patients List Filter Section */}
-                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
+                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
 
                         <div className="row list-box-header">
                             <div className="col-md-9">
                                 
                             </div>
-
+                            
                             <Link to="adminDashboard" className="go-back-btn"><i class='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn"><i class='bx bx-refresh'></i></button> &nbsp;
-                            <Link to="/adddoctor" className="add-staff-btn">Enroll New Staff</Link>
+                            <button className="btn refresh-btn" onClick={refreshHandler}><i class='bx bx-refresh'></i></button> &nbsp;
+                            <Link to="/adddoctor" className="add-staff-btn">Add New Doctor</Link>
                                                         
                         </div>
 
                         <div className="row">
-                            <div className="col-md-7">
-                                <h5 className="pt-2">Doctors List <span style={{color: '#F95800'}}>( {doctors && doctors?.length < 10 ? '0'+doctors?.length : doctors?.length} )</span></h5> 
+                            <div className="col-md-9">
+                                <h5 className="pt-2">Doctors List <span style={{color: '#F95800'}}>( {totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs} )</span></h5> 
                             </div>
 
-                            <div className="col-md-2">
-                                <select className="form-control" placeholder="Sort By">
-                                <option selected disabled>Sort By</option>
-                                    <option value="-1">Ascending Order</option>
-                                    <option value="1">Descending Order</option>
-                                </select>
-                            </div>
-
-                            <form onSubmit={searchhandler}>
+                    
+                            <div className="col-md-3">
                                 <div className="input-group">
                                     <input
                                         type="text"
-                                        id="search_field"
-                                        className="form-control"
-                                        placeholder="Search By Email ..."
-                                        // value={keyword}
-                                        // onChange={(e) => setKeyword(e.target.value)}
+                                        className="form-control shadow-none"
+                                        placeholder="Search by name ..."
+                                        value={keyword}
+                                        onChange={(e) => setKeyword(e.target.value)}
+                                        onBlur={(e) => {searchhandler(e.target.value)}}
+                                        style={{outline: 'none'}}
                                     />
-                                    <div className="input-group-append">
-                                        <button id="search_btn" className="btn" type="submit">
-                                            <i class='bx bx-search'></i>
-                                        </button>
-                                    </div>
                                 </div>
-                            </form>
-
+                            </div>
                         </div>
                     </div>  
-                    <br />
+                    <hr />
 
                     {/* Patient List Card */}
                         <div className="col-md-12">
@@ -136,23 +137,25 @@ const DoctorsList = ({match}) => {
                              
                              </tbody>
                             </Table> 
+                            <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small> 
+
 
                             {/* Pagination */}
-                        {/* {resPerPage <= doctorCount && (
-                            <div className="d-flex justify-content-center mt-5"> 
-                            <Pagination activePage={currentPage} 
-                             itemsCountPerPage={resPerPage} 
-                             totalItemsCount = {doctorCount}
-                             onChange={setCurrentPageNumber} 
-                             nextPageText = {'⟩'}
-                             prevPageText = {'⟨'}
-                             firstPageText = {'«'}
-                             lastPageText = {'»'}
-                             itemClass='page-item'
-                             linkClass="page-link"
-                            />           
-                       </div>
-                        )}    */}
+                                {!isSearch && resPerPage <= totalDrs && (
+                                    <div className="d-flex justify-content-center mt-5"> 
+                                    <Pagination activePage={currentPage} 
+                                    itemsCountPerPage={resPerPage} 
+                                    totalItemsCount = {totalDrs}
+                                    onChange={setCurrentPageNumber} 
+                                    nextPageText = {'⟩'}
+                                    prevPageText = {'⟨'}
+                                    firstPageText = {'«'}
+                                    lastPageText = {'»'}
+                                    itemClass='page-item'
+                                    linkClass="page-link"
+                                    />           
+                            </div>
+                                )}   
                         </Fragment>                      
                         </div>
                     </div>

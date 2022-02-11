@@ -28,6 +28,9 @@
   margin-left: 20px;
 }
 
+.rounded-card {
+  border-radius: 25px;
+}
  /* Comment Bubble  */
  .bubble {
   box-sizing: border-box;
@@ -1279,9 +1282,7 @@ nav .profile-details i {
 /* table classes */
 table {
   text-align: center;
-  justify-content: center;  
-  padding: 10px 0;
-  border-spacing: 15px; 
+  justify-content: center;   
   table-layout: fixed;
 }
 
@@ -1637,46 +1638,47 @@ tr {
 }
 
 .go-back-btn {
-  background-color: #081D45;
-  color: #FFF;
-  font-size: 14px;
-  padding: 10px;
-  border-radius: 4px;
-  float: right
+  color: #000;
+  font-size: 16px;
+  padding: 9px;
+  border-radius: 25px;
+  float: right;
+  transition: all 0.5s ease;
 }
 
 .go-back-btn:hover {
-  background-color: dodgerblue;
+  background-color: #F95800;
   color: #FFF;
   text-decoration: none;
 }
 
 .refresh-btn {
-  background-color: #081D45;
-  color: #FFF;
+  color: #000;
   font-size: 14px;
   padding: 10px;
-  border-radius: 4px;
-  float: right
+  border-radius: 25px;
+  float: right;
+  transition: all 0.5s ease;
 }
 
 .refresh-btn:hover {
-  background-color: dodgerblue;
+  background-color: #F95800;
   color: #FFF;
   text-decoration: none;
 }
 
 .add-staff-btn {
-  background-color: #081D45;
-  color: #FFF;
+  border: 2px solid #081D45;
+  color: #000;
   font-size: 14px;
   padding: 10px;
   border-radius: 4px;
-  float: left
+  float: left;
+  transition: all 0.5s ease;
 }
 
 .add-staff-btn:hover {
-  background-color: dodgerblue;
+  background-color: #2a4b8a;
   color: #FFF;
   text-decoration: none;
 }
