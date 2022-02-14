@@ -4,12 +4,13 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctors, searchDoctor } from '../../actions/adminActions';
+import { getDoctors, searchDoctor, doctorDeActivate, doctorActivate } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import Pagination from 'react-js-pagination';
-import {Badge, Table } from 'react-bootstrap';
+import {Badge, Table, Modal } from 'react-bootstrap';
 import moment from 'moment';
+import { UPDATE_DOCTOR_RESET } from '../../constants/adminConstants';
 
 const DoctorsList = () => {
 
@@ -21,16 +22,28 @@ const DoctorsList = () => {
     const [keyword, setKeyword] = useState('');
     const [isSearch, setIsSearch] = useState(false);
 
-    const { loading, error, doctors} = useSelector(state => state.admin);
+    const [smShow, setSmShow] = useState(false); //small confirm modal
+    const [doctorModel, setDoctorModel] = useState(null);
+    const [doctorToDelete, setDoctorToDelete] = useState(null);
+
+    const { loading, error, doctors, isUpdated} = useSelector(state => state.admin);
     const { totalDrs } = useSelector(state => state.adminStat);
         
     useEffect(() =>{
         if(error){
-            return alert.error(error);
+            alert.error(error);
         }
+
+        if(isUpdated) {
+            alert.success('Account Status Changed');
+            dispatch(getDoctors(resPerPage, currentPage));
+            dispatch({type: UPDATE_DOCTOR_RESET})
+            setSmShow(false);
+        }
+
         dispatch(getDoctors(resPerPage, currentPage));
 
-    }, [dispatch, alert, error, currentPage ]);
+    }, [dispatch, alert, error, currentPage, isUpdated]);
 
     function setCurrentPageNumber(pageNumber) {
         setCurrentPage(pageNumber);
@@ -53,6 +66,14 @@ const DoctorsList = () => {
         setIsSearch(false);
         setKeyword('');
 
+    }
+
+    const deActivateDoctor = () => {
+        dispatch(doctorDeActivate(doctorModel));
+    }
+
+    const activateDoctor = () => {
+        dispatch(doctorActivate(doctorModel));
     }
 
     return (
@@ -107,7 +128,7 @@ const DoctorsList = () => {
                     {/* Patient List Card */}
                         <div className="col-md-12">
                          <Fragment>
-                         <Table striped hover>
+                         <Table striped hover bordered>
                             <thead align="center">
                                 <tr>
                                     <th>Name</th>
@@ -115,6 +136,7 @@ const DoctorsList = () => {
                                     <th>Gender </th>
                                     <th>NPI Number</th>
                                     <th>Phone 1</th>
+                                    <th>Acc Status</th>
                                     <th>Action</th>
                                 </tr> 
                             </thead>
@@ -122,14 +144,24 @@ const DoctorsList = () => {
                             {doctors && doctors.map((doctor, index) => ( 
                                 <tr key={index}>
                                 <td><Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> Dr. {doctor?.firstname} {doctor?.lastname} <p style={{color: 'gray'}}>{moment(doctor?.DOB).format("ll")}</p> </Link></td>
-                                <td>{doctor?.email}</td>
+                                <td style={{wordWrap: 'break-word'}}>{doctor?.email}</td>
                                 {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
                                 <td>{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</td>
                                 <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
+                                {doctor?.block === false ? <td>
+                                        <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                        </td> : <td><i class='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                </td>}
                                 <td>
                                     <Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
-                                    {/* <Link to={{ pathname: "/#", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> */}
-                                    {/* <Link className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> */}
+                                    <Link to={{ pathname: "/Doctor/Edit", state: {id: doctor}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
+                                    
+                                    {doctors.block === false ? <Fragment>
+                                        <Link className="rounded-button-delete" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
+                                    </Fragment> : 
+                                    <Fragment>
+                                        <Link className="rounded-button-activate" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                    </Fragment>}
                                 </td>
                             </tr> 
                             
@@ -162,6 +194,24 @@ const DoctorsList = () => {
                 </Fragment>
              )}
             </section>
+
+            <Modal
+                size="sm"
+                show={smShow}
+                onHide={() => setSmShow(false)}
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                <Modal.Body>
+                    <small style={{color: 'gray'}}>Are you sure you want to activate / de-activate 
+                        <span style={{color: '#000'}}> Dr. {doctorToDelete}'s</span> Account ?
+                    </small>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <button className="btn btn-sm btn-success" onClick={activateDoctor}>Activate</button>
+                    <button className="btn btn-sm btn-danger" onClick={deActivateDoctor}>De-Activate</button>
+                </Modal.Footer>
+            </Modal>  
         </Fragment>
     )
 }

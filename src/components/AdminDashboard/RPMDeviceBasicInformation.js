@@ -155,8 +155,17 @@ const RPMDeviceBasicInformation = (props) => {
 
                                     <br/>
                                     <div style={{ display: "flex" }}>
+                                        {patient?.block === false ? 
+                                        <Fragment>
                                         <button className="submit-btn ml-3" onClick={AssignDeviceToPatient}>Assign </button>
                                         <Link to={{ pathname: "/printReceipt", state: {deviceAssigned: deviceDetails, patientDetails: patient }}} className="ml-3 mt-2">Print Receipt</Link>
+                                        </Fragment>
+                                        : 
+                                        <Fragment>
+                                            <small style={{ color: "red", marginBottom: "30px"}}>Cannot assigned device, {patient?.firstname} {patient?.lastname}'s account is de-activated.</small>
+                                        </Fragment>    
+                                    }
+                                        
                                     </div>
                                 </div>
                             </div>                             

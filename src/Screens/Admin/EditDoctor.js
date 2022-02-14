@@ -7,79 +7,51 @@ import { doctorProfile, updateDoctor, clearErrors } from '../../actions/adminAct
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { UPDATE_DOCTOR_RESET } from '../../constants/adminConstants';
+import { Formik, Form } from 'formik';
+
+
 
 const EditDoctor = (props) => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    let id = props?.location?.state?.id;
+    let doctorInfo = props?.location?.state?.id;
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [gender, setGender] = useState(); 
-    const [contactno, setContactno] = useState('');
-    const [phone1, setPhone1] = useState('');
-    const [phone2, setPhone2] = useState('');
-    const [npi, setNpi] = useState('');
-    const [licenseNumber, setLicenseNumber] = useState('');
+    const {_id, firstname, lastname, gender, DOB, email, phone1, mobileNo, npinumber, licensenumber} = doctorInfo;
+
+    const [docfirstname, setDocFirstName] = useState(firstname);
+    const [doclastname, setDocLastName] = useState(lastname);
+    const [docDOB, setDocDOB] = useState(DOB);
+     const [docemail, setDocEmail] = useState(email);
+    const [docgender, setDocGender] = useState(gender); 
+    const [docphone1, setDocPhone1] = useState(phone1);
+    const [docmobileno, setDocMobileNo] = useState(mobileNo);
+    const [docnpi, setDocNpi] = useState(npinumber);
+    const [doclicenseNumber, setDocLicenseNumber] = useState(licensenumber);
     
-    const { error, doctor} = useSelector(state => state.doctorProfile);
-    const { loading, error: updateError, isUpdated } = useSelector(state => state.doctor);
+    const { loading, error, isUpdated } = useSelector(state => state.admin);
 
 
     useEffect(() => {
-        if(doctor && doctor._id !== id){ 
-            dispatch(doctorProfile(id))
-        } else {       
-            setFirstName(doctor?.firstname);
-            setLastName(doctor?.lastname);
-            setEmail(doctor?.email);
-            setGender(doctor?.gender);
-            setContactno(doctor?.contactno);
-            setPhone1(doctor?.phone1);
-            setPhone2(doctor?.phone2);
-            setNpi(doctor?.npinumber);
-            setLicenseNumber(doctor?.licensenumber);
-        }
-
         if(error){
             alert.error(error);
             dispatch(clearErrors());
         }
 
-        if(updateError){
-            alert.error(updateError);
-            dispatch(clearErrors());
-        }
-
-        if(isUpdated === true){
-            props?.history.push('/doctors');
-               alert.success('Doctor Updated');
+        if(isUpdated){
+            alert.success('Doctor Updated');
+            props.history.push('/doctors');
             dispatch({
                 type: UPDATE_DOCTOR_RESET 
             });
         }
             
-    }, [dispatch, alert, error, doctor, id, updateError, isUpdated]);
+    }, [dispatch, isUpdated]);
 
 
-    const editHandler = (e) => {
-        e.preventDefault();
-
-        const formData = new FormData();
-        formData.set('firstName', firstName);
-        formData.set('lastName', lastName);
-        formData.set('email', email);
-        formData.set('gender', gender);
-        formData.set('contactno', contactno);
-        formData.set('phone1', phone1);
-        formData.set('phone2', phone2);
-        formData.set('npinumber', npi);
-        formData.set('licenseNumber', licenseNumber);
-
-        dispatch(updateDoctor(id, firstName, lastName, email, gender, contactno, phone1, phone2, npi, licenseNumber));
+    const updateHandler = () => {
+        dispatch(updateDoctor(_id, docfirstname, doclastname, docDOB, docemail, docgender, docphone1, docmobileno, docnpi, doclicenseNumber));
     }
 
 
@@ -93,144 +65,154 @@ const EditDoctor = (props) => {
                 <TopBar />
 
                 {loading ? <Loader /> : <Fragment>
-                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
+                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
-                        <h4 className="pt-2 mt-2">Edit Doctor</h4>
+                        <h5 className="pt-2 mt-2">Update <span style={{color: '#F95800'}}>Dr. {firstname} {lastname} </span></h5>
                         <hr />
 
-                        
-                            <form onSubmit={editHandler}>
+                        <Formik initialValues={{ }}
+                            enableReinitialize={true}
+                            // validationSchema={validate}
+                            onSubmit={updateHandler}
+                        >
+
+                        { formik  => (
+                        <div>
+                            <Form>
+                            {/* First Name */}
                             <div className="row">
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="firstName"><i className='bx bx-user label-icons'></i> First Name</label>
-                                                <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="First Name"
-                                                required
-                                                value={firstName}		
-                                                onChange={(e) => setFirstName(e.target.value)}
-                                                />
-                                        </div>
-                                    </div>
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="firstname" className="form-label mt-3">First Name</label>
+                                    <input
+                                        type="text" 
+                                        name="firstname"
+                                        className='form-control shadow-none'
+                                        placeholder="First Name"
+                                        value={docfirstname}
+                                        onChange={(e) => setDocFirstName(e.target.value)} 
+                                    />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="lastName"><i className='bx bx-user label-icons'></i> Last Name</label>
-                                                <input 
-                                                type="text" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Last Name"
-                                                value={lastName}
-                                                onChange={(e) => setLastName(e.target.value)}
-                                                />
-                                        </div>
-                                    </div>
+                            {/* Last Name */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="lastname" className="form-label mt-3">Last Name</label>
+                                    <input
+                                        type="text" 
+                                        name="lastname"
+                                        className='form-control shadow-none'
+                                        placeholder="Last Name"
+                                        value={doclastname}
+                                        onChange={(e) => setDocLastName(e.target.value)} 
+                                    />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                                <label htmlFor="gender"><i className='bx bx-male label-icons'></i> Gender</label>
-                                                <select 
-                                                    className="form-control"
-                                                    defaultValue={gender} 
-                                                    value={gender}
-                                                    onChange={(e) => setGender(e.target.value)}
-                                                    >
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                        </div>
-                                    </div>
+                            {/* Email */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="email" className="form-label mt-3">Email</label>
+                                    <input
+                                        type="email" 
+                                        name="email"
+                                        className='form-control shadow-none'
+                                        placeholder="Email Address"
+                                        value={docemail}
+                                        onChange={(e) => setDocEmail(e.target.value)} 
+                                    />
+                            </div>
 
+                            {/* Gender */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="gender" className="form-label mt-3">Gender</label>
+                                <select
+                                    label="Gender"
+                                    name="gender"
+                                    className="form-control"
+                                    defaultValue={docgender}
+                                    onChange={(e) => setDocGender(e.target.value)}
+                                    >
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
 
-                                    <div className="col-md-4">
-                                    <div className="form-group">
-                                            <label htmlFor="email"><i className='bx bx-envelope label-icons'></i> Email Address</label>
-                                                <input 
-                                                type="email" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Email Address"
-                                                required
-                                                value={email}		
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                />
-                                        </div>
-                                    </div>
+                            {/* DOB */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="gender" className="form-label mt-3">DOB</label>
+                                <input
+                                    type="date"
+                                    label="Gender"
+                                    name="gender"
+                                    className="form-control"
+                                    defaultValue={docDOB}
+                                    onChange={(e) => setDocDOB(e.target.value)}
+                                />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="contactno"><i className='bx bx-phone label-icons'></i> Contact No (Primary)</label>
-                                                <input 
-                                                type="number" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Contact No"
-                                                required
-                                                value={contactno}		
-                                                onChange={(e) => setContactno(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
+                            {/* Phone1 */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="phone1" className="form-label mt-3">Phone1</label>
+                                <input
+                                    type="text"
+                                    label="phone1"
+                                    name="phone1"
+                                    className="form-control"
+                                    defaultValue={docphone1}
+                                    onChange={(e) => setDocPhone1(e.target.value)}
+                                />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="phone1"><i className='bx bx-phone label-icons'></i> Contact No (Primary). </label>
-                                                <input 
-                                                type="number" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Fax Number"
-                                                value={phone1}		
-                                                onChange={(e) => setPhone1(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
+                            {/* Mobile No */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="mobileno" className="form-label mt-3">Mobile No</label>
+                                <input
+                                    type="text"
+                                    label="mobileno"
+                                    name="mobileno"
+                                    className="form-control"
+                                    defaultValue={docmobileno}
+                                    onChange={(e) => setDocMobileNo(e.target.value)}
+                                />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="phone2"><i className='bx bx-phone label-icons'></i> Phone No (Secondary)</label>
-                                                <input 
-                                                type="number" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="Phone 2"
-                                                value={phone2}		
-                                                onChange={(e) => setPhone2(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
+                            {/* NPI Number */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="npinumber" className="form-label mt-3">NPI</label>
+                                <input
+                                    type="text"
+                                    label="npinumber"
+                                    name="npinumber"
+                                    className="form-control"
+                                    defaultValue={docnpi}
+                                    onChange={(e) => setDocNpi(e.target.value)}
+                                />
+                            </div>
 
-                                    <div className="col-md-4">
-                                        <div className="form-group">
-                                            <label htmlFor="licensenumber"><i className='bx bx-id-card label-icons'></i> License Number</label>
-                                                <input 
-                                                type="number" 
-                                                className="form-control" 
-                                                autoComplete="off" 
-                                                placeholder="License NUmber"
-                                                required
-                                                value={licenseNumber}		
-                                                onChange={(e) => setLicenseNumber(e.target.value)}
-                                                />
-                                        </div>
-                                    </div>
-                               </div>
+                            {/* License Number */}
+                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <label htmlFor="licensenumber" className="form-label mt-3">License Number</label>
+                                <input
+                                    type="text"
+                                    label="licensenumber"
+                                    name="licensenumber"
+                                    className="form-control"
+                                    defaultValue={doclicenseNumber}
+                                    onChange={(e) => setDocLicenseNumber(e.target.value)}
+                                />
+                            </div>
+                        </div> 
 
-                            <hr />
-                            <button className="btn login-btn-class" type="submit"> 
-                                Update
-                            </button>
-                            <br />
-                            <br />
-                            <br />
+                        <br/>
+                        {/* Buttons */}
+                        <div className="row mr-3" style={{ float: 'right'}}>
+                            <button className="reset-btn ml-3" type="submit" >Update</button>
+                        </div>
 
-                        </form>
-                        
+                        <br/><br/><br/>
+                    </Form>
+                </div>
+                )}
+                </Formik>
+
+                    
                     </div>
                 </div>
                 </Fragment> }

@@ -69,11 +69,16 @@ import {
     UPDATE_HR_REQUEST,
     UPDATE_HR_SUCCESS,
     UPDATE_HR_FAIL,
+    UPDATE_HR_RESET,
     ASSIGN_DOCTOR_TO_HR_REQUEST,
     ASSIGN_DOCTOR_TO_HR_SUCCESS,
     ASSIGN_DOCTOR_TO_HR_FAIL,
     ADMIN_STATS_SUCCESS,
     ADMIN_STATS_FAIL,
+    UPDATE_PATIENT_REQUEST,
+    UPDATE_PATIENT_SUCCESS,
+    UPDATE_PATIENT_FAIL,
+    UPDATE_PATIENT_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -92,6 +97,7 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
         }
 
         case ALL_PATIENTS_FAIL: 
+        case UPDATE_PATIENT_REQUEST:
         return { 
             loading: false,  
             error: action.payload        
@@ -113,7 +119,40 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
             return { 
                 loading: false,  
                 error: action.payload
-            }        
+        }
+
+        case UPDATE_PATIENT_SUCCESS: 
+            return {
+                loading: false,
+                isUpdated: true 
+        }
+
+        case UPDATE_PATIENT_FAIL: return {
+            loading: false,
+            error: action.payload
+        }
+
+        case UPDATE_DOCTOR_SUCCESS: 
+            return {
+             loading: false,
+             isUpdated: true,
+            }  
+
+        case UPDATE_DOCTOR_RESET:
+            return {
+                loading: false,
+                isUpdated: false,
+            }
+        
+        case UPDATE_DOCTOR_FAIL: 
+            return {
+             error: action.payload
+            }
+
+        case UPDATE_PATIENT_RESET: return {
+            loading: false,
+            isUpdated: false
+        }
        
 
         case CLEAR_ERRORS: 
@@ -230,32 +269,7 @@ export const doctorpatientsReducers = (state = {}, action) => {
 
 export const doctorReducers = (state = {doctor: {}}, action) => {
     switch(action.type) {
-        case UPDATE_DOCTOR_REQUEST:     
-            return {
-                ...state,
-                loading: true
-            }
-
-
-        case UPDATE_DOCTOR_SUCCESS: 
-            return {
-             ...state,   
-             loading: false,
-             isUpdated: true,
-            }  
-
-        case UPDATE_DOCTOR_RESET:
-            return {
-                ...state,
-                isUpdated: false,
-            }
-
-        case UPDATE_DOCTOR_FAIL: 
-        return {
-         ...state,
-         error: action.payload
-        }
-
+    
         case CLEAR_ERRORS: 
             return {
                ...state,
@@ -552,7 +566,11 @@ export const hrsReducers =  (state = { hrs: []}, action) => {
                 isAssigned: false,
             }
 
-
+        case UPDATE_HR_RESET: 
+        return { 
+            loading: false,
+            isUpdated: false
+        }
 
         case ALL_HRS_FAIL:
         case ADD_HR_FAIL:

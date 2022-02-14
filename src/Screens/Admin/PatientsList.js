@@ -4,19 +4,25 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPatients, updatePatientConsentStatus, searchPatient } from '../../actions/adminActions';
+import { getPatients, updatePatientConsentStatus, searchPatient, patientDeActivate, patientActivate } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-import {Badge, Table } from 'react-bootstrap';
+import {Badge, Table, Modal } from 'react-bootstrap';
 import moment from 'moment';
 import Pagination from 'react-js-pagination';
+import {UPDATE_PATIENT_RESET} from '../../constants/adminConstants';
+
 
 const PatientsList = () => {
 
     const dispatch = useDispatch();
 
+    const [smShow, setSmShow] = useState(false); //small confirm modal
+    const [patientModel, setPatientModel] = useState(null);
+    const [patientToDelete, setPatientToDelete] = useState(null);
+
     const alert = useAlert();
-    const { loading, error, patients} = useSelector(state => state.admin);
+    const { loading, error, patients, isUpdated} = useSelector(state => state.admin);
     const { totalPatients } = useSelector(state => state.adminStat);
     const [keyword, setKeyword] = useState('');
     const [isSearch, setIsSearch] = useState(false);
@@ -27,9 +33,16 @@ const PatientsList = () => {
         if(error){
             return alert.error(error);
         }
+
+        if(isUpdated){
+            alert.success('Status Changed');
+            dispatch({type: UPDATE_PATIENT_RESET});
+            dispatch(getPatients(resPerPage, currentPage));
+            setSmShow(false);
+        }
         dispatch(getPatients(resPerPage, currentPage));
 
-    }, [dispatch, alert, error, currentPage])
+    }, [dispatch, alert, error, isUpdated, currentPage])
 
     
     const getPatientsList = () => {
@@ -58,6 +71,13 @@ const PatientsList = () => {
         }
     }  
 
+    const deActivatePatient = () => {
+        dispatch(patientDeActivate(patientModel));
+    }
+
+    const activatePatient = () => {
+        dispatch(patientActivate(patientModel))
+    }
 
     return (
         <Fragment>
@@ -111,26 +131,30 @@ const PatientsList = () => {
                     {/* Patient List Card */}
                         <div className="col-md-12">
                         {patients && <Fragment>
-                            <Table striped hover>
+                            <Table striped hover bordered>
                             <thead align="center">
                                 <tr>
                                 <th>Name</th>
-                                <th>Contact No </th>
+                                <th>DOB </th>
                                 <th>Email</th>
+                                <th>Acc Status</th>
                                 <th>Phy. Status</th>
-                                <th>Role</th>
                                 <th>Consent Status</th>
                                 <th>ACTION</th> 
                                 </tr>
                             </thead>
                             <tbody>
-                                {patients && patients.map((patient, index) => (
+                                {patients && patients.length > 0 ? <Fragment> 
+                                    {patients && patients.map((patient, index) => (
                                     <tr key={index}>  
-                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>{moment(patient?.DOB).format("ll")}</p></Link></td>
-                                    <td>{patient?.phone1} <p>(English)</p></td> 
-                                    <td>{patient?.email}</td>
+                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                    <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+                                    <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                    {patient?.block === false ? <td>
+                                        <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                        </td> : <td><i class='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p></td>}
                                     <td>{patient?.assigned_doctor_id ? <Badge bg="info text-white" className="assigned-tag">Assigned</Badge> : <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge>}</td>
-                                    <td>{patient?.role}</td>
+                                    
                                     {patient?.rpmconsent === true ? <td>
                                         <div className="custom-control custom-switch">
                                             <input 
@@ -157,11 +181,19 @@ const PatientsList = () => {
                                     }
                                     
                                     <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
-                                    {/* <Link disabled className="rounded-button-edit" to="/patients"><i className='bx bx-edit-alt'></i></Link> */}
-                                    {/* <Link className="rounded-button-delete" to="/patients"><i className='bx bxs-user-minus'></i></Link> */}
+                                    <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>
+                                    
+                                    {patient?.block === false ? <Link className="rounded-button-delete" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-alt'></i></Link> 
+                                    : 
+                                    <Link>
+                                    <Link className="rounded-button-activate" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                    </Link> }
                                     </td>
                                 </tr>    
                                 ))}
+                                </Fragment> : <div>
+                                    <small className="not-found-text">Patients Not Found</small>
+                                </div> }
                             </tbody>
                             </Table>
                             <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small> 
@@ -181,7 +213,25 @@ const PatientsList = () => {
                                     linkClass="page-link"
                                     />           
                             </div>
-                                )}      
+                                )}    
+
+                                <Modal
+                                    size="sm"
+                                    show={smShow}
+                                    onHide={() => setSmShow(false)}
+                                    aria-labelledby="example-modal-sizes-title-sm"
+                                >
+                                    <Modal.Body>
+                                        <small style={{color: 'gray'}}>Are you sure you want to activate / de-activate 
+                                            <span style={{color: '#000'}}> {patientToDelete}</span> ?
+                                        </small>
+                                    </Modal.Body>
+
+                                    <Modal.Footer>
+                                        <button className="btn btn-sm btn-success" onClick={activatePatient}>Activate</button>
+                                        <button className="btn btn-sm btn-danger" onClick={deActivatePatient}>De-Activate</button>
+                                    </Modal.Footer>
+                                </Modal>  
                         </Fragment>}                      
                         </div>
                     </div>

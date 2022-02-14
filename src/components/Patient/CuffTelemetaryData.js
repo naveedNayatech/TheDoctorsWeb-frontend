@@ -58,7 +58,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             <div className="col-md-3">
             <span className="profile-label">Diastolic : {telemetaryData?.dia}</span>
                 {telemetaryData?.dia < 80 ? <p className="normalBP">Low</p> : telemetaryData?.dia >= 80 && telemetaryData?.dia < 90 ? 
-                <p className="normalBP">Normal</p> : telemetaryData?.dia >= 90 ? <p className="elevatedBP">High Blood Pressure</p> : ''}
+                <p className="normalBP">Normal</p> : telemetaryData?.dia >= 90 && telemetaryData?.dia <=100 ? <p className="elevatedBP">Elevated</p> : <p className="elevatedBP">High Blood Pressure</p>}
             </div>
 
             <div className="col-md-1">

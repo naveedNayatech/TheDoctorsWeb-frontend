@@ -30,6 +30,7 @@ import AssignDrToHr from './Screens/Admin/AssignDrToHr';
 import AssignPatientToHr from './Screens/Admin/AssignPatientToHR';
 import AdminTimeReport from './Screens/Admin/AdminTimeReport';
 import AdminPrintReport from './Screens/Admin/AdminPrintReport';
+import EditPatient from './Screens/Admin/EditPatient';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -60,7 +61,7 @@ function App() {
         <ProtectedRoute exact path='/me' isAdmin={true} component={Profile} />
         <ProtectedRoute exact path='/adddoctor' isAdmin={true} component={AddNewDoctor} />
         <ProtectedRoute exact path='/patientprofile' isAdmin={true} component={PatientProfile} />
-        <ProtectedRoute exact path="/editDoctor" isAdmin={true} component={EditDoctor} />
+        <ProtectedRoute exact path="/Doctor/Edit" isAdmin={true} component={EditDoctor} />
         <ProtectedRoute exact path='/assigndoctor' isAdmin={true} component={AssignDoctorToPatient} />
         <ProtectedRoute exact path='/devices' isAdmin={true} component={RPMDevices} />
         <ProtectedRoute exact path='/devicedetails' isAdmin={true} component={DevicesDetails} />
@@ -76,6 +77,7 @@ function App() {
         <ProtectedRoute exact path='/assignPatientToHr' isAdmin={true} component={AssignPatientToHr} />
         <ProtectedRoute exact path="/Admin/Report" isAdmin={true} component={AdminTimeReport} />
         <ProtectedRoute exact path='/Admin/Report/Print' isAdmin={true} component={AdminPrintReport} />
+        <ProtectedRoute exact path='/Patients/Edit' isAdmin={true} component={EditPatient} />
         {/* Staff Routes */}
         <Route exact path="/stafflogin" component={StaffLogin} />
         <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
