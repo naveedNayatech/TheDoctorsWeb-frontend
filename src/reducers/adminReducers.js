@@ -79,6 +79,9 @@ import {
     UPDATE_PATIENT_SUCCESS,
     UPDATE_PATIENT_FAIL,
     UPDATE_PATIENT_RESET,
+    GET_ADMIN_NOTIFICATIONS_REQUEST,
+    GET_ADMIN_NOTIFICATIONS_SUCCESS,
+    GET_ADMIN_NOTIFICATIONS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -603,7 +606,30 @@ export const adminStatsReducers = (state = { totalPatients:0, totalHrs: 0, total
             } 
             
         default: // need this for default case
-        return state 
-    
+        return state    
+    }
+}
+
+export const adminNotificationsReducers = (state = { notifications:[] }, action) => {
+    switch (action.type) {
+        case GET_ADMIN_NOTIFICATIONS_REQUEST: 
+            return {
+                loading: true,
+            }
+
+        case GET_ADMIN_NOTIFICATIONS_SUCCESS:
+            return {
+                loading: false,
+                notifications: action.payload
+            }
+            
+        case GET_ADMIN_NOTIFICATIONS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+        }
+            
+        default: // need this for default case
+        return state    
     }
 }

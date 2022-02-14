@@ -22,7 +22,8 @@ import { commentReducers } from './reducers/HRReducers';
 import { hrtimeSpentReducers } from './reducers/HRReducers';
 import { hrTimeReportReducers } from './reducers/HRReducers';
 import { carePlanReducers } from './reducers/HRReducers';
-
+import {initialMonthReportReducers} from './reducers/HRReducers';
+import {adminNotificationsReducers} from './reducers/adminReducers';
 const reducer = combineReducers({
     admin: adminReducers,
     auth: authReducers,
@@ -44,7 +45,9 @@ const reducer = combineReducers({
     timeSpent: hrtimeSpentReducers,
     target : hrTimeReportReducers,
     adminStat: adminStatsReducers,
-    careplan: carePlanReducers
+    careplan: carePlanReducers,
+    initialMonthReport:initialMonthReportReducers,
+    adminNoti: adminNotificationsReducers
 })
 
 let initialState = {}

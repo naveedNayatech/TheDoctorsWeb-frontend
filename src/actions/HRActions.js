@@ -13,6 +13,9 @@ import {
     TIME_REPORT_REQUEST,
     TIME_REPORT_SUCCESS,
     TIME_REPORT_FAIL,
+    INITIAL_MONTH_REPORT_REQUEST,
+    INITIAL_MONTH_REPORT_SUCCESS,
+    INITIAL_MONTH_REPORT_FAIL,
     ADDING_CARE_PLAN_SUCCESS,
     ADDING_CARE_PLAN_FAIL,
     PATIENT_CARE_PLAN_SUCCESS,
@@ -143,7 +146,6 @@ export const carePlanOfPatient = (patientId, hrId, description) => async(dispatc
 
 export const getTimeReport = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
     try {
-
         dispatch({ 
             type: TIME_REPORT_REQUEST
         });
@@ -172,6 +174,36 @@ export const getTimeReport = (patientId, hrId, startDate, endDate) => async(disp
        })
     }   
 }
+
+export const getInitialMonthReport = (month) => async(dispatch) => {
+    try {
+        dispatch({ 
+            type: INITIAL_MONTH_REPORT_REQUEST
+        });
+
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/general/report/initialsetup`, {
+                month: month
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: INITIAL_MONTH_REPORT_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: INITIAL_MONTH_REPORT_FAIL,
+           payload: error.message
+       })
+    }
+} 
+
 
 export const getPatientCarePlan = (patientId) => async(dispatch) => {    
     try {

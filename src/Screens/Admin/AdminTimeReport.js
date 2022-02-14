@@ -31,12 +31,7 @@ const AdminTimeReport = () => {
     }, [dispatch, patientId])
 
     const submitHandler = () => {
-        // console.log('start Date is ' + startDate);
-        // console.log('end Date is ' + endDate);
-        // console.log('patient Id is ' + patientId);
-        // console.log('hr Id is ' + patient?.assigned_hr_id);
-
-        dispatch(getTimeReport(patientId, patient?.assigned_hr_id, startDate, endDate)); 
+        dispatch(getTimeReport(patientId, patient?.assigned_hr_id?._id, startDate, endDate)); 
     }
 
     const resetData = () => {
@@ -51,7 +46,7 @@ const AdminTimeReport = () => {
         {/* TopBar */}
         <TopBar />
 
-        <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
+        <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
             <div className="home-content">
 
             <div className="col-md-7">

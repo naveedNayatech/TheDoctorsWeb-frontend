@@ -6,7 +6,7 @@ import MetaData from '../../layouts/MetaData';
 const Dashboard = () => {
     return (
         <Fragment>
-            <div  className="admindashboardbody">
+            <div className="admindashboardbody">
                 <MetaData title="Dashboard" />
                 <Sidebar />
                 <Home />

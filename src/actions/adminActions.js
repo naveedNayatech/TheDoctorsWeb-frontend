@@ -74,6 +74,9 @@ import {
     UPDATE_PATIENT_REQUEST,
     UPDATE_PATIENT_SUCCESS,
     UPDATE_PATIENT_FAIL,
+    GET_ADMIN_NOTIFICATIONS_REQUEST,
+    GET_ADMIN_NOTIFICATIONS_SUCCESS,
+    GET_ADMIN_NOTIFICATIONS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -1286,6 +1289,32 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
     }
 }
 
+export const getAdminNotifications = () => async(dispatch) => {
+    try {
+        dispatch({ type: GET_ADMIN_NOTIFICATIONS_REQUEST})
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const data = await axios.post(`${Prod01}/general/notifications`, {
+                admin: true
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            } 
+        });
+
+        dispatch({ 
+            type: GET_ADMIN_NOTIFICATIONS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({ 
+            type: GET_ADMIN_NOTIFICATIONS_FAIL,
+            payload: error
+        })
+    }
+}
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({

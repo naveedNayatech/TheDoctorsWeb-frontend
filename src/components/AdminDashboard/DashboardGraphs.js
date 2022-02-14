@@ -49,7 +49,7 @@ const DashboardGraphs = () => {
 
     return (
         <Fragment>
-            <section className="alerts-section">
+            <section className="alerts-section rounded-card">
             <h5 className="title">Graphical Representation</h5> 
             <ResponsiveContainer width="100%" height={330}>
                 <BarChart

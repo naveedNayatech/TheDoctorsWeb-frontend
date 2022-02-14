@@ -50,22 +50,27 @@ const Sidebar = () => {
                 </li>
 
                 <li className="nav_link">
-                    <NavLink key="timereport" to="/Admin/Report" activeClassName="link-name-active">
+                    <NavLink key="timereport" to="/Admin/Report">
                         <i className='bx bx-time-five'></i>
                         <span className="link_name">Time Report</span>
                     </NavLink>
                 </li>
 
-
                 <li className="nav_link">
                     <NavLink key="inventory" to="/devices" activeClassName="link-name-active">
-                         <i class='bx bxs-data'></i>
+                         <i className='bx bxs-data'></i>
                         <span className="link_name">Inventory</span>
                     </NavLink>
                 </li>
 
-               
+                <li className="nav_link">
+                    <NavLink to="/Admin/Report/InitialMonth">
+                        <i className='bx bxs-data'></i>
+                        <span className="link_name" >Initial Month Report</span>     
+                    </NavLink>
+                </li>
 
+               
                 <br/>
                 <li>
                     <NavLink key="logout" to="#" onClick={logoutHandler}>

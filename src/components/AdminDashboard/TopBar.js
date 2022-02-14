@@ -39,16 +39,13 @@ const TopBar = () => {
                     </div>
 
                     <div className="profile-details btn dropdown-toggle" type="button" 
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
+                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
                         <img src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg" alt="profileimg" />
-                        <span className="admin-name">{isAuthenticated == true && user && user?.name}</span>
-                           
+                        <span className="admin-name">{isAuthenticated == true && user && user?.name}</span>   
                     </div>
 
                     <div className="dropdown-menu">
-                                    
                         <Link className="dropdown-item" to="/me"><small>My Profile</small></Link>
-
                         <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}><small>Logout</small></Link>
                     </div>
                 </nav>

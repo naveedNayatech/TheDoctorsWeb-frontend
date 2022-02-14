@@ -6,6 +6,18 @@
   scroll-behavior: smooth;
 }
 
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #FFF;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #D3D3D3;
+  border-radius: 20px;
+}
 .error {
   position: 'absolute';
   color: red;
@@ -76,6 +88,11 @@
   background-color:#FFF;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   padding: 20px;
+}
+
+.alerts-section {
+  max-height: 430px;
+  overflow-y: auto;
 }
 
 .rounded-button-edit{
@@ -1438,6 +1455,19 @@ tr {
 .reset-btn:hover {
   background-color: orangered
 }
+
+.excelreportbutton{
+  background-color: #1D6F42;
+  color: #FFF;
+  padding: 10px;
+  border-radius: 5px;
+  border: none !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  margin-bottom: 20px;
+  transition: all .4s;
+  width: 160px
+}
+
 
 .row-class {
   float: right

@@ -12,6 +12,9 @@ import {
     TIME_REPORT_REQUEST,
     TIME_REPORT_SUCCESS,
     TIME_REPORT_FAIL,
+    INITIAL_MONTH_REPORT_REQUEST,
+    INITIAL_MONTH_REPORT_SUCCESS,
+    INITIAL_MONTH_REPORT_FAIL,
     RESET_TIME_REPORT_DATA,
     ADDING_CARE_PLAN_SUCCESS,
     ADDING_CARE_PLAN_FAIL,
@@ -173,6 +176,45 @@ export const hrTimeReportReducers = (state = {targets:{}}, action) => {
                 error: action.payload,
             }
 
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }  
+         
+        default: 
+            return state; 
+    } 
+}
+
+export const initialMonthReportReducers = (state = {initialMonthPatients:[]}, action) => {
+    switch (action.type) {
+    
+        case INITIAL_MONTH_REPORT_REQUEST:
+            return {
+                loading: true,
+            }
+        
+        case INITIAL_MONTH_REPORT_SUCCESS:
+            return {
+                loading: false,
+                initialMonthPatients: action.payload
+            }
+        
+        // case RESET_TIME_REPORT_DATA: 
+        // return {
+        //     loading: false,
+        //     targets: null,
+        //     totalTime: 0
+        // }
+
+        case INITIAL_MONTH_REPORT_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            }
 
         case CLEAR_ERRORS: 
          return {
