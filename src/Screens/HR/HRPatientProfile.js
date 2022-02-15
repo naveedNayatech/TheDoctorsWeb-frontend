@@ -4,22 +4,31 @@ import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
 import { patientProfile, getPatientTelemetryData} from '../../actions/adminActions';
-import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan} from '../../actions/HRActions';
+import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth} from '../../actions/HRActions';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge, Tabs, Tab, Modal, Spinner, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import { Badge, Tabs, Tab, Modal, Spinner} from 'react-bootstrap';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData'; 
 import { COMMENT_RESET, ADDING_TIME_SPENT_RESET, ADDING_CARE_PLAN_RESET } from '../../constants/HRConstants';
 import { Formik, Form } from 'formik';
 import {Link} from 'react-router-dom';
 import TextField from '../../components/Form/TextField';
+import clockImg from '../../assets/Images/clock.png'
+import moment from 'moment';
 
 const HRPatientProfile = (props) => {
     const alert = useAlert();
+    let remainingReadings;
 
   let patientid = props?.location?.state?.patientid;
+
+    const input = new Date();
+    const output = moment(input, "DD-MM-YY");
+    let currMonthName  = moment().format('MMMM');
+    let startDate = output.startOf('month').format('L');
+    let endDate = output.endOf('month').format('L');
   
   const dispatch = useDispatch();
   const [addTimeShow, setAddTimeShow] = useState(false);
@@ -32,7 +41,10 @@ const HRPatientProfile = (props) => {
   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
   const {hr} = useSelector(state => state.hrAuth);  
   const { careplan } = useSelector(state => state.careplan);
+  const { totalTime } = useSelector(state => state.totalTimeSpent);
   
+  let hrId = hr?._id;
+
   useEffect(() => {
     if(error){
         return alert.error(error);
@@ -47,6 +59,7 @@ const HRPatientProfile = (props) => {
     dispatch(patientProfile(patientid));
     dispatch(getPatientTelemetryData(patientid))
     dispatch(getPatientCarePlan(patientid));
+    dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
 
     if(commentSuccess) {
         alert.success('Comment added');
@@ -95,6 +108,7 @@ const HRPatientProfile = (props) => {
         }
         dispatch(carePlanOfPatient(patient?._id, hr?._id, description))
     }
+
 
   return <Fragment>
       <MetaData title="Patients Profile"/>
@@ -189,9 +203,17 @@ const HRPatientProfile = (props) => {
 
                             {patient && <Fragment>
                                 <div className="row">
-                                <div className="col-md-8">
+                                <div className="col-md-3">
                                     <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
                                 </div>
+                                
+                                
+                                <div className="col-md-5">
+                                    <img src={clockImg} className="img-responsive img-thumbnail" width="50" height="50"/>
+                                    <small className="total-time-spent">{totalTime} mins spent in month <span style={{color: '#F95800'}}>{currMonthName}</span> </small>
+                                </div>
+                                
+                                
 
                                 <div className="col-md-2">
                                     <button className="submit-btn mt-2" onClick={handleShow}><small>Add Time</small></button>
@@ -216,11 +238,12 @@ const HRPatientProfile = (props) => {
                                             <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
                                             
                                                 <p className="patient-profile-name">{patient?.firstname} {patient?.lastname} </p>
-                                        
+                                                
                                                 <Fragment>
                                                     <p className="patient-email">{patient?.email}</p>
                                                     <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
+                                                    <p style={{fontSize: 14}} className="text-center">Remaining <i className="check-icon">{remainingReadings = 16 - deviceData.length}</i></p>
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : <p className="patient-profile-name">Month Initial:  N/A</p>}
                                                 </Fragment>
                                         </div>    

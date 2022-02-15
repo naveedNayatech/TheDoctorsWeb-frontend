@@ -32,6 +32,7 @@ import AdminTimeReport from './Screens/Admin/AdminTimeReport';
 import AdminPrintReport from './Screens/Admin/AdminPrintReport';
 import EditPatient from './Screens/Admin/EditPatient';
 import InitialMonthReport from './Screens/Admin/InitialMonthReport';
+import PatientCPReport from './Screens/Admin/PatientCPReport';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -80,6 +81,7 @@ function App() {
         <ProtectedRoute exact path='/Admin/Report/Print' isAdmin={true} component={AdminPrintReport} />
         <ProtectedRoute exact path='/Patients/Edit' isAdmin={true} component={EditPatient} />
         <ProtectedRoute exact path="/Admin/Report/InitialMonth" isAdmin={true} component={InitialMonthReport} />
+        <ProtectedRoute exact path='/Admin/Report/patient' isAdmin={true} component={PatientCPReport} />
         {/* Staff Routes */}
         <Route exact path="/stafflogin" component={StaffLogin} />
         <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />

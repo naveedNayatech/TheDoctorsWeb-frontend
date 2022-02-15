@@ -189,8 +189,9 @@ const PatientProfile = (props) => {
                                 </div>
 
                             </div>
-
-                    <div className="col-md-3">
+                
+                    {deviceData && deviceData.length > 0 ? <Fragment>
+                        <div className="col-md-3">
                         <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
                     </div>
 
@@ -218,8 +219,7 @@ const PatientProfile = (props) => {
                             Spo2 Data
                         </Tab>
                     </Tabs>
-
-
+                    </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found</small>}
                     </Fragment> }
                 </div>
                 

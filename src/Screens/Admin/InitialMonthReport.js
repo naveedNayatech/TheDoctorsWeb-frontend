@@ -3,10 +3,12 @@ import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import { getInitialMonthReport } from '../../actions/HRActions';
+import { RESET_INITIAL_MONTH_DATA } from '../../constants/HRConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import moment from 'moment';
 import ExportReactCSV from '../../components/ExportReactCSV';
+
 
 const InitialMonthReport = () => {
 
@@ -20,6 +22,13 @@ const InitialMonthReport = () => {
             dispatch(getInitialMonthReport(month))
         }
     }, [month])
+
+    const resetHandler = () => {
+        dispatch({
+            type: RESET_INITIAL_MONTH_DATA
+        })
+        setMonth('');
+    }
 
   return (
     <Fragment>
@@ -62,31 +71,27 @@ const InitialMonthReport = () => {
                     <option value="December">December</option>
                     </select>
                 </div>
-                <hr/>
 
                  {/* Heading */}
-                 
-                     <div>
-
-                     <div className="row">   
+                       
+                     {initialMonthPatients && initialMonthPatients.length > 0 && (<Fragment>
+                    <hr />
+                    <div className="row">
                      <div className="col-md-8 col-lg-8">
                          <p style={{color: 'gray', fontWeight: 'bold'}}>Results Found: <span style={{color: '#F95800'}}>{initialMonthPatients && initialMonthPatients.length} </span></p>
                      </div>
-                    
-                     {initialMonthPatients && initialMonthPatients.length > 0 && (<Fragment>
-                        <div className="col-md-2 col-lg-2">
-                            <ExportReactCSV csvData={initialMonthPatients} fileName="InitialMonthPatients.csv" />
-                         </div>
-                     </Fragment>)}
-                     
 
-                     <div className="col-md-2">
-                         <button className="reset-btn">Reset</button>
-                     </div>
-                     </div>
-                     </div>
-                 
+                    <div className="col-md-2 col-lg-2">
+                        <ExportReactCSV csvData={initialMonthPatients} fileName="InitialMonthPatients.csv" />
+                        </div>
+
+                        <div className="col-md-2">
+                        <button className="reset-btn" onClick={resetHandler}>Reset</button>
+                    </div>
+                    </div>
                      <hr/>
+                    </Fragment>)}                     
+                
                 {/* Heading */}
 
 

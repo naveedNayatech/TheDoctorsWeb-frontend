@@ -1,6 +1,5 @@
 import React from 'react'
-import { CSVLink } from 'react-csv'
-import Button from 'react-bootstrap/Button';
+import { CSVLink } from 'react-csv';
 import moment from 'moment';
 
 export const ExportReactCSV = ({csvData, fileName}) => {

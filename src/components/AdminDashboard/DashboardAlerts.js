@@ -24,7 +24,9 @@ const DashboardAlerts = () => {
     return (
         <Fragment>
             <section className="alerts-section rounded-card">
-            <h5 className="title">Notifications</h5> 
+            {notifications && (<Fragment>
+            <h5 className="title">Notifications <span style={{color: 'gray'}}>( {notifications?.data?.length} )</span></h5> 
+            </Fragment>)}
 
             {notifications && notifications?.data?.map((noti, index) =>(
                <Fragment>

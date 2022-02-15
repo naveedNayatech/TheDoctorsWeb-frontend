@@ -15,6 +15,7 @@ import {
     INITIAL_MONTH_REPORT_REQUEST,
     INITIAL_MONTH_REPORT_SUCCESS,
     INITIAL_MONTH_REPORT_FAIL,
+    RESET_INITIAL_MONTH_DATA,
     RESET_TIME_REPORT_DATA,
     ADDING_CARE_PLAN_SUCCESS,
     ADDING_CARE_PLAN_FAIL,
@@ -24,6 +25,11 @@ import {
     UPDATE_CARE_PLAN_SUCCESS,
     UPDATE_CARE_PLAN_FAIL,
     UPDATE_CARE_PLAN_RESET,
+    TIME_SPENT_OF_CURRENT_MONTH_SUCCESS,
+    TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+    PATIENT_CP_REPORT_REQUEST,
+    PATIENT_CP_REPORT_SUCCESS,
+    PATIENT_CP_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -202,12 +208,11 @@ export const initialMonthReportReducers = (state = {initialMonthPatients:[]}, ac
                 initialMonthPatients: action.payload
             }
         
-        // case RESET_TIME_REPORT_DATA: 
-        // return {
-        //     loading: false,
-        //     targets: null,
-        //     totalTime: 0
-        // }
+        case RESET_INITIAL_MONTH_DATA:
+            return {
+                loading: false,
+                initialMonthPatients: null
+            }
 
         case INITIAL_MONTH_REPORT_FAIL:
             return {
@@ -264,4 +269,61 @@ export const carePlanReducers = (state={careplan:{}}, action) => {
     default: 
     return state;
     }
+}
+
+export const timeSpentCurrentMonthReducer = (state={totalTime:0 }, action) => {
+    switch (action.type) {
+        case TIME_SPENT_OF_CURRENT_MONTH_SUCCESS:
+            return {
+                totalTime: action.payload.totalTime
+            }
+        
+        case TIME_SPENT_OF_CURRENT_MONTH_FAIL: 
+        return {
+            ...state,
+            loading: false,
+            error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }
+         
+    default: 
+    return state;
+    }
+}
+
+export const patientCPReportReducers = (state = {patientCompleteCP:[]}, action) => {
+    switch (action.type) {
+    
+        case PATIENT_CP_REPORT_REQUEST:
+            return {
+                loading: true,
+            }
+        
+        case PATIENT_CP_REPORT_SUCCESS:
+            return {
+                loading: false,
+                patientCompleteCP: action.payload
+            }
+
+        case PATIENT_CP_REPORT_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }  
+         
+        default: 
+            return state; 
+    } 
 }

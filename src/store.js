@@ -23,7 +23,10 @@ import { hrtimeSpentReducers } from './reducers/HRReducers';
 import { hrTimeReportReducers } from './reducers/HRReducers';
 import { carePlanReducers } from './reducers/HRReducers';
 import {initialMonthReportReducers} from './reducers/HRReducers';
+import { timeSpentCurrentMonthReducer } from './reducers/HRReducers';
 import {adminNotificationsReducers} from './reducers/adminReducers';
+import { patientCPReportReducers } from './reducers/HRReducers';
+
 const reducer = combineReducers({
     admin: adminReducers,
     auth: authReducers,
@@ -47,7 +50,9 @@ const reducer = combineReducers({
     adminStat: adminStatsReducers,
     careplan: carePlanReducers,
     initialMonthReport:initialMonthReportReducers,
-    adminNoti: adminNotificationsReducers
+    adminNoti: adminNotificationsReducers,
+    totalTimeSpent: timeSpentCurrentMonthReducer,
+    completeCP : patientCPReportReducers
 })
 
 let initialState = {}

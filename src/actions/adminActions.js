@@ -1264,6 +1264,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
          
             console.log('Putting PatientId in device');
             device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
+                assignedTime: Date.now(),
                 assigned_patient_id: patientId 
             }, {
                 headers: {

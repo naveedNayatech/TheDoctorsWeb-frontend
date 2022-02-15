@@ -22,6 +22,11 @@ import {
     PATIENT_CARE_PLAN_FAIL,
     UPDATE_CARE_PLAN_SUCCESS,
     UPDATE_CARE_PLAN_FAIL,
+    TIME_SPENT_OF_CURRENT_MONTH_SUCCESS,
+    TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+    PATIENT_CP_REPORT_REQUEST,
+    PATIENT_CP_REPORT_SUCCESS,
+    PATIENT_CP_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -175,6 +180,33 @@ export const getTimeReport = (patientId, hrId, startDate, endDate) => async(disp
     }   
 }
 
+
+export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
+    try {
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime/${hrId}/${patientId}`, {
+                    startDate:startDate,
+                    endDate: endDate
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: TIME_SPENT_OF_CURRENT_MONTH_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
 export const getInitialMonthReport = (month) => async(dispatch) => {
     try {
         dispatch({ 
@@ -199,6 +231,35 @@ export const getInitialMonthReport = (month) => async(dispatch) => {
     } catch (error) {
        dispatch({
            type: INITIAL_MONTH_REPORT_FAIL,
+           payload: error.message
+       })
+    }
+} 
+
+export const getCompletePatientCP = () => async(dispatch) => {
+    try {
+        dispatch({ 
+            type: PATIENT_CP_REPORT_REQUEST
+        });
+
+        const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/general/report/initialsetup`, {
+        
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });    
+           
+        dispatch({ 
+            type: PATIENT_CP_REPORT_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: PATIENT_CP_REPORT_FAIL,
            payload: error.message
        })
     }

@@ -57,21 +57,26 @@ const Sidebar = () => {
                 </li>
 
                 <li className="nav_link">
+                    <NavLink key="initialmonthreport" to="/Admin/Report/InitialMonth" activeClassName="link-name-active">
+                        <i className="bx bx-grid-alt"></i>
+                        <span className="link_name">Initial Month Report</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
+                    <NavLink key="initialmonthreport" to="/Admin/Report/patient" activeClassName="link-name-active">
+                        <i className='bx bxs-report'></i>
+                        <span className="link_name">Patient CP</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
                     <NavLink key="inventory" to="/devices" activeClassName="link-name-active">
                          <i className='bx bxs-data'></i>
                         <span className="link_name">Inventory</span>
                     </NavLink>
                 </li>
 
-                <li className="nav_link">
-                    <NavLink to="/Admin/Report/InitialMonth">
-                        <i className='bx bxs-data'></i>
-                        <span className="link_name" >Initial Month Report</span>     
-                    </NavLink>
-                </li>
-
-               
-                <br/>
                 <li>
                     <NavLink key="logout" to="#" onClick={logoutHandler}>
                         <i className="bx bx-log-out" style={{color: 'red'}}></i>
