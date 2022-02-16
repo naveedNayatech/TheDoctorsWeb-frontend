@@ -788,9 +788,37 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
            payload: error.message
        })
     }   
-   }
+}
 
+export const sortTelemetartData = (patientId, sortDate) => async(dispatch) => {    
+    try {
+       dispatch({ 
+           type: GET_PATIENT_DEVICE_DATA_REQUEST
+       });
+       
+       const token = JSON. parse(localStorage.getItem('token'));
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData`, {
+                patientId: patientId,
+                specificDate: sortDate,
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+                }
+           });
    
+       dispatch({
+           type: GET_PATIENT_DEVICE_DATA_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_PATIENT_DEVICE_DATA_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
    export const insertComment = (deviceid, comment, patientid) => async(dispatch) => {
     
     try {

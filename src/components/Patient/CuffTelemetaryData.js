@@ -135,6 +135,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
                 <br/><br/><br/>
             </div> 
             ))}
+
+            <hr />
                     
     </Fragment>;
 };

@@ -3,7 +3,7 @@ import MetaData from '../../layouts/MetaData';
 import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
-import { patientProfile, getPatientTelemetryData} from '../../actions/adminActions';
+import { patientProfile, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
 import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth} from '../../actions/HRActions';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,8 @@ const HRPatientProfile = (props) => {
     let currMonthName  = moment().format('MMMM');
     let startDate = output.startOf('month').format('L');
     let endDate = output.endOf('month').format('L');
+
+    const [sortDate, setSortDate] = useState('');
   
   const dispatch = useDispatch();
   const [addTimeShow, setAddTimeShow] = useState(false);
@@ -107,6 +109,19 @@ const HRPatientProfile = (props) => {
             return
         }
         dispatch(carePlanOfPatient(patient?._id, hr?._id, description))
+    }
+
+    const sortPatientTelemetaryData = (date) => {
+        const dateToFind = new Date(date).toLocaleDateString('zh-Hans-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
+        dispatch(sortTelemetartData(patientid, dateToFind));
+    }
+
+    const refreshHandler = () => {
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientCarePlan(patientid));
+        dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
+        setSortDate('');
     }
 
 
@@ -243,7 +258,9 @@ const HRPatientProfile = (props) => {
                                                     <p className="patient-email">{patient?.email}</p>
                                                     <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
-                                                    <p style={{fontSize: 14}} className="text-center">Remaining <i className="check-icon">{remainingReadings = 16 - deviceData.length}</i></p>
+                                                    {deviceData && (<Fragment>
+                                                        <p style={{fontSize: 14}} className="text-center">Remaining <i className="check-icon">{remainingReadings = 16 - deviceData.length}</i></p>
+                                                    </Fragment>)}
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : <p className="patient-profile-name">Month Initial:  N/A</p>}
                                                 </Fragment>
                                         </div>    
@@ -349,11 +366,24 @@ const HRPatientProfile = (props) => {
 
 
                         {/* Patient Telemetary Data */}
-                        <div className="col-md-3">
-                            <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                        {deviceData && deviceData.length > 0 ? <Fragment>
+                        <br/><br/>
+                        <div className="row">
+                            <div className="col-md-9">
+                               <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                            </div>
+
+                            <div className="col-md-3">
+                                <input type="date" 
+                                className="form-control"
+                                value={sortDate} 
+                                onChange={(e) => {sortPatientTelemetaryData(e.target.value); setSortDate(e.target.value)}}
+                                />
+                            </div>
                         </div>
+                        
 
-
+                    
                         <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
                             <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
                             {deviceData && deviceData.map((devicedata, index) => (
@@ -375,6 +405,7 @@ const HRPatientProfile = (props) => {
                                 ))}
                             </Tab>
                         </Tabs>   
+                        </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <Link onClick={refreshHandler}>Refresh List</Link></small>}
                         </Fragment>
                         }
                         </div>

@@ -5,21 +5,22 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData'; 
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData} from '../../actions/adminActions';
+import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
 import { getPatientCarePlan } from '../../actions/HRActions';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Form, Image, Button, Badge , Tabs, Tab} from 'react-bootstrap';
-import DatePicker from "react-datepicker";
+import { Badge , Tabs, Tab} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 
 const PatientProfile = (props) => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
+
+    const [sortDate, setSortDate] = useState('');
 
     let searchedDate;
     let patientid = props?.location?.state?.patientid;
@@ -49,11 +50,21 @@ const PatientProfile = (props) => {
         dispatch(assignDeviceToPatient(patientid, deviceid));
     }
 
-    const removeAssignDevice = (device,patientId) => {
-        console.log('Device id is ' + device._id);
-        console.log('Patient id is ' + patientId);
+        const sortPatientTelemetaryData = (date) => {
+            const dateToFind = new Date(date).toLocaleDateString('zh-Hans-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
+            dispatch(sortTelemetartData(patientid, dateToFind));
+        }
+    
 
+    const removeAssignDevice = (device,patientId) => {
          dispatch(removeAssignedDevice(device, patientid));
+    }
+
+    const refreshHandler = () => {
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientCarePlan(patientid));
+        setSortDate('');
     }
 
     return (
@@ -191,9 +202,20 @@ const PatientProfile = (props) => {
                             </div>
                 
                     {deviceData && deviceData.length > 0 ? <Fragment>
-                        <div className="col-md-3">
-                        <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
-                    </div>
+                        <br/><br/>
+                        <div className="row">
+                            <div className="col-md-9">
+                                <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                            </div>
+
+                            <div className="col-md-3">
+                                <input type="date" 
+                                className="form-control"
+                                value={sortDate} 
+                                onChange={(e) => {sortPatientTelemetaryData(e.target.value); setSortDate(e.target.value)}}
+                                />
+                            </div>
+                        </div>
 
                     <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
                         <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
@@ -215,11 +237,11 @@ const PatientProfile = (props) => {
                             </div>
                         ))}
                         </Tab>
-                        <Tab eventKey="spo2" title="Spo2 ( Telemetary Data )">
+                        {/* <Tab eventKey="spo2" title="Spo2 ( Telemetary Data )">
                             Spo2 Data
-                        </Tab>
+                        </Tab> */}
                     </Tabs>
-                    </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found</small>}
+                    </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <Link onClick={refreshHandler}>Refresh List</Link></small>}
                     </Fragment> }
                 </div>
                 
