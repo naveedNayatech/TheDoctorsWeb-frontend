@@ -207,21 +207,49 @@ export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) =
     }   
 }
 
-export const getInitialMonthReport = (month) => async(dispatch) => {
+export const getInitialMonthReport = (hrId, doctorId, month) => async(dispatch) => {
     try {
         dispatch({ 
             type: INITIAL_MONTH_REPORT_REQUEST
         });
 
-       const token = JSON. parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/general/report/initialsetup`, {
-                month: month
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
+       const token = JSON. parse(localStorage.getItem('token'));
+       let data;
+       
+       if(month){
+        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+            month: month
+       }, {
+        headers: {
+            "Authorization":`Bearer ${token}`
+         }
+       });   
+       }
+
+       if(month && hrId){
+        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+            month: month,
+            hrId:hrId
+       }, {
+        headers: {
+            "Authorization":`Bearer ${token}`
+         }
+       });   
+       }
+
+       if(month && doctorId){
+           console.log('Doctor ID is ' + doctorId);
+        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+            month: month,
+            doctorId:doctorId
+       }, {
+        headers: {
+            "Authorization":`Bearer ${token}`
+         }
+       });   
+       }
+        
            
         dispatch({ 
             type: INITIAL_MONTH_REPORT_SUCCESS,

@@ -107,6 +107,61 @@ export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
     }
 }
 
+// Get Doctor's Patient List
+export const getDoctorsPatientList = (docId) => async(dispatch) => {
+    try {
+        dispatch({
+            type: ALL_PATIENTS_REQUEST,
+        })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${docId}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: ALL_PATIENTS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_PATIENTS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const getHrsPatientList = (hrId) => async(dispatch) => {
+    try {
+        dispatch({
+            type: ALL_PATIENTS_REQUEST,
+        })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+        console.log('HR ID is ' + hrId);
+        const { data } = await axios.get(`${Prod01}/hr/patientlist/${hrId}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            type: ALL_PATIENTS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_PATIENTS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
 // Search Patient By Name
 export const searchPatient = (searchValue) => async(dispatch) => {
     try {

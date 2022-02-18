@@ -3,31 +3,56 @@ import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import { getInitialMonthReport } from '../../actions/HRActions';
+import {  
+    getDoctors,
+    getHrLists
+} from '../../actions/adminActions';
 import { RESET_INITIAL_MONTH_DATA } from '../../constants/HRConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import moment from 'moment';
 import ExportReactCSV from '../../components/ExportReactCSV';
-
+import { useAlert } from 'react-alert';
 
 const InitialMonthReport = () => {
+    const alert = useAlert();
 
     const [month, setMonth] = useState('');
     const dispatch = useDispatch();
 
-    const {initialMonthPatients} = useSelector(state => state.initialMonthReport);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [resPerPage, setResPerPage] = useState(10);
+
+    const {error, initialMonthPatients} = useSelector(state => state.initialMonthReport);
+    const { doctors } = useSelector(state => state.doctor);
+    const { hrs} = useSelector(state => state.hrslist);
+
+    const [doctorId, setDoctorId] = useState('');
+    const [hrId, setHrId] = useState('');
 
     useEffect(() => {
-        if(month){
-            dispatch(getInitialMonthReport(month))
+        if(error){
+            alert.error(error);
+            return 
         }
-    }, [month])
+        dispatch(getDoctors(resPerPage, currentPage));
+        dispatch(getHrLists(resPerPage, currentPage));
+    }, [error]);
 
     const resetHandler = () => {
         dispatch({
             type: RESET_INITIAL_MONTH_DATA
         })
         setMonth('');
+        setDoctorId('');
+        setHrId('');
+    }
+
+    const generateInitialReport = () => {
+        // console.log('Month is  '+ month);
+        // console.log('Hr Id is  '+ hrId);
+        // console.log('Doctor id is ' + doctorId);
+        dispatch(getInitialMonthReport(hrId, doctorId, month))
     }
 
   return (
@@ -47,34 +72,74 @@ const InitialMonthReport = () => {
                 </div>
                 <hr />
                 
-                <div className="col-md-4">
+                <div className="row">
+                <div className="col-md-3">
                 <label htmlFor="from">Select Patient </label>
-                    <select 
-                        label="From" 
-                        name="from" 
-                        className="form-control"
-                        value={month}
-                        onChange={(e) => setMonth(e.target.value)}
-                    >
-                    <option value="SelectMonth">Select Month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
+                        <select 
+                            label="From" 
+                            name="from" 
+                            className="form-control"
+                            value={month}
+                            onChange={(e) => setMonth(e.target.value)}
+                        >
+                            <option value="SelectMonth">Select Month</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+
+                    <div className="col-md-3">
+                        <label htmlFor="doctor">Select Doctor </label>
+                            <select 
+                            label="doctor" 
+                            name="doctor" 
+                            className="form-control"
+                            value={doctorId}
+                            onChange={(e) => setDoctorId(e.target.value)}
+                            >
+                            <option value="undefined">Select Doctor</option>
+                            {doctors && doctors.map((doc, index) => (
+                                <option value={doc?._id} key={index}> {doc?.firstname} {doc?.lastname}</option>
+                            ))}    
                     </select>
+                    </div>
+
+                    <div className="col-md-3">
+                        <label htmlFor="doctor">Select HR </label>
+                            <select 
+                            label="hr" 
+                            name="hr" 
+                            className="form-control"
+                            value={hrId}
+                            onChange={(e) => setHrId(e.target.value)}
+                            >
+                            <option value="undefined">Select HR</option>  
+                            {hrs && hrs.map((hr, index) => (
+                                <option key={index} value={hr?._id}> {hr?.firstname} {hr?.lastname}</option>
+                            ))}  
+                    </select>
+                    </div>
+
+                    <div className="col-md-3">
+                        <label>&nbsp;</label>
+                        <button className="btn btn-success btn-block" onClick={generateInitialReport}>Search</button>
+                    </div>
+                
                 </div>
 
                  {/* Heading */}
                        
-                     {initialMonthPatients && initialMonthPatients.length > 0 && (<Fragment>
+                     {initialMonthPatients && initialMonthPatients?.data?.length > 0 && (<Fragment>
                     <hr />
                     <div className="row">
                      <div className="col-md-8 col-lg-8">
@@ -82,8 +147,8 @@ const InitialMonthReport = () => {
                      </div>
 
                     <div className="col-md-2 col-lg-2">
-                        <ExportReactCSV csvData={initialMonthPatients} fileName="InitialMonthPatients.csv" />
-                        </div>
+                        <ExportReactCSV csvData={initialMonthPatients?.data} fileName="InitialMonthPatients.csv" />
+                    </div>
 
                         <div className="col-md-2">
                         <button className="reset-btn" onClick={resetHandler}>Reset</button>
@@ -95,13 +160,13 @@ const InitialMonthReport = () => {
                 {/* Heading */}
 
 
-                {initialMonthPatients && initialMonthPatients.map((initialreport, index) => (
+                {initialMonthPatients && initialMonthPatients?.data?.map((initialreport, index) => (
                     <Fragment>
                         <div className="row" key={index}>
                            <div className="col-md-1">
                                <span style={{color: 'gray', fontWeight: 'bold'}}>{index}</span>
                            </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                                 <b>Patient Details</b>
                                 <br/>
                                 <span className="profile-label">Name: {initialreport?.firstname} {initialreport?.lastname}</span><br/>
@@ -109,7 +174,7 @@ const InitialMonthReport = () => {
                                 <span className="profile-label">Gender: <Badge bg="info text-white">{initialreport?.gender}</Badge></span><br/>
                                 <span className="profile-label">Email: {initialreport?.email}</span><br/>
                                 <span className="profile-label">Phone 1: {initialreport?.phone1}</span> <br/>
-                                <span className="profile-label">Diseases: {initialreport?.diseases}</span>
+                                <span className="profile-label">Diseases: {initialreport?.diseases}</span> <br/>
                                 <span className="profile-label">Initial Month: <Badge bg="danger text-white"> {month} </Badge></span>
                             </div>
 
@@ -117,10 +182,17 @@ const InitialMonthReport = () => {
                                 <b>Doctor Details</b>
                                 <br/>
                                 <span className="profile-label">Name: {initialreport?.assigned_doctor_id?.firstname} {initialreport?.assigned_doctor_id?.lastname}</span><br/>
-                                <span className="profile-label">Gender: <Badge bg="danger text-white">Male</Badge></span><br/>
+                                <span className="profile-label">Gender: <Badge bg="danger text-white">{initialreport?.assigned_doctor_id?.gender}</Badge></span><br/>
                             </div>
 
-                            <div className="col-md-4">
+                            <div className="col-md-2">
+                                <b>HR Details</b>
+                                <br/>
+                                <span className="profile-label">Name: {initialreport?.assigned_hr_id?.firstname} {initialreport?.assigned_hr_id?.lastname}</span><br/>
+                                <span className="profile-label">Gender: <Badge bg="danger text-white">{initialreport?.assigned_hr_id?.gender}</Badge></span><br/>
+                            </div>
+
+                            <div className="col-md-3">
                                 <b>Device Details</b>
                                 <br/>
                                 {initialreport?.assigned_devices && initialreport?.assigned_devices.map((device, index) => (

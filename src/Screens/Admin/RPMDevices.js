@@ -98,54 +98,54 @@ const RPMDevices = (props) => {
                 
                     <div className="home-content">
                     <div className="row">
-                                    <div className="col-md-4">
-                                        {deviceCount ? 
-                                        <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount < 10 ? '0'+deviceCount : deviceCount} )</span> </h5> : null
-                                        }
-                                    </div>
+                        <div className="col-md-4">
+                            {deviceCount ? 
+                            <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount < 10 ? '0'+deviceCount : deviceCount} )</span> </h5> : null
+                            }
+                        </div>
 
-                                    <div className="col-md-2">
-                                        <input 
-                                        type="text"
-                                        className="form-control shadow-none"
-                                        placeholder="Search By ID ..."
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        onBlur={(e) => {searchDevice(e.target.value)}}
-                                        style={{outline: 'none'}}
-                                         />
-                                    </div>
+                        <div className="col-md-2">
+                            <input 
+                            type="text"
+                            className="form-control shadow-none"
+                            placeholder="Search By ID ..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            onBlur={(e) => {searchDevice(e.target.value)}}
+                            style={{outline: 'none'}}
+                                />
+                        </div>
 
 
-                                    <div className="col-md-2">
-                                        <select name="listDevice" 
-                                            className="form-control shadow-none"
-                                            defaultValue={'List Device By'}
-                                            onChange={sortDevices}
-                                        >
-                                            <option disabled>List Device By</option>
-                                            <option value="true"> In Stock</option>
-                                            <option value="false"> Out Of Stock</option>
-                                        </select>
-                                    </div>
+                        <div className="col-md-2">
+                            <select name="listDevice" 
+                                className="form-control shadow-none"
+                                defaultValue={'List Device By'}
+                                onChange={sortDevices}
+                            >
+                                <option disabled>List Device By</option>
+                                <option value="true"> In Stock</option>
+                                <option value="false"> Out Of Stock</option>
+                            </select>
+                        </div>
 
-                                    <div className="col-md-2">
-                                        <select name="listDevice" 
-                                            className="form-control shadow-none"
-                                             defaultValue={'Sort By'}
-                                             onChange={sortDevicesByBroken}
-                                        >
-                                            <option disabled>Sort By</option>
-                                            <option value="true"> Broken</option>
-                                        </select>
-                                    </div>
+                        <div className="col-md-2">
+                            <select name="listDevice" 
+                                className="form-control shadow-none"
+                                    defaultValue={'Sort By'}
+                                    onChange={sortDevicesByBroken}
+                            >
+                                <option disabled>Sort By</option>
+                                <option value="true"> Broken</option>
+                            </select>
+                        </div>
 
-                                    <div className="col-md-2 mt-2 pt-2">
-                                        <Link to="/device" style={{ float: 'right'}}>
-                                            <small>Add New RPM Device</small>
-                                        </Link>
-                                    </div>
-                                </div>
+                        <div className="col-md-2 mt-2 pt-2">
+                            <Link to="/device" style={{ float: 'right'}}>
+                                <small>Add New RPM Device</small>
+                            </Link>
+                        </div>
+                     </div>
                             <hr className="blue-hr"/> 
                         </div>
 

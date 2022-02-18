@@ -4,7 +4,17 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPatients, updatePatientConsentStatus, searchPatient, patientDeActivate, patientActivate } from '../../actions/adminActions';
+import { 
+    getPatients, 
+    updatePatientConsentStatus, 
+    searchPatient, 
+    patientDeActivate, 
+    patientActivate, 
+    getDoctors,
+    getHrLists,
+    getDoctorsPatientList,
+    getHrsPatientList
+} from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import {Badge, Table, Modal } from 'react-bootstrap';
@@ -20,9 +30,13 @@ const PatientsList = () => {
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [patientModel, setPatientModel] = useState(null);
     const [patientToDelete, setPatientToDelete] = useState(null);
+    const [doctorId, setDoctorId] = useState('');
+    const [hrId, setHrId] = useState('');
 
     const alert = useAlert();
     const { loading, error, patients, isUpdated} = useSelector(state => state.admin);
+    const { doctors } = useSelector(state => state.doctor);
+    const { hrs} = useSelector(state => state.hrslist);
     const { totalPatients } = useSelector(state => state.adminStat);
     const [keyword, setKeyword] = useState('');
     const [isSearch, setIsSearch] = useState(false);
@@ -38,12 +52,43 @@ const PatientsList = () => {
             alert.success('Status Changed');
             dispatch({type: UPDATE_PATIENT_RESET});
             dispatch(getPatients(resPerPage, currentPage));
+
             setSmShow(false);
         }
         dispatch(getPatients(resPerPage, currentPage));
+        dispatch(getDoctors(resPerPage, currentPage));
+        dispatch(getHrLists(resPerPage, currentPage));
 
-    }, [dispatch, alert, error, isUpdated, currentPage])
 
+    }, [dispatch, alert, error, isUpdated, currentPage]);
+
+
+        const searchPatientByDoctor = (id) => {
+            console.log('Hello in searchPatientByHR' + id );
+            if(id === "undefined" || ''){
+                dispatch(getPatients(resPerPage, currentPage));
+                dispatch(getDoctors(resPerPage, currentPage));
+                dispatch(getHrLists(resPerPage, currentPage));
+                return
+            }
+            dispatch(getDoctorsPatientList(id));
+            setHrId('');
+        }
+
+
+        const searchPatientByHR = (id) => {
+            console.log('Hello in searchPatientByHR ' + id );
+            if(id === "undefined" || ''){
+                dispatch(getPatients(resPerPage, currentPage));
+                dispatch(getDoctors(resPerPage, currentPage));
+                dispatch(getHrLists(resPerPage, currentPage));
+                return
+            }
+            dispatch(getHrsPatientList(id));
+            setDoctorId('');
+        }
+       
+    
     
     const getPatientsList = () => {
        dispatch(getPatients(resPerPage, currentPage));
@@ -68,6 +113,8 @@ const PatientsList = () => {
         else {
             setIsSearch(true);
             dispatch(searchPatient(searchValue));
+            setHrId('');
+            setDoctorId('')
         }
     }  
 
@@ -77,6 +124,15 @@ const PatientsList = () => {
 
     const activatePatient = () => {
         dispatch(patientActivate(patientModel))
+    }
+
+    const refreshHandler = () => {
+        dispatch(getPatients(resPerPage, currentPage));
+        dispatch(getDoctors(resPerPage, currentPage));
+        dispatch(getHrLists(resPerPage, currentPage));
+        setHrId('');
+        setDoctorId(''); 
+        setSearch('');
     }
 
     return (
@@ -101,16 +157,43 @@ const PatientsList = () => {
 
                             
                             <Link to="adminDashboard" className="go-back-btn"><i class='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn"><i class='bx bx-refresh'></i></button> &nbsp;
+                            <button className="btn refresh-btn" onClick={refreshHandler}><i class='bx bx-refresh'></i></button> &nbsp;
                             <Link to="/addpatient" className="add-staff-btn">Add New Patient</Link>
                                                         
                         </div>
 
                         <div className="row">
-                            <div className="col-md-9">
+                            <div className="col-md-5">
                                 <h5 className="pt-2 mt-2">Patients List <span style={{color: '#F95800'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
                             </div>
-                             
+
+                            <div className="col-md-2">
+                                <select 
+                                className="form-control"
+                                value={doctorId}
+                                onChange={(e) => {searchPatientByDoctor(e.target.value); setDoctorId(e.target.value)}}
+                                >
+                                    <option value="undefined">Search By Dr.</option>
+                                    {doctors && doctors.map((doc, index) => (
+                                        <option value={doc?._id} key={index}>{doc?.firstname} {doc?.lastname}</option>                                         
+                                    ))}
+                                </select>    
+                            </div>
+
+                            <div className="col-md-2">
+                                <select 
+                                className="form-control"
+                                value={hrId}
+                                onChange={(e) => {searchPatientByHR(e.target.value); setHrId(e.target.value)}} 
+                                >
+                                    <option value="undefined">Search By HR</option>
+                                    {hrs && hrs.map((hr, index) => (
+                                        <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname}</option>
+                                    ))}
+                                    
+                                </select>    
+                            </div>
+
                             <div className="col-md-2">
                                 <div style={{width: 200}}>
                                     <input type="text" 

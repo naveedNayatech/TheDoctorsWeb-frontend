@@ -85,7 +85,7 @@ import {
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
-export const adminReducers = (state = { patients: [], doctors: []}, action) => {
+export const adminReducers = (state = { patients: []}, action) => {
     switch(action.type) {
         case ALL_PATIENTS_REQUEST: 
         return { 
@@ -104,24 +104,6 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
         return { 
             loading: false,  
             error: action.payload        
-        }
-
-        case ALL_DOCTORS_REQUEST:
-            return { 
-                loading: true, 
-                doctors: []    
-            }
-
-        case ALL_DOCTORS_SUCCESS:
-            return { 
-                loading: false,  
-                doctors: action.payload 
-            }
-            
-        case ALL_DOCTORS_FAIL:
-            return { 
-                loading: false,  
-                error: action.payload
         }
 
         case UPDATE_PATIENT_SUCCESS: 
@@ -162,13 +144,45 @@ export const adminReducers = (state = { patients: [], doctors: []}, action) => {
         return { 
             ...state,
             error: null 
-
         }
 
         default: 
          return state;
     }
 } 
+
+export const doctorReducers = (state = {doctors: []}, action) => {
+    switch(action.type) {
+        case ALL_DOCTORS_REQUEST:
+            return { 
+                loading: true,     
+            }
+
+        case ALL_DOCTORS_SUCCESS:
+            return { 
+                loading: false,  
+                doctors: action.payload 
+            }
+            
+        case ALL_DOCTORS_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+            }        
+        
+        default:{
+            return state
+            }     
+    }
+}
+
+
 
 export const newDoctorReducers = (state = {}, action) => {
     switch (action.type) {
@@ -270,20 +284,20 @@ export const doctorpatientsReducers = (state = {}, action) => {
     } 
 }
 
-export const doctorReducers = (state = {doctor: {}}, action) => {
-    switch(action.type) {
+// export const doctorReducers = (state = {doctor: {}}, action) => {
+    // switch(action.type) {
     
-        case CLEAR_ERRORS: 
-            return {
-               ...state,
-               error: null   
-            }        
+    //     case CLEAR_ERRORS: 
+    //         return {
+    //            ...state,
+    //            error: null   
+    //         }        
         
-        default:{
-            return state
-            }     
-    }
-}
+    //     default:{
+    //         return state
+    //         }     
+    // }
+// }
 
 export const patientProfileReducers = (state = {patient: {}}, action) => {
     switch (action.type) {

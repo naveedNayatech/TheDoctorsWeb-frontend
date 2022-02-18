@@ -26,7 +26,8 @@ const DoctorsList = () => {
     const [doctorModel, setDoctorModel] = useState(null);
     const [doctorToDelete, setDoctorToDelete] = useState(null);
 
-    const { loading, error, doctors, isUpdated} = useSelector(state => state.admin);
+    const { loading, error, isUpdated} = useSelector(state => state.admin);
+    const { doctors } = useSelector(state => state.doctor);
     const { totalDrs } = useSelector(state => state.adminStat);
         
     useEffect(() =>{
