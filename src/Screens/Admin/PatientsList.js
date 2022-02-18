@@ -132,7 +132,7 @@ const PatientsList = () => {
         dispatch(getHrLists(resPerPage, currentPage));
         setHrId('');
         setDoctorId(''); 
-        setSearch('');
+        setKeyword('');
     }
 
     return (
