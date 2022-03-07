@@ -10,6 +10,7 @@ import Loader from '../../layouts/Loader';
 import Pagination from 'react-js-pagination';
 import { Badge, Modal, Table } from 'react-bootstrap';
 import { DELETE_RPM_DEVICE_RESET } from '../../constants/adminConstants';
+import InventoryAnalytics from '../../components/inventory/InventoryAnalytics';
 
 const RPMDevices = (props) => {
 
@@ -93,22 +94,23 @@ const RPMDevices = (props) => {
                 <section className="home-section">
                 {/* TopBar */}
                 <TopBar />
+
+
                 {loading ? <Loader /> : ( <Fragment>    
                 <div className="shadow-lg p-3 mb-2 mr-4 ml-4 rounded">
-                
                     <div className="home-content">
                     <div className="row">
-                        <div className="col-md-4">
+                        <div className="col-md-3">
                             {deviceCount ? 
                             <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount < 10 ? '0'+deviceCount : deviceCount} )</span> </h5> : null
                             }
                         </div>
 
-                        <div className="col-md-2">
+                        <div className="col-md-3">
                             <input 
                             type="text"
                             className="form-control shadow-none"
-                            placeholder="Search By ID ..."
+                            placeholder="Find By ID or IMEI..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             onBlur={(e) => {searchDevice(e.target.value)}}
@@ -149,7 +151,7 @@ const RPMDevices = (props) => {
                             <hr className="blue-hr"/> 
                         </div>
 
-                        {/* Devices List Card */}
+                        <InventoryAnalytics />        
                           {/* Devices List Card */}
                           <div className="col-md-12">
                          <Fragment>
@@ -161,8 +163,8 @@ const RPMDevices = (props) => {
                                     <th>IMEI</th>
                                     <th>Device Type </th>
                                     <th>Broken</th>
-                                    <th>Firmware Version</th>
                                     <th>Status</th>
+                                    <th>To</th>
                                     <th>Action</th>
                                 </tr> 
                             </thead>
@@ -177,8 +179,9 @@ const RPMDevices = (props) => {
                                         : device.deviceType === 'spO2' ? <td><Badge bg="info text-white" className="male-tag">Spo2</Badge></td> : 
                                         <td><Badge bg="danger text-white" className="male-tag">Weight</Badge></td>}
                                     {device?.broken === true ? <td style={{color: 'red', fontWeight: 'bold'}}>Broken</td> : <td>unbroken</td> }
-                                    <td>{device?.firmwareVersion ? device?.firmwareVersion : 'N/A'}</td>
-                                    {device?.assigned_patient_id ? <td style={{backgroundColor: 'gray', color: '#FFF'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
+                                    
+                                    {device?.assigned_patient_id ? <td style={{backgroundColor: 'green', color: '#FFF'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
+                                    <td>{device?.assigned_patient_id ? device?.assigned_patient_id?.lastname : 'N/A'}</td>
                                     <td>
                                         <Link to={{ pathname:"/devicedetails", state: {id: device?._id}}} className="rounded-button-profile"><i className='bx bx-list-ul'></i></Link>
                                         <Link to={{ pathname:"/updatedevice", state: {deviceDetails: device}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>                       

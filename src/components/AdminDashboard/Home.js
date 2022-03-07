@@ -5,7 +5,6 @@ import { useAlert } from 'react-alert';
 import { getPatients, getAllDevices, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import {Table, Badge} from 'react-bootstrap';
-import DashboardAlerts from '../AdminDashboard/DashboardAlerts';
 import DashboardGraphs from '../AdminDashboard/DashboardGraphs';
 import moment from 'moment';
 
@@ -33,24 +32,24 @@ const Home = () => {
             {/*  Home content  */}
             <div className="home-content">
                 <div className="overview-boxes">
-                <div className="box box0">
-                        <div className="left-side">
-                            <div className="box_topic">Total Patients</div>
-                            <div className="number">{totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients }</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
+                        <div className="box box0">
+                                <div className="left-side">
+                                    <Link to="/patients" className="box_topic">Total Patients</Link>
+                                    <div className="number">{totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients }</div>
+                                    <div className="indicator">
+                                        <i className="bx bx-up-arrow-alt down"></i>
+                                        <span className="text">Up from Yesterday</span>
+                                    </div>
+                                </div>
+                                <i className="bx bx-user cart"></i>
                         </div>
-                        <i className="bx bx-user cart"></i>
-                    </div>
 
                     <div className="box box1">
                         <div className="left-side">
-                            <div className="box_topic">Inventory</div>
+                            <Link to="/devices" className="box_topic">RPM Inventory</Link>
                             <div className="number">{totalDevices && totalDevices < 10 ? '0'+totalDevices : totalDevices }</div>
                             <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
+                                <i className="bx bx-up-arrow-alt down"></i>
                                 <span className="text">Up from Yesterday</span>
                             </div>
                         </div>
@@ -59,10 +58,10 @@ const Home = () => {
 
                     <div className="box box2">
                         <div className="left-side">
-                            <div className="box_topic">Total Doctors</div>
+                            <Link to="/doctors" className="box_topic">Total Doctors</Link>
                             <div className="number">{totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs}</div>
                             <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
+                                <i className="bx bx-up-arrow-alt down"></i>
                                 <span className="text">Up from Yesterday</span>
                             </div>
                         </div>
@@ -71,7 +70,7 @@ const Home = () => {
 
                     <div className="box box3">
                         <div className="left-side">
-                            <div className="box_topic">Total HRs</div>
+                            <Link to="/hrs" className="box_topic">Total HRs <br/></Link>
                             <div className="number">{totalHrs && totalHrs < 10 ? '0'+totalHrs : totalHrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-down-arrow-alt down"></i>
@@ -82,18 +81,12 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className="container">
-                    <hr style={{background: '#F95800', height: '1px'}} />
-                </div>
+                <br />
 
                 {/* Graphs & Alerts Section */}
                 <div className="container-fluid row">
-                    <div className="col-lg-7">
+                    <div className="col-lg-12">
                         <DashboardGraphs />
-                    </div>
-
-                    <div className="col-lg-5">
-                        <DashboardAlerts />
                     </div>
                 </div>
 
@@ -105,7 +98,7 @@ const Home = () => {
                             <h5 className="title">Recently Added Patients</h5>
                                 <div className="sales-details">
                                 {patients && <Fragment>
-                                    <Table className="striped bordered hover">
+                                    <Table striped hover bordered>
                                         <thead>
                                         <tr>
                                           <th>Pt. Name</th>
@@ -135,7 +128,7 @@ const Home = () => {
                                 <div className="col-md-4 col-lg-4">
                                     <h5 className="title">Recently Added Devices</h5>
                                     {devices && <Fragment>        
-                                    <Table className="striped bordered hover">
+                                    <Table striped hover bordered>
                                         <thead>
                                         <tr>
                                           <th>Type</th>  
@@ -146,7 +139,7 @@ const Home = () => {
                                         <tbody>
                                             {devices && devices.slice(0,5).map((device, index) => (
                                              <tr key={index}>
-                                                 <td><img src="https://www.iconpacks.net/icons/2/free-stethoscope-icon-3539-thumb.png" style={{borderRadius: '50%', width: '50px', height: '50px'}} /></td>
+                                                 <td>{index + 1}</td>
                                                 <td><Link to={{ pathname:"/devicedetails", state: {deviceid: device?.deviceId}}}>{device?._id}</Link></td>
                                                 {device?.deviceType === 'bp' ? 
                                                     <td><Badge bg="warning text-white" className="male-tag">cuff</Badge></td>

@@ -37,7 +37,7 @@ const DevicesDetails = (props) => {
                     {loading ? <Loader /> : <Fragment>
                     <div className="shadow-lg p-3 mb-2 mr-4 ml-4 rounded">
                             <div className="home-content">
-                                <h5 className="pt-2">Device Details <span style={{color: '#F95800'}}>(SN: {deviceId})</span></h5>
+                                <h5 className="pt-2">Device Details <span style={{color: '#F95800'}}>(ID: {deviceId})</span></h5>
                                 <hr /> 
 
                                 <RPMDeviceBasicInformation deviceData={deviceDetails}/>    

@@ -1,5 +1,5 @@
 *{
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Sora', sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -18,12 +18,13 @@
   background-color: #D3D3D3;
   border-radius: 20px;
 }
-.error {
+
+/* .error {
   position: 'absolute';
   color: red;
   font-size: 0.8rem;
   margin-top: 4px;
-}
+} */
 
 .blue-hr {
   background: #081D45;
@@ -1083,12 +1084,12 @@ How it works
 
 .home-section nav{
   width: 100%;
-  height: 40px;
+  height: 50px;
   background: #FFF;
   padding: 0 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   transition: all 0.4s ease;
 }
 
@@ -1106,40 +1107,6 @@ How it works
 .home-section nav .sidebar-button i{
   font-size: 35px;
   margin-right: 10px;
-}
-
-.home-section nav .search-box{
-  height: 40px;
-  width: 550px;
-  margin: 0 20px;
-  position: relative;
-}
-
-nav .search-box input {
-  position: absolute;
-  height:100%;
-  width: 100%;
-  border-radius: 6px;
-  padding: 0 15px;
-  font-size: 17px;
-  background: #F5F6FA;
-  border: 2px solid #EFEEF1;
-  outline: none;
-}
-
-nav .search-box .bx-search{
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 40px;
-  width: 40px;
-  background: #0A2558;
-  border-radius: 6px;
-  color: #fff;
-  font-size: 22px;
-  line-height: 40px;
-  text-align: center;
 }
 
 .home-section nav .profile-details{
@@ -1173,6 +1140,59 @@ nav .profile-details i {
   font-size: 25px;
 }
 
+.nav-topbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.left-div {
+  width: 53vw;
+}
+
+.right-div{
+  display: flex;
+  flex-direction: row;
+}
+
+.notification-dropdown {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.patient-list-style {
+  width: 200px;
+  border: none;
+  border-bottom: 2px solid black;
+  outline: none;
+}
+
+.admin-topbar-dropdown {
+  width: 70px !important;
+  margin: 10px;
+}
+
+.admin-topbar-notification-dropdown {
+  width: 520px !important;
+  margin: 10px 0px;
+  max-height: 430px;
+  overflow-y: auto;
+}
+
+.notification-text {
+  width:470px !important;
+  font-size:14px;
+  overflow-x: hidden;
+}
+
+.drop-down-item-active:hover {
+  background-color: #F1F1F1;
+}
+
+.drop-down-item-active:active{
+  background-color: #F1F1F1
+}
+
+
 /* Home Content */
 .home-section .home-content {
   position: relative;
@@ -1198,19 +1218,19 @@ nav .profile-details i {
 }
 
 .home-content .overview-boxes .box0{
-  background-image: linear-gradient(#00bf8f, #001510);
+  background-image: linear-gradient(#ff0000, #141212);
 }
 
 .home-content .overview-boxes .box1{
-  background-image: linear-gradient(#6441a5 , #2a0845);
+  background-image: linear-gradient(#ffa600 , #141212);
 }
 
 .home-content .overview-boxes .box2{
-  background-image: linear-gradient(#200122 , #6f0000);
+  background-image: linear-gradient(#216d41 , #141212);
 }
 
 .home-content .overview-boxes .box3{
-  background-image: linear-gradient(#ff512f , #f09819);
+  background-image: linear-gradient(#003f5c , #141212);
 }
 
 .home-content .overview-boxes .staff-box0{
@@ -1231,6 +1251,10 @@ nav .profile-details i {
   font-size: 20px;
   font-weight: 500;
   color: #FFF
+}
+
+.home-content .overview-boxes .box_topic:hover {
+  text-decoration: none;
 }
 
 .home-content .overview-boxes .number {
@@ -1341,7 +1365,7 @@ th {
 }
 
 tr {
-  color: gray;
+  color: #444;
   font-size: 13px;
 }
 
@@ -2065,4 +2089,9 @@ tr {
   margin-left: 7px;
   font-weight: bold;
   letter-spacing: 1px
+}
+
+.graph-card {
+  -webkit-box-shadow: 0px 0px 15px -10px #000000;
+  box-shadow: 0px 0px 15px -10px #000000;
 }

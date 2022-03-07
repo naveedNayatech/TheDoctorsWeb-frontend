@@ -97,7 +97,7 @@ const PatientProfile = (props) => {
                                         
                                                 <Fragment>
                                                     <p className="patient-email">{patient?.email}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i class='bx bx-x cross-icon'></i>}</p>
+                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i className='bx bx-x cross-icon'></i>}</p>
                                                     <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
                                                     {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : 'Not added yet'}
                                                 </Fragment>
@@ -142,13 +142,14 @@ const PatientProfile = (props) => {
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Physician Information</span>                                 
                                         <hr />
+                                    {patient?.assigned_doctor_id ? <>
+                                        <span className="profile-label">Name</span>
+                                    <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
+                                    </> : <>
+                                    <span className="profile-label">Doctor Not Assigned Yet</span>
 
-                                    <span className="profile-label">Name</span>
-                                    <p className="patient-profile-card-text">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
-
-                                    <span className="profile-label">Gender</span>
-                                    <p className="patient-profile-card-text"><Badge bg="info text-white" className="male-tag">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.gender}</Badge> </p>
-
+                                    </>}
+                                    
                                 </div>
 
                                 <div className="col-md-3">

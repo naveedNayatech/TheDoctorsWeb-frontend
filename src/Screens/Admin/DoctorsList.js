@@ -97,8 +97,8 @@ const DoctorsList = () => {
                                 
                             </div>
                             
-                            <Link to="adminDashboard" className="go-back-btn"><i class='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn" onClick={refreshHandler}><i class='bx bx-refresh'></i></button> &nbsp;
+                            <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
+                            <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
                             <Link to="/adddoctor" className="add-staff-btn">Add New Doctor</Link>
                                                         
                         </div>
@@ -151,17 +151,17 @@ const DoctorsList = () => {
                                 <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
                                 {doctor?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
-                                        </td> : <td><i class='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
                                 </td>}
                                 <td>
                                     <Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     <Link to={{ pathname: "/Doctor/Edit", state: {id: doctor}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
                                     
                                     {doctors.block === false ? <Fragment>
-                                        <Link className="rounded-button-delete" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
+                                        <Link to="/doctors" className="rounded-button-delete" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
                                     </Fragment> : 
                                     <Fragment>
-                                        <Link className="rounded-button-activate" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                        <Link to="/doctors" className="rounded-button-activate" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-open'></i></Link>
                                     </Fragment>}
                                 </td>
                             </tr> 

@@ -45,6 +45,7 @@ import {
     ADD_RPM_DEVICE_RESET,
     UPDATE_DEVICE_REQUEST,
     UPDATE_DEVICE_SUCCESS,
+    UPDATE_DEVICE_RESET,
     UPDATE_DEVICE_FAIL,
     SORT_DEVICES_BY_BROKEN_REQUEST,
     SORT_DEVICES_BY_BROKEN_SUCCESS,
@@ -75,6 +76,8 @@ import {
     ASSIGN_DOCTOR_TO_HR_FAIL,
     ADMIN_STATS_SUCCESS,
     ADMIN_STATS_FAIL,
+    INVENTORY_STATS_SUCCESS,
+    INVENTORY_STATS_FAIL,
     UPDATE_PATIENT_REQUEST,
     UPDATE_PATIENT_SUCCESS,
     UPDATE_PATIENT_FAIL,
@@ -487,6 +490,12 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
              loading: false,
              isUpdated: true
          }    
+    
+    case UPDATE_DEVICE_RESET: 
+        return {
+            loading: false,
+            isUpdated: false
+        }
      
      case ADD_RPM_DEVICE_FAIL:
      case UPDATE_DEVICE_FAIL:
@@ -621,6 +630,27 @@ export const adminStatsReducers = (state = { totalPatients:0, totalHrs: 0, total
             
         default: // need this for default case
         return state    
+    }
+}
+
+export const inventoryStatsReducers = (state={totalDevices:0, instockDevices: 0, outstockDevices: 0, brokenDevices:0}, action) => {
+    switch(action.type){
+        case INVENTORY_STATS_SUCCESS:
+            return{
+                totalDevices: action.payload.totalDevices,
+                instockDevices: action.payload.instockDevices,
+                outstockDevices: action.payload.outstockDevices,
+                brokenDevices: action.payload.brokenDevices
+        }
+
+        case INVENTORY_STATS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+            
+        default: 
+        return state
     }
 }
 

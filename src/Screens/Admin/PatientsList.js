@@ -64,7 +64,6 @@ const PatientsList = () => {
 
 
         const searchPatientByDoctor = (id) => {
-            console.log('Hello in searchPatientByHR' + id );
             if(id === "undefined" || ''){
                 dispatch(getPatients(resPerPage, currentPage));
                 dispatch(getDoctors(resPerPage, currentPage));
@@ -77,7 +76,6 @@ const PatientsList = () => {
 
 
         const searchPatientByHR = (id) => {
-            console.log('Hello in searchPatientByHR ' + id );
             if(id === "undefined" || ''){
                 dispatch(getPatients(resPerPage, currentPage));
                 dispatch(getDoctors(resPerPage, currentPage));
@@ -156,8 +154,8 @@ const PatientsList = () => {
                             </div>
 
                             
-                            <Link to="adminDashboard" className="go-back-btn"><i class='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn" onClick={refreshHandler}><i class='bx bx-refresh'></i></button> &nbsp;
+                            <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
+                            <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
                             <Link to="/addpatient" className="add-staff-btn">Add New Patient</Link>
                                                         
                         </div>
@@ -175,7 +173,7 @@ const PatientsList = () => {
                                 >
                                     <option value="undefined">Search By Dr.</option>
                                     {doctors && doctors.map((doc, index) => (
-                                        <option value={doc?._id} key={index}>{doc?.firstname} {doc?.lastname}</option>                                         
+                                        <option value={doc?._id} key={index}>Dr. {doc?.firstname} {doc?.lastname}</option>                                         
                                     ))}
                                 </select>    
                             </div>
@@ -221,7 +219,7 @@ const PatientsList = () => {
                                 <th>DOB </th>
                                 <th>Email</th>
                                 <th>Acc Status</th>
-                                <th>Phy. Status</th>
+                                <th>Physician</th>
                                 <th>Consent Status</th>
                                 <th>ACTION</th> 
                                 </tr>
@@ -230,13 +228,22 @@ const PatientsList = () => {
                                 {patients && patients.length > 0 ? <Fragment> 
                                     {patients && patients.map((patient, index) => (
                                     <tr key={index}>  
-                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                    <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                    
                                     <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+                                    
                                     <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                    
                                     {patient?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
-                                        </td> : <td><i class='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p></td>}
-                                    <td>{patient?.assigned_doctor_id ? <Badge bg="info text-white" className="assigned-tag">Assigned</Badge> : <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge>}</td>
+                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                    </td>}
+                                        
+                                    {patient?.assigned_doctor_id ? <>
+                                        <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                    </> : <>
+                                    <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                    </>}
                                     
                                     {patient?.rpmconsent === true ? <td>
                                         <div className="custom-control custom-switch">

@@ -3,7 +3,7 @@ import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
 import { Image, Badge } from 'react-bootstrap';
-import moment from 'moment';
+const moment = require('moment-timezone');
 import { useSelector, useDispatch } from 'react-redux';
 import { commentOnReading } from '../../actions/HRActions';
 import {COMMENT_RESET} from '../../constants/HRConstants';
@@ -95,7 +95,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
                     <span className="vl"></span>
 
                     <span className="profile-label ml-2">Created At: </span>
-                    <span className="profile-label"> {moment(healthData?.createdAt).format("lll")}</span>
+                    <span className="profile-label"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
                 </div>
             </div>
 
@@ -122,9 +122,6 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
 
             {/* Comment on Reading */}
-            
-            {/* Comment Section */}
-
 
             {/* Comment */}
             {notes.length > 0 && notes.map((note, index) => ( <div key={index}>

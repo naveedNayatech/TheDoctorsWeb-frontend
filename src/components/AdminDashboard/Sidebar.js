@@ -44,7 +44,7 @@ const Sidebar = () => {
 
                 <li className="nav_link">
                     <NavLink key="hr" to="/hrlist" activeClassName="link-name-active">
-                         <i class='bx bxs-user'></i>
+                         <i className='bx bxs-user'></i>
                         <span className="link_name">HR</span>
                     </NavLink>
                 </li>

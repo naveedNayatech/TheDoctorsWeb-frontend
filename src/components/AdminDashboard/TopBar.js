@@ -1,11 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
 import { useSelector, useDispatch } from 'react-redux';
+import { Dropdown, Alert } from 'react-bootstrap';
+import { getAdminNotifications } from '../../actions/adminActions';
+import moment from 'moment';
+import { useAlert } from 'react-alert';
 
 const TopBar = () => {
     
     const dispatch = useDispatch();
+    const alert = useAlert();
+
+    const { notifications, error} = useSelector(state => state.adminNoti);
+
+    useEffect(() => {
+        if(error) {
+            alert.error(error);
+        }
+        dispatch(getAdminNotifications());
+  }, [dispatch]);
+
 
     const { isAuthenticated, user } = useSelector(state => state.auth);
 
@@ -26,27 +41,74 @@ const TopBar = () => {
     return (
         <Fragment>
             {/* Top Header */}
-            <nav>
-                    <div className="sidebar-button">
-                        <i className="bx bx-menu sidebarBtn"></i>
-                        <span className="dashboard">Dashboard</span>    
+                <nav>
+                    <div className="nav-topbar">
+                        <div className="left-div">
+                            <div className="sidebar-button">
+                                <i className="bx bx-menu sidebarBtn"></i>
+                                <span className="dashboard">Admin <span style={{color: '#F95800'}}>Dashboard</span></span>    
+                        </div>
                     </div>
 
+                        {/* Notifications */}
+                        <div className="right-div">
+                        <div className="notification-dropdown">
+                        <Dropdown className="admin-topbar-dropdown">
+                            <Dropdown.Toggle variant="link" id="dropdown-basic">
 
-                    <div className="search-box">
-                        <input type="text" placeholder="Search here..." autoComplete="off" />
-                        <i className="bx bx-search"></i>
-                    </div>
+                            <i className='bx bx-bell' style={{color: 'red', fontSize: '20px'}}></i>
+                            </Dropdown.Toggle>
 
-                    <div className="profile-details btn dropdown-toggle" type="button" 
-                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
-                        <img src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg" alt="profileimg" />
-                        <span className="admin-name">{isAuthenticated == true && user && user?.name}</span>   
-                    </div>
+                            <Dropdown.Menu className="admin-topbar-notification-dropdown">
+                            {notifications && notifications?.data?.map((noti, index) =>(
+                                <Dropdown.Item key={index} className="drop-down-item-active">
+                                    {noti?.noti_type === 'bp' ? <>
+                                    <Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: noti?.patientId}}}>
+                                    <Alert className="notification-text" variant={noti?.status === "High" ? "danger" : noti?.status === 'Elevated' ? "warning" : "info"}>
+                                        <small>{noti?.textAny}</small>
+                                        <div>
+                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).format("lll")}</small>
+                                          
+                                        </div>    
+                                    </Alert>
+                                </Link></> : <>
+                                <Link style={{textDecoration: 'none'}} to="/adminDashboard">
+                                    <Alert className="notification-text" variant={noti?.status === "High" ? "danger" : noti?.status === 'Elevated' ? "warning" : "info"}>
+                                        <small>{noti?.textAny}</small>
+                                        <div>
+                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).format("lll")}</small>
+                                        
+                                        </div>    
+                                    </Alert>
+                                </Link>
+                                </>    
+                                }
+                                
+                                </Dropdown.Item>
+                            ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        </div>
+                        {/* Notifications */}
 
-                    <div className="dropdown-menu">
-                        <Link className="dropdown-item" to="/me"><small>My Profile</small></Link>
-                        <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}><small>Logout</small></Link>
+
+                        <Dropdown>
+                            <Dropdown.Toggle variant="none" id="dropdown-basic" className="profile-details">
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" alt="profileimg" />
+                            <span className="admin-name">{isAuthenticated == true && user && user?.name}</span>  
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="admin-topbar-dropdown">
+                                <Dropdown.Item>
+                                    <Link className="dropdown-item" to="/me"><small>My Profile</small></Link>
+                                </Dropdown.Item>
+                                
+                                <Dropdown.Item >
+                                    <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}><small>Logout</small></Link>
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
                     </div>
                 </nav>
                 <br />

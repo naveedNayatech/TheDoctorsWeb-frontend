@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-bootstrap';
 import { Prod, Prod01 } from '../constants/ActionType';
+import moment from 'moment';
 
 import { 
     ALL_PATIENTS_REQUEST, 
@@ -71,6 +72,8 @@ import {
     ASSIGN_DOCTOR_TO_HR_FAIL,
     ADMIN_STATS_SUCCESS,
     ADMIN_STATS_FAIL,
+    INVENTORY_STATS_SUCCESS,
+    INVENTORY_STATS_FAIL,
     UPDATE_PATIENT_REQUEST,
     UPDATE_PATIENT_SUCCESS,
     UPDATE_PATIENT_FAIL,
@@ -979,8 +982,29 @@ export const getAdminStats = () => async(dispatch) => {
     }
 }
 
+export const getInventoryStats = () => async(dispatch) => {
+    try {
+        
+        const token = JSON. parse(localStorage.getItem('token'));
 
+        const { data } = await axios.get(`${Prod01}/device/stats`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
 
+        dispatch({
+            type: INVENTORY_STATS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: INVENTORY_STATS_FAIL,
+            payload: error.message
+        })
+    }
+}
 
 // Get device details => admin
 export const getDeviceDetails = (id) => async(dispatch) => {
@@ -1326,9 +1350,9 @@ export const deleteRPMDevice = (id) => async(dispatch) => {
 export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch) => {
     
     try {
-        // dispatch({ 
-        //     type: UPDATE_DEVICE_REQUEST
-        // });
+        dispatch({ 
+            type: UPDATE_DEVICE_REQUEST
+        });
 
         const token = JSON. parse(localStorage.getItem('token'));
 
@@ -1344,32 +1368,30 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         let device;
 
         if(data.status === 201){
-         
-            console.log('Putting PatientId in device');
+        
             device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
-                assignedTime: Date.now(),
+                assignedTime: moment(new Date()).format("DD/MM/YYYY"),
                 assigned_patient_id: patientId 
             }, {
                 headers: {
                     "Authorization":`Bearer ${token}`
                 }  
             })
-        } 
+        }
+       
         
-        // console.log(device);
-        // dispatch({
-        //     type: UPDATE_DEVICE_SUCCESS,
-        //     payload: data
-        // })
+        dispatch({
+            type: UPDATE_DEVICE_SUCCESS,
+        })
 
         
     } catch (error) {
         console.log(error);
     
-        // dispatch({
-        //     type: UPDATE_DEVICE_FAIL,
-        //     payload: error
-        // })
+        dispatch({
+            type: UPDATE_DEVICE_FAIL,
+            payload: error
+        })
     }
 }
 

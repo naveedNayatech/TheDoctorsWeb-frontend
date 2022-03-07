@@ -97,15 +97,15 @@ const HRList = () => {
                                 {hr?.assigned_doctor_id ? <td>Dr. {hr?.assigned_doctor_id?.firstname} {hr?.assigned_doctor_id?.lastname}</td> : <td>N/A</td>}
                                 {hr?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
-                                        </td> : <td><i class='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
                                 </td>}
                                 <td>
                                     <Link to={{ pathname: "/hrProfile", state: {hr: hr}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     <Link to={{ pathname: "/updateHR", state:{ hr: hr}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
                                    {hr?.block === false ? <Fragment>
-                                        <Link className="rounded-button-delete" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
+                                        <Link to="hrlist" className="rounded-button-delete" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
                                    </Fragment> : <Fragment>
-                                        <Link className="rounded-button-activate" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                        <Link to="hrlist" className="rounded-button-activate" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-open'></i></Link>
                                     </Fragment>} 
 
                                 </td>

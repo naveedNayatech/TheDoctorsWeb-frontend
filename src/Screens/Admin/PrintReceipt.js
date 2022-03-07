@@ -24,21 +24,20 @@ const PrintReceipt = (props) => {
                     <hr style={{color: '#F95800', height: 3}} />
                     
                     <h5 style={{color: 'gray'}}>Assigned To</h5>
-                     <b>Patient Name : </b> <span>{patient?.title} {patient?.firstname} {patient?.lastname}</span> <br/>
-                     <b>Address : </b> <span>{patient?.address} {patient?.line2} {patient?.city} {patient?.state} {patient?.zipCode}  </span> <br />   
+                     <b>Patient Name : </b> <span> {device?.assigned_patient_id?.firstname} {device?.assigned_patient_id?.lastname}</span> <br/>
+                     <b>Address : </b> <span>{device?.assigned_patient_id?.address} {device?.assigned_patient_id?.line2} {device?.assigned_patient_id?.city} {device?.assigned_patient_id?.state} {device?.assigned_patient_id?.zipCode}  </span> <br />   
 
                     <hr/>
                      <h5 style={{color: 'gray'}}>Device Details</h5>
-                     <b>Device ID : </b> <span>{device?.deviceId}</span> <br/><br />
+                     <b>Device ID : </b> <span>{device?._id}</span> <br/><br />
 
                      <span style={{backgroundColor: '#DCDCDC', 
                      padding: '15px', 
                      borderRadius: '10px'
-                     }}><b> Date: </b> <span>{moment().format("DD-MM-YYYY hh:mm:ss")}</span></span> <br/>
-
-                    <button className="btn btn-danger mt-3" onClick={printReceipt}>Print Receipt</button>
+                     }}><b>Assigned Date: </b> <span>{moment(device?.assignedTime).format("DD-MM-YYYY")}</span></span> <br/>
                     
                     
+                    <button className="btn btn-danger mt-3" onClick={printReceipt} style={{textDecoration: 'none'}}>Print Receipt</button>
                     <div className="col-md-4"></div>
 
                 </div>

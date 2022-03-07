@@ -2,15 +2,15 @@ import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import { Badge } from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
-import { getPatients, patientProfile, assignRPMDeviceToPatient } from '../../actions/adminActions';
+import { getPatients, patientProfile, assignRPMDeviceToPatient, getDeviceDetails } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { ADD_RPM_DEVICE_RESET } from '../../constants/adminConstants';
-import { Link } from 'react-router-dom';
-
+import { UPDATE_DEVICE_RESET } from '../../constants/adminConstants';
+import { Link, useHistory } from 'react-router-dom';
 
 const RPMDeviceBasicInformation = (props) => {
 
+    const history = useHistory();
     const alert = useAlert();
     const dispatch = useDispatch();
 
@@ -38,11 +38,13 @@ const RPMDeviceBasicInformation = (props) => {
         }
 
         if(isUpdated) {
-            alert.success('Updated');
-            // props?.history?.('/devicedetails');
+            alert.success('Device Assigned');
+            history.push('/devicedetails');
+
+            dispatch(getDeviceDetails(deviceDetails?._id));
 
             dispatch({
-                type: ADD_RPM_DEVICE_RESET
+                type: UPDATE_DEVICE_RESET
             });
         }
         
@@ -51,7 +53,7 @@ const RPMDeviceBasicInformation = (props) => {
     const AssignDeviceToPatient = () => {
         dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));
     }
-
+    
     return (
         <Fragment>
             <small><b>Basic Information: </b></small>
@@ -67,12 +69,12 @@ const RPMDeviceBasicInformation = (props) => {
                         <tr>
                             <th scope="col-md-3">Type</th>
                             {deviceDetails?.deviceType === 'bp' ? <td scope="col-md-3"><Badge bg="warning text-white" className="male-tag">cuff</Badge></td> : <td><Badge bg="info text-white" className="male-tag">Weight</Badge></td>}
-                            <th scope="col-md-3">Broken Status</th>
+                            <th scope="col-md-3">Physical Status</th>
                             <td scope="col-md-3" style={{color: deviceDetails?.broken === true ? 'red': 'green'}}><b>{deviceDetails?.broken  === true ? 'broken' : 'unbroken'}</b></td>
                         </tr>
 
                         <tr>
-                            <th scope="col-md-3">Created At</th>
+                            <th scope="col-md-3">Added Date</th>
                             <td scope="col-md-3">{moment(deviceDetails?.createdAt).format("lll")}</td>
                             <th scope="col-md-3">Firmware Version</th>
                             <td scope="col-md-3">{deviceDetails?.firmwareVersion ? deviceDetails?.firmwareVersion : 'N/A'}</td>
@@ -81,8 +83,8 @@ const RPMDeviceBasicInformation = (props) => {
                         <tr>
                             <th scope="col-md-3">hardware Version</th>
                             <td scope="col-md-3">{deviceDetails?.hardwareVersion ? deviceDetails?.hardwareVersion : 'N/A'}</td>
-                            <th scope="col-md-3">Patient Assigned Status</th>
-                            {deviceDetails?.assigned_patient_id ?  <td scope="col-md-3"><Badge bg="info text-white"> Assigned</Badge></td> : <td><Badge bg="success text-white"> In Stock</Badge></td>
+                            <th scope="col-md-3">Device Status</th>
+                            {deviceDetails?.assigned_patient_id ?  <td scope="col-md-3"><Badge bg="info text-white" className="male-tag"> Assigned</Badge></td> : <td><Badge bg="success text-white" className="male-tag"> In Stock</Badge></td>
                              } 
                         </tr>
 
@@ -98,7 +100,8 @@ const RPMDeviceBasicInformation = (props) => {
                 </table>
 
                 <div>
-
+                
+                {deviceDetails && deviceDetails?.assigned_patient_id?._id == null ? <>
                 <small><b>Assign Device to Patient</b></small>
 
                 <div className="row">
@@ -171,7 +174,18 @@ const RPMDeviceBasicInformation = (props) => {
                             </div>                             
                         </Fragment> }
                     </div>
-                </div> 
+                </div>    
+
+                </> : <>
+                <b>Device Assigned.</b> <br/>
+                <small>This device is already assigned to Patient 
+                <b> {deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname}</b>, 
+                if you want to assign this device to other patient, first remove it from patient profile.</small>
+                <br />
+                
+                <Link to={{ pathname: "/printReceipt", state: {deviceAssigned: deviceDetails, patientDetails: patient }}} className="ml-3 mt-2">Print Receipt</Link>
+                </>}
+                 
             </div> 
         </Fragment>
     )
