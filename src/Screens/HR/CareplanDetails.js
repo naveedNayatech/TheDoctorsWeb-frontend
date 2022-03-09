@@ -8,7 +8,9 @@ import { Formik, Form } from 'formik';
 import moment from 'moment';
 import { Badge, Modal } from 'react-bootstrap';
 import { UPDATE_CARE_PLAN_RESET } from '../../constants/HRConstants';
-import { useAlert } from 'react-alert'
+import { useAlert } from 'react-alert';
+import TextField from '../../components/Form/TextField';
+import { Link } from 'react-router-dom';
 
 const CareplanDetails = (props) => {
   
@@ -18,7 +20,11 @@ const CareplanDetails = (props) => {
 
   const { careplan, isUpdated } = useSelector(state => state.careplan);
   const [carePlanShow ,setCarePlanShow] = useState(false);
+
   const [description, setDescription] = useState(careplan?.Description);
+  const [readingsPerDay, setReadingsPerDay] = useState(careplan?.readingsPerDay);
+  const [readingsPerMonth, setReadingsPerMonth] = useState(careplan?.readingsPerMonth);
+
 
   const handleCarePlanModalClose = () => setCarePlanShow(false);
   const handleCarePlanModalShow = () => setCarePlanShow(true);
@@ -37,7 +43,7 @@ const CareplanDetails = (props) => {
 }, [dispatch, isUpdated]);
 
   const updatehandler = () => {
-    dispatch(updateCarePan(description, careplan?._id));
+    dispatch(updateCarePan(description, readingsPerMonth, readingsPerDay, careplan?._id));
   }
 
   return (
@@ -84,8 +90,9 @@ const CareplanDetails = (props) => {
                     <b>Careplan</b>
                     <hr/>
                     <small style={{textAlign:'justifyContent'}}>{careplan?.Description}</small> <br/>
+                    <Link to={`/v1/uploadFiles/${careplan?.fileName}`}>{careplan?.fileName}</Link>
                     <small style={{float: 'right', marginRight: 20}}><i>{moment(careplan?.createdAt).format("lll")}</i></small> <br/>
-
+                    <br/>
                     <button className="btn btn-outline-info mt-2" onClick={handleCarePlanModalShow}>Update Careplan</button>
                   </div>
                 </div>
@@ -109,6 +116,25 @@ const CareplanDetails = (props) => {
                 { formik => (
                     <div>
                         <Form>
+
+                        <TextField 
+                                label="Readings / mo" 
+                                name="readingsPerMonth" 
+                                type="number" 
+                                placeholder="Readings / mo"
+                                value={readingsPerMonth} 
+                                onChange={(e) => setReadingsPerMonth(e.target.value)}
+                            />
+
+                            <TextField 
+                                label="Readings / day" 
+                                name="readingsPerDay" 
+                                type="number" 
+                                placeholder="Readings / day"
+                                value={readingsPerDay} 
+                                onChange={(e) => setReadingsPerDay(e.target.value)}
+                            />
+
                         <label htmlFor="description" className="form-label mt-3">Description</label>
                             <textarea 
                                 label="Description" 
@@ -119,6 +145,8 @@ const CareplanDetails = (props) => {
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Type description here .... "
                             />
+
+
                         <br/>
                         <div className="row-class">
                             <button className="btn btn-outline-danger ml-3" type="submit">Update</button>

@@ -210,7 +210,9 @@ const PatientProfile = (props) => {
                             </div>
 
                             <div className="col-md-3">
-                                <input type="date" 
+                                <input 
+                                type="date"
+                                max={moment().format("YYYY-MM-DD")} 
                                 className="form-control"
                                 value={sortDate} 
                                 onChange={(e) => {sortPatientTelemetaryData(e.target.value); setSortDate(e.target.value)}}

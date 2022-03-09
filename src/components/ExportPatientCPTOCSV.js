@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import moment from 'moment';
+const moment = require('moment-timezone');
 import { CSVLink } from 'react-csv'
 
 const ExportPatientCPTOCSV = ({csvData, fileName}) => {
@@ -9,7 +9,7 @@ const ExportPatientCPTOCSV = ({csvData, fileName}) => {
             'Sr No':index + 1,
             'Pt FName':patient?.firstname,
             'Pt LName': patient.lastname,
-            'Pt DOB': moment(patient?.DOB).format("ll"),
+            'Pt DOB': moment(patient?.DOB).tz("America/New_York").format("ll"),
             'Pt Gender': patient?.gender,
             'Pt Email': patient?.email,
             'Pt Phone 1':patient?.phone1,
@@ -21,7 +21,7 @@ const ExportPatientCPTOCSV = ({csvData, fileName}) => {
             'Pt Diseases': patient?.diseases,
             'Pt Insurance Companies': patient?.insurancecompany,
             'Pt Initial Setup': patient?.initialsetup,
-            'Account Created Date':moment(patient?.createdAt).format("ll"),
+            'Account Created Date':moment(patient?.createdAt).tz("America/New_York").format("ll"),
             ' ': ' ',
             'Dr FName': patient?.assigned_doctor_id?.firstname,
             'Dr LName': patient?.assigned_doctor_id?.lastname,
@@ -29,7 +29,7 @@ const ExportPatientCPTOCSV = ({csvData, fileName}) => {
             ' ':' ',
             'HR FName':patient?.assigned_hr_id?.firstname,
             'HR LName':patient?.assigned_hr_id?.lastname,
-            'HR DOB': moment(patient?.assigned_hr_id?.DOB).format("ll"),
+            'HR DOB': moment(patient?.assigned_hr_id?.DOB).tz("America/New_York").format("ll"),
             'HR Email': patient?.assigned_hr_id?.email,
             'HR Phone 1': patient?.assigned_hr_id?.phone1,
             ' ':' ',

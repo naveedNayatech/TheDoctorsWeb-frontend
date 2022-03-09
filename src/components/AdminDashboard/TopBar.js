@@ -4,7 +4,7 @@ import { logout } from '../../actions/authActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Alert } from 'react-bootstrap';
 import { getAdminNotifications } from '../../actions/adminActions';
-import moment from 'moment';
+const moment = require('moment-timezone');
 import { useAlert } from 'react-alert';
 
 const TopBar = () => {
@@ -67,7 +67,7 @@ const TopBar = () => {
                                     <Alert className="notification-text" variant={noti?.status === "High" ? "danger" : noti?.status === 'Elevated' ? "warning" : "info"}>
                                         <small>{noti?.textAny}</small>
                                         <div>
-                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).format("lll")}</small>
+                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).tz("America/New_York").format("lll")}</small>
                                           
                                         </div>    
                                     </Alert>
@@ -76,7 +76,7 @@ const TopBar = () => {
                                     <Alert className="notification-text" variant={noti?.status === "High" ? "danger" : noti?.status === 'Elevated' ? "warning" : "info"}>
                                         <small>{noti?.textAny}</small>
                                         <div>
-                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).format("lll")}</small>
+                                            <small style={{fontSize: '12px', color: 'gray', float:'right'}}>{moment(noti?.createdAt).tz("America/New_York").format("lll")}</small>
                                         
                                         </div>    
                                     </Alert>

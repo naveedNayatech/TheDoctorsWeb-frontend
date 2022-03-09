@@ -42,42 +42,6 @@ const StaffDashboard = (props) => {
 
                 <div className="home-content">
                 <div className="overview-boxes">
-                    <div className="box staff-box0">
-                        <div className="left-side">
-                            <div className="box_topic">My Patients</div>
-                            <div className="number">{hrpatients && hrpatients.length}</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-user cart"></i>
-                    </div>
-
-                    <div className="box staff-box1">
-                        <div className="left-side">
-                            <div className="box_topic">Devices Assigned</div>
-                            <div className="number">00</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-devices cart two"></i>
-                    </div>
-
-                    <div className="box staff-box2">
-                        <div className="left-side">
-                            <div className="box_topic">Total Staff</div>
-                            <div className="number">00</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-user cart three"></i>
-                    </div>
-
                     {/* Pie Graph */}
                     <HRPieGraph />
                 </div>
@@ -99,34 +63,38 @@ const StaffDashboard = (props) => {
                                 {hrpatients?.length > 0 ? (<Fragment>
                                 <div className="col-md-12">
                                     <Fragment>
-                                        <Table className="table table-sm table-striped">
+                                        <Table striped hover bordered>
                                         <thead align="center">
                                             <tr>
                                             <th>Name</th>
-                                            <th>Contact No </th>
+                                            <th>DOB </th>
                                             <th>Email</th>
-                                            <th>Phy. Status</th>
-                                            <th>Role</th>
-                                            <th>Patient Of</th>
+                                            <th>Acc Status</th>
+                                            <th>Physician</th>
                                             <th>Devices Assigned</th>
-                                            <th>ACTION</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
                                         {hrpatients && hrpatients.map((patient, index) => ( 
                                             <tr key={index}>
-                                            <td><Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>{moment(patient?.DOB).format("ll")}</p></Link></td>
-                                            <td>{patient?.phone1} <p>(English)</p></td> 
-                                            <td>{patient?.email}</td>
-                                            <td>{patient?.assigned_doctor_id ? <Badge bg="info text-white" className="assigned-tag">Assigned</Badge> : <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge>}</td>
-                                            <td>{patient?.role}</td>
+                                            
+                                            <td>
+                                                <Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link>
+                                            </td>
+
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
+                                            
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                            
+                                            {patient?.block === false ? <td>
+                                                <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                                </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                            </td>}
+
+
                                             {patient?.assigned_doctor_id ? <td style={{backgroundColor:'#D3D3D3'}}> {patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id.lastname}</td> : 'N/A' }
                                             {patient?.assigned_devices ? <td>{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
-                                            <td>
-                                            <Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
-                                                {/* <Link to={{ pathname: "/staffPatients", state: {id: hrpatients ?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
-                                            </td>
+                                            
                                         </tr> 
                                         
                                         ))}

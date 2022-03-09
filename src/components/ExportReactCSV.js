@@ -1,6 +1,6 @@
 import React from 'react'
 import { CSVLink } from 'react-csv';
-import moment from 'moment';
+const moment = require('moment-timezone');
 
 export const ExportReactCSV = ({csvData, fileName}) => {
 
@@ -10,7 +10,7 @@ export const ExportReactCSV = ({csvData, fileName}) => {
             'initial Month':'February',
             'First Name':patient?.firstname,
             'Last Name': patient.lastname,
-            'DOB': moment(patient?.DOB).format("ll"),
+            'DOB': moment(patient?.DOB).tz("America/New_York").format("ll"),
             'Gender': patient?.gender,
             'Email': patient?.email,
             'Phone 1':patient?.phone1,

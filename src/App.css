@@ -19,12 +19,12 @@
   border-radius: 20px;
 }
 
-/* .error {
+.error {
   position: 'absolute';
   color: red;
   font-size: 0.8rem;
   margin-top: 4px;
-} */
+}
 
 .blue-hr {
   background: #081D45;
@@ -1649,11 +1649,12 @@ tr {
 } */
 
 .patient-profile-col-heading {
-  background-color: #081D45;
-  color: #FFF;
+  background-color: #d9dadb;
+  color: #000;
   padding: 10px;
-  border-radius: 25px;
+  border-radius: 5px;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .patient-profile-card-text{
@@ -1760,11 +1761,21 @@ tr {
   text-decoration: none;
 }
 
-.check-icon {
-  background-color: #F95800;
+.patient-profile-data-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #e4af8e;
+  -webkit-box-shadow: 0px 0px 15px -10px #000000;
+  box-shadow: 0px 0px 15px -10px #000000;
   color: #FFF;
-  border-radius: 20px;
-  padding: 7px
+  border-radius: 5px;
+}
+
+.check-icon {
+  color: #FF0000;
+  border-radius: 50%;
+  font-weight: bold;
 }
 
 .cross-icon {

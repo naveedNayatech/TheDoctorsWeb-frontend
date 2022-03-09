@@ -94,7 +94,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
                     <span className="vl"></span>
 
-                    <span className="profile-label ml-2">Created At: </span>
+                    <span className="profile-label ml-2">Reading Date: </span>
                     <span className="profile-label"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
                 </div>
             </div>
@@ -122,11 +122,12 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
 
             {/* Comment on Reading */}
+            
 
             {/* Comment */}
             {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
                 <div className="bubble bubble-alt bubble-green"> <p>
-                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).format("ll")}</span> 
+                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).tz('America/New_York').format("ll")}</span> 
                     </p>
                 </div>
                 <br/><br/><br/>

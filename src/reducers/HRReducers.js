@@ -30,6 +30,9 @@ import {
     PATIENT_CP_REPORT_REQUEST,
     PATIENT_CP_REPORT_SUCCESS,
     PATIENT_CP_REPORT_FAIL,
+    GET_HR_NOTIFICATIONS_REQUEST,
+    GET_HR_NOTIFICATIONS_SUCCESS,
+    GET_HR_NOTIFICATIONS_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -326,4 +329,28 @@ export const patientCPReportReducers = (state = {patientCompleteCP:[]}, action) 
         default: 
             return state; 
     } 
+}
+
+export const hrNotificationsReducers = (state = { notifications:[] }, action) => {
+    switch (action.type) {
+        case GET_HR_NOTIFICATIONS_REQUEST: 
+            return {
+                loading: true,
+            }
+
+        case GET_HR_NOTIFICATIONS_SUCCESS:
+            return {
+                loading: false,
+                notifications: action.payload
+            }
+            
+        case GET_HR_NOTIFICATIONS_FAIL:
+            return {
+                ...state,
+                error: action.payload
+        }
+            
+        default: // need this for default case
+        return state    
+    }
 }

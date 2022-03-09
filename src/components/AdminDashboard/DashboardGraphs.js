@@ -38,7 +38,7 @@ const DashboardGraphs = () => {
                   'dia': deviceData?.telemetaryData?.dia,
                   'pul':deviceData?.telemetaryData?.pul
               }
-      });
+         });
 
 
     return (
@@ -67,7 +67,7 @@ const DashboardGraphs = () => {
                 <YAxis dataKey="sys"/>
                 <CartesianGrid strokeDasharray="1 1" />
                 <Tooltip />
-                <Legend/>
+                <Legend/> 
                 <Bar dataKey="sys" fill="#FE9E15" />
                 <Bar dataKey="dia" fill="#003366" />
                 <Bar dataKey="pul" fill="#F95800" />

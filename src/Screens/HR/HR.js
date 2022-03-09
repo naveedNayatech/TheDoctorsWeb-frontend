@@ -25,7 +25,7 @@ const { loading, hr, isAuthenticated} = useSelector(state => state.hrAuth);
 
                     <div className="row">
                       <div className="col-lg-6 col-md-8 col-sm-12 col-xs-12">
-                          <h5 className="pt-2 mt-2">{hr?.firstname} {hr?.firstname} <span style={{color: '#F95800'}}> Profile </span></h5> 
+                          <h5 className="pt-2 mt-2">{hr?.firstname} {hr?.lastname} <span style={{color: '#F95800'}}> Profile </span></h5> 
                       </div>
                     </div>  
                     <hr />

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Prod, Prod01 } from '../constants/ActionType';
+import { Prod01 } from '../constants/ActionType';
  
 import {
     HR_PATIENTS_REQUEST,
@@ -27,6 +27,9 @@ import {
     PATIENT_CP_REPORT_REQUEST,
     PATIENT_CP_REPORT_SUCCESS,
     PATIENT_CP_REPORT_FAIL,
+    GET_HR_NOTIFICATIONS_REQUEST,
+    GET_HR_NOTIFICATIONS_SUCCESS,
+    GET_HR_NOTIFICATIONS_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -38,7 +41,7 @@ try {
 
     const token = JSON. parse(localStorage.getItem('token'));
 
-    const { data } = await axios.get(`${Prod01}/hr/patientlist/${id}`,{
+    const { data } = await axios.get(`${Prod01}/hr/patientlist/${id}/null`,{
         headers: {
             "Authorization":`Bearer ${token}`
          }
@@ -121,7 +124,7 @@ export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) =
 }
 
 
-export const carePlanOfPatient = (patientId, hrId, description) => async(dispatch) => {
+export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth, readingsPerDay, fileName) => async(dispatch) => {
     let data ; 
     try {
        const token = JSON. parse(localStorage.getItem('token'));
@@ -129,13 +132,31 @@ export const carePlanOfPatient = (patientId, hrId, description) => async(dispatc
         data = await axios.post(`${Prod01}/patient/addCarePlan`, {
                 assigned_hr_id : hrId,
                 assigned_patient_id:patientId,
-                Description: description
+                Description: description,
+                readingsPerMonth:readingsPerMonth,
+                readingsPerDay:readingsPerDay,
+                fileName:fileName.name
            }, {
             headers: {
                 "Authorization":`Bearer ${token}`
              }
-           });    
+           });
            
+       
+        let formData = new FormData();
+		formData.append('file', fileName);
+
+        if(fileName){
+        fetch(`${Prod01}/general/uploadfile`,{
+                method: 'POST',
+                body: formData,
+                headers: {
+                    "Authorization":`Bearer ${token}`
+                }
+            }
+        )
+        }
+
         dispatch({ 
             type: ADDING_CARE_PLAN_SUCCESS,
             payload: data
@@ -317,12 +338,14 @@ export const getPatientCarePlan = (patientId) => async(dispatch) => {
     }   
 }
 
-export const updateCarePan = (description, careplanId) => async(dispatch) => {    
+export const updateCarePan = (description, readingsPerMonth, readingsPerDay, careplanId) => async(dispatch) => {    
     try {
        const token = JSON. parse(localStorage.getItem('token'));
 
        const { data } = await axios.put(`${Prod01}/patient/editcareplan/${careplanId}`,{
            Description: description,
+           readingsPerMonth:readingsPerMonth,
+           readingsPerDay:readingsPerDay
        }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -340,6 +363,33 @@ export const updateCarePan = (description, careplanId) => async(dispatch) => {
            payload: error.message
        })
     }   
+}
+
+export const getHRNotifications = (id) => async(dispatch) => {
+    try {
+        dispatch({ type: GET_HR_NOTIFICATIONS_REQUEST})
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const data = await axios.post(`${Prod01}/general/notifications`, {
+                hrId: id
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            } 
+        });
+
+        dispatch({ 
+            type: GET_HR_NOTIFICATIONS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({ 
+            type: GET_HR_NOTIFICATIONS_FAIL,
+            payload: error
+        })
+    }
 }
 
 // Clear errors

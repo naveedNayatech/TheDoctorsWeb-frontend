@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-bootstrap';
 import { Prod, Prod01 } from '../constants/ActionType';
-import moment from 'moment';
+const moment = require('moment-timezone');
 
 import { 
     ALL_PATIENTS_REQUEST, 
@@ -1370,7 +1370,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         if(data.status === 201){
         
             device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
-                assignedTime: moment(new Date()).format("DD/MM/YYYY"),
+                assignedTime: moment(new Date()).tz("America/New_York").format("DD/MM/YYYY"),
                 assigned_patient_id: patientId 
             }, {
                 headers: {
@@ -1421,6 +1421,7 @@ export const getAdminNotifications = () => async(dispatch) => {
         })
     }
 }
+
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({
