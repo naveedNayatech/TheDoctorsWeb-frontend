@@ -65,7 +65,7 @@ const TopBar = () => {
                                         </div>    
                                     </Alert>
                                 </Link></> : <>
-                                <Link style={{textDecoration: 'none'}} to="/adminDashboard">
+                                <Link style={{textDecoration: 'none'}} to="/HrDashboard">
                                     <Alert className="notification-text" variant={noti?.status === "High" ? "danger" : noti?.status === 'Elevated' ? "warning" : "info"}>
                                         <small>{noti?.textAny}</small>
                                         <div>

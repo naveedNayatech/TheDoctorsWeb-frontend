@@ -5,7 +5,7 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData'; 
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
-import { patientProfile, assignDeviceToPatient, removeAssignedDevice, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
+import { patientProfile, getRemainingReadings, removeAssignedDevice, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
 import { getPatientCarePlan } from '../../actions/HRActions';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,7 @@ const PatientProfile = (props) => {
     let deviceid = props?.location?.state?.deviceid;
 
 
-    const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
+    const { loading, error, patient, isUpdated, readingsCount} = useSelector(state => state.patientProfile);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
     const { careplan } = useSelector(state => state.careplan);
     
@@ -39,6 +39,7 @@ const PatientProfile = (props) => {
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid))
         dispatch(getPatientCarePlan(patientid));
+        dispatch(getRemainingReadings(patientid));
         
         if(isUpdated) {
             alert.success('Updated Successfully');
@@ -46,9 +47,6 @@ const PatientProfile = (props) => {
 
     }, [dispatch, alert, error, isUpdated]);
 
-    const assignDevice = () => {
-        dispatch(assignDeviceToPatient(patientid, deviceid));
-    }
 
         const sortPatientTelemetaryData = (date) => {
             const dateToFind = new Date(date).toLocaleDateString('zh-Hans-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
@@ -66,6 +64,8 @@ const PatientProfile = (props) => {
         dispatch(getPatientCarePlan(patientid));
         setSortDate('');
     }
+
+    let readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
 
     return (
         <Fragment>
@@ -97,9 +97,8 @@ const PatientProfile = (props) => {
                                         
                                                 <Fragment>
                                                     <p className="patient-email">{patient?.email}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i className='bx bx-x cross-icon'></i>}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
-                                                    {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : 'Not added yet'}
+                                                    
+                                                    <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span> 
                                                 </Fragment>
                                         </div>    
                                  </div>
@@ -131,9 +130,33 @@ const PatientProfile = (props) => {
 
 
                                     <div className="col-md-3 ">
-                                            <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
+                                            <span className="patient-profile-col-heading">Patient Analytics</span>                                 
                                              <hr />
-                                                <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'}  </span>   
+
+                                            <div className="patient-profile-data-div">
+                                                <p style={{fontSize: 14}} className="text-center mt-2">RPM Consent : </p>
+                                                <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
+                                            </div>   
+
+                                            {careplan ? <>
+                                                <div className="patient-profile-data-div mt-2">
+                                                    <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
+                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
+                                                </div>
+                                            </> : ''}
+
+                                            {careplan ? <>
+                                                <div className="patient-profile-data-div mt-2">
+                                                    <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
+                                                    
+                                                    <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                </div>
+                                            </> : ''}
+
+                                            <div className="patient-profile-data-div mt-2">
+                                                <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>
+                                                <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
+                                            </div>
                                     </div>
                                 </div>
 
@@ -190,14 +213,13 @@ const PatientProfile = (props) => {
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Patient Careplan</span>                                 
                                     <hr /> 
-                                    {careplan && ( <Fragment>
-                                        <small>{careplan && careplan?.Description}</small>            
-                                        <small style={{float: 'right', marginTop: 10}}>
+                                    {careplan ? <Fragment>
+                                        <span style={{float: 'right', marginTop: 10}}>
                                             <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
                                             &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
                                             </i>
-                                        </small>  
-                                    </Fragment>)}
+                                        </span>  
+                                    </Fragment> : 'N/A'}
                                 </div>
 
                             </div>

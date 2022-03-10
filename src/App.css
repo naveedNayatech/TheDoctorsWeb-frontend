@@ -1051,14 +1051,14 @@ How it works
 }
 
 .sidebar .nav-links li a .link_name{
-  color: #FAFAFA;
+  color: #FFF;
   font-size: 12px;
-  font-weight: light;
+  font-weight: 500;
   text-transform: uppercase; 
 }
 
 .link-name-active {
-  background-color: #F95800;
+  background-color: #006762;
 }
 
 .sidebarBtn {
@@ -1662,7 +1662,7 @@ tr {
 }
 
 .patient-profile-disease-span {
-  background-color: #F95800;
+  background-color: #006762;
   display: inline-block;
   padding: 8px;
   border-radius: 20px;
@@ -1746,8 +1746,8 @@ tr {
 }
 
 .add-staff-btn {
-  border: 2px solid #081D45;
-  color: #000;
+  background-color: #006762;
+  color: #F8C113;
   font-size: 14px;
   padding: 10px;
   border-radius: 4px;
@@ -1755,17 +1755,16 @@ tr {
   transition: all 0.5s ease;
 }
 
-.add-staff-btn:hover {
-  background-color: #2a4b8a;
-  color: #FFF;
+ .add-staff-btn:hover {
   text-decoration: none;
-}
+  color: #FFF
+} 
 
 .patient-profile-data-div {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: #e4af8e;
+  background-color: #006762;
   -webkit-box-shadow: 0px 0px 15px -10px #000000;
   box-shadow: 0px 0px 15px -10px #000000;
   color: #FFF;
@@ -1773,9 +1772,7 @@ tr {
 }
 
 .check-icon {
-  color: #FF0000;
-  border-radius: 50%;
-  font-weight: bold;
+  color: #F8C113;
 }
 
 .cross-icon {
@@ -2105,4 +2102,10 @@ tr {
 .graph-card {
   -webkit-box-shadow: 0px 0px 15px -10px #000000;
   box-shadow: 0px 0px 15px -10px #000000;
+}
+
+.row-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

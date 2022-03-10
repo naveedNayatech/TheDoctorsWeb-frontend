@@ -3,7 +3,7 @@ import MetaData from '../../layouts/MetaData';
 import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
 import Loader from '../../layouts/Loader';
-import { patientProfile, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
+import { patientProfile, getPatientTelemetryData, sortTelemetartData, getRemainingReadings} from '../../actions/adminActions';
 import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth} from '../../actions/HRActions';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ import moment from 'moment';
 
 const HRPatientProfile = (props) => {
     const alert = useAlert();
-    let remainingReadings;
 
   let patientid = props?.location?.state?.patientid;
 
@@ -29,6 +28,7 @@ const HRPatientProfile = (props) => {
     let currMonthName  = moment().format('MMMM');
     let startDate = output.startOf('month').format('L');
     let endDate = output.endOf('month').format('L');
+    let readingmonth;
 
     const [sortDate, setSortDate] = useState('');
   
@@ -41,7 +41,7 @@ const HRPatientProfile = (props) => {
   const [fileName, setFileName] = useState({});
 
 
-  const { loading, error, patient} = useSelector(state => state.patientProfile);
+  const { loading, error, patient, readingsCount} = useSelector(state => state.patientProfile);
   const { deviceData } = useSelector(state => state.deviceData);
   const { commentSuccess} = useSelector(state => state.comments);
   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
@@ -66,6 +66,7 @@ const HRPatientProfile = (props) => {
     dispatch(getPatientTelemetryData(patientid))
     dispatch(getPatientCarePlan(patientid));
     dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
+    dispatch(getRemainingReadings(patientid));
 
     if(commentSuccess) {
         alert.success('Comment added');
@@ -133,7 +134,7 @@ const HRPatientProfile = (props) => {
         setSortDate('');
     }
     
-   
+    readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
 
     
 
@@ -280,7 +281,7 @@ const HRPatientProfile = (props) => {
                                 
                                 {careplan ? <Fragment>
                                     <div className="col-md-2">
-                                        <button disabled className="btn btn-outline-danger mt-2"><small>Careplan Added</small></button>
+                                        <button disabled className="btn btn-outline-danger mt-2"><small>+ Careplan</small></button>
                                     </div>
                                 </Fragment> : <Fragment>
                                     <div className="col-md-2">
@@ -337,20 +338,26 @@ const HRPatientProfile = (props) => {
                                         <hr />
 
                                         
-                                        <div className="patient-profile-data-div">
+                                                    <div className="patient-profile-data-div">
                                                         <p style={{fontSize: 14}} className="text-center mt-2">RPM Consent : </p>
                                                         <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
                                                     </div>
 
-                                                    <div className="patient-profile-data-div mt-2">
+                                                    {careplan ? <>
+                                                        <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
-                                                    <span className="check-icon mt-2">16</span>
+                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
                                                     </div>
-
-                                                    <div className="patient-profile-data-div mt-2">
-                                                        <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
-                                                        <span className="check-icon mt-2">11</span>
-                                                    </div>
+                                                    </> : ''}
+                                                    
+                                                    {careplan ? <>
+                                                        <div className="patient-profile-data-div mt-2">
+                                                            <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
+                                                            
+                                                            <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                        </div>
+                                                    </> : ''}
+                                                    
 
                                                     <div className="patient-profile-data-div mt-2">
                                                         <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>
@@ -381,14 +388,13 @@ const HRPatientProfile = (props) => {
                                             <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
                                             
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
-                                                <Fragment>
+                                                <div key={index}>
                                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
                                                 {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
                                                     <i className="bx bx-trash"></i>
                                                 </button> */}
                                                 </p>
-                                                
-                                                </Fragment>
+                                                </div>
                                             ))}           
                                         </Fragment>}      
                                         </div>
@@ -442,7 +448,7 @@ const HRPatientProfile = (props) => {
                         
 
                     
-                        <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
+                        <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example">
                             <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
                             {deviceData && deviceData.map((devicedata, index) => (
                                 <div key={index}>
@@ -463,7 +469,7 @@ const HRPatientProfile = (props) => {
                                 ))}
                             </Tab>
                         </Tabs>   
-                        </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <Link onClick={refreshHandler}>Refresh List</Link></small>}
+                        </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-primary btn-sm"onClick={refreshHandler}>Refresh List</button></small>}
                         </Fragment>
                         }
                         </div>

@@ -90,7 +90,7 @@ const CareplanDetails = (props) => {
                     <b>Careplan</b>
                     <hr/>
                     <small style={{textAlign:'justifyContent'}}>{careplan?.Description}</small> <br/>
-                    <Link to={`/v1/uploadFiles/${careplan?.fileName}`}>{careplan?.fileName}</Link>
+                    <Link to={`https://vitalsportal.com/v1/uploadFiles/${careplan?.fileName}`}>{careplan?.fileName}</Link>
                     <small style={{float: 'right', marginRight: 20}}><i>{moment(careplan?.createdAt).format("lll")}</i></small> <br/>
                     <br/>
                     <button className="btn btn-outline-info mt-2" onClick={handleCarePlanModalShow}>Update Careplan</button>

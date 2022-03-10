@@ -80,6 +80,7 @@ import {
     GET_ADMIN_NOTIFICATIONS_REQUEST,
     GET_ADMIN_NOTIFICATIONS_SUCCESS,
     GET_ADMIN_NOTIFICATIONS_FAIL,
+    GET_PATIENT_REMAINING_READINGS,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -541,7 +542,7 @@ export const getDoctorPatients = (id) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${id}`, {
+        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${id}/null`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -875,6 +876,30 @@ export const sortTelemetartData = (patientId, sortDate) => async(dispatch) => {
            payload: error.message
        })
     }   
+}
+
+export const getRemainingReadings = (id) => async(dispatch) => {
+    try{
+    const token = JSON. parse(localStorage.getItem('token'));
+    
+    const {data} =  await axios.get(`${Prod01}/patient/getReadingCount/${id}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+                }
+           });
+    
+    dispatch({
+        type: GET_PATIENT_REMAINING_READINGS,
+        payload: data
+    })  
+    
+
+    } catch(error) {
+        dispatch({
+            payload: error.message
+        })
+    }
+
 }
 
    export const insertComment = (deviceid, comment, patientid) => async(dispatch) => {

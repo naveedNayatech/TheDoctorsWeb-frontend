@@ -54,15 +54,9 @@ const HRPatientsList = () => {
                     <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
                         <div className="home-content">
                             <div className="container">
-                                <div className="row">
-                                    <div className="col-md-9">
-                                        <h5 className="pt-2 mt-2">My Patients ({hrpatients && hrpatients.length}) </h5> 
-                    
-                                    </div>
-
-                                    <div className="col-md-3">
-                                         <Link to="/Hr/AddPatient" className="add-staff-btn">Enroll New Patient</Link> 
-                                    </div>
+                                <div className="row-display">
+                                        <h5 >My Patients ({hrpatients && hrpatients.length}) </h5> 
+                                         <Link to="/Hr/AddPatient" className="add-staff-btn">+ Add New Patient</Link> 
                                 </div> 
                                 <hr />
                                 

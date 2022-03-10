@@ -1,8 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { staffLogout } from '../../actions/authActions';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Sidebar = (props) => {
 
@@ -32,28 +31,28 @@ const Sidebar = (props) => {
 
             <ul className="nav-links">
                 <li>
-                    <Link key="dashboard" to="/Dashboard">
+                    <NavLink key="dashboard" to="/Dashboard" activeClassName="link-name-active">
                     <i className='bx bx-list-ul'></i>
                         <span className="link_name">My Dashboard</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
                 <li>
-                    <Link key="staffPatients" to="/staffPatients">
+                    <NavLink key="staffPatients" to="/staffPatients" activeClassName="link-name-active">
                     <i className='bx bx-list-ul'></i>
                         <span className="link_name">My Patients</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
                 <li>
-                    <Link key="doctors" to="/staffProfile">
+                    <NavLink key="doctors" to="/staffProfile" activeClassName="link-name-active">
                         <i className="bx bx-user"></i>
                         <span className="link_name">My Profile</span>
-                    </Link>
+                    </NavLink>
                 </li>
 
  
-                <li style={{backgroundColor: 'orangered'}}>
+                <li>
                     <Link key="logout" to="#" onClick={logoutHandler}>
                         <i className="bx bx-log-out"></i>
                         <span className="link_name">Logout</span>

@@ -27,27 +27,27 @@ const TopBar = () => {
         <Fragment>
             {/* Top Header */}
             <nav>
-                    <div className="sidebar-button">
-                        <i className="bx bx-menu sidebarBtn"></i>
-                        <span className="dashboard">Doctor <span style={{color: '#F95800'}}>Dashboard</span></span>    
-                    </div>
+                <div className="sidebar-button">
+                    <i className="bx bx-menu sidebarBtn"></i>
+                    <span className="dashboard">Doctor <span style={{color: '#F95800'}}>Dashboard</span></span>    
+                </div>
 
 
-                        <div className="profile-details btn dropdown-toggle" type="button" 
-                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
-                        <img src="https://i.stack.imgur.com/l60Hf.png" alt="profileimg" />
-                        <span className="admin-name">{isAuthenticated == true && staff && <Fragment>{staff?.firstname} {staff?.lastname}</Fragment>}</span>
-                           
-                    </div>
+                <div style={{marginLeft: '50%'}} className="profile-details btn dropdown-toggle" type="button" 
+                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
+                    <img src="https://i.stack.imgur.com/l60Hf.png" alt="profileimg" />
+                <span className="admin-name">{isAuthenticated == true && staff && <Fragment>{staff?.firstname} {staff?.lastname}</Fragment>}</span>
+                
+                </div>
 
-                    <div className="dropdown-menu">
-                                    
-                        <Link className="dropdown-item" to="/staffProfile">My Profile</Link>
+                <div className="dropdown-menu">
+                                
+                    <Link className="dropdown-item" to="/staffProfile">My Profile</Link>
 
-                        <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}>Logout</Link>
-                    </div>
-                </nav>
-                <hr className="blue-hr"/>
+                    <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}>Logout</Link>
+                </div>
+            </nav>
+            <hr className="blue-hr"/>
         </Fragment>
     )
 }

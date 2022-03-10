@@ -9,6 +9,8 @@ import folderImg from '../../assets/Images/folder.png';
 import { Link } from 'react-router-dom';
 import { Badge, Form } from 'react-bootstrap';
 import Loader from '../../layouts/Loader';
+import patientProfileImg from '../../assets/Images/patientProfile.png';
+import moment from 'moment';
 
 const StaffDashboard = (props) => {
 
@@ -38,49 +40,23 @@ const StaffDashboard = (props) => {
                 {/* TopBar */}  
                 <TopBar />
 
-
-                <div className="home-content">
-                <div className="overview-boxes">
-                    <div className="box staff-box0">
-                        <div className="left-side">
-                            <div className="box_topic">My Patients</div>
-                            <div className="number">{doctorpatients && doctorpatients.length}</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-user cart"></i>
+                <div className="container row">
+                    <div className="col-md-12">
+                        <div className="home-content">
+                            <StaffPieGraph />
+                        </div>    
                     </div>
 
-                    <div className="box staff-box1">
-                        <div className="left-side">
-                            <div className="box_topic">Devices Assigned</div>
-                            <div className="number">00</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-devices cart two"></i>
-                    </div>
+                    {/* <div className="col-md-3 alerts-section rounded-card">
+                        HR Details   
+                         <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" /> 
+                         <p className="patient-profile-name"> Alex Adeel</p>
+                         <p className="patient-profile-name"> adeelahmad@gmail.com</p>
+                         <p className="patient-profile-name"> +844-569-558</p>
 
-                    <div className="box staff-box2">
-                        <div className="left-side">
-                            <div className="box_topic">Total Staff</div>
-                            <div className="number">00</div>
-                            <div className="indicator">
-                                <i className="bx bx-up-arrow-alt"></i>
-                                <span className="text">Up from Yesterday</span>
-                            </div>
-                        </div>
-                        <i className="bx bx-user cart three"></i>
-                    </div>
-
-                    {/* Pie Graph */}
-                    <StaffPieGraph />
+                    </div> */}
                 </div>
-            </div>
+                
 
             <div>
 
@@ -103,28 +79,36 @@ const StaffDashboard = (props) => {
                                         <thead align="center">
                                         <tr>  
                                             <th>Name</th>
-                                            <th>Gender</th>
-                                            <th>Contact No </th>
+                                            <th>DOB </th>
                                             <th>Email</th>
-                                            <th>Phy. Status</th>
-                                            <th>Consent Status</th>
-                                            <th>Action</th>
+                                            <th>Acc Status</th>
+                                            <th>Physician</th>
+                                            <th>Devices Assigned</th>
                                         </tr> 
                                         </thead>
                                         <tbody>
                                         {doctorpatients && doctorpatients.map((patient, index) => ( 
                                             <tr align="center" key={index}>
-                                            <td><Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
-                                            <td>{patient?.phone1} <p>(English)</p></td>
-                                            <td>{patient?.gender ? patient?.gender : 'N/A'}</td>
-                                            <td>{patient?.email}</td>
-                                            <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td> 
-                                            <td>{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</td>
-                                            <td>
-                                            <Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
-                                                {/* <Link to={{ pathname: "/staffPatients", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
-                                            </td>
+                                            
+                                            <td><Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                            
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
+                                            
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                            
+                                            {patient?.block === false ? <td>
+                                                <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                                </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                            </td>}
+                                            
+                                            {patient?.assigned_doctor_id ? <>
+                                                <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                            </> : <>
+                                            <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                            </>}
+
+                                            {patient?.assigned_devices ? <td>{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
+                                            
                                         </tr> 
                                         ))}
                                         

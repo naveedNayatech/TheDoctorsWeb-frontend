@@ -4,7 +4,8 @@ import TopBar from '../../components/Staff/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import {useSelector, useDispatch} from 'react-redux';
-import { patientProfile, getPatientTelemetryData, insertComment} from '../../actions/adminActions';
+import { patientProfile, getPatientTelemetryData, getRemainingReadings} from '../../actions/adminActions';
+import { getPatientCarePlan } from '../../actions/HRActions';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
@@ -21,11 +22,13 @@ const StaffPatientProfile = (props) => {
 
 
     let patientid = props?.location?.state?.patientid;
+    let readingmonth;
 
-    const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
+    const { loading, error, patient, isUpdated, readingsCount} = useSelector(state => state.patientProfile);
     const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
     const { isAuthenticated} = useSelector(state => state.staffAuth);
+    const { careplan } = useSelector(state => state.careplan);
 
     const [addTimeShow, setAddTimeShow] = useState(false);
 
@@ -40,7 +43,9 @@ const StaffPatientProfile = (props) => {
 
 
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientTelemetryData(patientid));
+        dispatch(getPatientCarePlan(patientid));
+        dispatch(getRemainingReadings(patientid));
         
         if(commentSuccess) {
             alert.success('Comment added');
@@ -58,7 +63,7 @@ const StaffPatientProfile = (props) => {
     const handleClose = () => setAddTimeShow(false);
     const handleShow = () => setAddTimeShow(true);
 
-    
+    readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
 
     return (
         <Fragment>
@@ -96,9 +101,7 @@ const StaffPatientProfile = (props) => {
                                         
                                                 <Fragment>
                                                     <p className="patient-email">{patient?.email}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">RPM Consent {patient?.rpmconsent === true ? <i className="bx bx-check check-icon"></i>: <i className='bx bx-x cross-icon'></i>}</p>
-                                                    <p style={{fontSize: 14}} className="text-center">Readings /mo <i className="check-icon">16</i></p>
-                                                    {patient?.initialsetup ? <p style={{fontSize: 14}} className="text-center">Initial setup <i className="check-icon">{patient?.initialsetup}</i></p> : null}
+                                                    <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
                                                 </Fragment>
                                         </div>   
                                     </div>
@@ -129,9 +132,34 @@ const StaffPatientProfile = (props) => {
                                     </div>
 
                                     <div className="col-md-3 ">
-                                            <span className="patient-profile-col-heading">Patient Disease (s)</span>                                 
+                                            <span className="patient-profile-col-heading">Patient Analytics</span>                                 
                                              <hr />
-                                            <span className="patient-profile-card-text"> {patient?.diseases} </span>   
+
+                                             <div className="patient-profile-data-div">
+                                                 <p style={{fontSize: 14}} className="text-center mt-2">RPM Consent : </p>
+                                                <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
+                                            </div>
+
+                                            {careplan ? <>
+                                                        <div className="patient-profile-data-div mt-2">
+                                                    <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
+                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
+                                                    </div>
+                                                    </> : ''}
+                                                    
+                                            {careplan ? <>
+                                                        <div className="patient-profile-data-div mt-2">
+                                                            <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
+                                                            
+                                                            <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                        </div>
+                                                    </> : ''}
+
+
+                                            <div className="patient-profile-data-div mt-2">
+                                                <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>
+                                                <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
+                                            </div>   
                                                 
                                     </div>
                                 </div>
@@ -181,14 +209,17 @@ const StaffPatientProfile = (props) => {
                                 </div>
 
                                 <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Insurance companies</span>                                 
+                                    <span className="patient-profile-col-heading">Patient Careplan</span>                                 
                                         <hr />
-                                        <div className="row">    
-                                        <div className="col-md-12">
-                                        <p className="profile-label">{patient?.insurance ? patient?.insurance : 'N/A'}</p>
-                                        
-                                        </div>    
-                                    </div>
+                                        {careplan && ( <Fragment>
+                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.Description}</small>            
+                                                <small style={{float: 'right', marginTop: 10}}>
+                                                    <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
+                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                                    </i>
+                                                </small>    
+                                                
+                                            </Fragment>)}
                                    
                                   </div>
                                   </div> {/* row ends here */}

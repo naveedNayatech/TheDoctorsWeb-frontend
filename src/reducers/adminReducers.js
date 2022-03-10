@@ -85,6 +85,7 @@ import {
     GET_ADMIN_NOTIFICATIONS_REQUEST,
     GET_ADMIN_NOTIFICATIONS_SUCCESS,
     GET_ADMIN_NOTIFICATIONS_FAIL,
+    GET_PATIENT_REMAINING_READINGS,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -141,7 +142,6 @@ export const adminReducers = (state = { patients: []}, action) => {
             loading: false,
             isUpdated: false
         }
-       
 
         case CLEAR_ERRORS: 
         return { 
@@ -335,6 +335,11 @@ export const patientProfileReducers = (state = {patient: {}}, action) => {
             return {
                 loading: false,
                 error: action.payload
+            }
+        
+        case GET_PATIENT_REMAINING_READINGS:
+            return {
+                readingsCount: action.payload
             }
 
         case CLEAR_ERRORS: 
