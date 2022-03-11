@@ -138,20 +138,20 @@ const PatientProfile = (props) => {
                                                 <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
                                             </div>   
 
-                                            {careplan ? <>
+                                            {careplan && <>
                                                 <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
                                                     <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
                                                 </div>
-                                            </> : ''}
+                                            </> }
 
-                                            {careplan ? <>
+                                            {careplan && <>
                                                 <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
                                                     
                                                     <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
                                                 </div>
-                                            </> : ''}
+                                            </> }
 
                                             <div className="patient-profile-data-div mt-2">
                                                 <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>

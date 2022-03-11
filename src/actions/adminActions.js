@@ -120,7 +120,7 @@ export const getDoctorsPatientList = (docId) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${docId}`, {
+        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${docId}/null`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -147,7 +147,7 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
         console.log('HR ID is ' + hrId);
-        const { data } = await axios.get(`${Prod01}/hr/patientlist/${hrId}`, {
+        const { data } = await axios.get(`${Prod01}/hr/patientlist/${hrId}/null`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }

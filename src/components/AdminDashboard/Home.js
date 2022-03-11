@@ -109,7 +109,7 @@ const Home = () => {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {patients && patients.slice(0,5).map((patient, index) => (
+                                        {patients && patients.slice(0,9).map((patient, index) => (
                                         <tr key={index}>
                                           <td>{patient?.title} {patient?.firstname} {patient?.lastname}</td>
                                           <td>{moment(patient?.DOB).format("ll")}</td>
