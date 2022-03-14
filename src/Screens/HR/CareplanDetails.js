@@ -21,9 +21,9 @@ const CareplanDetails = (props) => {
   const { careplan, isUpdated } = useSelector(state => state.careplan);
   const [carePlanShow ,setCarePlanShow] = useState(false);
 
-  const [description, setDescription] = useState(careplan?.Description);
-  const [readingsPerDay, setReadingsPerDay] = useState(careplan?.readingsPerDay);
-  const [readingsPerMonth, setReadingsPerMonth] = useState(careplan?.readingsPerMonth);
+  const [description, setDescription] = useState(careplan?.data?.Description);
+  const [readingsPerDay, setReadingsPerDay] = useState(careplan?.data?.readingsPerDay);
+  const [readingsPerMonth, setReadingsPerMonth] = useState(careplan?.data?.readingsPerMonth);
 
 
   const handleCarePlanModalClose = () => setCarePlanShow(false);
@@ -43,7 +43,7 @@ const CareplanDetails = (props) => {
 }, [dispatch, isUpdated]);
 
   const updatehandler = () => {
-    dispatch(updateCarePan(description, readingsPerMonth, readingsPerDay, careplan?._id));
+    dispatch(updateCarePan(description, readingsPerMonth, readingsPerDay, careplan?.data?._id));
   }
 
   return (
@@ -66,31 +66,31 @@ const CareplanDetails = (props) => {
                   <div className="col-md-4">
                     <b>Patient Details</b>
                     <hr/>
-                    <span className="profile-label">Name: {careplan?.assigned_patient_id?.firstname} {careplan?.assigned_patient_id?.lastname}</span><br/>
-                    <span className="profile-label">DOB: {moment(careplan?.assigned_patient_id?.DOB).format("ll")}</span><br/>
-                    <span className="profile-label">Gender: <Badge bg="info text-white">{careplan?.assigned_patient_id?.gender}</Badge></span><br/>
-                    <span className="profile-label">Email: {careplan?.assigned_patient_id?.email}</span><br/>
-                    <span className="profile-label">Phone 1: {careplan?.assigned_patient_id?.phone1}</span> <br/>
-                    <span className="profile-label">Diseases: {careplan?.assigned_patient_id?.diseases}</span>
+                    <span className="profile-label">Name: {careplan?.data?.assigned_patient_id?.firstname} {careplan?.data?.assigned_patient_id?.lastname}</span><br/>
+                    <span className="profile-label">DOB: {moment(careplan?.data?.assigned_patient_id?.DOB).format("ll")}</span><br/>
+                    <span className="profile-label">Gender: <Badge bg="info text-white">{careplan?.data?.assigned_patient_id?.gender}</Badge></span><br/>
+                    <span className="profile-label">Email: {careplan?.data?.assigned_patient_id?.email}</span><br/>
+                    <span className="profile-label">Phone 1: {careplan?.data?.assigned_patient_id?.phone1}</span> <br/>
+                    <span className="profile-label">Diseases: {careplan?.data?.assigned_patient_id?.diseases}</span>
 
                   </div>
 
                   <div className="col-md-4">
                     <b>Added By</b>
                     <hr/>
-                    <span className="profile-label">Name: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}</span><br/>
-                    <span className="profile-label">DOB: {moment(careplan?.assigned_hr_id?.firstname).format("ll")}</span><br/>
+                    <span className="profile-label">Name: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}</span><br/>
+                    <span className="profile-label">DOB: {moment(careplan?.data?.assigned_hr_id?.DOB).format("ll")}</span><br/>
                     <span className="profile-label">Gender: <Badge bg="danger text-white">Male</Badge></span><br/>
-                    <span className="profile-label">Email: {careplan?.assigned_hr_id?.email}</span><br/>
-                    <span className="profile-label">Phone 1: {careplan?.assigned_hr_id?.phone1}</span> <br/>
-                    <span className="profile-label">Role: <Badge bg="warning text-white">{careplan?.assigned_hr_id?.role}</Badge></span>
+                    <span className="profile-label">Email: {careplan?.data?.assigned_hr_id?.email}</span><br/>
+                    <span className="profile-label">Phone 1: {careplan?.data?.assigned_hr_id?.phone1}</span> <br/>
+                    <span className="profile-label">Role: <Badge bg="warning text-white">{careplan?.data?.assigned_hr_id?.role}</Badge></span>
                   </div>
 
                   <div className="col-md-4">
                     <b>Careplan</b>
                     <hr/>
-                    <small style={{textAlign:'justifyContent'}}>{careplan?.Description}</small> <br/>
-                    <Link to={`https://vitalsportal.com/v1/uploadFiles/${careplan?.fileName}`}>{careplan?.fileName}</Link>
+                    <small style={{textAlign:'justifyContent'}}>{careplan?.data?.Description}</small> <br/>
+                    <Link to={`https://vitalsportal.com/v1/uploadFiles/${careplan?.data?.fileName}`}>{careplan?.data?.fileName}</Link>
                     <small style={{float: 'right', marginRight: 20}}><i>{moment(careplan?.createdAt).format("lll")}</i></small> <br/>
                     <br/>
                     <button className="btn btn-outline-info mt-2" onClick={handleCarePlanModalShow}>Update Careplan</button>

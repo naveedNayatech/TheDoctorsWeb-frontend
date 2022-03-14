@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
+import { Spinner } from 'react-bootstrap'
 
 import { login, clearErrors } from '../actions/authActions'; 
 
@@ -49,7 +49,7 @@ const Login = ({ history }) => {
     return (
     	<Fragment>
 		<MetaData title="Login" />
-		{loading ? <Loader /> : <Fragment>
+		 <Fragment>
 				<div className="login-section">
 					<div className="container">
 						<div className="row content">
@@ -100,7 +100,7 @@ const Login = ({ history }) => {
 
 												<div className="row-class" style={{justifyContent: 'space-between'}}>
 													<button className="reset-btn" type="reset">Reset</button>
-													<button className="submit-btn ml-3" type="submit" disabled={loading ? true : false}>Login</button>
+													<button className="submit-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Login'}</button>
 												</div>
 											</Form>
 
@@ -116,7 +116,7 @@ const Login = ({ history }) => {
 						</div>
 					</div>
 				</div>
-		</Fragment>}
+		</Fragment>
         
     </Fragment>
     )

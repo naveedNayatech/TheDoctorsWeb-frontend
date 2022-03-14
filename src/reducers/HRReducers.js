@@ -235,7 +235,7 @@ export const initialMonthReportReducers = (state = {initialMonthPatients:[]}, ac
     } 
 }
 
-export const carePlanReducers = (state={careplan:{}}, action) => {
+export const carePlanReducers = (state='', action) => {
     switch (action.type) {
         
         case PATIENT_CARE_PLAN_SUCCESS:

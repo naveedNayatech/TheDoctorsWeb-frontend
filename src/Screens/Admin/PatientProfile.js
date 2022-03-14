@@ -27,9 +27,10 @@ const PatientProfile = (props) => {
     let deviceid = props?.location?.state?.deviceid;
 
 
-    const { loading, error, patient, isUpdated, readingsCount} = useSelector(state => state.patientProfile);
+    const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
     const { careplan } = useSelector(state => state.careplan);
+    const { count } = useSelector(state => state.readingsCount);
     
     useEffect(() => {
         if(error){
@@ -40,6 +41,10 @@ const PatientProfile = (props) => {
         dispatch(getPatientTelemetryData(patientid))
         dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
+        
+
+        console.log('Careplan is ' + careplan)    
+        
         
         if(isUpdated) {
             alert.success('Updated Successfully');
@@ -65,7 +70,15 @@ const PatientProfile = (props) => {
         setSortDate('');
     }
 
-    let readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
+    
+    let readingsThisMonth;
+    let ReadingsperMonth; 
+ 
+    readingsThisMonth = count;
+    ReadingsperMonth = careplan?.data?.readingsPerMonth;
+    
+    
+
 
     return (
         <Fragment>
@@ -86,9 +99,9 @@ const PatientProfile = (props) => {
                                     <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
                                 </div>
                                         
-                            <hr />
+                                <hr />
 
-                                <div className="row">
+                                 <div className="row">
                                     <div className="col-md-3">
                                         <div>
                                             <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
@@ -101,7 +114,7 @@ const PatientProfile = (props) => {
                                                     <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span> 
                                                 </Fragment>
                                         </div>    
-                                 </div>
+                                    </div>
 
                                     <div className="col-md-3">
                                             <span className="patient-profile-col-heading">Address</span>                                 
@@ -138,27 +151,27 @@ const PatientProfile = (props) => {
                                                 <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
                                             </div>   
 
-                                            {careplan && <>
+                                             {careplan !== undefined && <>
                                                 <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
-                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
+                                                    <span className="check-icon mt-2">{ReadingsperMonth}</span>
                                                 </div>
                                             </> }
 
-                                            {careplan && <>
+                                            {careplan !== undefined && <>
                                                 <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
                                                     
-                                                    <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                    <span className="check-icon mt-2">{ReadingsperMonth - readingsThisMonth}</span>
                                                 </div>
-                                            </> }
+                                            </> } 
 
                                             <div className="patient-profile-data-div mt-2">
                                                 <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>
                                                 <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
                                             </div>
                                     </div>
-                                </div>
+                                </div> 
 
                                  <br />   
                                 <div className="row">
@@ -167,10 +180,9 @@ const PatientProfile = (props) => {
                                         <hr />
                                     {patient?.assigned_doctor_id ? <>
                                         <span className="profile-label">Name</span>
-                                    <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
+                                    <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
                                     </> : <>
                                     <span className="profile-label">Doctor Not Assigned Yet</span>
-
                                     </>}
                                     
                                 </div>
@@ -178,21 +190,21 @@ const PatientProfile = (props) => {
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">RPM Integration</span>                                 
                                         <hr />
-                                         {patient?.assigned_devices && patient?.assigned_devices.length === 0 ? <Fragment>
+                                         {patient?.assigned_devices && patient?.assigned_devices?.length === 0 ? <Fragment>
                                             <span className="profile-label">No Device Assigned Yet</span>
                                            
                                             </Fragment> : <Fragment>
-                                            <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
+                                            <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices?.length})</span>
                                             
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
-                                                <Fragment>
+                                                <div key={index}>
                                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
                                                 <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass,patientid)}>
                                                     <i className="bx bx-trash"></i>
                                                 </button>
                                                 </p>
                                                 
-                                                </Fragment>
+                                                </div>
                                             ))} 
                                                 
                                         </Fragment>}            
@@ -213,18 +225,18 @@ const PatientProfile = (props) => {
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Patient Careplan</span>                                 
                                     <hr /> 
-                                    {careplan ? <Fragment>
+                                    {careplan && careplan ? <Fragment>
                                         <span style={{float: 'right', marginTop: 10}}>
-                                            <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
-                                            &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                            <i>Careplan Added.</i> <br/>
+                                            <i>By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
+                                            &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
                                             </i>
                                         </span>  
                                     </Fragment> : 'N/A'}
                                 </div>
-
                             </div>
-                
-                    {deviceData && deviceData.length > 0 ? <Fragment>
+
+                            {deviceData && deviceData.length > 0 ? <Fragment>
                         <br/><br/>
                         <div className="row">
                             <div className="col-md-9">
@@ -242,7 +254,7 @@ const PatientProfile = (props) => {
                             </div>
                         </div>
 
-                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
+                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example">
                         <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
                         {deviceData && deviceData.map((devicedata, index) => (
                             <div key={index}>
@@ -266,7 +278,8 @@ const PatientProfile = (props) => {
                             Spo2 Data
                         </Tab> */}
                     </Tabs>
-                    </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <Link onClick={refreshHandler}>Refresh List</Link></small>}
+                    </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-link" onClick={refreshHandler}>Refresh List</button></small>}
+                 
                     </Fragment> }
                 </div>
                 

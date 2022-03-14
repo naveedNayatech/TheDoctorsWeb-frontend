@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Prod01 } from '../constants/ActionType';
- 
+
 import {
     HR_PATIENTS_REQUEST,
     HR_PATIENTS_SUCCESS,
@@ -319,7 +319,7 @@ export const getPatientCarePlan = (patientId) => async(dispatch) => {
     try {
        const token = JSON. parse(localStorage.getItem('token'));
 
-       const { data } = await axios.get(`${Prod01}/patient/CarePlan/${patientId}` , {
+       const data  = await axios.get(`${Prod01}/patient/CarePlan/${patientId}` , {
             headers: {
                 "Authorization":`Bearer ${token}`
              }
@@ -329,6 +329,7 @@ export const getPatientCarePlan = (patientId) => async(dispatch) => {
             type: PATIENT_CARE_PLAN_SUCCESS,
             payload: data,
         });
+
         
     } catch (error) {
        dispatch({

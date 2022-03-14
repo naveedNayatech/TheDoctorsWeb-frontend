@@ -24,11 +24,12 @@ const StaffPatientProfile = (props) => {
     let patientid = props?.location?.state?.patientid;
     let readingmonth;
 
-    const { loading, error, patient, isUpdated, readingsCount} = useSelector(state => state.patientProfile);
+    const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
     const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
     const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
     const { isAuthenticated} = useSelector(state => state.staffAuth);
     const { careplan } = useSelector(state => state.careplan);
+    const { count } = useSelector(state => state.readingsCount);
 
     const [addTimeShow, setAddTimeShow] = useState(false);
 
@@ -63,7 +64,12 @@ const StaffPatientProfile = (props) => {
     const handleClose = () => setAddTimeShow(false);
     const handleShow = () => setAddTimeShow(true);
 
-    readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
+    let readingsThisMonth;
+    let ReadingsperMonth; 
+ 
+    readingsThisMonth = count;
+    ReadingsperMonth = careplan?.data?.readingsPerMonth;
+
 
     return (
         <Fragment>
@@ -143,7 +149,7 @@ const StaffPatientProfile = (props) => {
                                             {careplan ? <>
                                                         <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
-                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
+                                                    <span className="check-icon mt-2">{careplan?.data?.readingsPerMonth}</span>
                                                     </div>
                                                     </> : ''}
                                                     
@@ -151,7 +157,7 @@ const StaffPatientProfile = (props) => {
                                                         <div className="patient-profile-data-div mt-2">
                                                             <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
                                                             
-                                                            <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                            <span className="check-icon mt-2">{ReadingsperMonth - readingsThisMonth}</span>
                                                         </div>
                                                     </> : ''}
 
@@ -212,10 +218,10 @@ const StaffPatientProfile = (props) => {
                                     <span className="patient-profile-col-heading">Patient Careplan</span>                                 
                                         <hr />
                                         {careplan && ( <Fragment>
-                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.Description}</small>            
+                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.data?.Description}</small>            
                                                 <small style={{float: 'right', marginTop: 10}}>
-                                                    <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
-                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                                    <i>Added By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
+                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
                                                     </i>
                                                 </small>    
                                                 

@@ -302,7 +302,7 @@ export const doctorpatientsReducers = (state = {}, action) => {
     // }
 // }
 
-export const patientProfileReducers = (state = {patient: {}}, action) => {
+export const patientProfileReducers = (state = {patient: {}, readingsCount: ""}, action) => {
     switch (action.type) {
         case PATIENT_PROFILE_REQUEST: 
         case ASSIGN_PATIENT_TO_DOCTOR_REQUEST:
@@ -336,11 +336,7 @@ export const patientProfileReducers = (state = {patient: {}}, action) => {
                 loading: false,
                 error: action.payload
             }
-        
-        case GET_PATIENT_REMAINING_READINGS:
-            return {
-                readingsCount: action.payload
-            }
+
 
         case CLEAR_ERRORS: 
                 return {
@@ -680,5 +676,17 @@ export const adminNotificationsReducers = (state = { notifications:[] }, action)
             
         default: // need this for default case
         return state    
+    }
+}
+
+export const remainingReadingsReducer = (state={count:0}, action) => {
+    switch(action.type) {
+        case GET_PATIENT_REMAINING_READINGS: 
+        return {
+            count: action.payload.count
+        }
+
+        default: 
+        return state
     }
 }

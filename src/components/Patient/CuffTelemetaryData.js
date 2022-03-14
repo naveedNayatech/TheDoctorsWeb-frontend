@@ -94,7 +94,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
                     <span className="vl"></span>
 
-                    <span className="profile-label ml-2">Reading Date: </span>
+                    <span className="profile-label ml-2">Added D/T: </span>
                     <span className="profile-label"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
                 </div>
             </div>

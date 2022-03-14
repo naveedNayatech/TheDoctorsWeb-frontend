@@ -28,6 +28,7 @@ import {adminNotificationsReducers} from './reducers/adminReducers';
 import { patientCPReportReducers } from './reducers/HRReducers';
 import { inventoryStatsReducers } from './reducers/adminReducers';
 import { hrNotificationsReducers } from './reducers/HRReducers';
+import { remainingReadingsReducer } from './reducers/adminReducers';
 
 const reducer = combineReducers({
     admin: adminReducers,
@@ -56,7 +57,8 @@ const reducer = combineReducers({
     totalTimeSpent: timeSpentCurrentMonthReducer,
     completeCP : patientCPReportReducers,
     inventoryStats: inventoryStatsReducers,
-    hrNoti: hrNotificationsReducers
+    hrNoti: hrNotificationsReducers,
+    readingsCount: remainingReadingsReducer
 
 })
 

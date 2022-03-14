@@ -41,9 +41,10 @@ const HRPatientProfile = (props) => {
   const [fileName, setFileName] = useState({});
 
 
-  const { loading, error, patient, readingsCount} = useSelector(state => state.patientProfile);
+  const { loading, error, patient} = useSelector(state => state.patientProfile);
   const { deviceData } = useSelector(state => state.deviceData);
   const { commentSuccess} = useSelector(state => state.comments);
+  const { count } = useSelector(state => state.readingsCount);
   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
   const {hr} = useSelector(state => state.hrAuth);  
   const { careplan } = useSelector(state => state.careplan);
@@ -134,7 +135,11 @@ const HRPatientProfile = (props) => {
         setSortDate('');
     }
     
-    readingmonth = careplan?.readingsPerMonth - readingsCount?.count;
+    let readingsThisMonth;
+    let ReadingsperMonth; 
+ 
+    readingsThisMonth = count;
+    ReadingsperMonth = careplan?.data?.readingsPerMonth;
 
     
 
@@ -346,7 +351,7 @@ const HRPatientProfile = (props) => {
                                                     {careplan ? <>
                                                         <div className="patient-profile-data-div mt-2">
                                                     <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
-                                                    <span className="check-icon mt-2">{careplan?.readingsPerMonth}</span>
+                                                    <span className="check-icon mt-2">{careplan?.data?.readingsPerMonth}</span>
                                                     </div>
                                                     </> : ''}
                                                     
@@ -354,7 +359,7 @@ const HRPatientProfile = (props) => {
                                                         <div className="patient-profile-data-div mt-2">
                                                             <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
                                                             
-                                                            <span className="check-icon mt-2">{readingmonth > 0 ? readingmonth : 'completed'}</span>
+                                                            <span className="check-icon mt-2">{ReadingsperMonth - readingsThisMonth}</span>
                                                         </div>
                                                     </> : ''}
                                                     
@@ -415,10 +420,10 @@ const HRPatientProfile = (props) => {
                                             <hr />        
                                                 
                                             {careplan && ( <Fragment>
-                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.Description}</small>            
+                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.data?.Description}</small>            
                                                 <small style={{float: 'right', marginTop: 10}}>
-                                                    <i>Added By: {careplan?.assigned_hr_id?.firstname} {careplan?.assigned_hr_id?.lastname}
-                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.assigned_hr_id?.role}</Badge> 
+                                                    <i>Added By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
+                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
                                                     </i>
                                                 </small>    
                                                 <br/><br/>
