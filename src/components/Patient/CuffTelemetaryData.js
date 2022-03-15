@@ -8,13 +8,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { commentOnReading } from '../../actions/HRActions';
 import {COMMENT_RESET} from '../../constants/HRConstants';
 import {useAlert } from 'react-alert';
-
+import patientProfileImg from '../../assets/Images/patientProfile.png';
 
 
 const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const  dispatch = useDispatch();
     const alert = useAlert();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [resPerPage, setResPerPage] = useState(5);
 
     const { hr} = useSelector(state => state.hrAuth);
     const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
@@ -28,10 +31,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const commentHandler = (readingId) => {
         if(hr?._id === undefined){
-            // console.log('Doctor is commenting')
             dispatch(commentOnReading(readingId, staff?.id, comment));
         } else {
-            // console.log('HR is commenting')
             dispatch(commentOnReading(readingId, hr?.id, comment));
         }
     }
@@ -72,31 +73,29 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
         </div> {/* First Row Ends here */}
 
         {/* Device & Patient Info */}
-        <div className="row">
-                <div className="col-md-5">
-                    <span className="profile-label">Patient Name: </span>
-                    <span className="profile-label"> {patientInfo?.firstname} {patientInfo?.lastname}</span>
+        <div className="row-display telemetary-patient-row pl-2 pr-2">
+                {/* <div className="col-md-5"> */}
+                    <span className="telemetary-patient-row">Patient Name: </span>
+                    <span className="telemetary-patient-row"> {patientInfo?.firstname} {patientInfo?.lastname}</span>
 
                     <span className="vl"></span>
 
-                    <span className="profile-label ml-4">Gender: </span>
-                    <span className="profile-label"> <Badge bg="info text-white">{patientInfo?.gender}</Badge></span>
-                </div>
+                {/* </div> */}
 
-                <div className="col-md-7">
-                    <span className="profile-label">Device ID: </span>
-                    <span className="profile-label"> {deviceDetails?._id}</span>
+                {/* <div className="col-md-7"> */}
+                    <span className="telemetary-patient-row">Device ID: </span>
+                    <span className="telemetary-patient-row"> {deviceDetails?._id}</span>
 
                     <span className="vl"></span>
 
-                    <span className="profile-label ml-2">Device Type: </span>
-                    <span className="profile-label"> <Badge bg="info text-white">{deviceDetails?.deviceType}</Badge></span>
+                    <span className="telemetary-patient-row ml-2">Device Type: </span>
+                    <span className="telemetary-patient-row"> <Badge bg="info text-white">{deviceDetails?.deviceType}</Badge></span>
 
                     <span className="vl"></span>
 
-                    <span className="profile-label ml-2">Added D/T: </span>
-                    <span className="profile-label"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
-                </div>
+                    <span className="telemetary-patient-row ml-2">Added D/T: </span>
+                    <span className="telemetary-patient-row"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
+                {/* </div> */}
             </div>
 
 
@@ -126,16 +125,21 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
             {/* Comment */}
             {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
-                <div className="bubble bubble-alt bubble-green"> <p>
-                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).tz('America/New_York').format("ll")}</span> 
-                    </p>
+                <div className="row-display-secondary">
+                    <div className="mt-3 mr-3">
+                        <img src={patientProfileImg} alt="hr/drImg" style={{width: '50px', height: '50px', borderRadius: '50%'}}/>
+                    </div>
+                    <div className="bubble bubble-alt"> <p className="mr-3"> 
+                        {note?.conclusion} <br/> <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).tz('America/New_York').format("ll")}</span> 
+                        </p>
+                    </div>
                 </div>
-                <br/><br/><br/>
+                
+                <br/>
             </div> 
             ))}
 
-            <hr />
-                    
+            {/* <hr />                     */}
     </Fragment>;
 };
 

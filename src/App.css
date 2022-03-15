@@ -52,14 +52,14 @@
   max-width: 80%;
   position: relative;
   clear: both;
-  background: #95c2fd;
+  background: #ebebf0;
   border: solid 1px rgba(0,0,0,0.5);
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
-  padding: 3px 20px;
+  padding: 3px 15px;
   color: #000;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+  /* text-shadow: 0 1px 1px rgba(255,255,255,0.8); */
   word-wrap: break-word;
   margin-top: 10px;
 }
@@ -2108,4 +2108,19 @@ tr {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.row-display-secondary {
+  display: flex;
+  flex-direction: row; 
+  border-radius: 5px;
+}
+
+.telemetary-patient-row{
+  background-color: #006762;
+  color: #F8C113;
+  font-size: 14px;
+  font-weight: light;
+  text-transform: uppercase;
+  padding: 5px 0px;
 }
