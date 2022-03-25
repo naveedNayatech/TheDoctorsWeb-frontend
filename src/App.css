@@ -1716,7 +1716,7 @@ tr {
 }
 
 .go-back-btn {
-  color: #000;
+  color: #303030;
   font-size: 16px;
   padding: 9px;
   border-radius: 25px;
@@ -1725,13 +1725,12 @@ tr {
 }
 
 .go-back-btn:hover {
-  background-color: #F95800;
-  color: #FFF;
+  color: #F8C113;
   text-decoration: none;
 }
 
 .refresh-btn {
-  color: #000;
+  color: #303030;
   font-size: 14px;
   padding: 10px;
   border-radius: 25px;
@@ -1740,14 +1739,13 @@ tr {
 }
 
 .refresh-btn:hover {
-  background-color: #F95800;
-  color: #FFF;
+  color: #F8C113;
   text-decoration: none;
 }
 
 .add-staff-btn {
   background-color: #006762;
-  color: #F8C113;
+  color: #FFF;
   font-size: 14px;
   padding: 10px;
   border-radius: 4px;
@@ -1757,7 +1755,7 @@ tr {
 
  .add-staff-btn:hover {
   text-decoration: none;
-  color: #FFF
+  color: #F8C113
 } 
 
 .patient-profile-data-div {
@@ -2123,4 +2121,18 @@ tr {
   font-weight: light;
   text-transform: uppercase;
   padding: 5px 0px;
+}
+
+.form-check-input {
+  font-size: 16px;
+}
+
+.newUserGender>input {
+  margin-top: 15px;
+}
+
+.newUserGender>label{
+  margin: 10px;
+  font-size: 18px;
+  color: #555;
 }

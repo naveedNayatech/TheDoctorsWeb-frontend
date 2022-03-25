@@ -217,7 +217,7 @@ const AddPatient = (props) => {
                                     </div>
 
                                     {/* Insurance Company */}
-                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                         <TextField 
                                                 label="Insurance Company" 
                                                 name="insurancecompany" 
@@ -225,6 +225,7 @@ const AddPatient = (props) => {
                                                 placeholder="Insurance Company"
                                         />
                                     </div>
+
 
                                 </div>{/* row ends here */}
 

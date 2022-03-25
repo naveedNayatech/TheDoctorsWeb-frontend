@@ -34,7 +34,7 @@ const Home = () => {
                 <div className="overview-boxes">
                         <div className="box box0">
                                 <div className="left-side">
-                                    <Link to="/patients" className="box_topic">Total Patients</Link>
+                                    <Link to="/patients" className="box_topic">Total Patients <br /></Link>
                                     <div className="number">{totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients }</div>
                                     <div className="indicator">
                                         <i className="bx bx-up-arrow-alt down"></i>
@@ -46,7 +46,7 @@ const Home = () => {
 
                     <div className="box box1">
                         <div className="left-side">
-                            <Link to="/devices" className="box_topic">RPM Inventory</Link>
+                            <Link to="/devices" className="box_topic">RPM Inventory <br /></Link>
                             <div className="number">{totalDevices && totalDevices < 10 ? '0'+totalDevices : totalDevices }</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt down"></i>
@@ -58,7 +58,7 @@ const Home = () => {
 
                     <div className="box box2">
                         <div className="left-side">
-                            <Link to="/doctors" className="box_topic">Total Doctors</Link>
+                            <Link to="/doctors" className="box_topic">Total Doctors<br /></Link>
                             <div className="number">{totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt down"></i>

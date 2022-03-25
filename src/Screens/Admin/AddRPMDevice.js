@@ -24,13 +24,14 @@ const AddRPMDevice = (props) => {
         .max(20, 'Should be less than 20 characters'),
 		imei: Yup.string() 
 		  .min(4, 'Should be atleast 4 characters')
-		  .max(20, 'Should be less than 20 characters'),
+		  .max(20, 'Should be less than 20 characters')
+          .required('IMEI is required'),
         modelNumber: Yup.string()
         .min(4, 'Should be atleast 6 characters')
         .max(20, 'Should be less than 20 characters')
         .required('Model Number is Required'),  
-		deviceType:Yup.string().required('Select Device Type'),
-        broken: Yup.boolean(),
+		deviceType:Yup.string("bp").required('Select Device Type'),
+        broken: Yup.boolean().required('Device status is required'),
         firmwareVersion: Yup.string(),
         hardwareVersion: Yup.string()
 	  });
@@ -74,7 +75,13 @@ const AddRPMDevice = (props) => {
                         <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Device </span></h5>
                         <hr className="blue-hr"/>
                     
-                         <Formik initialValues={{ }}
+                         <Formik initialValues={{
+                             _id: '',
+                             imei: '',
+                             modelNumber: '',
+                             deviceType:'',
+                             broken:'' 
+                          }}
                          validationSchema={validate}
                          onSubmit={values => {
                             submitHandler(values)

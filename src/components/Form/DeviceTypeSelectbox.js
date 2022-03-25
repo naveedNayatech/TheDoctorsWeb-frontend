@@ -9,9 +9,9 @@ const DeviceTypeSelectbox = ({ label, ...props}) => {
                 <select 
                 className={`form-control shadow-none ${meta.touched && meta.error && `is-invalid`}`}
                 {...field} {...props}
-                autoComplete="off"
                 placeholder="Select Device Type" 
                 >
+                <option>Select device type</option>
                 <option value="bp">Cuff</option>
                 <option value="weight">Weight</option>
                 <option value="spO2">Spo2</option>

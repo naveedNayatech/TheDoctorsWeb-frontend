@@ -358,19 +358,20 @@ export const doctorActivate = (_id) => async(dispatch) => {
 }
 
 
-export const updatePatientConsentStatus = (patientId) => async(dispatch) => {
+export const updatePatientConsentStatus = (patientId, value) => async(dispatch) => {
     try {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
-            rpmconsent : true
+            rpmconsent : value
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
         });
         
+        dispatch(getPatients(10, 1));
         // dispatch({
         //     type: ALL_PATIENTS_SUCCESS,
         //     payload: data
@@ -1389,6 +1390,14 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
                 "Authorization":`Bearer ${token}`
             } 
         });
+
+        const rpm = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
+            rpmconsent: true,
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
 
         let device;
 

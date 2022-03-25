@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
-import { Badge } from 'react-bootstrap';
+import { Badge, Form, Modal} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import { getPatients, patientProfile, assignRPMDeviceToPatient, getDeviceDetails } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
@@ -21,6 +21,8 @@ const RPMDeviceBasicInformation = (props) => {
     const { error: deviceError, isUpdated} = useSelector(state => state.device);
 
     const [patientId, setPatientId] = useState('');
+    const [smShow, setSmShow] = useState(false); //RPM Consent modal
+    const [RPMConsent, setRPMConsent] = useState(false); 
 
     useEffect(() => {
         if(error){
@@ -156,12 +158,33 @@ const RPMDeviceBasicInformation = (props) => {
                                         <p className="profile-value-text">{patient?.phone1 ? patient?.phone1 : 'N/A' }</p>
                                     </div>
 
-                                    <br/>
-                                    <div style={{ display: "flex" }}>
+                                    <br />
+                                </div>
+
+                                {/* RPM Consent */}
+                                <div className="row-display">
+                                        
+                                        <Form>
+                                            <Form.Check 
+                                                type="switch"
+                                                id="custom-switch"
+                                                label="RPM Consent"
+                                                style={{color: 'dodgerblue', fontSize: '14px'}}
+                                                onClick={(event) => setRPMConsent(event.target.checked ? true : false)}
+                                            />
+                                        </Form>
+
+                                        <button className="btn btn-danger btn-sm" onClick={() => setSmShow(true)}> Read RPM Consent</button>
+                                    </div>
+                                <br />
+
+
+                                {/* RPM Consent */}
+                                {RPMConsent === true ? <>
+                                        <div >
                                         {patient?.block === false ? 
                                         <Fragment>
-                                        <button className="submit-btn ml-3" onClick={AssignDeviceToPatient}>Assign </button>
-                                        <Link to={{ pathname: "/printReceipt", state: {deviceAssigned: deviceDetails, patientDetails: patient }}} className="ml-3 mt-2">Print Receipt</Link>
+                                            <button className="add-staff-btn" onClick={AssignDeviceToPatient}>Assign Device</button>
                                         </Fragment>
                                         : 
                                         <Fragment>
@@ -170,7 +193,7 @@ const RPMDeviceBasicInformation = (props) => {
                                     }
                                         
                                     </div>
-                                </div>
+                                    </> : ''}
                             </div>                             
                         </Fragment> }
                     </div>
@@ -187,6 +210,43 @@ const RPMDeviceBasicInformation = (props) => {
                 </>}
                  
             </div> 
+
+
+            {/* RPM Consent Modal */}
+            <Modal
+                size="lg"
+                show={smShow}
+                onHide={() => setSmShow(false)}
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                <Modal.Header>
+                    <b>RPM <span style={{color: '#006762'}}>Consent</span></b>
+                </Modal.Header>
+                <Modal.Body>
+                   <small>It is agreed to by both parties that reimbursement for medical billing services will be
+                    paid by the client in the amount of $500 per month, or 6.0%, whichever is greater, if the 
+                    number of clients the client has within a month period is less than three (3) patients. Should
+                    the client’s number of patients services increase beyond three (3) patients, but less than six (6), 
+                    then client shall by DULU $750 per month, or 6.0%, whichever is greater. <br/><br/>
+                    Additionally, it is understood that as a part of this agreement, DULU shall provide credentialing
+                    services for government and commercial health insurance. Whereas credentialing involves many parties
+                     and movies parts. Provider credentialing requires organization verify the credentials of healthcare 
+                     provides to ensure they have the required licenses, certifications, and skills to properly care for 
+                     patients. Every health insurance company checks the credentials of a healthcare entity before it 
+                     includes the entity as an in-network provider. In order to expedite the credentialing process, DULU 
+                     will make all attempts to process paperless credentialing. Should DULU encounter costs that exceed the 
+                     monthly agreed amount herein Exhibit A, DULU shall discuss these costs with the client to determine 
+                     reimbursement. <br/><br/>
+                     The agreement within his Exhibit A shall only be applicable for the duration of the first
+                     three (3) months upon execution of this agreement. Where upon, the terms of Exhibit A will 
+                     expire, and the Terms of this Agreement shall follow $3.2 of the medical services Agreement.
+                     Should client’s patient base fail to meet at least five (5) patients within three (3) months,
+                     an extension of the Exhibit A agreement may be granted on a month-to -month basis for up to 
+                     six (6) months. Such execution of agreement shall be made in writing and signed by both parties
+                     no later than the 10th day of each month, and the Agreement will form part of this entire Agreement.
+                    </small>
+                </Modal.Body>
+            </Modal>
         </Fragment>
     )
 }

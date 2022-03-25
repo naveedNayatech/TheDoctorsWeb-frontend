@@ -92,9 +92,10 @@ const PatientsList = () => {
        dispatch(getPatients(resPerPage, currentPage));
     }
 
-    const changeConsentStatus = (id) => {
-        dispatch(updatePatientConsentStatus(id));
-        getPatientsList(resPerPage, currentPage);
+    const changeConsentStatus = (id, value) => {
+        console.log('Patient ID is' + id);
+        console.log('Consent Status is ' + value);
+        dispatch(updatePatientConsentStatus(id, value));
         alert.success('Status Changed');
     }
 
@@ -239,17 +240,16 @@ const PatientsList = () => {
                                         </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
                                     </td>}
                                         
-                                    {patient?.assigned_doctor_id ? <>
+                                     {patient?.assigned_doctor_id ? <>
                                         <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
                                     </> : <>
                                     <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                     </>}
                                     
-                                    {patient?.rpmconsent === true ? <td>
+                                    {/*{patient?.rpmconsent === true ? <td>
                                         <div className="custom-control custom-switch">
                                             <input 
                                                 type="checkbox" 
-                                                disabled
                                                 className="custom-control-input" 
                                                 checked="true"
                                                 style={{border: 'none', backgroundColor: 'red'}}
@@ -268,7 +268,24 @@ const PatientsList = () => {
                                             <label className="custom-control-label" htmlFor={index}>Not Signed</label>
                                         </div>
                                     </td>
-                                    }
+                                    } */}
+                                    <td>
+                                        <div className="form-check">
+                                            <input 
+                                            type="checkbox"
+                                            id={index}
+                                            className="form-check-input"
+                                            defaultChecked={patient?.rpmconsent === true ? true : false}
+                                            onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
+                                            />
+
+                                            <label class="form-check-label" for={index}>
+                                            {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
+                                                Signed</span>
+                                                : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}
+                                            </label>
+                                        </div>
+                                    </td>
                                     
                                     <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>

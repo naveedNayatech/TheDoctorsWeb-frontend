@@ -12,7 +12,7 @@ const BrokenDeviceSelectBox = ({ label, ...props}) => {
                 defaultValue={'Broken Status'}
                 placeholder="Select Broken Status" 
                 >
-                <option disabled>Broken Status</option>    
+                <option>Select broken status</option>   
                 <option value="false">Unbroken</option>
                 <option value="true">Broken</option>
                 </select>
