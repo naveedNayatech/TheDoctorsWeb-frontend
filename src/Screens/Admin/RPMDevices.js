@@ -11,6 +11,7 @@ import Pagination from 'react-js-pagination';
 import { Badge, Modal, Table } from 'react-bootstrap';
 import { DELETE_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 import InventoryAnalytics from '../../components/inventory/InventoryAnalytics';
+import ReactTooltip from "react-tooltip";
 
 const RPMDevices = (props) => {
 
@@ -106,7 +107,7 @@ const RPMDevices = (props) => {
                             }
                         </div>
 
-                        <div className="col-md-3">
+                        <div className="col-md-2">
                             <input 
                             type="text"
                             className="form-control shadow-none"
@@ -121,7 +122,7 @@ const RPMDevices = (props) => {
 
                         <div className="col-md-2">
                             <select name="listDevice" 
-                                className="form-control shadow-none"
+                                className="form-control shadow-none select-input-type"
                                 defaultValue={'List Device By'}
                                 onChange={sortDevices}
                             >
@@ -133,7 +134,7 @@ const RPMDevices = (props) => {
 
                         <div className="col-md-2">
                             <select name="listDevice" 
-                                className="form-control shadow-none"
+                                className="form-control select-input-type"
                                     defaultValue={'Sort By'}
                                     onChange={sortDevicesByBroken}
                             >
@@ -142,13 +143,24 @@ const RPMDevices = (props) => {
                             </select>
                         </div>
 
-                        <div className="col-md-2 mt-2 pt-2">
-                            <Link to="/device" style={{ float: 'right'}}>
+                        <div className="col-md-2">
+                            <Link to="/device" className="add-staff-btn">
                                 <small>Add New RPM Device</small>
                             </Link>
                         </div>
+
+                        <div className="col-lg-1 col-md-1">
+                            <Link to="/Admin/Inventory/Download" className="add-staff-btn" data-tip data-for="downloadcsv">
+                            <i className='bx bxs-download'></i>
+                            </Link>
+                        </div>
                      </div>
-                            <hr className="blue-hr"/> 
+
+                        <ReactTooltip id="downloadcsv" type="dark" effect="solid">
+                            Download complete list in .csv
+                        </ReactTooltip>
+
+                            <br /> 
                         </div>
 
                         <InventoryAnalytics />        

@@ -34,7 +34,7 @@ const PrintReceipt = (props) => {
                      <span style={{backgroundColor: '#DCDCDC', 
                      padding: '15px', 
                      borderRadius: '10px'
-                     }}><b>Assigned Date: </b> <span>{moment(device?.assignedTime).format("DD-MM-YYYY")}</span></span> <br/>
+                     }}><b>Assigned Date: </b> <span>{device?.assignedTime || 'N/A'}</span></span> <br/>
                     
                     
                     <button className="btn btn-danger mt-3" onClick={printReceipt} style={{textDecoration: 'none'}}>Print Receipt</button>

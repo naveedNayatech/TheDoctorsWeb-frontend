@@ -51,8 +51,6 @@ const AssignDoctorToPatient = (props) => {
     }
 
     const assignDoctor = (id) => {
-        console.log('Doctor ID is ' + id);
-        console.log('Patient Id is  '+ patientId);
         dispatch(assignPatientToDoctor(id, patientId))
     }
 
@@ -80,7 +78,7 @@ const AssignDoctorToPatient = (props) => {
                                 onChange={(e) => setPatientId(e.target.value)}
                                 >
                                 <option> Select Patient</option>    
-                                {patients && patients.map((patient, index) => (
+                                {patients && patients.filter(patients => !patients.assigned_doctor_id).map((patient, index) => (
                                     <option value={patient?._id} key={index}> {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                 ))}    
                                 
@@ -130,6 +128,7 @@ const AssignDoctorToPatient = (props) => {
                                     </div>
                             </div>
                             <button className="add-staff-btn mr-5" style={{ float: 'right' }} onClick={() => assignDoctor(id)}> Assign {patient?.title} {patient?.firstname} to Dr. {firstName && firstName} {lastName && lastName} </button>             
+                            
                         </Fragment>}
                     </div>
                 </div>

@@ -59,7 +59,6 @@ const PatientsList = () => {
         dispatch(getDoctors(resPerPage, currentPage));
         dispatch(getHrLists(resPerPage, currentPage));
 
-
     }, [dispatch, alert, error, isUpdated, currentPage]);
 
 
@@ -93,8 +92,6 @@ const PatientsList = () => {
     }
 
     const changeConsentStatus = (id, value) => {
-        console.log('Patient ID is' + id);
-        console.log('Consent Status is ' + value);
         dispatch(updatePatientConsentStatus(id, value));
         alert.success('Status Changed');
     }
@@ -134,6 +131,14 @@ const PatientsList = () => {
         setKeyword('');
     }
 
+    function handleKeyUp(event) {
+        //key code for enter
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          event.target.blur();
+        }
+       }
+
     return (
         <Fragment>
                 <MetaData title="Patients List"/>
@@ -157,22 +162,22 @@ const PatientsList = () => {
                             
                             <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
                             <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
-                            <Link to="/addpatient" className="add-staff-btn">Add New Patient</Link>
+                            <Link to="/addpatient" className="add-staff-btn"><i className='bx bxs-user'></i> &nbsp;Add New Patient</Link>
                                                         
                         </div>
 
                         <div className="row">
                             <div className="col-md-5">
-                                <h5 className="pt-2 mt-2">Patients List <span style={{color: '#F95800'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
+                                <h5 className="pt-2 mt-2">Patients List <span style={{color: '#006762'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
                             </div>
 
                             <div className="col-md-2">
                                 <select 
-                                className="form-control"
+                                className="form-control select-input-type"
                                 value={doctorId}
                                 onChange={(e) => {searchPatientByDoctor(e.target.value); setDoctorId(e.target.value)}}
                                 >
-                                    <option value="undefined">Search By Dr.</option>
+                                    <option value="undefined"> Search By Dr.</option>
                                     {doctors && doctors.map((doc, index) => (
                                         <option value={doc?._id} key={index}>Dr. {doc?.firstname} {doc?.lastname}</option>                                         
                                     ))}
@@ -181,7 +186,7 @@ const PatientsList = () => {
 
                             <div className="col-md-2">
                                 <select 
-                                className="form-control"
+                                className="form-control select-input-type"
                                 value={hrId}
                                 onChange={(e) => {searchPatientByHR(e.target.value); setHrId(e.target.value)}} 
                                 >
@@ -202,6 +207,7 @@ const PatientsList = () => {
                                     value={keyword}
                                     onChange={(e) => setKeyword(e.target.value)}
                                     onBlur={(e) => {searchhandler(e.target.value)}}
+                                    onKeyUp={handleKeyUp}
                                     style={{outline: 'none'}}
                                     />
                                 </div>
@@ -246,29 +252,6 @@ const PatientsList = () => {
                                     <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                     </>}
                                     
-                                    {/*{patient?.rpmconsent === true ? <td>
-                                        <div className="custom-control custom-switch">
-                                            <input 
-                                                type="checkbox" 
-                                                className="custom-control-input" 
-                                                checked="true"
-                                                style={{border: 'none', backgroundColor: 'red'}}
-                                            />
-                                            <label className="custom-control-label" htmlFor={index}>Signed</label>
-                                        </div>
-                                    </td> : 
-                                        <td>
-                                        <div className="custom-control custom-switch">
-                                            <input 
-                                                type="checkbox" 
-                                                className="custom-control-input" 
-                                                id={index}
-                                                onChange={() => changeConsentStatus(patient?._id)}
-                                            />
-                                            <label className="custom-control-label" htmlFor={index}>Not Signed</label>
-                                        </div>
-                                    </td>
-                                    } */}
                                     <td>
                                         <div className="form-check">
                                             <input 
@@ -306,7 +289,7 @@ const PatientsList = () => {
                             <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small> 
 
                             {/* Pagination */}
-                                {!isSearch && resPerPage <= totalPatients && (
+                                {!isSearch && !doctorId && !hrId && resPerPage <= totalPatients && (
                                     <div className="d-flex justify-content-center mt-5"> 
                                     <Pagination activePage={currentPage} 
                                     itemsCountPerPage={resPerPage} 

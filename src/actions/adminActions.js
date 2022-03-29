@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-bootstrap';
 import { Prod, Prod01 } from '../constants/ActionType';
 const moment = require('moment-timezone');
+import { useAlert } from 'react-alert';
 
 import { 
     ALL_PATIENTS_REQUEST, 
@@ -563,7 +564,37 @@ export const getDoctorPatients = (id) => async(dispatch) => {
     }
 }
 
+export const removePatientsDoctor = (id, doctorId) => async(dispatch) => {
+    try {
+        // const alert = useAlert();
+        const token = JSON. parse(localStorage.getItem('token'));
 
+        const res = await axios.put(`${Prod01}/patient/edit/${id}`,{
+            lastname: "Ahmad"
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+
+        if(res.status === 201){
+            dispatch(getDoctorPatients(doctorId));
+        }
+
+        
+        // dispatch({
+        //     loading: false,
+        //     type: DOCTOR_PATIENTS_SUCCESS,
+        //     payload: data 
+        // })
+        
+    } catch (error) {
+        dispatch({
+            type: DOCTOR_PATIENTS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 
 // Update doctor Profile -> ADMIN
@@ -612,7 +643,7 @@ export const patientProfile = (id) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/patient/patientprofile/${id}`, {
+        const { data }= await axios.get(`${Prod01}/patient/patientprofile/${id}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }

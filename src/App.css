@@ -107,6 +107,7 @@
   font-size: 14px;
 }
 
+
 .rounded-button-deactivate {
   color: #FFF;
   width: 40px;
@@ -341,7 +342,7 @@
 }
 
 .not-assigned-tag {
-  width: 90px;
+  width: 110px;
   font-size: 12px;
   margin: 0 auto
 }
@@ -700,7 +701,7 @@ How it works
 }
 
 .appointment .php-email-form input:focus, .appointment .php-email-form textarea:focus, .appointment .php-email-form select:focus {
-  border-color: #1977cc;
+  border-color: #000 !important;
 }
 
 .appointment .php-email-form input, .appointment .php-email-form select {
@@ -1359,8 +1360,8 @@ table tr td{
 } */
 
 th {
-  background-color: #DBDCD5;
-  color: #000;
+  background-color: #373041;
+  color: #FFF;
   font-size: 12px;
 }
 
@@ -2135,4 +2136,18 @@ tr {
   margin: 10px;
   font-size: 18px;
   color: #555;
+}
+
+.select-input-type {
+  background-color: #006762;
+  color: #FFF;
+  height: 40px;
+  font-size: 12px;
+}
+
+.select-input-type:focus {
+  background-color: #006762;
+  color: #FFF;
+  height: 40px;
+  border: none !important;
 }
