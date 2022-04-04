@@ -86,6 +86,9 @@ import {
     GET_ADMIN_NOTIFICATIONS_SUCCESS,
     GET_ADMIN_NOTIFICATIONS_FAIL,
     GET_PATIENT_REMAINING_READINGS,
+    GET_LOGS_REQUEST,
+    GET_LOGS_SUCCESS,
+    GET_LOGS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -358,7 +361,8 @@ export const deviceDataReducers = (state = { deviceData: []}, action) => {
         case GET_PATIENT_DEVICE_DATA_SUCCESS: 
         return { 
             loading: false,  
-            deviceData: action.payload        
+            deviceData: action.payload,
+            Count :action.count        
         }
 
         case GET_PATIENT_DEVICE_DATA_FAIL: 
@@ -688,5 +692,36 @@ export const remainingReadingsReducer = (state={count:0}, action) => {
 
         default: 
         return state
+    }
+}
+
+export const logsReducers = (state = {logs: []}, action) => {
+    switch(action.type) {
+        case GET_LOGS_REQUEST:
+            return { 
+                loading: true,     
+            }
+
+        case GET_LOGS_SUCCESS:
+            return { 
+                loading: false,  
+                logs: action.payload 
+            }
+            
+        case GET_LOGS_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+            }        
+        
+        default:{
+            return state
+            }     
     }
 }

@@ -20,6 +20,8 @@ const HRList = () => {
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [HRModel, setHRModel] = useState(null);
     const [HRToDelete, setHRToDelete] = useState(null);
+    const [query, setQuery] = useState(""); // set search query.
+    const keys = ["firstname", "lastname", "email", "DOB", "gender"];
 
     useEffect(() =>{
         if(error){
@@ -58,18 +60,25 @@ const HRList = () => {
                     <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
                     <div className="home-content">
 
-                        <div className="row list-box-header">
-                            <div className="col-md-9">
-                            <h5 className="pt-2">HRs List <span style={{color: '#F95800'}}>( 01 )</span></h5> 
+                        <div className="row">
+                            <div className="col-md-7">
+                                <h5 className="pt-2">HRs List <span style={{color: '#F95800'}}>( 04 )</span></h5> 
                             </div>
-
-                            <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn"><i className='bx bx-refresh'></i></button> &nbsp;
-                            <Link to="/addhr" className="add-staff-btn">Add New HR</Link>
-                                                        
+                            <div className="row-display">
+                                <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
+                                
+                                <input type="text" 
+                                    placeholder="Search..." 
+                                    className="form-control" 
+                                    style={{width: '200px'}}
+                                    onChange={e => setQuery(e.target.value)}
+                                />
+                                &nbsp;&nbsp;&nbsp;
+                                <Link to="/addhr" className="add-staff-btn">Add New HR</Link>
+                            </div>
                         </div>
 
-                        <hr className="blue-hr"/>
+                        <br />
 
 
                         {/* HRs List */}
@@ -88,9 +97,9 @@ const HRList = () => {
                                 </tr> 
                             </thead>
                             <tbody>
-                            {hrs && hrs.map((hr, index) => (
+                            {hrs && hrs.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((hr, index) => (
                                <tr key={index}>
-                                <td><Link to={{ pathname: "/hrProfile", state: {hr: hr}}}> {hr?.firstname} {hr?.lastname} <p style={{color: 'gray'}}>({hr?.role})</p> </Link></td>
+                                <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/hrProfile", state: {hr: hr}}}> {hr?.firstname} {hr?.lastname} <p style={{color: 'gray'}}>({hr?.role})</p> </Link></td>
                                 <td>{moment(hr?.DOB).format("ll")}</td>    
                                 <td style={{wordWrap: 'break-word'}}>{hr?.email}</td>    
                                 {hr?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="warning text-white" className="female-tag">Female</Badge></td>}    

@@ -145,7 +145,7 @@ const RPMDevices = (props) => {
 
                         <div className="col-md-2">
                             <Link to="/device" className="add-staff-btn">
-                                <small>Add New RPM Device</small>
+                                <small>Add New Device</small>
                             </Link>
                         </div>
 

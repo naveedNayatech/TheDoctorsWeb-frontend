@@ -19,12 +19,14 @@ const DoctorsList = () => {
     const alert = useAlert();
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(10);
-    const [keyword, setKeyword] = useState('');
-    const [isSearch, setIsSearch] = useState(false);
 
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [doctorModel, setDoctorModel] = useState(null);
     const [doctorToDelete, setDoctorToDelete] = useState(null);
+    const [query, setQuery] = useState("");
+    const keys = ["firstname", "lastname", "email", "npinumber", "phone1"];
+
+
 
     const { loading, error, isUpdated} = useSelector(state => state.admin);
     const { doctors } = useSelector(state => state.doctor);
@@ -48,19 +50,7 @@ const DoctorsList = () => {
 
     function setCurrentPageNumber(pageNumber) {
         setCurrentPage(pageNumber);
-    }
-
-    const searchhandler = (searchValue) => {
-        if (searchValue === undefined || searchValue === "") {
-            dispatch(getDoctors(resPerPage, currentPage));
-            setIsSearch(false)
-
-        }
-        else {
-            setIsSearch(true);
-            dispatch(searchDoctor(searchValue));
-        }
-    }  
+    } 
 
     const refreshHandler = () => {
         dispatch(getDoctors(resPerPage, currentPage));
@@ -92,39 +82,26 @@ const DoctorsList = () => {
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
 
-                        <div className="row list-box-header">
-                            <div className="col-md-9">
+                    <div className="row">
+                            <div className="col-md-7">
+                                <h5 className="pt-2">Doctors List <span style={{color: '#007673'}}>( 
+                                     {doctors && doctors.length} )</span></h5> 
+                            </div>
+                            <div className="row-display">
+                                <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
                                 
-                            </div>
-                            
-                            <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
-                            <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
-                            <Link to="/adddoctor" className="add-staff-btn">Add New Doctor</Link>
-                                                        
-                        </div>
-
-                        <div className="row">
-                            <div className="col-md-9">
-                                <h5 className="pt-2">Doctors List <span style={{color: '#F95800'}}>( {totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs} )</span></h5> 
-                            </div>
-
-                    
-                            <div className="col-md-3">
-                                <div className="input-group">
-                                    <input
-                                        type="text"
-                                        className="form-control shadow-none"
-                                        placeholder="Search by name ..."
-                                        value={keyword}
-                                        onChange={(e) => setKeyword(e.target.value)}
-                                        onBlur={(e) => {searchhandler(e.target.value)}}
-                                        style={{outline: 'none'}}
-                                    />
-                                </div>
+                                <input type="text" 
+                                    placeholder="Search..." 
+                                    className="form-control" 
+                                    style={{width: '200px'}}
+                                    onChange={e => setQuery(e.target.value)}
+                                />
+                                &nbsp;&nbsp;&nbsp;
+                                <Link to="/adddoctor" className="add-staff-btn">Add New Doctor</Link>
                             </div>
                         </div>
                     </div>  
-                    <hr />
+                    <br />
 
                     {/* Patient List Card */}
                         <div className="col-md-12">
@@ -142,7 +119,7 @@ const DoctorsList = () => {
                                 </tr> 
                             </thead>
                             <tbody>
-                            {doctors && doctors.map((doctor, index) => ( 
+                            {doctors && doctors.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((doctor, index) => ( 
                                 <tr key={index}>
                                 <td><Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> Dr. {doctor?.firstname} {doctor?.lastname} <p style={{color: 'gray'}}>{moment(doctor?.DOB).format("ll")}</p> </Link></td>
                                 <td style={{wordWrap: 'break-word'}}>{doctor?.email}</td>
@@ -174,7 +151,7 @@ const DoctorsList = () => {
 
 
                             {/* Pagination */}
-                                {!isSearch && resPerPage <= totalDrs && (
+                                {resPerPage <= totalDrs && (
                                     <div className="d-flex justify-content-center mt-5"> 
                                     <Pagination activePage={currentPage} 
                                     itemsCountPerPage={resPerPage} 

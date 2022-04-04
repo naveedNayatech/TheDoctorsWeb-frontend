@@ -1160,13 +1160,6 @@ nav .profile-details i {
   margin-right: 20px;
 }
 
-.patient-list-style {
-  width: 200px;
-  border: none;
-  border-bottom: 2px solid black;
-  outline: none;
-}
-
 .admin-topbar-dropdown {
   width: 70px !important;
   margin: 10px;
@@ -1426,14 +1419,13 @@ tr {
 }
 
 
-
-/* .form-control:focus {
+.form-control:focus {
   color: gray;
   background-color: #FFF;
-  border-color:dodgerblue !important;
+  border-color:#006762 !important;
   outline: none;
   box-shadow: none;
-} */
+}
 
 .forgot-password-link {
   font-size: 12px;
@@ -1687,7 +1679,7 @@ tr {
 
 /* Pagination */
 .page-item.active .page-link {
-  background-color: #F95800;
+  background-color: #007673;
   border-color: #D3D3D3;
 }
 
@@ -2116,12 +2108,11 @@ tr {
 }
 
 .telemetary-patient-row{
-  background-color: #006762;
-  color: #F8C113;
+  background-color: #F0F0F0;
+  color: #000;
   font-size: 14px;
   font-weight: light;
-  text-transform: uppercase;
-  padding: 5px 0px;
+  padding: 4px 0px;
 }
 
 .form-check-input {
@@ -2150,4 +2141,21 @@ tr {
   color: #FFF;
   height: 40px;
   border: none !important;
+}
+
+.telemetary-card {
+  background: #FFF;
+  box-shadow: 0 0 5px 5px rgba(0,0,0, 0.1);
+  margin: 15px 5px;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.logs-card {
+  background: #afe9f3;
+  border-radius: 10px;
+  padding: 10px;
+  color: #0a0a0a;
+  max-height: 680px;
+  overflow-y: auto;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
@@ -6,24 +6,18 @@ import { Image, Badge } from 'react-bootstrap';
 const moment = require('moment-timezone');
 import { useSelector, useDispatch } from 'react-redux';
 import { commentOnReading } from '../../actions/HRActions';
-import {COMMENT_RESET} from '../../constants/HRConstants';
-import {useAlert } from 'react-alert';
+
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 
 
 const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const  dispatch = useDispatch();
-    const alert = useAlert();
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [resPerPage, setResPerPage] = useState(5);
 
     const { hr} = useSelector(state => state.hrAuth);
-    const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
+    const { staff} = useSelector(state => state.staffAuth);
 
     let telemetaryData = healthData?.telemetaryData;
-    let patientInfo = healthData?.assigned_patient_id;
     let deviceDetails = healthData?.deviceId;
     let notes = healthData?.notes;
 
@@ -38,6 +32,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
     }
 
   return <Fragment>
+      <div className="telemetary-card">
         <br />
           <div className="row">
             <div className="col-md-1">
@@ -74,14 +69,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
         {/* Device & Patient Info */}
         <div className="row-display telemetary-patient-row pl-2 pr-2">
-                {/* <div className="col-md-5"> */}
-                    <span className="telemetary-patient-row">Patient Name: </span>
-                    <span className="telemetary-patient-row"> {patientInfo?.firstname} {patientInfo?.lastname}</span>
-
-                    <span className="vl"></span>
-
-                {/* </div> */}
-
+           
                 {/* <div className="col-md-7"> */}
                     <span className="telemetary-patient-row">Device ID: </span>
                     <span className="telemetary-patient-row"> {deviceDetails?._id}</span>
@@ -118,9 +106,6 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
                     </div>
                 </div>
             } 
-
-
-            {/* Comment on Reading */}
             
 
             {/* Comment */}
@@ -134,13 +119,13 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
                         </p>
                     </div>
                 </div>
-                
-                <br/>
-            </div> 
-            ))}
 
-            {/* <hr />                     */}
-    </Fragment>;
+                {/* <br/> */}
+            </div> 
+            ))}  
+        </div>
+    </Fragment>;   
 };
+
 
 export default CuffTelemetaryData;

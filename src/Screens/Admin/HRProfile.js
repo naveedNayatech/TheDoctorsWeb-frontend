@@ -28,9 +28,12 @@ const HRProfile = (props) => {
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                        <Link to={{ pathname: "/assignDrToHr", state: {id: hrInfo}}} 
-                            className="add-staff-btn mt-2">Assign Doctor to Hr. {hrInfo?.lastname}
-                        </Link>
+                        {hrInfo?.assigned_doctor_id ? ' ' : <>
+                            <Link to={{ pathname: "/assignDrToHr", state: {id: hrInfo}}} 
+                                className="add-staff-btn mt-2">Assign Doctor to Hr. {hrInfo?.lastname}
+                            </Link>
+                        </>}
+                        
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -60,7 +63,7 @@ const HRProfile = (props) => {
                                         <div className="row">
                                         <div className="col-md-4">
                                             <span className="profile-label">Email: </span>
-                                            <p className="profile-value-text">{hrInfo?.email}</p>
+                                            <p className="profile-value-text" style={{wordWrap: 'break-word'}}>{hrInfo?.email}</p>
 
                                             <span className="profile-label">Gender: </span>
                                             <p className="profile-value-text">{hrInfo?.gender}</p>                            

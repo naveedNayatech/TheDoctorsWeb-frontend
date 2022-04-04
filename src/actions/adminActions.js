@@ -82,6 +82,9 @@ import {
     GET_ADMIN_NOTIFICATIONS_SUCCESS,
     GET_ADMIN_NOTIFICATIONS_FAIL,
     GET_PATIENT_REMAINING_READINGS,
+    GET_LOGS_REQUEST,
+    GET_LOGS_SUCCESS,
+    GET_LOGS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -570,7 +573,7 @@ export const removePatientsDoctor = (id, doctorId) => async(dispatch) => {
         const token = JSON. parse(localStorage.getItem('token'));
 
         const res = await axios.put(`${Prod01}/patient/edit/${id}`,{
-            lastname: "Ahmad"
+            delete: assigned_doctor_id
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -827,8 +830,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
         let device;
 
         if(data.status === 201){
-         
-            console.log('Putting PatientId in device');
+      
             device = await axios.put(`${Prod01}/device/edit/${Device.deviceObjectId._id}`, {
                 assigned_patient_id: null 
             }, {
@@ -852,7 +854,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
-   export const getPatientTelemetryData = (patientId) => async(dispatch) => {
+   export const getPatientTelemetryData = (patientId, recordsPerPage, currentPage) => async(dispatch) => {
     
     try {
        dispatch({ 
@@ -860,7 +862,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
        });
        
        const token = JSON. parse(localStorage.getItem('token'));
-       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData`, {
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/${recordsPerPage}/${currentPage}`, {
                patientId: patientId
            }, {
             headers: {
@@ -870,7 +872,8 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    
        dispatch({
            type: GET_PATIENT_DEVICE_DATA_SUCCESS,
-           payload: data
+           payload: data.healthData,
+           count: data.Count
        })    
    
     } catch (error) {
@@ -1013,6 +1016,34 @@ export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
         })
     }
 }
+
+// Get All Logs
+export const getAllLogs = () => async(dispatch) => {
+    try {
+        dispatch({ type: GET_LOGS_REQUEST })
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.get(`${Prod01}/admin/logs`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
+
+        dispatch({
+            type: GET_LOGS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: GET_LOGS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
 
 // Get Admin Stats 
 export const getAdminStats = () => async(dispatch) => {

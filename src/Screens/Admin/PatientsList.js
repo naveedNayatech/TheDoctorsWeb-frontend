@@ -262,7 +262,7 @@ const PatientsList = () => {
                                             onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
                                             />
 
-                                            <label class="form-check-label" for={index}>
+                                            <label className="form-check-label" for={index}>
                                             {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
                                                 Signed</span>
                                                 : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}

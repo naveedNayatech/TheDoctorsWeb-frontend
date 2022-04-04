@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
 import { RESET_ASSIGN_PATIENT_TO_HR } from '../../constants/adminConstants';
+import { Badge } from 'react-bootstrap';
 
 const AssignDrToHr = (props) => {
 
@@ -25,13 +26,12 @@ const AssignDrToHr = (props) => {
     const [patientId, setPatientId] = useState('');
 
 
-    const { loading, error, doctors, isUpdated} = useSelector(state => state.admin);
+    const { loading, error, doctors, isUpdated} = useSelector(state => state.doctor);
     const { loading : doctorLoading, doctor } = useSelector(state => state.doctorProfile);
     const { isAssigned } = useSelector(state => state.hrslist);
 
 
     useEffect(() => {
-        
         if(error){
             return alert.error(error);
         }
@@ -72,7 +72,7 @@ const AssignDrToHr = (props) => {
                 <div className="row">
                     <div className="col-md-4">
                         <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Doctor </span></h5>
-                        <hr />
+                        <br />
 
                             <select 
                                 name="patientlist"
@@ -90,14 +90,15 @@ const AssignDrToHr = (props) => {
                     </div>
 
                     <div className="col-md-8">
-                        <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#F95800'}}>Details </span></h5>
-                        <hr />
+                        
 
                         {doctorId && doctor && <Fragment>
+                            <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#F95800'}}>Details </span></h5>
+                            <br />
                                     <div className="col-md-12">
                                         <div className="row">
                                             <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
-                                            <p className="profile-name pl-3 pb-2">{doctor?.title} {doctor?.firstname} {doctor?.lastname} </p>
+                                            <p className="profile-name pl-3 pb-2">Dr. {doctor?.firstname} {doctor?.lastname} </p>
                                         </div>
 
                                         <br />
@@ -105,26 +106,29 @@ const AssignDrToHr = (props) => {
                                     <div className="row">
                                         <div className="col-md-4">    
                                             <span className="profile-label">Email Address: </span>
-                                        <p className="profile-value-text">{doctor?.email ? doctor?.email : 'N/A'}</p>
+                                            <p className="profile-value-text" style={{wordWrap: 'break-word'}}>{doctor?.email ? doctor?.email : 'N/A'}</p>
 
-                                        <span className="profile-label">Address: </span>
-                                            <p className="profile-value-text">{doctor?.address} , {doctor?.state}</p>    
+                                            <span className="profile-label">License #: </span>
+                                            <p className="profile-value-text">{doctor?.licensenumber || 'N/A'}</p>    
                                         </div>
 
                                         <div className="col-md-4">    
                                             <span className="profile-label">D.O.B: </span>
                                         <p className="profile-value-text">{moment(doctor?.DOB).format("ll")}</p>
 
+                                        <br/>
                                         <span className="profile-label">Role: </span>
                                             <p className="profile-value-text">{doctor?.role}</p>                                 
                                         </div>
+                                        
 
                                         <div className="col-md-4">    
-                                        <span className="profile-label">Gender: </span>
-                                            <p className="profile-value-text">{doctor?.gender ? doctor?.gender : 'N/A'}</p>
+                                            <span className="profile-label">Gender: </span>
+                                            <p><Badge bg="info text-white" className="male-tag">{doctor?.gender}</Badge></p>
 
-                                            <span className="profile-label">SSN: </span>
-                                            <p className="profile-value-text">{doctor?.ssn ? doctor?.ssn : 'N/A'}</p>                                
+                                        <br/>
+                                        <span className="profile-label">NPI: </span>
+                                            <p className="profile-value-text">{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</p>                                
                                         </div>
                                     </div>
                             </div>

@@ -22,6 +22,9 @@ const DoctorProfile = (props) => {
     const [patientToRemove, setpatientToRemove] = useState(""); //set patient id to remove.
     const [doctorId, setDoctorID] = useState(docId); 
     
+    const [query, setQuery] = useState("");
+    const keys = ["firstname", "lastname", "DOB", "email", "phone1", "diseases"];
+
     const { loading, error, doctor } = useSelector(state => state.doctorProfile);
     const { doctorpatients } = useSelector(state => state.docPatients);
 
@@ -58,15 +61,11 @@ const DoctorProfile = (props) => {
                         <div className="home-content">
                         <div className="container">
                          <div className="row-display">
-                             {/* <div className="col-lg-9 col-md-9 col-sm-12 col-xs-12"> */}
-                                <h5 className="pt-2 mt-2">Doctor <span style={{color: '#F95800'}}> Details </span></h5> 
-                             {/* </div> */}
-
-                             {/* <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12"> */}
-                                 <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
-                                 className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
-                                 </Link>
-                             {/* </div> */}
+                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '#F95800'}}> Details </span></h5> 
+                                                         
+                            <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
+                            className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
+                            </Link>
                          </div>   
 
                          <hr className="blue-hr"/>
@@ -131,8 +130,18 @@ const DoctorProfile = (props) => {
 
                         {/* paste patients list fragment here */}
                         {doctorpatients && doctorpatients?.length > 0 ? (<Fragment>
-                            <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
-                            <hr className="blue-hr"/>
+                            <div className="row-display">
+                                <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
+                                
+                                <input 
+                                type="text" 
+                                className="form-control"
+                                onChange={e => setQuery(e.target.value)}
+                                placeholder="Search"
+                                style={{width: '250px'}}
+                                /> 
+                            </div>
+                            <br />
 
                                 <div className="col-md-12">
                                     <Fragment>
@@ -143,20 +152,35 @@ const DoctorProfile = (props) => {
                                             <th>Contact No </th>
                                             <th>Email</th>
                                             <th>Phy. Status</th>
-                                            <th>Insurance Company</th>
-                                            <th>Consent Status</th>
+                                            <th>Assigned Physician</th>
+                                            <th>Diseases</th>
                                             <th>Action</th>
                                             </tr> 
                                         </thead>
                                         <tbody>
-                                        {doctorpatients && doctorpatients.map((patient, index) => ( 
+                                        {doctorpatients && doctorpatients.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
                                             <tr align="center" key={index}>
-                                            <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
-                                            <td>{patient?.phone1} <p>(English)</p></td>
+                                            <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>
+                                                {patient?.firstname} {patient?.lastname}  
+                                                <p>{patient?.phone1}</p></Link>
+                                            </td>
+
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+
                                             <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
-                                            <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
-                                            <td>{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</td> 
-                                            <td>{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</td>
+
+                                            {patient?.block === false ? <td>
+                                                <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                                </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                            </td>}
+
+                                            {patient?.assigned_doctor_id ? <>
+                                                <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                                </> : <>
+                                                <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                            </>}
+
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.diseases}</td>
                                             <td>
                                             <Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                             <Link to="/doctorProfile" className="rounded-button-delete" onClick={() => {setSmShow(true); setPatientName(patient?.lastname); setpatientToRemove(patient?._id)}}><i className="bx bx-trash" ></i></Link> &nbsp;

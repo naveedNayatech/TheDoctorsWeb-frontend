@@ -2,23 +2,23 @@ import React, { useEffect,  Fragment } from 'react';
 import TopBar from '../AdminDashboard/TopBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getPatients, getAllDevices, getAdminStats } from '../../actions/adminActions';
+import { getPatients, getAllLogs, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import {Table, Badge} from 'react-bootstrap';
 import DashboardGraphs from '../AdminDashboard/DashboardGraphs';
-import moment from 'moment';
+const moment = require('moment-timezone');
 
 const Home = () => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
     const { patients} = useSelector(state => state.admin);
-    const { deviceCount, devices} = useSelector(state => state.devices);
+    const { loading, logs} = useSelector(state => state.log);
     const { totalPatients, totalHrs, totalDrs, totalDevices } = useSelector(state => state.adminStat)
 
     useEffect(() => {
           dispatch(getPatients());
-          dispatch(getAllDevices());
+          dispatch(getAllLogs());
           dispatch(getAdminStats())
     }, [dispatch]);
 
@@ -101,21 +101,24 @@ const Home = () => {
                                     <Table striped hover bordered>
                                         <thead>
                                         <tr>
-                                          <th>Pt. Name</th>
-                                          <th>DOB</th>
-                                          <th>Gender</th>
-                                          <th>SSN</th>
-                                          <th>profile</th>
+                                        <th>Name</th>
+                                        <th>DOB </th>
+                                        <th>Email</th>
+                                        <th>Phone #</th>
+                                        <th>Diseases</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {patients && patients.slice(0,9).map((patient, index) => (
                                         <tr key={index}>
-                                          <td>{patient?.title} {patient?.firstname} {patient?.lastname}</td>
-                                          <td>{moment(patient?.DOB).format("ll")}</td>
-                                          {patient?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="warning text-white" className="female-tag">Female</Badge></td>}
-                                          <td>{patient?.phone1}</td>
-                                          <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceid}}}>Profile</Link></td>
+                                           <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                    
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+                                    
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                          
+                                            <td>{patient?.phone1}</td>
+                                          <td>{patient?.diseases || 'N/A'}</td>
                                         </tr>
                                         ))}
                                         </tbody>
@@ -125,31 +128,18 @@ const Home = () => {
                             </div>
 
                             
-                                <div className="col-md-4 col-lg-4">
-                                    <h5 className="title">Recently Added Devices</h5>
-                                    {devices && <Fragment>        
-                                    <Table striped hover bordered>
-                                        <thead>
-                                        <tr>
-                                          <th>Type</th>  
-                                          <th>Device ID</th>  
-                                          <th>Type</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                            {devices && devices.slice(0,5).map((device, index) => (
-                                             <tr key={index}>
-                                                 <td>{index + 1}</td>
-                                                <td><Link to={{ pathname:"/devicedetails", state: {deviceid: device?.deviceId}}}>{device?._id}</Link></td>
-                                                {device?.deviceType === 'bp' ? 
-                                                    <td><Badge bg="warning text-white" className="male-tag">cuff</Badge></td>
-                                                    : device.deviceType === 'spo2' ? <td><Badge bg="info text-white" className="male-tag">Spo2</Badge></td> : 
-                                                    <td><Badge bg="danger text-white" className="male-tag">Weight</Badge></td>}
-                                                </tr>
-                                                ))}
-                                        </tbody>
-                                      </Table>
-                                      </Fragment> }
+                                <div className="col-md-4 col-lg-4 logs-card">
+                                    <h5 className="title">Logs</h5>
+                                    <hr />
+                                    {logs && logs.map((log, index) => (
+                                         <div key={index}>        
+                                             <ul>
+                                                 <ol><small>{log?.text}.</small> <p><small><i>
+                                                 {moment(log.createdAt).tz("America/New_York").format("lll")}
+                                                 </i></small></p></ol>
+                                             </ul>
+                                         </div>
+                                    ))} 
                                 </div>
                             </div>
                         </div>
