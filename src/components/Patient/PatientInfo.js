@@ -2,11 +2,13 @@ import React from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import { Badge} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
-
+import { useDispatch} from 'react-redux';
 
 const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, patientid}) => {
 
-    const removeAssignDevice = (device,patientId) => {
+    const dispatch = useDispatch();
+    
+    const removeAssignDevice = (device,patientid) => {
         dispatch(removeAssignedDevice(device, patientid));
     }
 

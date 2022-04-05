@@ -17,7 +17,7 @@ import {
     STAFF_LOGOUT_SUCCESS,
     STAFF_LOGOUT_FAIL,
     HR_LOGOUT_SUCCESS,
-    HR_LOGOUT_FAIL,
+    HR_LOGOUT_FAIL
 } from '../constants/authConstants';
 
 
@@ -188,3 +188,4 @@ export const hrAuthReducers = (state = { hr: {}, isAuthenticated: false, loading
         return state
     }
 }
+

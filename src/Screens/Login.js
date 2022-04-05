@@ -91,7 +91,7 @@ const Login = ({ history }) => {
 												/>
 
 												
-												<Link to="/login">
+												<Link to="/auth/forgot">
 													<span className="forgot-password-link">Forgot Password?</span>
 												</Link>
 												

@@ -11,7 +11,7 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
-import { Badge , Tabs, Tab} from 'react-bootstrap';
+import { Tabs, Tab} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
  
@@ -142,7 +142,6 @@ const PatientProfile = (props) => {
                             </div>
 
                         <br /><br />
-                        {console.log("total Counts are " + Count)}
 
                     <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example">
                         <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">

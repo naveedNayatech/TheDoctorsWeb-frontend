@@ -77,6 +77,13 @@ const Sidebar = () => {
                     </NavLink>
                 </li>
 
+                <li className="nav_link">
+                    <NavLink key="credentials" to="/credentials" activeClassName="link-name-active">
+                         <i className='bx bxs-data'></i>
+                        <span className="link_name">Manage Credentials</span>
+                    </NavLink>
+                </li>
+
                 <li>
                     <NavLink key="logout" to="#" onClick={logoutHandler}>
                         <i className="bx bx-log-out" style={{color: 'red'}}></i>

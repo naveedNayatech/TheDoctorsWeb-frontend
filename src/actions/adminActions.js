@@ -815,7 +815,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     //    dispatch({ 
     //        type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
     //    });
-   debugger
+ 
        const token = JSON. parse(localStorage.getItem('token'));
 
         const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {

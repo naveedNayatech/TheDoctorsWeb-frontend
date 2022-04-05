@@ -1444,7 +1444,7 @@ tr {
 .submit-btn {
   background-color: #081D45;
   color: #FFF;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   border: none !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
@@ -1460,7 +1460,7 @@ tr {
 .reset-btn {
   background-color: #F95800;
   color: #FFF;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   border: none !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;

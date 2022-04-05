@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Prod, Prod01 } from '../constants/ActionType';
+import { useAlert } from 'react-alert';
 
 import { 
     LOGIN_REQUEST,
@@ -22,6 +23,12 @@ import {
     HR_LOGOUT_FAIL,
     CLEAR_ERRORS
 } from '../constants/authConstants';
+
+import { 
+    SHOW_ALERT_MESSAGE,
+    HIDE_ALERT_MESSAGE,
+    FETCH_ERROR
+} from '../constants/Common';
 
 
 // Login 
@@ -209,6 +216,102 @@ export const staffLogout = () => async(dispatch) => {
         })
     }
 }
+
+export const forgotpassword = (values) => async(dispatch) => {
+    const { email } = values;  
+    try {
+       const res  = await axios.post(`${Prod01}/auth/forgot-password`, {
+           email
+       });
+      
+       if(res){
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Email Sent"
+          });
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
+       }
+       
+       
+    } catch (error) {
+       dispatch({
+        type: FETCH_ERROR,
+        payload: 'Email cannot be sent'
+      })
+      dispatch({
+        type: HIDE_ALERT_MESSAGE
+      })
+    }
+}
+
+export const resetpassword = (values, queryToken) => async(dispatch) => {
+    const { password } = values;  
+    try {
+       const res = await axios.post(`${Prod01}/auth/reset-password?token=${queryToken}`, {
+           password: password
+       });
+      
+       if(res){
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Password has been reset"
+          });
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
+       }
+       
+       
+    } catch (error) {
+       dispatch({
+        type: FETCH_ERROR,
+        payload: 'Unable to update password'
+      })
+      dispatch({
+        type: HIDE_ALERT_MESSAGE
+      })
+    }
+}
+
+
+export const resetpasswordById = (password, id) => async(dispatch) => {  
+    
+    const token = JSON. parse(localStorage.getItem('token'));
+
+    try {
+       const res = await axios.post(`${Prod01}/general/resetpasswordanyuser`, {
+           id: id,
+           password: password
+       }, {
+        headers: {
+            "Authorization":`Bearer ${token}`
+        } 
+       });
+      
+       if(res){
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Password has been reset"
+          });
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
+       }
+       
+       
+    } catch (error) {
+       dispatch({
+        type: FETCH_ERROR,
+        payload: 'Unable to update password'
+      })
+      dispatch({
+        type: HIDE_ALERT_MESSAGE
+      })
+    }
+}
+
 
 
 // Clear errors

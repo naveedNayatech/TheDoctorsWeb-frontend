@@ -34,6 +34,7 @@ import EditPatient from './Screens/Admin/EditPatient';
 import InitialMonthReport from './Screens/Admin/InitialMonthReport';
 import PatientCPReport from './Screens/Admin/PatientCPReport';
 import CompleteInventoryList from './Screens/Admin/CompleteInventoryList';
+import AdminResetPassword from './Screens/Admin/AdminResetPassword';
 // Staff Screens
 import StaffLogin from './Screens/Staff/StaffLogin';
 import StaffDashboard from './Screens/Staff/StaffDashboard';
@@ -51,12 +52,17 @@ import TimeReport from './Screens/HR/TimeReport';
 import PrintReport from './Screens/HR/PrintReport';
 import HRAddPatient from './Screens/HR/HRAddPatient';
 import CareplanDetails from './Screens/HR/CareplanDetails';
+// General links
+import ForgotPassword from './Screens/ForgotPassword';
+import ResetPassword from './Screens/ResetPassword';
 
 function App() {
   return (
     <Router>
         <Route exact path='/' component={LandingPage} />,  
         <Route exact path='/login' component={Login} />,
+        <Route exact path='/auth/forgot' component={ForgotPassword} />
+        <Route exact path="/v1/auth/reset-password" component={ResetPassword} />
         <ProtectedRoute exact path='/patients' isAdmin={true} component={PatientsList} />
         <ProtectedRoute exact path='/doctors' component={DoctorsList} />
         <ProtectedRoute exact path='/adminDashboard' isAdmin={true} component={AdminDashboard} />
@@ -84,7 +90,8 @@ function App() {
         <ProtectedRoute exact path="/Admin/Report/InitialMonth" isAdmin={true} component={InitialMonthReport} />
         <ProtectedRoute exact path='/Admin/Report/patient' isAdmin={true} component={PatientCPReport} />
         <ProtectedRoute exact path='/Admin/Inventory/Download' isAdmin={true} component={CompleteInventoryList} />
-        {/* Staff Routes */}
+        <ProtectedRoute exact path="/Credentials" isAdmin={true} component={AdminResetPassword} />
+         {/* Staff Routes */}
         <Route exact path="/stafflogin" component={StaffLogin} />
         <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
         <StaffProtectedRoute exact path="/staffProfile" component={StaffProfile} />
