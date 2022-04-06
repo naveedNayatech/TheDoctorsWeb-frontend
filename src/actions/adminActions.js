@@ -85,6 +85,8 @@ import {
     GET_LOGS_REQUEST,
     GET_LOGS_SUCCESS,
     GET_LOGS_FAIL,
+    HR_PROFILE_SUCCESS,
+    HR_PROFILE_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -537,6 +539,34 @@ export const doctorProfile = (id) => async(dispatch) => {
         })
     }
 }
+
+export const getHrProfile = (id) => async(dispatch) => {
+    try {
+        
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const { data } = await axios.get(`${Prod01}/hr/hrbyid/${id}`, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+        
+        dispatch({
+            loading: false,
+            type: HR_PROFILE_SUCCESS,
+            payload: data 
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: HR_PROFILE_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+
+
 
 // Get Doctor Patients
 export const getDoctorPatients = (id) => async(dispatch) => {

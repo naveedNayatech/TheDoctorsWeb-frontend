@@ -3,26 +3,38 @@ import MetaData from '../../layouts/MetaData';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctors, doctorProfile } from '../../actions/adminActions';
+import { getDoctors, doctorProfile, getHrLists, getHrProfile } from '../../actions/adminActions';
 import DoctorProfile from '../../components/AdminDashboard/DoctorProfile';
+import HRProfile from '../../components/AdminDashboard/HRProfile';
 
 const AdminResetPassword = () => {
 
   const dispatch = useDispatch();
+  
   const [doctorId, setDoctorId] = useState('');
+  const [hrId, setHRId] = useState('');
+
   const { loading, error, doctors} = useSelector(state => state.doctor);
   const { doctor } = useSelector(state => state.doctorProfile);
+  const { hrs } = useSelector(state => state.hrslist);
+  const { hrProfile } = useSelector(state => state.hrprofile);
 
   const [userType, setUserType] = useState('doctor');
 
+
   useEffect(() => {
     dispatch(getDoctors());
+    dispatch(getHrLists());
 
     if(doctorId){
         dispatch(doctorProfile(doctorId))
     }
+
+    if(hrId){
+      dispatch(getHrProfile(hrId))
+    }
     
-}, [dispatch, error, doctorId]);
+}, [dispatch, error, doctorId, hrId]);
 
   
   return (
@@ -42,7 +54,7 @@ const AdminResetPassword = () => {
 
                   <div className="row justify-content-center">
                       <button 
-                        className={`btn ${userType === 'doctor' ? 'btn-primary' : 'link'} m-3`}
+                        className={`btn ${userType === 'doctor' ? 'submit-btn' : 'link'} m-3`}
                         onClick={() => setUserType('doctor')}
                         > 
                         <i className='bx bxs-user pr-2'></i>
@@ -50,7 +62,7 @@ const AdminResetPassword = () => {
                       </button>
 
                       <button 
-                        className={`btn ${userType === 'hr' ? 'btn-secondary' : 'link'} m-3`}
+                        className={`btn ${userType === 'hr' ? 'submit-btn' : 'link'} m-3`}
                         onClick={() => setUserType('hr')}> 
                         <i className='bx bxs-user pr-2'></i>
                          HR </button>
@@ -63,7 +75,9 @@ const AdminResetPassword = () => {
                   <div className="col-md-4">
                       <select 
                       className="form-control"
+                      value={doctorId}
                       onChange={(e) => setDoctorId(e.target.value)}
+
                       >
 
                       <option>Select Doctor</option>
@@ -72,14 +86,40 @@ const AdminResetPassword = () => {
                           ))} 
                       </select>
                     </div>
-                      {doctor && <>
+                      {doctor && doctor?.firstname && <>
                         <div className="col-md-8">  
-                        <DoctorProfile doctors={doctors} doctor={doctor} />
+                        <DoctorProfile doctor={doctor} />
                       </div>
                       </>
                       }
                     </div>
-                     </> : null }
+                     </> : <>
+                     {/* HRs List */}
+                     <div className='row'>
+                      <div className="col-md-4">
+                      <select 
+                      className="form-control"
+                      value={hrId}
+                      onChange={(e) => setHRId(e.target.value)}
+                      >
+
+                      <option>Select HR</option>
+                      {hrs && hrs.map((hr, index) => (
+                              <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname} {hr?.npinumber} </option>
+                          ))} 
+                      </select>
+                    </div>
+                      
+                    {hrProfile && hrProfile?.firstname && <>
+                        <div className="col-md-8">  
+                        <HRProfile hrprofile={hrProfile} />
+                      </div>
+                      </>
+                      }
+
+                    </div>
+                     
+                     </> }
                   
                   </div>
 

@@ -14,8 +14,8 @@ import {
     DOCTOR_PROFILE_FAIL,
     DOCTOR_PATIENTS_REQUEST,
     DOCTOR_PATIENTS_SUCCESS,
-    DOCTOR_PATIENTS_FAIL,
-    FETCH_DOCTOR_PATIENTS_SUCCESS,
+    HR_PROFILE_SUCCESS,
+    HR_PROFILE_FAIL,
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
@@ -289,21 +289,6 @@ export const doctorpatientsReducers = (state = {}, action) => {
             return state; 
     } 
 }
-
-// export const doctorReducers = (state = {doctor: {}}, action) => {
-    // switch(action.type) {
-    
-    //     case CLEAR_ERRORS: 
-    //         return {
-    //            ...state,
-    //            error: null   
-    //         }        
-        
-    //     default:{
-    //         return state
-    //         }     
-    // }
-// }
 
 export const patientProfileReducers = (state = {patient: {}, readingsCount: ""}, action) => {
     switch (action.type) {
@@ -688,6 +673,25 @@ export const remainingReadingsReducer = (state={count:0}, action) => {
         case GET_PATIENT_REMAINING_READINGS: 
         return {
             count: action.payload.count
+        }
+
+        default: 
+        return state
+    }
+}
+
+export const hrProfilesReducer = (state={hrProfile:0}, action) => {
+    switch(action.type) {
+        
+        case HR_PROFILE_SUCCESS: 
+        return {
+            hrProfile: action.payload
+        }
+
+        case HR_PROFILE_FAIL: 
+        return {
+            ...state,
+            error: action.payload
         }
 
         default: 

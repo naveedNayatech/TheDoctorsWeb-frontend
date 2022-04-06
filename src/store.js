@@ -30,6 +30,7 @@ import { inventoryStatsReducers } from './reducers/adminReducers';
 import { hrNotificationsReducers } from './reducers/HRReducers';
 import { remainingReadingsReducer } from './reducers/adminReducers';
 import { logsReducers } from './reducers/adminReducers';
+import { hrProfilesReducer } from './reducers/adminReducers';
 // COMMON REDUCERS
 import { commonReducers } from './reducers/Common';
 
@@ -63,7 +64,8 @@ const reducer = combineReducers({
     hrNoti: hrNotificationsReducers,
     readingsCount: remainingReadingsReducer,
     log: logsReducers,
-    common: commonReducers
+    common: commonReducers,
+    hrprofile: hrProfilesReducer
 
 })
 

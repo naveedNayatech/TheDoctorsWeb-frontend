@@ -7,7 +7,7 @@ import { resetpasswordById } from '../../actions/authActions';
 import { useAlert } from 'react-alert';
 import { useSelector, useDispatch } from 'react-redux';
 
-const DoctorProfile = ({doctor}) => {
+const HRProfile = ({ hrprofile }) => {
     
     const dispatch = useDispatch();
     const alert = useAlert();
@@ -22,7 +22,7 @@ const DoctorProfile = ({doctor}) => {
     
 
       const submitHandler = (values) => {
-        dispatch(resetpasswordById( values.password ,doctor._id))
+        dispatch(resetpasswordById( values.password ,hrprofile._id))
       }
 
     useEffect(() => {
@@ -40,13 +40,13 @@ const DoctorProfile = ({doctor}) => {
     <div className="row">
 
     <div className="col-md-8">
-    {doctor && <>
+    {hrprofile && <>
             <br />
                     <div className="col-md-12">
                         <div className="row">
                             <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
-                            <p className="profile-name pl-3 pb-2">Dr. {doctor?.firstname} {doctor?.lastname} <br />
-                            <small className="profile-value-text pl-3">{doctor?.email}</small>
+                            <p className="profile-name pl-3 pb-2">HR. {hrprofile?.firstname} {hrprofile?.lastname} <br />
+                            <small className="profile-value-text pl-3">{hrprofile?.email}</small>
                             </p>
                         </div>
 
@@ -70,8 +70,7 @@ const DoctorProfile = ({doctor}) => {
                                     type="password" 
                                     placeholder="New Password"
                                 />
-                                 <small>Password must contain atleast one letter and one number</small>
-                                
+                                <small>Password must contain atleast one letter and one number</small>
                                 <br/><br/>
                                 
 
@@ -91,4 +90,4 @@ const DoctorProfile = ({doctor}) => {
   )
 }
 
-export default DoctorProfile
+export default HRProfile
