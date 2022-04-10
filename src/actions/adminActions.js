@@ -126,7 +126,7 @@ export const getDoctorsPatientList = (docId) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${docId}/null`, {
+        const { data } = await axios.post(`${Prod01}/doctor/patientlist/${docId}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -152,8 +152,8 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
         })
         
         const token = JSON. parse(localStorage.getItem('token'));
-        console.log('HR ID is ' + hrId);
-        const { data } = await axios.get(`${Prod01}/hr/patientlist/${hrId}/null`, {
+        
+        const { data } = await axios.post(`${Prod01}/hr/patientlist/${hrId}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -543,7 +543,7 @@ export const doctorProfile = (id) => async(dispatch) => {
 export const getHrProfile = (id) => async(dispatch) => {
     try {
         
-        const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/hr/hrbyid/${id}`, {
             headers: {
@@ -575,9 +575,9 @@ export const getDoctorPatients = (id) => async(dispatch) => {
             type: DOCTOR_PATIENTS_REQUEST 
         })
         
-        const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-        const { data } = await axios.get(`${Prod01}/doctor/patientlist/${id}/null`, {
+        const { data } = await axios.post(`${Prod01}/doctor/patientlist/${id}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -597,22 +597,23 @@ export const getDoctorPatients = (id) => async(dispatch) => {
     }
 }
 
-export const removePatientsDoctor = (id, doctorId) => async(dispatch) => {
+export const removePatientsDoctor = (id) => async(dispatch) => {
     try {
-        // const alert = useAlert();
         const token = JSON. parse(localStorage.getItem('token'));
 
         const res = await axios.put(`${Prod01}/patient/edit/${id}`,{
-            delete: assigned_doctor_id
+            assigned_doctor_id: ''
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
         });
 
-        if(res.status === 201){
-            dispatch(getDoctorPatients(doctorId));
-        }
+        console.log(res);
+
+        // if(res.status === 201){
+        //     dispatch(getDoctorPatients(doctorId));
+        // }
 
         
         // dispatch({
@@ -884,7 +885,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
    }
 
-   export const getPatientTelemetryData = (patientId, recordsPerPage, currentPage) => async(dispatch) => {
+   export const getPatientTelemetryData = (patientId, recordsPerPage, currentPage, sort) => async(dispatch) => {
     
     try {
        dispatch({ 
@@ -893,7 +894,8 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
        
        const token = JSON. parse(localStorage.getItem('token'));
        const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/${recordsPerPage}/${currentPage}`, {
-               patientId: patientId
+               patientId: patientId,
+               createdAt: sort
            }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -914,16 +916,17 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
     }   
 }
 
-export const sortTelemetartData = (patientId, sortDate) => async(dispatch) => {    
+export const sortTelemetartData = (patientId, startDate, endDate) => async(dispatch) => {    
     try {
        dispatch({ 
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
        const token = JSON. parse(localStorage.getItem('token'));
-       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData`, {
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/10/1`, {
                 patientId: patientId,
-                specificDate: sortDate,
+                startDate: startDate,
+                endDate: endDate,
            }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -932,7 +935,8 @@ export const sortTelemetartData = (patientId, sortDate) => async(dispatch) => {
    
        dispatch({
            type: GET_PATIENT_DEVICE_DATA_SUCCESS,
-           payload: data
+           payload: data.healthData,
+           count: data.Count
        })    
    
     } catch (error) {

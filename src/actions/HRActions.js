@@ -30,6 +30,9 @@ import {
     GET_HR_NOTIFICATIONS_REQUEST,
     GET_HR_NOTIFICATIONS_SUCCESS,
     GET_HR_NOTIFICATIONS_FAIL,
+    GET_CAREPLAN_LIST_REQUEST,
+    GET_CAREPLAN_LIST_SUCCESS,
+    GET_CAREPLAN_LIST_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -41,7 +44,7 @@ try {
 
     const token = JSON. parse(localStorage.getItem('token'));
 
-    const { data } = await axios.get(`${Prod01}/hr/patientlist/${id}/null`,{
+    const { data } = await axios.post(`${Prod01}/hr/patientlist/${id}`,{
         headers: {
             "Authorization":`Bearer ${token}`
          }
@@ -334,6 +337,37 @@ export const getPatientCarePlan = (patientId) => async(dispatch) => {
     } catch (error) {
        dispatch({
            type: PATIENT_CARE_PLAN_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+export const getHRCareplans = (hrId) => async(dispatch) => {    
+    try {
+
+        dispatch({
+            type: GET_CAREPLAN_LIST_REQUEST
+        })
+
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data }  = await axios.post(`${Prod01}/patient/CarePlanbydrhr`, {
+           "hr_Id":hrId
+       }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: GET_CAREPLAN_LIST_SUCCESS,
+            payload: data,
+        });
+
+        
+    } catch (error) {
+       dispatch({
+           type: GET_CAREPLAN_LIST_FAIL,
            payload: error.message
        })
     }   

@@ -107,7 +107,7 @@ const Login = ({ history }) => {
 											<br/><br/><br/>
 												<div className="row" style={{justifyContent: 'space-between'}}>
 													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
-													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Staff</Link></small>
+													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Doctor</Link></small>
 												</div>
 										</div>
 									)}

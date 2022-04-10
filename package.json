@@ -15,6 +15,7 @@
     "react-alert": "^7.0.3",
     "react-alert-template-basic": "^1.0.2",
     "react-bootstrap": "^2.0.2",
+    "react-bootstrap-multiselect": "^2.4.1",
     "react-csv": "^2.2.2",
     "react-datepicker": "^4.6.0",
     "react-datetime-picker": "^3.4.3",

@@ -48,7 +48,7 @@ const CareplanDetails = (props) => {
 
   return (
     <Fragment>
-      <MetaData title="Patients Profile"/>
+      <MetaData title="Careplan Details"/>
         <HRSidebar />    
 
         <section className="home-section">

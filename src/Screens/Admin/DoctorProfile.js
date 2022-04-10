@@ -21,7 +21,8 @@ const DoctorProfile = (props) => {
     const [patientName, setPatientName] = useState(""); //patient name to show in modal.
     const [patientToRemove, setpatientToRemove] = useState(""); //set patient id to remove.
     const [doctorId, setDoctorID] = useState(docId); 
-    
+    const [sort, setSort] = useState(true);
+
     const [query, setQuery] = useState("");
     const keys = ["firstname", "lastname", "DOB", "email", "phone1", "diseases"];
 
@@ -39,10 +40,10 @@ const DoctorProfile = (props) => {
     }, [dispatch, alert, error, doctorId]);
 
     const removePatient = () => {
+        console.log('helloooo');
         dispatch(removePatientsDoctor(patientToRemove, doctorId));
         setSmShow(false);
-        alert.success('Patient Removed')
-        
+        // alert.success('Patient Removed')
     }
 
 
@@ -133,13 +134,23 @@ const DoctorProfile = (props) => {
                             <div className="row-display">
                                 <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
                                 
+                                <div className="row-display">
                                 <input 
                                 type="text" 
-                                className="form-control"
+                                className="form-control mt-2"
                                 onChange={e => setQuery(e.target.value)}
                                 placeholder="Search"
-                                style={{width: '250px'}}
+                                style={{width: '180px', height: '40px'}}
                                 /> 
+
+                                &nbsp;&nbsp;&nbsp;
+                                <button className="btn add-staff-btn mt-2" 
+                                onClick={() => setSort(sort => !sort)}
+                                style={{height: '40px'}}
+                                >
+                                    {sort ? <i className="bx bx-down-arrow-alt"></i> : <i className="bx bx-up-arrow-alt"></i>}
+                                </button>
+                                </div>
                             </div>
                             <br />
 
@@ -158,7 +169,40 @@ const DoctorProfile = (props) => {
                                             </tr> 
                                         </thead>
                                         <tbody>
-                                        {doctorpatients && doctorpatients.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
+                                        {sort ? <>
+                                            {doctorpatients && doctorpatients.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
+                                            <tr align="center" key={index}>
+                                            <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>
+                                                {patient?.firstname} {patient?.lastname}  
+                                                <p>{patient?.phone1}</p></Link>
+                                            </td>
+
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+
+                                            {patient?.block === false ? <td>
+                                                <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                                </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                            </td>}
+
+                                            {patient?.assigned_doctor_id ? <>
+                                                <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                                </> : <>
+                                                <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                            </>}
+
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.diseases}</td>
+                                            <td>
+                                            <Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
+                                            <Link to="/doctorProfile" className="rounded-button-delete" onClick={() => {setSmShow(true); setPatientName(patient?.lastname); setpatientToRemove(patient?._id)}}><i className="bx bx-trash" ></i></Link> &nbsp;
+                                                {/* <Link to="/#" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
+                                            </td>
+                                        </tr> 
+                                        
+                                        ))}    
+                                        </> : <>
+                                        {doctorpatients && doctorpatients.reverse().filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
                                             <tr align="center" key={index}>
                                             <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>
                                                 {patient?.firstname} {patient?.lastname}  
@@ -189,6 +233,8 @@ const DoctorProfile = (props) => {
                                         </tr> 
                                         
                                         ))}
+                                        </> }
+                                        
                                         
                                         </tbody>
                                         </table>    

@@ -39,22 +39,29 @@ const HRSidebar = (props) => {
 
                 <li>
                     <Link key="staffPatients" to="/HrPatients">
-                    <i className='bx bx-list-ul'></i>
-                        <span className="link_name">My Patients</span>
+                    <i className='bx bx-user'></i>
+                        <span className="link_name">Patients</span>
                     </Link>
                 </li>
 
                 <li>
                     <Link key="timeReport" to="/timeReport">
-                    <i className='bx bx-list-ul'></i>
+                    <i className='bx bx-time-five'></i>
                         <span className="link_name">Time Report</span>
+                    </Link>
+                </li>
+
+                <li>
+                    <Link key="careplans" to="/HR/careplans">
+                        <i className="bx bx-file"></i>
+                        <span className="link_name">Careplans</span>
                     </Link>
                 </li>
 
                 <li>
                     <Link key="doctors" to="/hr">
                         <i className="bx bx-user"></i>
-                        <span className="link_name">My Profile</span>
+                        <span className="link_name">Profile</span>
                     </Link>
                 </li>
 

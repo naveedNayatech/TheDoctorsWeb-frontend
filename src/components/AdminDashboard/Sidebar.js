@@ -79,7 +79,7 @@ const Sidebar = () => {
 
                 <li className="nav_link">
                     <NavLink key="credentials" to="/credentials" activeClassName="link-name-active">
-                         <i className='bx bxs-data'></i>
+                        <i className='bx bxs-lock'></i>
                         <span className="link_name">Manage Credentials</span>
                     </NavLink>
                 </li>

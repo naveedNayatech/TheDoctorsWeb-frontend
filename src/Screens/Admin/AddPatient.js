@@ -11,12 +11,15 @@ import {useDispatch, useSelector} from 'react-redux'
 import { useAlert } from 'react-alert';
 import { PATIENT_RESET } from '../../constants/adminConstants';
 
+
 const AddPatient = (props) => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
 
     const { loading, error ,  isAdded} = useSelector(state => state.patientCRUD);
+    const data = [{ value:'One', selected:true }, { value: 'Two' }, { value:'Three' }]
+
 
     useEffect(() => {
         if(error){
@@ -57,7 +60,8 @@ const AddPatient = (props) => {
 	  });
 
       const submitHandler = (values) => {
-        dispatch(addPatient(values));
+        console.log('diseases are ' + values.diseases);
+        // dispatch(addPatient(values));
     }
 
   return <Fragment>
@@ -208,12 +212,12 @@ const AddPatient = (props) => {
 
                                     {/* Disease */}
                                     <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                        <TextField 
-                                                label="Diseases" 
-                                                name="diseases" 
-                                                type="text" 
-                                                placeholder="Diseases"
-                                        />
+                                         <TextField 
+                                            label="Diseases" 
+                                            name="diseases" 
+                                            type="text" 
+                                            placeholder="Diseases"
+                                        /> 
                                     </div>
 
                                     {/* Insurance Company */}

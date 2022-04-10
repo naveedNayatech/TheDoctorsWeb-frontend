@@ -20,6 +20,7 @@ const HRList = () => {
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [HRModel, setHRModel] = useState(null);
     const [HRToDelete, setHRToDelete] = useState(null);
+    const [sort, setSort] = useState(true);
     const [query, setQuery] = useState(""); // set search query.
     const keys = ["firstname", "lastname", "email", "DOB", "gender"];
 
@@ -48,6 +49,7 @@ const HRList = () => {
         dispatch(HRActivate(HRModel));
     }
     
+
   return <Fragment>
         <MetaData title="HRs"/>
                 <Sidebar />    
@@ -74,6 +76,11 @@ const HRList = () => {
                                     onChange={e => setQuery(e.target.value)}
                                 />
                                 &nbsp;&nbsp;&nbsp;
+                                <button className="btn add-staff-btn" onClick={() => setSort(!sort)}>
+                                    {sort ? <i className="bx bx-down-arrow-alt"></i> : <i className="bx bx-up-arrow-alt"></i>}
+                                </button>
+
+                                &nbsp;&nbsp;&nbsp;
                                 <Link to="/addhr" className="add-staff-btn">Add New HR</Link>
                             </div>
                         </div>
@@ -97,7 +104,8 @@ const HRList = () => {
                                 </tr> 
                             </thead>
                             <tbody>
-                            {hrs && hrs.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((hr, index) => (
+                            {sort ? <>
+                                {hrs && hrs.filter(item => keys.some(key => item[key]?.toLowerCase().includes(query))).map((hr, index) => (
                                <tr key={index}>
                                 <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/hrProfile", state: {hr: hr}}}> {hr?.firstname} {hr?.lastname} <p style={{color: 'gray'}}>({hr?.role})</p> </Link></td>
                                 <td>{moment(hr?.DOB).format("ll")}</td>    
@@ -120,6 +128,32 @@ const HRList = () => {
                                 </td>
                                </tr> 
                             ))}
+                            </> : <>
+                            {hrs && hrs.reverse().filter(item => keys.some(key => item[key]?.toLowerCase().includes(query))).map((hr, index) => (
+                               <tr key={index}>
+                                <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/hrProfile", state: {hr: hr}}}> {hr?.firstname} {hr?.lastname} <p style={{color: 'gray'}}>({hr?.role})</p> </Link></td>
+                                <td>{moment(hr?.DOB).format("ll")}</td>    
+                                <td style={{wordWrap: 'break-word'}}>{hr?.email}</td>    
+                                {hr?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="warning text-white" className="female-tag">Female</Badge></td>}    
+                                {hr?.assigned_doctor_id ? <td>Dr. {hr?.assigned_doctor_id?.firstname} {hr?.assigned_doctor_id?.lastname}</td> : <td>N/A</td>}
+                                {hr?.block === false ? <td>
+                                        <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                </td>}
+                                <td>
+                                    <Link to={{ pathname: "/hrProfile", state: {hr: hr}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
+                                    <Link to={{ pathname: "/updateHR", state:{ hr: hr}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
+                                   {hr?.block === false ? <Fragment>
+                                        <Link to="hrlist" className="rounded-button-delete" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
+                                   </Fragment> : <Fragment>
+                                        <Link to="hrlist" className="rounded-button-activate" onClick={() => {setSmShow(true); setHRModel(hr?._id); setHRToDelete(hr?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                    </Fragment>} 
+
+                                </td>
+                               </tr> 
+                            ))}
+                            </>}
+                            
                             </tbody>
                         </Table>
                         </Fragment>

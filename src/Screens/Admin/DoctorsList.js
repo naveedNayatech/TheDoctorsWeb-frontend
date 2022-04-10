@@ -23,6 +23,7 @@ const DoctorsList = () => {
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [doctorModel, setDoctorModel] = useState(null);
     const [doctorToDelete, setDoctorToDelete] = useState(null);
+    const [sort, setSort] = useState('ascending');
     const [query, setQuery] = useState("");
     const keys = ["firstname", "lastname", "email", "npinumber", "phone1"];
 
@@ -83,9 +84,9 @@ const DoctorsList = () => {
                     <div className="home-content">
 
                     <div className="row">
-                            <div className="col-md-7">
+                            <div className="col-md-6">
                                 <h5 className="pt-2">Doctors List <span style={{color: '#007673'}}>( 
-                                     {doctors && doctors.length} )</span></h5> 
+                                     {doctors && doctors?.length} )</span></h5> 
                             </div>
                             <div className="row-display">
                                 <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
@@ -96,6 +97,10 @@ const DoctorsList = () => {
                                     style={{width: '200px'}}
                                     onChange={e => setQuery(e.target.value)}
                                 />
+                                &nbsp;&nbsp;&nbsp;
+                                <button className="btn add-staff-btn" onClick={() => setSort(sort => !sort)}>
+                                    {sort ? <i className="bx bx-down-arrow-alt"></i> : <i className="bx bx-up-arrow-alt"></i>}
+                                </button>
                                 &nbsp;&nbsp;&nbsp;
                                 <Link to="/adddoctor" className="add-staff-btn">Add New Doctor</Link>
                             </div>
@@ -119,7 +124,33 @@ const DoctorsList = () => {
                                 </tr> 
                             </thead>
                             <tbody>
-                            {doctors && doctors.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((doctor, index) => ( 
+                            {sort ? <>
+                            {doctors && doctors.filter(item => keys.some(key => item[key]?.toLowerCase().includes(query))).map((doctor, index) => ( 
+                                <tr key={index}>
+                                <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> Dr. {doctor?.firstname} {doctor?.lastname} <p style={{color: 'gray'}}>{moment(doctor?.DOB).format("ll")}</p> </Link></td>
+                                <td style={{wordWrap: 'break-word'}}>{doctor?.email}</td>
+                                {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
+                                <td>{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</td>
+                                <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
+                                {doctor?.block === false ? <td>
+                                        <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                </td>}
+                                <td>
+                                    <Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
+                                    <Link to={{ pathname: "/Doctor/Edit", state: {id: doctor}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>
+                                    
+                                    {doctors.block === false ? <Fragment>
+                                        <Link to="/doctors" className="rounded-button-delete" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-alt'></i></Link>
+                                    </Fragment> : 
+                                    <Fragment>
+                                        <Link to="/doctors" className="rounded-button-activate" onClick={() => {setSmShow(true); setDoctorModel(doctor?._id); setDoctorToDelete(doctor?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                    </Fragment>}
+                                </td>
+                            </tr> 
+                             ))} 
+                            </> : <>
+                            {doctors && doctors.reverse().filter(item => keys.some(key => item[key]?.toLowerCase().includes(query))).map((doctor, index) => ( 
                                 <tr key={index}>
                                 <td><Link to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> Dr. {doctor?.firstname} {doctor?.lastname} <p style={{color: 'gray'}}>{moment(doctor?.DOB).format("ll")}</p> </Link></td>
                                 <td style={{wordWrap: 'break-word'}}>{doctor?.email}</td>
@@ -142,8 +173,9 @@ const DoctorsList = () => {
                                     </Fragment>}
                                 </td>
                             </tr> 
-                            
                              ))}
+                            </>}    
+                            
                              
                              </tbody>
                             </Table> 

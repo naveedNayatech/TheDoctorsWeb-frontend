@@ -33,6 +33,9 @@ import {
     GET_HR_NOTIFICATIONS_REQUEST,
     GET_HR_NOTIFICATIONS_SUCCESS,
     GET_HR_NOTIFICATIONS_FAIL,
+    GET_CAREPLAN_LIST_REQUEST,
+    GET_CAREPLAN_LIST_SUCCESS,
+    GET_CAREPLAN_LIST_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -272,6 +275,37 @@ export const carePlanReducers = (state='', action) => {
     default: 
     return state;
     }
+}
+
+export const careplanListReducers = (state={careplanlist:[]}, action) => {
+    switch (action.type) {
+        
+        case GET_CAREPLAN_LIST_REQUEST:
+            return {
+                loading: true
+        }
+
+        case GET_CAREPLAN_LIST_SUCCESS: 
+            return {
+                loading: false,
+                careplanlist: action.payload
+            }
+        
+        case GET_CAREPLAN_LIST_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }
+         
+        default: 
+        return state;
+        }
 }
 
 export const timeSpentCurrentMonthReducer = (state={totalTime:0 }, action) => {

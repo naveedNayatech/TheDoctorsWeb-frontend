@@ -11,7 +11,7 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
-import { Tabs, Tab} from 'react-bootstrap';
+import { Tabs, Tab, Row, Col, Nav} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
  
@@ -21,7 +21,8 @@ const PatientProfile = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    const [sortDate, setSortDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     let patientid = props?.location?.state?.patientid;
 
@@ -33,6 +34,7 @@ const PatientProfile = (props) => {
 
     const [readingPerPage, setReadingsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    const [sort, sortBy] = useState(-1);
 
     
     useEffect(() => {
@@ -41,7 +43,7 @@ const PatientProfile = (props) => {
         }
 
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage));
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
         dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
         
@@ -50,20 +52,22 @@ const PatientProfile = (props) => {
             alert.success('Updated Successfully');
         }
 
-    }, [dispatch, alert, error, isUpdated, currentPage]);
+    }, [dispatch, alert, error, isUpdated, currentPage, sort]);
 
+    const sortPatientTelemetaryData = () => {
+        console.log('start date is ' + startDate);
+        console.log('end date is ' + endDate);
 
-        const sortPatientTelemetaryData = (date) => {
-            const dateToFind = new Date(date).toLocaleDateString('zh-Hans-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
-            dispatch(sortTelemetartData(patientid, dateToFind));
-        }
-
-
+        dispatch(sortTelemetartData(patientid, startDate, endDate, readingPerPage, currentPage));
+    }
+    
     const refreshHandler = () => {
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
         dispatch(getPatientCarePlan(patientid));
-        setSortDate('');
+        setStartDate('');
+        setEndDate('');
+        setSort('')
     }
 
     
@@ -108,53 +112,96 @@ const PatientProfile = (props) => {
                                 <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#F95800'}}>(Total Readings: {Count}) </span></h5>
                             </div>
 
-                            <div className="row-display" style={{backgroundColor: 'gray', color: '#FFF', padding: 10}}> 
+                            <div className="row-display patient-profile-col-heading" style={{ 
+                                padding: 10,
+                                borderRadius: '10px'
+                                }}
+                                
+                                > 
                             
                             <div style={{width: '30%'}}>
                             <label>To: </label>
                               <input 
                                 type="date"
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
                                 max={moment().format("YYYY-MM-DD")} 
                                 className="form-control"
                                 />
                             </div>
-
+                            
+                            &nbsp;&nbsp;
                             <div style={{width: '30%'}}>                            
                             <label>From: </label>
                               <input 
                                 type="date"
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
                                 max={moment().format("YYYY-MM-DD")} 
                                 className="form-control"
                              />
                              </div>
-
+                            
+                             &nbsp;&nbsp;
                              <div style={{width: '30%'}}>                            
                                 <label>Sort By: </label>
-                                    <select className="form-control">
-                                        <option value="1">Ascending</option>
-                                        <option value="-1">Descending</option>
+                                    <select 
+                                    value={sort}
+                                    onChange={e => sortBy(e.target.value)}
+                                    className="form-control">
+                                        <option value="-1">Descending (last to first)</option>
+                                        <option value="1">Ascending (first to last)</option>
                                     </select>
                              </div>
-
+                            
+                            &nbsp;&nbsp;
                              <div> 
-                                <button className="btn add-staff-btn mt-4">Search</button>    
+                                 <label>Search</label>
+                                    <button 
+                                        className="btn add-staff-btn"
+                                        onClick={sortPatientTelemetaryData}>Search
+                                    </button>    
+                            </div>
+
+                            <div> 
+                                 <label>Reset</label>
+                                    <button
+                                        onClick={refreshHandler} 
+                                        className="btn add-staff-btn">Reset
+                                    </button>    
                             </div>
                             </div>
 
                         <br /><br />
+                    
 
-                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example">
-                        <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
-                        {deviceData && deviceData.map((devicedata, index) => (
-                            <div key={index}>
-                                {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                    <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={true} />
-                                </Fragment> : ''}
-                            </div>
-                        ))}
+                    <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                    <Row>
+                        <Col sm={12}>
+                            <Nav variant="pills" className="flex-row">
+                                <Nav.Item style={{cursor: 'pointer'}}>
+                                <Nav.Link eventKey="first">Cuff (B.P | Telemetary Data)</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item style={{cursor: 'pointer'}}>
+                                <Nav.Link eventKey="second">Weight (Telemetary Data)</Nav.Link>
+                                </Nav.Item>
+                            </Nav>
+                        </Col>
+                        
 
-                        {/* Pagination */}
-                        {readingPerPage <= Count && (
+                        <Col sm={12}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                {deviceData && deviceData.map((devicedata, index) => (
+                                    <div key={index}>
+                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
+                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={true} />
+                                        </Fragment> : ''}
+                                    </div>
+                                ))}
+
+                                {/* Pagination */}
+                                {readingPerPage <= Count && (
                                     <div className="d-flex justify-content-center mt-5"> 
                                     <Pagination activePage={currentPage} 
                                     itemsCountPerPage={readingPerPage} 
@@ -169,19 +216,25 @@ const PatientProfile = (props) => {
                                     />           
                                 </div>
                                 )} 
-                        </Tab>
-                        
-                        <Tab eventKey="weight" title="Weight ( Telemetary Data )">
-                        {deviceData && deviceData.map((devicedata, index) => (
-                            <div key={index}>
-                                 {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
-                                    <WeightTelemetaryData healthData={devicedata} isAdmin={true} />
-                                </Fragment> : ''}   
-                            </div>
-                        ))}
-                        </Tab>
+                                </Tab.Pane>
+                                
+                                
 
-                    </Tabs>
+                                <Tab.Pane eventKey="second">
+                                {deviceData && deviceData.map((devicedata, index) => (
+                                    <div key={index}>
+                                        {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
+                                            <WeightTelemetaryData healthData={devicedata} isAdmin={true} />
+                                        </Fragment> : ''}   
+                                    </div>
+                                ))}
+                                </Tab.Pane>
+                            </Tab.Content>
+                            </Col>
+                    </Row>
+                    </Tab.Container>
+                    
+                  
                     </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-link" onClick={refreshHandler}>Refresh List</button></small>}
                  
                     </Fragment> }
