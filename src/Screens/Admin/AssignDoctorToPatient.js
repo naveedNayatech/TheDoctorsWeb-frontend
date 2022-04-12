@@ -78,7 +78,7 @@ const AssignDoctorToPatient = (props) => {
                                 onChange={(e) => setPatientId(e.target.value)}
                                 >
                                 <option> Select Patient</option>    
-                                {patients && patients.map((patient, index) => (
+                                {patients && patients.filter(patients => !patients.assigned_doctor_id).map((patient, index) => (
                                     <option value={patient?._id} key={index}> {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                 ))}    
                                 

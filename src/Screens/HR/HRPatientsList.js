@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import MetaData from '../../layouts/MetaData';
 import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
@@ -20,6 +20,10 @@ const HRPatientsList = () => {
 
     const { isAuthenticated, hr} = useSelector(state => state.hrAuth);
     const { loading, error, hrpatients} = useSelector(state => state.hrPatients);
+
+    const [sort, setSort] = useState(true);
+    const [query, setQuery] = useState("");
+    const keys = ["firstname", "lastname", "DOB", "email", "phone1"];
 
     let id = hr._id;
 
@@ -55,9 +59,32 @@ const HRPatientsList = () => {
                         <div className="home-content">
                             <div className="container">
                                 <div className="row-display">
-                                        <h5 >My Patients ({hrpatients && hrpatients.length}) </h5> 
-                                         <Link to="/Hr/AddPatient" className="add-staff-btn">+ Add New Patient</Link> 
-                                </div> 
+                                    <h5 >My Patients ({hrpatients && hrpatients.length}) </h5> 
+                                    
+                                    <Link to="/Hr/AddPatient" className="add-staff-btn">+ Add New Patient</Link> 
+                                </div>
+
+                                <div className="row-display"> 
+                                        <div className="col-md-9">
+
+                                        </div>
+
+                                        <input 
+                                            type="text" 
+                                            className="form-control mt-2"
+                                            onChange={e => setQuery(e.target.value)}
+                                            placeholder="Search"
+                                            style={{width: '180px', height: '40px'}}
+                                        /> 
+
+                                        &nbsp;&nbsp;&nbsp;
+                                        <button className="btn add-staff-btn mt-2" 
+                                        onClick={() => setSort(sort => !sort)}
+                                        style={{height: '40px'}}
+                                        >
+                                        {sort ? <i className="bx bx-down-arrow-alt"></i> : <i className="bx bx-up-arrow-alt"></i>}
+                                        </button>
+                                    </div> 
                                 <hr />
                                 
                                 {hrpatients?.length > 0 ? (<Fragment>
@@ -76,11 +103,12 @@ const HRPatientsList = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {hrpatients && hrpatients.map((patient, index) => ( 
+                                        {sort ? <>
+                                        {hrpatients && hrpatients.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => (  
                                             <tr key={index}>
                                             
                                             <td>
-                                                <Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                                <Link style={{textDecoration: 'none'}}to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
                                             
                                                 <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
                                             <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
@@ -97,16 +125,49 @@ const HRPatientsList = () => {
                                             </>}
 
                                             
-                                            {patient?.assigned_devices ? <td>{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
+                                            {patient?.assigned_devices ? <td>0{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
                                             <td>
                                             <Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
-                                                {/* <Link to={{ pathname: "/staffPatients", state: {id: hrpatients ?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
+                                            </td>
+                                        </tr> 
+                                        ))}
+                                        </> : <>
+                                        
+                                        {hrpatients && hrpatients.reverse().filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
+                                            <tr key={index}>
+                                            
+                                            <td>
+                                                <Link style={{textDecoration: 'none'}} to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>
+                                                    {patient?.firstname} {patient?.lastname} 
+                                                    <p>{patient?.phone1}</p>
+                                                </Link>
+                                            </td>
+
+                                            <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
+                                            
+                                            <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                            
+                                            {patient?.block === false ? <td>
+                                                <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                                </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                            </td>}
+
+                                            {patient?.assigned_doctor_id ? <>
+                                                <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                            </> : <>
+                                            <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                            </>}
+                                            
+                                            {patient?.assigned_devices ? <td>0{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
+                                            <td>
+                                            <Link to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                             </td>
                                         </tr> 
                                         
                                         ))}
-                                        
+
+                                        </> }
+                                         
                                         </tbody>
                                         </Table>    
                                     </Fragment>                      

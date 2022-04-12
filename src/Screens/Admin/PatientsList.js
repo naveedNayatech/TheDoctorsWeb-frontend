@@ -39,6 +39,7 @@ const PatientsList = () => {
     const { hrs} = useSelector(state => state.hrslist);
     const { totalPatients } = useSelector(state => state.adminStat);
     const [keyword, setKeyword] = useState('');
+    const [searchBy ,setSearchBy] = useState('');
     const [isSearch, setIsSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(10);
@@ -100,18 +101,8 @@ const PatientsList = () => {
         setCurrentPage(pageNumber);
     }
 
-    const searchhandler = (searchValue) => {
-        if (searchValue === undefined || searchValue === "") {
-            getPatientsList(resPerPage, currentPage);
-            setIsSearch(false)
-
-        }
-        else {
-            setIsSearch(true);
-            dispatch(searchPatient(searchValue));
-            setHrId('');
-            setDoctorId('')
-        }
+    const searchhandler = () => {
+        dispatch(searchPatient(searchBy, keyword));
     }  
 
     const deActivatePatient = () => {
@@ -127,17 +118,9 @@ const PatientsList = () => {
         dispatch(getDoctors(resPerPage, currentPage));
         dispatch(getHrLists(resPerPage, currentPage));
         setHrId('');
-        setDoctorId(''); 
+        setDoctorId('');
         setKeyword('');
     }
-
-    function handleKeyUp(event) {
-        //key code for enter
-        if (event.keyCode === 13) {
-          event.preventDefault();
-          event.target.blur();
-        }
-       }
 
     return (
         <Fragment>
@@ -166,12 +149,12 @@ const PatientsList = () => {
                                                         
                         </div>
 
-                        <div className="row">
-                            <div className="col-md-5">
-                                <h5 className="pt-2 mt-2">Patients List <span style={{color: '#006762'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
-                            </div>
+                        <div className="row-display">
+                            
+                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#006762'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
+                            
 
-                            <div className="col-md-2">
+                            <div className="mt-2">
                                 <select 
                                 className="form-control select-input-type"
                                 value={doctorId}
@@ -184,7 +167,7 @@ const PatientsList = () => {
                                 </select>    
                             </div>
 
-                            <div className="col-md-2">
+                            <div className="mt-2">
                                 <select 
                                 className="form-control select-input-type"
                                 value={hrId}
@@ -197,25 +180,51 @@ const PatientsList = () => {
                                     
                                 </select>    
                             </div>
-
-                            <div className="col-md-2">
-                                <div style={{width: 200}}>
-                                    <input type="text" 
-                                    name="search patient" 
-                                    className="form-control shadow-none" 
-                                    placeholder="Search patient..." 
-                                    value={keyword}
-                                    onChange={(e) => setKeyword(e.target.value)}
-                                    onBlur={(e) => {searchhandler(e.target.value)}}
-                                    onKeyUp={handleKeyUp}
-                                    style={{outline: 'none'}}
-                                    />
-                                </div>
+                            
+                            {/* Search Key options */}
+                            <div
+                            className="row-display"
+                            style={{
+                                backgroundColor: '#D3D3D3',
+                                padding: '10px',
+                                borderRadius: '10px',
+                            }}>
+                            <div>
+                                <select 
+                                className="form-control select-input-type" 
+                                value={searchBy}
+                                onChange={e => setSearchBy(e.target.value)}
+                                >
+                                    <option value="undefined">Search Patient By </option>
+                                     <option value="firstname">Firstname</option>
+                                     <option value="lastname">Lastname</option>
+                                     <option value="email">email</option>
+                                     <option value="phone1">phone1</option>
+                                     <option value="address">Address</option>
+                                </select>    
                             </div>
-                        
+
+                            &nbsp;&nbsp;&nbsp;
+                            <div>
+                                <input type="text" 
+                                name="search patient" 
+                                className="form-control shadow-none" 
+                                placeholder="Search patient..." 
+                                value={keyword}
+                                onChange={e => setKeyword(e.target.value) }
+                                style={{outline: 'none'}}
+                                />
+                            </div>
+
+                            &nbsp;&nbsp;&nbsp;
+                            <button 
+                            className="btn add-staff-btn" style={{height: '40px'}}
+                            onClick={searchhandler}
+                            ><i class='bx bx-search-alt-2'></i></button>
+                            </div>
                         </div>
                     </div>  
-                    <hr />
+                    <br />
                     {/* Patient List Card */}
                         <div className="col-md-12">
                         {patients && <Fragment>
@@ -247,7 +256,7 @@ const PatientsList = () => {
                                     </td>}
                                         
                                      {patient?.assigned_doctor_id ? <>
-                                        <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                        <td style={{backgroundColor: '#007673', color: '#FFF'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
                                     </> : <>
                                     <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                     </>}
@@ -255,14 +264,14 @@ const PatientsList = () => {
                                     <td>
                                         <div className="form-check">
                                             <input 
-                                            type="checkbox"
-                                            id={index}
-                                            className="form-check-input"
-                                            defaultChecked={patient?.rpmconsent === true ? true : false}
-                                            onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
+                                                type="checkbox"
+                                                id={index}
+                                                className="form-check-input"
+                                                defaultChecked={patient?.rpmconsent === true ? true : false}
+                                                onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
                                             />
 
-                                            <label className="form-check-label" for={index}>
+                                            <label style={{ cursor: 'pointer' }} for={index}>
                                             {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
                                                 Signed</span>
                                                 : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}

@@ -4,7 +4,6 @@ import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { doctorProfile, getDoctorPatients, removePatientsDoctor } from '../../actions/adminActions';
-import doctorProfileImg from '../../assets/Images/doctorprofile.jpg';
 import folderImg from '../../assets/Images/folder.png';
 import Loader from '../../layouts/Loader';
 import { useAlert } from 'react-alert';
@@ -22,28 +21,30 @@ const DoctorProfile = (props) => {
     const [patientToRemove, setpatientToRemove] = useState(""); //set patient id to remove.
     const [doctorId, setDoctorID] = useState(docId); 
     const [sort, setSort] = useState(true);
-
     const [query, setQuery] = useState("");
     const keys = ["firstname", "lastname", "DOB", "email", "phone1", "diseases"];
 
-    const { loading, error, doctor } = useSelector(state => state.doctorProfile);
+    const { loading, error: doctorProfileError, doctor } = useSelector(state => state.doctorProfile);
     const { doctorpatients } = useSelector(state => state.docPatients);
-
+    const {error, message} = useSelector(state => state.common);
 
     useEffect(() => {
+        if(message){
+            alert.success(message);
+        }
+    
         if(error){
-            return alert.error(error);
+            alert.error(error)
         }
         
-        dispatch(doctorProfile(docId));
-        dispatch(getDoctorPatients(docId));
-    }, [dispatch, alert, error, doctorId]);
+        dispatch(doctorProfile(doctorId));
+        dispatch(getDoctorPatients(doctorId));
+    }, [dispatch, error, doctorId, message, doctorId]);
+
 
     const removePatient = () => {
-        console.log('helloooo');
         dispatch(removePatientsDoctor(patientToRemove, doctorId));
         setSmShow(false);
-        // alert.success('Patient Removed')
     }
 
 
@@ -124,9 +125,6 @@ const DoctorProfile = (props) => {
                                 </div>
                             </div>
                         </div>    
-                        
-                        
-                        {/* Patient List Card */}
 
 
                         {/* paste patients list fragment here */}
@@ -134,7 +132,7 @@ const DoctorProfile = (props) => {
                             <div className="row-display">
                                 <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
                                 
-                                <div className="row-display">
+                            <div className="row-display">
                                 <input 
                                 type="text" 
                                 className="form-control mt-2"
@@ -150,7 +148,7 @@ const DoctorProfile = (props) => {
                                 >
                                     {sort ? <i className="bx bx-down-arrow-alt"></i> : <i className="bx bx-up-arrow-alt"></i>}
                                 </button>
-                                </div>
+                            </div>
                             </div>
                             <br />
 

@@ -90,11 +90,11 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             
             {isAdmin ===true ? <Fragment>
             </Fragment> : 
-                <div className="row">
+                <div className="row mt-4">
                     <div className="col-md-10">
                         <input type="text" 
-                        className="form-control mt-1"
-                        placeholder="Enter your comment here ....."
+                        className="form-control"
+                        placeholder="Type your comment here ....."
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         key={telemetaryData?._id}

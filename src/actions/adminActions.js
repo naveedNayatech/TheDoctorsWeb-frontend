@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { Alert } from 'react-bootstrap';
 import { Prod, Prod01 } from '../constants/ActionType';
 const moment = require('moment-timezone');
-import { useAlert } from 'react-alert';
 
 import { 
     ALL_PATIENTS_REQUEST, 
@@ -90,6 +88,13 @@ import {
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
+import { 
+    SHOW_ALERT_MESSAGE,
+    HIDE_ALERT_MESSAGE,
+    FETCH_ERROR
+} from '../constants/Common';
+
+
 export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
     try {
         dispatch({
@@ -173,7 +178,7 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
 }
 
 // Search Patient By Name
-export const searchPatient = (searchValue) => async(dispatch) => {
+export const searchPatient = (searchBy, keyword) => async(dispatch) => {
     try {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
@@ -182,7 +187,8 @@ export const searchPatient = (searchValue) => async(dispatch) => {
         const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/patient/search`,{
-            search: searchValue
+            key: searchBy,
+            value:keyword
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -597,38 +603,111 @@ export const getDoctorPatients = (id) => async(dispatch) => {
     }
 }
 
-export const removePatientsDoctor = (id) => async(dispatch) => {
+export const removePatientsDoctor = (patientId, doctorId) => async(dispatch) => {
     try {
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const res = await axios.put(`${Prod01}/patient/edit/${id}`,{
-            assigned_doctor_id: ''
+        const res = await axios.post(`${Prod01}/patient/unsetHrDr`,{
+            patientId: patientId,
+            drId: true
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
         });
 
-        console.log(res);
-
-        // if(res.status === 201){
-        //     dispatch(getDoctorPatients(doctorId));
-        // }
-
         
-        // dispatch({
-        //     loading: false,
-        //     type: DOCTOR_PATIENTS_SUCCESS,
-        //     payload: data 
-        // })
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Patient removed from Doctor"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
+           
+        dispatch(getDoctorPatients(doctorId))
         
     } catch (error) {
         dispatch({
-            type: DOCTOR_PATIENTS_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'cannot remove patient'
+          })
+          dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
+
+export const removePatientsHR = (patientId) => async(dispatch) => {
+    try {
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const res = await axios.post(`${Prod01}/patient/unsetHrDr`,{
+            patientId: patientId,
+            hrId: true
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+
+        if(res){
+            dispatch({
+                type: SHOW_ALERT_MESSAGE,
+                payload: "Patient removed from hr"
+              });
+            
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
+            })
+           }
+        
+    } catch (error) {
+        dispatch({
+            type: FETCH_ERROR,
+            payload: 'cannot remove patient'
+          })
+          dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
+    }
+}
+
+export const removeDoctorFromHR = (hrId) => async(dispatch) => {
+    try {
+        const token = JSON. parse(localStorage.getItem('token'));
+
+        const res = await axios.post(`${Prod01}/hr/removeDr`,{
+            hrId: hrId
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        });
+
+        if(res){
+            dispatch({
+                type: SHOW_ALERT_MESSAGE,
+                payload: "Doctor removed from hr"
+              });
+            
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
+            })
+           }
+        
+    } catch (error) {
+        dispatch({
+            type: FETCH_ERROR,
+            payload: 'cannot remove doctor'
+          })
+          dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
+    }
+}
+
 
 
 // Update doctor Profile -> ADMIN
@@ -923,7 +1002,7 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
        });
        
        const token = JSON. parse(localStorage.getItem('token'));
-       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/10/1`, {
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/100/1`, {
                 patientId: patientId,
                 startDate: startDate,
                 endDate: endDate,
@@ -1211,14 +1290,15 @@ export const sortRPMDevices = (stock) => async(dispatch) => {
 }
 
 // Search RPM Devices
-export const searchRPMDevices = (searchValue) => async(dispatch) => {
+export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
     try {
         dispatch({ type: SORT_DEVICES_REQUEST })
         
         const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/device/search`, {
-            search: searchValue
+            key: searchBy,
+            value: search
         },{
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1417,6 +1497,7 @@ export const HRActivate = (_id) => async(dispatch) => {
         const token = JSON. parse(localStorage.getItem('token'));
 
         const {data} = await axios.put(`${Prod01}/hr/edit/${_id}`, {
+                loginAttemps: 0,
                 block: false
         }, {
             headers: {

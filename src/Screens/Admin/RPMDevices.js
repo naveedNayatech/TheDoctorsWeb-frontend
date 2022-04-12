@@ -26,6 +26,7 @@ const RPMDevices = (props) => {
     const [currentPage, setCurrentPage] = useState(1); //for pagination, current page
     const [resPerPage, setResPerPage] = useState(10); //for pagination, how many responses we want to show
     const [search, setSearch] = useState(''); 
+    const [searchBy, setSearchBy] = useState('');
 
     const [smShow, setSmShow] = useState(false); //small confirm modal
 
@@ -74,18 +75,13 @@ const RPMDevices = (props) => {
         setCurrentPage(pageNumber);
     } 
 
-    const searchDevice = (searchValue) => {
-        // console.log('Value is' + searchValue);
-        if (searchValue === undefined || searchValue === "") {
-            dispatch(getAllDevices(resPerPage, currentPage));
-            // setisSearch(false)
-
-        }
-        else {
-            // setisSearch(true);
-            dispatch(searchRPMDevices(searchValue));
-        }
+    const searchDevice = () => {
+        dispatch(searchRPMDevices(searchBy, search))
     };
+
+    const refreshHandler = () => {
+        dispatch(getAllDevices(resPerPage, currentPage));
+    }
 
     return (
         <Fragment>
@@ -100,27 +96,28 @@ const RPMDevices = (props) => {
                 {loading ? <Loader /> : ( <Fragment>    
                 <div className="shadow-lg p-3 mb-2 mr-4 ml-4 rounded">
                     <div className="home-content">
-                    <div className="row">
-                        <div className="col-md-3">
-                            {deviceCount ? 
-                            <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount < 10 ? '0'+deviceCount : deviceCount} )</span> </h5> : null
-                            }
-                        </div>
+                    
+                    <div className="row-display">
+                        
+                        <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount && deviceCount < 10 ? '0'+deviceCount : 'N/A'} )</span> </h5>
+                            
+                            
+                            <div className="row-display">
+                            <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
+                            <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
+                            <Link to="/device" className="add-staff-btn">
+                                <small>Add New Device</small>
+                            </Link>
+                            </div>
+                    </div>
+                    <br />
 
-                        <div className="col-md-2">
-                            <input 
-                            type="text"
-                            className="form-control shadow-none"
-                            placeholder="Find By ID or IMEI..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            onBlur={(e) => {searchDevice(e.target.value)}}
-                            style={{outline: 'none'}}
-                                />
-                        </div>
+                    <div className="row-display">
+                       <div className="col-md-4">
+                           
+                       </div>
 
-
-                        <div className="col-md-2">
+                        <div className="mt-2">
                             <select name="listDevice" 
                                 className="form-control shadow-none select-input-type"
                                 defaultValue={'List Device By'}
@@ -132,7 +129,7 @@ const RPMDevices = (props) => {
                             </select>
                         </div>
 
-                        <div className="col-md-2">
+                        <div className="mt-2">
                             <select name="listDevice" 
                                 className="form-control select-input-type"
                                     defaultValue={'Sort By'}
@@ -142,24 +139,60 @@ const RPMDevices = (props) => {
                                 <option value="true"> Broken</option>
                             </select>
                         </div>
-
-                        <div className="col-md-2">
-                            <Link to="/device" className="add-staff-btn">
-                                <small>Add New Device</small>
-                            </Link>
-                        </div>
-
-                        <div className="col-lg-1 col-md-1">
+                        
+                        <div className="mt-2">
                             <Link to="/Admin/Inventory/Download" className="add-staff-btn" data-tip data-for="downloadcsv">
                             <i className='bx bxs-download'></i>
                             </Link>
                         </div>
+
+                        {/* Search Device By */}
+                        <div
+                            className="row-display"
+                            style={{
+                                backgroundColor: '#D3D3D3',
+                                padding: '10px',
+                                borderRadius: '10px',
+                            }}>
+
+                        <div>
+                            <select 
+                            className="form-control select-input-type" 
+                            value={searchBy}
+                            onChange={e => setSearchBy(e.target.value)}
+                            >
+                                <option value="undefined">Search device By </option>
+                                    <option value="imei">IMEI</option>
+                                    <option value="modelNumber">Model Number</option>
+                                    <option value="deviceType">Device Type</option>
+                                    <option value="firmwareVersion">Firmware Version</option>
+                                    <option value="hardwareVersion">Hardware Version</option>
+                            </select>    
+                        </div>
+                        
+                        &nbsp;&nbsp;&nbsp;
+                        <div>
+                            <input 
+                            type="text"
+                            className="form-control shadow-none"
+                            placeholder="Search device..."
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            />
+                        </div>
+
+                        &nbsp;&nbsp;&nbsp;
+                            <button 
+                            className="btn add-staff-btn" style={{height: '40px'}}
+                            onClick={searchDevice}
+                            ><i class='bx bx-search-alt-2'></i></button>
+                        </div>
+                        
                      </div>
 
                         <ReactTooltip id="downloadcsv" type="dark" effect="solid">
                             Download complete list in .csv
                         </ReactTooltip>
-
                             <br /> 
                         </div>
 

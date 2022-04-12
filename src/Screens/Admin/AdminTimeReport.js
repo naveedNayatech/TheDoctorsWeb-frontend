@@ -2,24 +2,29 @@ import React, {useEffect, useState, Fragment} from 'react';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
-import { getPatients, patientProfile } from '../../actions/adminActions';
-import { getTimeReport } from '../../actions/HRActions';
+import { getPatients, patientProfile, getHrLists } from '../../actions/adminActions';
+import { getTimeReport, getTimeReportByHR } from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { RESET_TIME_REPORT_DATA } from '../../constants/HRConstants';
+import Loader from '../../layouts/Loader';
+
 
 const AdminTimeReport = () => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, patients} = useSelector(state => state.admin);
+    const { patients} = useSelector(state => state.admin);
     const { patient } = useSelector(state => state.patientProfile);
-    const {  targets, totalTime} = useSelector(state => state.target);
+    const { loading, targets, totalTime} = useSelector(state => state.target);
+    const { hrs } = useSelector(state => state.hrslist);
 
     const [patientId, setPatientId] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [hrId, setHRId] = useState('');
+    const [reportBy, setReportBy] = useState('patient');
 
     useEffect(() =>{
         dispatch(getPatients());
@@ -28,10 +33,17 @@ const AdminTimeReport = () => {
             dispatch(patientProfile(patientId));
         }
 
+        dispatch(getHrLists());
+
     }, [dispatch, patientId])
 
     const submitHandler = () => {
-        dispatch(getTimeReport(patientId, patient?.assigned_hr_id?._id, startDate, endDate)); 
+        if(reportBy === 'patient'){
+            dispatch(getTimeReport(patientId, patient?.assigned_hr_id?._id, startDate, endDate)); 
+        }
+        else {
+            dispatch(getTimeReportByHR(hrId, startDate, endDate)); 
+        }
     }
 
     const resetData = () => {
@@ -50,13 +62,26 @@ const AdminTimeReport = () => {
             <div className="home-content">
 
             <div className="col-md-7">
-                <h5 className="pt-2 mt-2">Time <span style={{color: '#F95800'}}>Report {patient?.firstname } {patient?.lastname }</span></h5>
+                <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report</span></h5>
             </div>
             <hr />
+
+            <div className="row justify-content-center">
+                <button className={`btn + ${reportBy === 'patient' ?'submit-btn shadow-none' : 'link'} m-3`} 
+                    onClick={() => setReportBy("patient")}> By Patient
+                </button>
+
+                <button 
+                    className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
+                    onClick={() => setReportBy("hr")}> By HR
+                </button>
+            </div>
+           
 
             {/* first row */}
             <div className="row">
                 <div className="col-md-3">
+                {reportBy === 'patient' ? <>
                 <label htmlFor="from">Select Patient </label>
                     <select 
                         label="From" 
@@ -69,8 +94,22 @@ const AdminTimeReport = () => {
                     {patients && patients.map((patient, index) => (
                         <option key={index} value={patient._id} > {patient.firstname} {patient.lastname} -  {moment(patient.DOB).format("ll")} </option>
                     ))}
-                    </select>
-                </div>
+                    </select>                
+                </> : <>
+                <label htmlFor="from">Select HR </label>
+                <select 
+                      className="form-control"
+                      value={hrId}
+                      onChange={(e) => setHRId(e.target.value)}
+                      >
+
+                      <option>Select HR</option>
+                      {hrs && hrs.map((hr, index) => (
+                              <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname} {hr?.npinumber} </option>
+                          ))} 
+                </select>                        
+                </>}
+               </div>
 
 
                 <div className="col-md-3">
@@ -102,7 +141,7 @@ const AdminTimeReport = () => {
                 <button  
                     name="submit" 
                     type="submit" 
-                    className="btn btn-primary mt-4"
+                    className="btn add-staff-btn mt-4"
                     onClick={submitHandler}
                 >
                     Generate Report
@@ -110,72 +149,78 @@ const AdminTimeReport = () => {
                 </div>
                 </div>  
                 {/* First Row Ends Here */}
-                
+                {loading ? <Loader /> : <>
                 {targets && targets.length > 0 ? <Fragment>
-                                 <hr/>
-                                <div className="row">
-                                    <div className="col-md-7">
-                                        <h5>Report <span style={{color: '#F95800'}}>Result</span></h5>
-                                    </div>
-
-                                    <div className="col-md-2">
-                                        <span>Total Time Spent: <span style={{color: '#F95800', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
-                                    </div>
-
-                                    <div className="col-md-2">
-                                        <Link to={{ pathname: "/Admin/Report/Print", state: {target: targets, timeSpent: totalTime, from: startDate, to: endDate, totalTimeSpent: totalTime }}} className="btn btn-info">Print Report</Link>
-                                    </div>
-
-                                    <div className="col-md-1">
-                                        <button className="btn btn-danger" onClick={resetData}>Reset</button>
-                                    </div>
-                                </div>    
-
-
-                {targets && targets.map((trgt, index) => ( 
-                                 <Fragment>
-                                     <br/>
-                                     <p className="reportsHeading">Patient Details:{}</p> 
-                                     <div className="row">
-                                         <div className="col-md-3">
-                                            <label className="form-label">Name: </label> <label className="report-label">{trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
-                                         </div>
-
-                                         <div className="col-md-5">
-                                            <label className="form-label">Email: </label> <label className="report-label">{trgt?.assigned_patient_id?.email}</label>
-                                         </div>
-
-                                         <div className="col-md-4">
-                                            <label className="form-label">DOB: </label> <label className="report-label">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
-                                             
-                                         </div>
+                                 
+                                 <br /><hr />
+                                 <div className="row-display">
+                                     <div className="col-md-4">
+                                         <h5>Query <span style={{color: '#007673'}}>Result</span></h5>
                                      </div>
-
-                                     <div className="row">
-                                         <div className="col-md-3">
-                                            <label className="form-label">Conclusion: </label>
-                                         </div>
-
-                                         <div className="col-md-2">
-                                            <label className="form-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label>
-                                         </div>
-
-                                         <div className="col-md-4">
-                                            <label className="form-label">By: </label> <label className="report-label">{trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname}</label>
-                                         </div>
-
-                                         <div className="col-md-3">
-                                            <label className="form-label">Created At: </label> <label className="report-label">{moment(trgt?.createdAt).format("ll")}</label>
-                                         </div>
-
-                                         <div className="col-md-12">
-                                            <label className="bubble bubble-alt bubble-green">{trgt?.conclusion}</label>
-                                         </div>
+ 
+                                     <span>Total Time Spent: <span style={{color: '#007673', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
+ 
+ 
+                                     <div className="row-display">
+                                         &nbsp;&nbsp;&nbsp;
+                                         <Link to={{ pathname: "/Admin/Report/Print", state: 
+                                         {target: targets, 
+                                         timeSpent: totalTime, 
+                                         from: startDate, 
+                                         to: endDate, 
+                                         totalTimeSpent: 
+                                         totalTime }}} 
+                                         className="btn add-staff-btn">Print Report</Link>
+                                         &nbsp;&nbsp;&nbsp;
+                                         <button className="btn add-staff-btn" onClick={resetData}>Reset</button>
                                      </div>
-                                     <hr />
-                                 </Fragment>
-                             ))}
-                        </Fragment> : ''}
+                                 </div>    
+ 
+ 
+                                {targets && targets.map((trgt, index) => ( 
+                                  <div className="m-5">
+                                      <br/>
+                                      <p className="reportsHeading">0{index + 1}</p> 
+                                      <div className="row-display">
+                                          <div>
+                                             <label className="profile-label">Patient Name: </label> 
+                                             <label className="report-label ml-2"> {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
+                                          </div>
+ 
+                                          <div>
+                                             <label className="profile-label">Patient Email: </label> 
+                                             <label className="report-label ml-2">{trgt?.assigned_patient_id?.email}</label>
+                                          </div>
+ 
+                                          <div>
+                                             <label className="profile-label">Patient DOB: </label> 
+                                             <label className="report-label ml-2">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
+                                          </div>
+                                      </div>
+ 
+                                      <div className="row-display">
+                                             <div>
+                                                 <label className="profile-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label>
+                                             </div>
+ 
+                                             <div>
+                                                 <label className="profile-label">By: </label> <label className="report-label">{trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname}</label>
+                                             </div>
+ 
+                                             <div>
+                                                 <label className="profile-label">Created At: </label> <label className="report-label">{moment(trgt?.createdAt).format("ll")}</label>
+                                             </div>
+                                     </div>
+ 
+                                          <div className="col-md-12">
+                                             <label className="bubble bubble-alt bubble-green">{trgt?.conclusion}</label>
+                                          </div>
+                                      
+                                      <br /><br />
+                                  </div>
+                              ))}
+                         </Fragment> : ''}
+                        </>}
                        </div>
                     </div>
                  </section>

@@ -7,10 +7,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import { RESET_TIME_REPORT_DATA } from '../../constants/HRConstants';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { useAlert } from 'react-alert';
+import Loader from '../../layouts/Loader';
 
 const TimeReport = () => {
 
     const dispatch = useDispatch();
+    const alert = useAlert();
 
     const [patientId, setPatientId] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -53,7 +56,7 @@ const TimeReport = () => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-md-6">
-                                       <h5 className="pt-2 mt-2">Time <span style={{color: '#F95800'}}>Report </span> </h5> 
+                                       <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report </span> </h5> 
                                     </div>
                                     
                                 </div>
@@ -116,7 +119,8 @@ const TimeReport = () => {
                              </div>  {/* First Row Ends Here */}
 
                              {/* Targets Display */}
-
+                             {loading ? <Loader /> : <>
+                             
                              {targets && targets.length > 0 ? <Fragment>
                                  <hr/>
                                 <div className="row">
@@ -129,35 +133,23 @@ const TimeReport = () => {
                                     </div>
 
                                     <div className="col-md-2">
-                                        <Link to={{ pathname: "/printReport", state: {target: targets, timeSpent: totalTime, from: startDate, to: endDate, totalTimeSpent: totalTime }}} className="btn btn-info">Print Report</Link>
+                                        <Link to={{ pathname: "/printReport", state: 
+                                        {target: targets, 
+                                        timeSpent: totalTime, 
+                                        from: startDate, 
+                                        to: endDate, 
+                                        totalTimeSpent: totalTime 
+                                        }}} className="btn add-staff-btn">Print Report</Link>
                                     </div>
 
                                     <div className="col-md-1">
-                                        <button className="btn btn-danger" onClick={resetData}>Reset</button>
+                                        <button className="btn reset-btn" onClick={resetData}>Reset</button>
                                     </div>
                                 </div>    
 
 
                                 {targets.map((trgt, index) => ( 
                                  <Fragment>
-                                     {/* <p className="reportsHeading">HR Details</p>
-                                    
-
-                                     <div className="row">
-                                         <div className="col-md-3">
-                                            <label className="form-label">Name: </label> <label className="report-label">{trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname}</label>
-                                         </div>
-
-                                         <div className="col-md-5">
-                                            <label className="form-label">Email: </label> <label className="report-label">{trgt?.assigned_hr_id?.email}</label>
-                                         </div>
-
-                                         <div className="col-md-4">
-                                            <label className="form-label">DOB: </label> <label className="report-label">{moment(trgt?.assigned_hr_id?.DOB).format("ll")}</label>
-                                             
-                                         </div>
-                                     </div> */}
-
                                      <br/>
                                      <p className="reportsHeading">Patient Details:{}</p> 
                                      <div className="row">
@@ -200,6 +192,10 @@ const TimeReport = () => {
                              ))}
 
                              </Fragment> : ''}
+
+                             </>}
+
+                             
                         </div>
                     </div>
                 </div>

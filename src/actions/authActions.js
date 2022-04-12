@@ -33,19 +33,17 @@ import {
 
 // Login 
 export const login = (values) => async(dispatch) => {
-    const { email, password, role} = values;
+    const { email, password} = values;
     try {
        dispatch({
            type: LOGIN_REQUEST
        })     
 
-       
-
        const res  = await axios.post(`${Prod01}/admin/login`, {
            email,
            password
        });
-      
+       
        if (res.data) {
         localStorage.setItem(
           "token",
@@ -57,17 +55,22 @@ export const login = (values) => async(dispatch) => {
         );
        }
 
-
        dispatch({
            type: LOGIN_SUCCESS,
            payload: res.data
        })
-       
+
     } catch (error) {
         dispatch({
-            type: LOGIN_FAIL,
-            payload: error.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Invalid email or password'
+          })
+          dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
+          dispatch({
+              type: LOGIN_FAIL
+          })
     }
 }
 

@@ -13,9 +13,11 @@ import { Spinner } from 'react-bootstrap'
 import { login, clearErrors } from '../actions/authActions'; 
 
 const Login = ({ history }) => {
+
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
+	const {message, error : loginError } = useSelector(state => state.common);
     
 	const validate = Yup.object().shape({
 		email: Yup.string().email('Invalid email').required('Email is Required'),
@@ -39,7 +41,11 @@ const Login = ({ history }) => {
 			dispatch(clearErrors());
 		}
 
-	}, [dispatch, alert, isAuthenticated, error, history])
+		if(loginError) {
+			alert.error(loginError);
+		}
+
+	}, [dispatch, alert, isAuthenticated, error, loginError, history])
 	
 	
 	const submitHandler = (values) => {

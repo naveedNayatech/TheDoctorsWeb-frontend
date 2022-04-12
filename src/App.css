@@ -1442,7 +1442,7 @@ tr {
 
 /* CSS */
 .submit-btn {
-  background-color: #081D45;
+  background-color: #007673;
   color: #FFF;
   padding: 5px;
   border-radius: 5px;
@@ -1451,10 +1451,11 @@ tr {
   margin-bottom: 20px;
   transition: all .4s;
   width: 120px;
+  display: block;
 }
 
-.submit-btn:hover {
-  background-color: #09425A
+.submit-btn:hover{
+  color: #fff;
 }
 
 .reset-btn {
@@ -1567,9 +1568,9 @@ tr {
 }
 
 .profile-label {
-  color: gray;
+  color: #010101;
   font-size: 12px;
-  font-weight: light;
+  font-weight: bolder !important;
   text-transform: uppercase;
 }
 
@@ -2031,12 +2032,12 @@ tr {
 
 /* HR & DR Reports */
 .reportsHeading {
-  background-color: #D3D3D3;
-  text-transform: uppercase;
-  color: 000;
-  padding: 8px;
-  border-radius: 10px;
-  width: 20%;
+  background-color: #007673;
+  color: white;
+  padding: 3px;
+  border-radius: 50px;
+  width: 40px;
+  text-align: center;
 
 }
 
@@ -2047,12 +2048,12 @@ tr {
 }
 
 .spentTime {
-  background-color: #F95800;
-  font-size: 14px;
+  background-color: #007673;
+  font-size: 12px;
   color: #FFF;
   text-transform: uppercase;
   padding: 6px;
-  border-radius: 15px
+  border-radius: 5px
 }
 
 .reportConclusion {

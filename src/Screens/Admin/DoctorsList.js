@@ -83,7 +83,7 @@ const DoctorsList = () => {
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
 
-                    <div className="row">
+                    <div className="row-display">
                             <div className="col-md-6">
                                 <h5 className="pt-2">Doctors List <span style={{color: '#007673'}}>( 
                                      {doctors && doctors?.length} )</span></h5> 

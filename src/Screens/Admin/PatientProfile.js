@@ -55,9 +55,6 @@ const PatientProfile = (props) => {
     }, [dispatch, alert, error, isUpdated, currentPage, sort]);
 
     const sortPatientTelemetaryData = () => {
-        console.log('start date is ' + startDate);
-        console.log('end date is ' + endDate);
-
         dispatch(sortTelemetartData(patientid, startDate, endDate, readingPerPage, currentPage));
     }
     

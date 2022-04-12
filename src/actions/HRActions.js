@@ -127,7 +127,7 @@ export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) =
 }
 
 
-export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth, readingsPerDay, fileName) => async(dispatch) => {
+export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth, readingsInDay, readingsInNight, fileName) => async(dispatch) => {
     let data ; 
     try {
        const token = JSON. parse(localStorage.getItem('token'));
@@ -137,7 +137,8 @@ export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth,
                 assigned_patient_id:patientId,
                 Description: description,
                 readingsPerMonth:readingsPerMonth,
-                readingsPerDay:readingsPerDay,
+                readingsInSlot1:readingsInDay,
+                readingsInSlot2: readingsInNight,
                 fileName:fileName.name
            }, {
             headers: {
@@ -179,10 +180,42 @@ export const getTimeReport = (patientId, hrId, startDate, endDate) => async(disp
             type: TIME_REPORT_REQUEST
         });
 
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+                    hrId: hrId,
+                    patientId: patientId,
+                    startDate:startDate,
+                    endDate: endDate
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: TIME_REPORT_SUCCESS,
+            payload: data,
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: TIME_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+export const getTimeReportByHR = (hrId, startDate, endDate) => async(dispatch) => {    
+    try {
+        dispatch({ 
+            type: TIME_REPORT_REQUEST
+        });
 
        const token = JSON. parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime/${hrId}/${patientId}`, {
+       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+                    hrId: hrId,
                     startDate:startDate,
                     endDate: endDate
            }, {

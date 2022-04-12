@@ -22,12 +22,11 @@ const AssignDrToHr = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();    
     
-    const [doctorId, setDoctorId] = useState('');
-    const [patientId, setPatientId] = useState('');
+    const [doctorId, setDoctorId] = useState('')
 
 
-    const { loading, error, doctors, isUpdated} = useSelector(state => state.doctor);
-    const { loading : doctorLoading, doctor } = useSelector(state => state.doctorProfile);
+    const { error, doctors} = useSelector(state => state.doctor);
+    const { doctor } = useSelector(state => state.doctorProfile);
     const { isAssigned } = useSelector(state => state.hrslist);
 
 
@@ -43,8 +42,8 @@ const AssignDrToHr = (props) => {
         }
 
         if(isAssigned === true){
-            alert.success('Assigned');
-            props.history.push({pathname: '/hrProfile', state: {hr: id}});
+            alert.success('Doctor Assigned');
+            props.history.push({pathname: '/hrlist'});
             dispatch({
                 type: RESET_ASSIGN_PATIENT_TO_HR
             })

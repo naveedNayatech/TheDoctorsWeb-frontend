@@ -111,7 +111,10 @@ const HRList = () => {
                                 <td>{moment(hr?.DOB).format("ll")}</td>    
                                 <td style={{wordWrap: 'break-word'}}>{hr?.email}</td>    
                                 {hr?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="warning text-white" className="female-tag">Female</Badge></td>}    
-                                {hr?.assigned_doctor_id ? <td>Dr. {hr?.assigned_doctor_id?.firstname} {hr?.assigned_doctor_id?.lastname}</td> : <td>N/A</td>}
+                                {hr?.assigned_doctor_id ? <td style={{backgroundColor: '#007673', color: '#FFF'}}>
+                                    Dr. {hr?.assigned_doctor_id?.firstname} {hr?.assigned_doctor_id?.lastname} 
+                                    <p style={{ wordWrap: 'break-word'}}> {hr?.assigned_doctor_id?.email}</p></td> : 
+                                <td>N/A</td>}
                                 {hr?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
                                         </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>

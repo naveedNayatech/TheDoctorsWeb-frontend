@@ -8,7 +8,7 @@ import { timeSpentOnPatient, carePlanOfPatient, getPatientCarePlan, hrTimeSpentO
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge, Tabs, Tab, Modal, Spinner} from 'react-bootstrap';
+import { Badge, Row, Col, Nav, Tab, Modal, Spinner} from 'react-bootstrap';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData'; 
 import { COMMENT_RESET, ADDING_TIME_SPENT_RESET, ADDING_CARE_PLAN_RESET } from '../../constants/HRConstants';
@@ -17,6 +17,8 @@ import {Link} from 'react-router-dom';
 import TextField from '../../components/Form/TextField';
 import clockImg from '../../assets/Images/clock.png'
 import moment from 'moment';
+import Pagination from 'react-js-pagination';
+
 
 const HRPatientProfile = (props) => {
     const alert = useAlert();
@@ -30,19 +32,21 @@ const HRPatientProfile = (props) => {
     let endDate = output.endOf('month').format('L');
     let readingmonth;
 
-    const [sortDate, setSortDate] = useState('');
+    const [filterStartDate, setFilterStartDate] = useState('');
+    const [filterEndDate, setFilterEndDate] = useState('');
   
   const dispatch = useDispatch();
   const [addTimeShow, setAddTimeShow] = useState(false);
   const [carePlanShow ,setCarePlanShow] = useState(false);
   const [description, setDescription] = useState('');
-  const [readingsPerDay, setReadingsPerDay] = useState('');
+  const [readingsInDay, setReadingsInDay] = useState('');
+  const [readingsInNight, setReadingsInNight] = useState('');
   const [readingsPerMonth, setReadingsPerMonth] = useState('');
   const [fileName, setFileName] = useState({});
 
 
   const { loading, error, patient} = useSelector(state => state.patientProfile);
-  const { deviceData } = useSelector(state => state.deviceData);
+  const { deviceData, Count } = useSelector(state => state.deviceData);
   const { commentSuccess} = useSelector(state => state.comments);
   const { count } = useSelector(state => state.readingsCount);
   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
@@ -51,6 +55,11 @@ const HRPatientProfile = (props) => {
   const { totalTime } = useSelector(state => state.totalTimeSpent);
   
   let hrId = hr?._id;
+
+  const [readingPerPage, setReadingsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sort, sortBy] = useState(-1);
+
 
   useEffect(() => {
     if(error){
@@ -64,7 +73,7 @@ const HRPatientProfile = (props) => {
     }
 
     dispatch(patientProfile(patientid));
-    dispatch(getPatientTelemetryData(patientid))
+    dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
     dispatch(getPatientCarePlan(patientid));
     dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
     dispatch(getRemainingReadings(patientid));
@@ -73,7 +82,7 @@ const HRPatientProfile = (props) => {
         alert.success('Comment added');
         dispatch({ type: COMMENT_RESET });
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
     }
 
     if(isSuccessful) {
@@ -81,7 +90,7 @@ const HRPatientProfile = (props) => {
         alert.success('added');
         dispatch({ type: ADDING_TIME_SPENT_RESET})
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
     }
 
     if(carePlanAdded){
@@ -90,10 +99,10 @@ const HRPatientProfile = (props) => {
         dispatch({ type: ADDING_CARE_PLAN_RESET })
         setDescription(''); 
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid))
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
     }
 
-}, [dispatch, alert, error, commentSuccess, isSuccessful,carePlanAdded, careplanerror]);
+}, [dispatch, alert, error, commentSuccess, isSuccessful,carePlanAdded, careplanerror, currentPage, sort]);
 
 
     const handleClose = () => setAddTimeShow(false);
@@ -119,12 +128,16 @@ const HRPatientProfile = (props) => {
             return
         }
 
-        dispatch(carePlanOfPatient(patient?._id, hr?._id, description, readingsPerMonth, readingsPerDay, fileName))
+        dispatch(carePlanOfPatient(patient?._id, hr?._id, 
+            description, 
+            readingsPerMonth, 
+            readingsInDay,
+            readingsInNight, 
+            fileName))
     }
 
-    const sortPatientTelemetaryData = (date) => {
-        const dateToFind = new Date(date).toLocaleDateString('zh-Hans-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }); 
-        dispatch(sortTelemetartData(patientid, dateToFind));
+    const sortPatientTelemetaryData = (date) => { 
+        dispatch(sortTelemetartData(patientid, filterStartDate, filterEndDate));
     }
 
     const refreshHandler = () => {
@@ -132,7 +145,12 @@ const HRPatientProfile = (props) => {
         dispatch(getPatientTelemetryData(patientid))
         dispatch(getPatientCarePlan(patientid));
         dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
-        setSortDate('');
+        setFilterStartDate("");
+        setFilterEndDate("");
+    }
+
+    function setCurrentPageNumber(currentPage) {
+        setCurrentPage(currentPage);
     }
     
     let readingsThisMonth;
@@ -221,12 +239,21 @@ const HRPatientProfile = (props) => {
                             />
 
                             <TextField 
-                                label="Readings / day" 
-                                name="readingsPerDay" 
+                                label="Reading in Morning" 
+                                name="readingsInSlot1" 
                                 type="number" 
                                 placeholder="Readings / day"
-                                value={readingsPerDay} 
-                                onChange={(e) => setReadingsPerDay(e.target.value)}
+                                value={readingsInDay} 
+                                onChange={(e) => setReadingsInDay(e.target.value)}
+                            />
+
+                            <TextField 
+                                label="Reading in Night" 
+                                name="readingsInSlot2" 
+                                type="number" 
+                                placeholder="Readings / day"
+                                value={readingsInNight} 
+                                onChange={(e) => setReadingsInNight(e.target.value)}
                             />
 
                         <label htmlFor="description" className="form-label mt-3">Description</label>
@@ -378,10 +405,14 @@ const HRPatientProfile = (props) => {
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Physician Information</span>                                 
                                         <hr />
-
-                                    <span className="profile-label">Name</span>
-                                    <p className="patient-profile-card-text">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
-                                </div>
+                                    {patient?.assigned_doctor_id ? <>
+                                        <span className="profile-label">Name</span>
+                                    <p className="patient-profile-card-text">
+                                        {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
+                                    </> : <>
+                                        <small>No doctor assigned yet</small>
+                                    </>}
+                                    </div>
 
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Devices Assigned</span>                                 
@@ -394,10 +425,7 @@ const HRPatientProfile = (props) => {
                                             
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                                 <div key={index}>
-                                                <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                                {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
-                                                    <i className="bx bx-trash"></i>
-                                                </button> */}
+                                                    <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
                                                 </p>
                                                 </div>
                                             ))}           
@@ -433,47 +461,136 @@ const HRPatientProfile = (props) => {
                                 </div> {/* Second row ends here*/}
 
 
-
+                        
                         {/* Patient Telemetary Data */}
                         {deviceData && deviceData.length > 0 ? <Fragment>
-                        <br/><br/>
-                        <div className="row">
-                            <div className="col-md-9">
-                               <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
+                       
+
+                        <div className="col-md-12">
+                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#F95800'}}>(Total Readings: {Count}) </span></h5>
                             </div>
 
-                            <div className="col-md-3">
-                                <input type="date" 
+                            <div className="row-display patient-profile-col-heading" style={{ 
+                                padding: 10,
+                                borderRadius: '10px'
+                                }}
+                            > 
+                            
+                            <div style={{width: '30%'}}>
+                            <label>To: </label>
+                              <input 
+                                type="date"
+                                value={filterStartDate}
+                                onChange={e => setFilterStartDate(e.target.value)}
+                                max={moment().format("YYYY-MM-DD")} 
                                 className="form-control"
-                                value={sortDate} 
-                                onChange={(e) => {sortPatientTelemetaryData(e.target.value); setSortDate(e.target.value)}}
                                 />
                             </div>
-                        </div>
+                            
+                            &nbsp;&nbsp;
+                            <div style={{width: '30%'}}>                            
+                            <label>From: </label>
+                              <input 
+                                type="date"
+                                value={filterEndDate}
+                                onChange={e => setFilterEndDate(e.target.value)}
+                                max={moment().format("YYYY-MM-DD")} 
+                                className="form-control"
+                             />
+                             </div>
+                            
+                             &nbsp;&nbsp;
+                             <div style={{width: '30%'}}>                            
+                                <label>Sort By: </label>
+                                    <select 
+                                    value={sort}
+                                    onChange={e => sortBy(e.target.value)}
+                                    className="form-control">
+                                        <option value="-1">Descending (last to first)</option>
+                                        <option value="1">Ascending (first to last)</option>
+                                    </select>
+                             </div>
+                            
+                            &nbsp;&nbsp;
+                             <div> 
+                                 <label>Search</label>
+                                    <button 
+                                        className="btn add-staff-btn"
+                                        onClick={sortPatientTelemetaryData}>Search
+                                    </button>    
+                            </div>
+
+                            <div> 
+                                 <label>Reset</label>
+                                    <button
+                                        onClick={refreshHandler} 
+                                        className="btn add-staff-btn">Reset
+                                    </button>    
+                            </div>
+                            </div>
+
+                        <br /><br />
                         
+                        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                        <Row>
+                            <Col sm={12}>
+                                <Nav variant="pills" className="flex-row">
+                                    <Nav.Item style={{cursor: 'pointer'}}>
+                                    <Nav.Link eventKey="first">Cuff (B.P | Telemetary Data)</Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item style={{cursor: 'pointer'}}>
+                                    <Nav.Link eventKey="second">Weight (Telemetary Data)</Nav.Link>
+                                    </Nav.Item>
+                                </Nav>
+                            </Col>
 
-                    
-                        <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example">
-                            <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
-                            {deviceData && deviceData.map((devicedata, index) => (
-                                <div key={index}>
-                                    {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                        <CuffTelemetaryData healthData= {devicedata} isAdmin={false} />
-                                    </Fragment> : ''}
-                                </div>
-                            ))}
-                            </Tab>
-
-                            <Tab eventKey="weight" title="Weight ( Telemetary Data )">
+                            <Col sm={12}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
                                 {deviceData && deviceData.map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.telemetaryData?.wt && devicedata?.telemetaryData?.telemetaryData?.fat ? <Fragment>
-                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false}/>
+                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
+                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
+                                        </Fragment> : ''}
+                                    </div>
+                                ))}
+
+                                {/* Pagination */}
+                                {!filterStartDate && !filterEndDate && readingPerPage <= Count && (
+                                    <div className="d-flex justify-content-center mt-5"> 
+                                    <Pagination activePage={currentPage} 
+                                    itemsCountPerPage={readingPerPage} 
+                                    totalItemsCount = {Count}
+                                    onChange={setCurrentPageNumber} 
+                                    nextPageText = {'⟩'}
+                                    prevPageText = {'⟨'}
+                                    firstPageText = {'«'}
+                                    lastPageText = {'»'}
+                                    itemClass='page-item'
+                                    linkClass="page-link"
+                                    />           
+                                </div>
+                                )} 
+                                </Tab.Pane>
+                                
+                                
+
+                                <Tab.Pane eventKey="second">
+                                {deviceData && deviceData.map((devicedata, index) => (
+                                    <div key={index}>
+                                        {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
+                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false} />
                                         </Fragment> : ''}   
                                     </div>
                                 ))}
-                            </Tab>
-                        </Tabs>   
+                                </Tab.Pane>
+                            </Tab.Content>
+                            </Col>
+                    </Row>
+                    </Tab.Container>
+
+                    
+                       
                         </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-primary btn-sm"onClick={refreshHandler}>Refresh List</button></small>}
                         </Fragment>
                         }
