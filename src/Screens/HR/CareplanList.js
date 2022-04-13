@@ -33,13 +33,27 @@ const CareplanList = () => {
         <HRTopBar />
 
         <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
-            <div className="home-content">
-                <div className="container">
-                    <h5 className="pt-2 mt-2"><span style={{ color: '#F95800'}}> Careplans </span></h5>
-                    <hr />
+            <div className="container">
+            <div className="row-display">                
+                    <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report </span> </h5> 
+                    
+                    <div className="row-display">
+                        <Link to="/HrDashboard">
+                            <button className="btn btn-primary mt-3">
+                                <i className='bx bx-arrow-back'></i>
+                            </button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/HrDashboard">
+                            <button className="btn btn-primary mt-3">
+                            <i className='bx bxs-home'></i>
+                            </button>
+                        </Link>
+                    </div> 
                 </div>
-
-
+                <hr />
+            </div>
+            <div className="home-content">
                 <div className="container-fluid col-md-12">
                     <>
                     {loading ? <Loader /> : <Table striped hover bordered>

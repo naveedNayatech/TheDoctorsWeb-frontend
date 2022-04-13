@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getDoctors, doctorProfile, getHrLists, getHrProfile } from '../../actions/adminActions';
 import DoctorProfile from '../../components/AdminDashboard/DoctorProfile';
 import HRProfile from '../../components/AdminDashboard/HRProfile';
+import { Link } from 'react-router-dom';
 
 const AdminResetPassword = () => {
 
@@ -48,7 +49,23 @@ const AdminResetPassword = () => {
 
               <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
                   <div className="home-content">
-                      <h5 className="pt-2 mt-2">Reset <span style={{color: '#F95800'}}>Password </span></h5>
+                      <div className="row-display">
+                      <h5 className="pt-2 mt-2">Reset <span style={{color: '#007673'}}>Password </span></h5>
+
+                      <div className="row-display">
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                                <i className='bx bx-arrow-back'></i>
+                            </button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                            <i className='bx bxs-home'></i>
+                            </button>
+                        </Link>
+                    </div>   
+                    </div>
                       <hr />
                   </div>
 

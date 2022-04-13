@@ -12,6 +12,7 @@ import TextField from '../../components/Form/TextField';
 import GenderSelectbox from '../../components/Form/GenderSelectbox';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
 const AddNewDoctor = ({ history }) => { 
 
@@ -37,7 +38,7 @@ const AddNewDoctor = ({ history }) => {
         DOB:Yup.string().required('DOB is required'),
         mobileNo: Yup.string(),
         phone1: Yup.string(),
-        gender: Yup.string(),
+        gender: Yup.string().required('Gender is required'),
         npinumber: Yup.string(),
         licensenumber: Yup.string()
 	  });
@@ -74,10 +75,32 @@ const AddNewDoctor = ({ history }) => {
 
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}> Doctor</span></h5>
+                        <div className="row-display">
+                            <h5 className="pt-2 mt-2">Add <span style={{color: '#007673'}}> Doctor</span></h5>
+                            <div className="row-display">
+                                <Link to="/doctors">
+                                    <button className="btn btn-primary mt-3">
+                                        <i className='bx bx-arrow-back'></i>
+                                    </button>
+                                </Link>
+                                &nbsp;&nbsp;
+                                <Link to="/adminDashboard">
+                                    <button className="btn btn-primary mt-3">
+                                    <i className='bx bxs-home'></i>
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
                         <hr className="blue-hr" />
 
-                        <Formik initialValues={{ }}
+                        <Formik initialValues={{ 
+                            firstname: '',
+                            lastname: '',
+                            email: '',
+                            gender:'',
+                            password:'',
+                            DOB: '' 
+                        }}
                          validationSchema={validate}
                          onSubmit={values => {
                             submitHandler(values)

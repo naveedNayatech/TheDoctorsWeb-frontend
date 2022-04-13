@@ -41,6 +41,9 @@ const TimeReport = () => {
 
     const resetData = () => {
         dispatch({ type: RESET_TIME_REPORT_DATA });
+        setPatientId("");
+        setStartDate("");
+        setEndDate("");
     }
   return <Fragment>
       <MetaData title="HR Dashboard" />
@@ -54,16 +57,29 @@ const TimeReport = () => {
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
                         <div className="home-content">
                             <div className="container">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                       <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report </span> </h5> 
-                                    </div>
+                                <div className="row-display">
+                                    
+                                    <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report </span> </h5> 
+                                    
+                                    <div className="row-display">
+                                        <Link to="/HrDashboard">
+                                            <button className="btn btn-primary mt-3">
+                                                <i className='bx bx-arrow-back'></i>
+                                            </button>
+                                        </Link>
+                                        &nbsp;&nbsp;
+                                        <Link to="/HrDashboard">
+                                            <button className="btn btn-primary mt-3">
+                                            <i className='bx bxs-home'></i>
+                                            </button>
+                                        </Link>
+                                    </div> 
                                     
                                 </div>
                                 <hr /> 
 
                                 
-                                <div className="row">
+                                <div className="row-display">
                                 <div className="col-md-3">
                                 <label htmlFor="from">Select Patient </label>
                                     <select 
@@ -105,12 +121,12 @@ const TimeReport = () => {
                                 />
                                 </div>
 
-                                <div className="col-md-3 mt-2">     
+                                <div className="col-md-3 mt-1">     
                                 <label>&nbsp;&nbsp;&nbsp;</label>
                                 <button  
                                     name="submit" 
                                     type="submit" 
-                                    className="btn btn-primary mt-4"
+                                    className="btn submit-btn shadow-none"
                                     onClick={submitHandler}
                                 >
                                     Generate Report
@@ -123,28 +139,27 @@ const TimeReport = () => {
                              
                              {targets && targets.length > 0 ? <Fragment>
                                  <hr/>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <h5>Report <span style={{color: '#F95800'}}>Result</span></h5>
+                                <div className="row-display">
+                                    
+                                    <h5>Report <span style={{color: '#007673'}}>Result</span></h5>
+                                    
+                                    <span>Total Time Spent: <span style={{color: '#007673', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
+                                    
+                                    <div className="row-display">
+                                    <Link to={{ pathname: "/printReport", state: 
+                                    {target: targets, 
+                                    timeSpent: totalTime, 
+                                    from: startDate, 
+                                    to: endDate, 
+                                    totalTimeSpent: totalTime 
+                                    }}} className="btn submit-btn"><i className='bx bx-printer'></i></Link>
+                                    
+                                    &nbsp;&nbsp;
+                                    <button className="btn submit-btn" onClick={resetData}>
+                                        <i className='bx bx-reset'></i>
+                                    </button>
                                     </div>
-
-                                    <div className="col-md-3">
-                                        <span>Total Time Spent: <span style={{color: '#F95800', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
-                                    </div>
-
-                                    <div className="col-md-2">
-                                        <Link to={{ pathname: "/printReport", state: 
-                                        {target: targets, 
-                                        timeSpent: totalTime, 
-                                        from: startDate, 
-                                        to: endDate, 
-                                        totalTimeSpent: totalTime 
-                                        }}} className="btn add-staff-btn">Print Report</Link>
-                                    </div>
-
-                                    <div className="col-md-1">
-                                        <button className="btn reset-btn" onClick={resetData}>Reset</button>
-                                    </div>
+                                    
                                 </div>    
 
 

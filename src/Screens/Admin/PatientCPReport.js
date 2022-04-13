@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Badge } from 'react-bootstrap';
 import ExportPatientCPTOCSV from '../../components/ExportPatientCPTOCSV';
+import { Link } from 'react-router-dom';
 
 const PatientCPReport = () => {
 
@@ -34,10 +35,10 @@ const PatientCPReport = () => {
         <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
             <div className="home-content">
 
-                <div className="row">
-                    <div className="col-md-8">
-                        <h5 className="pt-2 mt-2">All Patients<span style={{color: '#F95800'}}> (CP Report) </span></h5>
-                    </div>
+                <div className="row-display">
+                    
+                    <h5 className="pt-2 mt-2">All Patients<span style={{color: '#007673'}}> (CP Report) </span></h5>
+                    
                     {patientCompleteCP && patientCompleteCP.length > 0 && (<Fragment>
                         <div className="col-md-2 col-lg-2">
                             <ExportPatientCPTOCSV csvData={patientCompleteCP} fileName="CompleteCP.csv" />
@@ -45,9 +46,25 @@ const PatientCPReport = () => {
                     </Fragment>)}
 
 
-                    <div className="col-md-2">
-                        <button className="btn submit-btn" onClick={refreshHandler}> Refresh </button>
-                    </div>
+                    
+                    <div className="row-display">
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                                <i className='bx bx-arrow-back'></i>
+                            </button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                            <i className='bx bxs-home'></i>
+                            </button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <button className="btn btn-primary mt-3" onClick={refreshHandler}><i className='bx bx-refresh'></i> </button>
+
+                    </div>   
+
+                    
                 </div>
             <hr />
 

@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useAlert } from 'react-alert';
+import { Link } from 'react-router-dom';
 
 const HRAdd = (props) => {
 
@@ -41,7 +42,8 @@ const HRAdd = (props) => {
 		  .required('Last Name is Required'),
         email: Yup.string().email('Invalid email').required('Email is required'),  
 		password: Yup.string()
-        .min(6, 'Minimum 6 characters')
+        .required('Passowrd is required')
+        .min(6, 'Minimum 8 characters')
         .max(20, 'Maximum 20 characters')
         .required('Password is Required'),
         DOB:Yup.string().required('DOB is required'),
@@ -65,10 +67,33 @@ const HRAdd = (props) => {
 
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded">
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}> HR</span></h5>
+                        <div className="row-display">
+                         <h5 className="pt-2 mt-2">Add <span style={{color: '#007673'}}> HR</span></h5>
+                        <div className="row-display">
+                                <Link to="/hrlist">
+                                    <button className="btn btn-primary mt-3">
+                                        <i className='bx bx-arrow-back'></i>
+                                    </button>
+                                </Link>
+                                &nbsp;&nbsp;
+                                <Link to="/adminDashboard">
+                                    <button className="btn btn-primary mt-3">
+                                    <i className='bx bxs-home'></i>
+                                    </button>
+                                </Link>
+                            </div>   
+                        </div>
+                        
                         <hr className="blue-hr" />
                         
-                        <Formik initialValues={{ }}
+                        <Formik initialValues={{ 
+                            firstname: '',
+                            lastname: '',
+                            DOB: '',
+                            email: '',
+                            gender: '',
+                            password: ''
+                        }}
                          validationSchema={validate}
                          onSubmit={values => {
                             submitHandler(values)

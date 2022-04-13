@@ -57,8 +57,8 @@ const ResetPassword = ({history}) => {
 					<div className="container">
 						<div className="row content">
 								
-							<div className="col-md-12" >
-								<h3 className="signin-text">Reset <span style={{color: '#F95800'}}>Password</span></h3>
+							<div className="row-display" >
+								<h3 className="signin-text">Reset <span style={{color: '#007673'}}>Password</span></h3>
 								<small style={{color: 'dodgerblue'}}>Please enter your new password.</small>
                                 <br/><br/>
 								<Formik initialValues={{

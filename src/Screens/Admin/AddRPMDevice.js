@@ -11,6 +11,7 @@ import BrokenDeviceSelectbox from '../../components/Form/BrokenDeviceSelectbox';
 import { ADD_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
 const AddRPMDevice = (props) => {
 
@@ -72,8 +73,24 @@ const AddRPMDevice = (props) => {
                 {/* Header */}
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Device </span></h5>
-                        <hr className="blue-hr"/>
+                        <div className="row-display">
+                            <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Device </span></h5>
+
+                            <div className="row-display">
+                                <Link to="/adminDashboard">
+                                    <button className="btn btn-primary mt-3">
+                                        <i className='bx bx-arrow-back'></i>
+                                    </button>
+                                </Link>
+                                &nbsp;&nbsp;
+                                <Link to="/adminDashboard">
+                                    <button className="btn btn-primary mt-3">
+                                    <i className='bx bxs-home'></i>
+                                    </button>
+                                </Link>
+                            </div>   
+                        </div>
+                        <hr />
                     
                          <Formik initialValues={{
                              _id: '',

@@ -12,7 +12,7 @@ const GenderSelectbox = ({ label, ...props}) => {
                 autoComplete="off" 
                 defaultValue={'Select Gender'}
                 >
-                <option disabled>Select Gender</option>    
+                <option>Select Gender</option>    
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 </select>

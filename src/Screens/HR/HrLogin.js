@@ -93,16 +93,16 @@ const HrLogin = ({ history }) => {
 												<br/><br/>
 												
 
-												<div className="row-class" style={{justifyContent: 'space-between'}}>
-													<button className="reset-btn" type="reset">Reset</button>
+												<div className="row-display">
+													<button className="reset-btn" type="reset"><i className='bx bx-reset' ></i></button>
 													<button className="submit-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Login'}</button>
 												</div>
 											</Form>
 
 											<br/><br/><br/>
-												<div className="row" style={{justifyContent: 'space-between'}}>
+												<div className="row-display">
 													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
-													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Staff</Link></small>
+													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Doctor</Link></small>
 												</div>
 										</div>
 									)}

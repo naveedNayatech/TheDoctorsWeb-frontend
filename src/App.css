@@ -193,11 +193,11 @@
 }
 
 .form-label {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #28282B;
+  letter-spacing: 1px;
   font-weight: 600;
-  color: gray;
-  text-transform: uppercase;
-  letter-spacing: 1px
 }
 
 
@@ -1408,23 +1408,14 @@ tr {
 .form-control {
   display: block;
   width: 100%;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.2;
-  border-color: #D3D3D3;
+  border-color: #353935;
   border-style: solid;
   padding: 10px !important;
   height:auto;
   background-clip: padding-box;
   transition: all 0.4s;
-}
-
-
-.form-control:focus {
-  color: gray;
-  background-color: #FFF;
-  border-color:#006762 !important;
-  outline: none;
-  box-shadow: none;
 }
 
 .forgot-password-link {
@@ -1444,13 +1435,13 @@ tr {
 .submit-btn {
   background-color: #007673;
   color: #FFF;
-  padding: 5px;
+  padding: 7px;
   border-radius: 5px;
   border: none !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
   margin-bottom: 20px;
   transition: all .4s;
-  width: 120px;
+  width: auto;
   display: block;
 }
 
@@ -1467,7 +1458,7 @@ tr {
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
   margin-bottom: 20px;
   transition: all .4s;
-  width: 120px
+  min-width: 60px
 }
 
 .reset-btn:hover {

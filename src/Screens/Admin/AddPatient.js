@@ -10,6 +10,7 @@ import { addPatient } from '../../actions/adminActions';
 import {useDispatch, useSelector} from 'react-redux'
 import { useAlert } from 'react-alert';
 import { PATIENT_RESET } from '../../constants/adminConstants';
+import { Link } from 'react-router-dom';
 
 
 const AddPatient = (props) => {
@@ -48,7 +49,7 @@ const AddPatient = (props) => {
         email: Yup.string().email('Invalid email').required('Email is required'),  
 		DOB:Yup.string().required('DOB is required'),
         phone1: Yup.string(),
-        gender: Yup.string(),
+        gender: Yup.string().required('Gender is required'),
         zipCode:Yup.string(),
         address:Yup.string(),
         city:Yup.string(),
@@ -60,9 +61,9 @@ const AddPatient = (props) => {
 	  });
 
       const submitHandler = (values) => {
-        console.log('diseases are ' + values.diseases);
-        // dispatch(addPatient(values));
+        dispatch(addPatient(values));
     }
+    
 
   return <Fragment>
       <MetaData title="Add Patient"/>
@@ -74,14 +75,30 @@ const AddPatient = (props) => {
 
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{backgroundColor: '#FAFAFA'}}>
                     <div className="home-content">
-                        <h5 className="pt-2 mt-2">Add <span style={{color: '#F95800'}}>Patient </span></h5>
+                        <div className="row-display">
+                        <h5 className="pt-2 mt-2">Add <span style={{color: '#007673'}}>Patient </span></h5>
+                            <div className="row-display">
+                                <Link to="/patients">
+                                    <button className="btn btn-primary mt-3">
+                                        <i className='bx bx-arrow-back'></i>
+                                    </button>
+                                </Link>
+                                &nbsp;&nbsp;
+                                <Link to="/adminDashboard">
+                                    <button className="btn btn-primary mt-3">
+                                    <i className='bx bxs-home'></i>
+                                    </button>
+                                </Link>
+                            </div>    
+                        </div>
                         <hr className="blue-hr"/>
 
                         <Formik initialValues={{
                              firstname: '',
                              lastname:'',
                              email: '',
-                             DOB: ''
+                             DOB: '',
+                             gender: ''
                          }}
                          validationSchema={validate}
                          onSubmit={values => {

@@ -13,6 +13,7 @@ import { Badge } from 'react-bootstrap';
 import moment from 'moment';
 import ExportReactCSV from '../../components/ExportReactCSV';
 import { useAlert } from 'react-alert';
+import { Link } from 'react-router-dom';
 
 const InitialMonthReport = () => {
     const alert = useAlert();
@@ -21,7 +22,7 @@ const InitialMonthReport = () => {
     const dispatch = useDispatch();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [resPerPage, setResPerPage] = useState(10);
+    const [resPerPage, setResPerPage] = useState(20);
 
     const {error, initialMonthPatients} = useSelector(state => state.initialMonthReport);
     const { doctors } = useSelector(state => state.doctor);
@@ -49,9 +50,6 @@ const InitialMonthReport = () => {
     }
 
     const generateInitialReport = () => {
-        // console.log('Month is  '+ month);
-        // console.log('Hr Id is  '+ hrId);
-        // console.log('Doctor id is ' + doctorId);
         dispatch(getInitialMonthReport(hrId, doctorId, month))
     }
 
@@ -67,14 +65,28 @@ const InitialMonthReport = () => {
         <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
             <div className="home-content">
 
-                <div className="col-md-7">
-                    <h5 className="pt-2 mt-2">Initial Month<span style={{color: '#F95800'}}> Report </span></h5>
+                <div className="row-display">
+                    <h5 className="pt-2 mt-2">Initial Month<span style={{color: '#007673'}}> Report </span></h5>
+                
+                    <div className="row-display">
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                                <i className='bx bx-arrow-back'></i>
+                            </button>
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/adminDashboard">
+                            <button className="btn btn-primary mt-3">
+                            <i className='bx bxs-home'></i>
+                            </button>
+                        </Link>
+                    </div>   
                 </div>
                 <hr />
                 
                 <div className="row">
                 <div className="col-md-3">
-                <label htmlFor="from">Select Patient </label>
+                <label htmlFor="from">Select Month </label>
                         <select 
                             label="From" 
                             name="from" 
@@ -132,7 +144,7 @@ const InitialMonthReport = () => {
 
                     <div className="col-md-3">
                         <label>&nbsp;</label>
-                        <button className="btn btn-success btn-block" onClick={generateInitialReport}>Search</button>
+                        <button className="btn submit-btn shadow-none" onClick={generateInitialReport}>Search</button>
                     </div>
                 
                 </div>

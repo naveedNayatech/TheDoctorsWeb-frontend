@@ -134,7 +134,7 @@ const HRPatientProfile = (props) => {
             readingsInDay,
             readingsInNight, 
             fileName))
-    }
+        }
 
     const sortPatientTelemetaryData = (date) => { 
         dispatch(sortTelemetartData(patientid, filterStartDate, filterEndDate));

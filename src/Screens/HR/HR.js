@@ -5,6 +5,7 @@ import HRPieGraph from '../../components/HR/HRPieGraph';
 import HRTopBar from '../../components/HR/HRTopbar';
 import MetaData from '../../layouts/MetaData';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 
 const HR = () => {
@@ -23,10 +24,23 @@ const { loading, hr, isAuthenticated} = useSelector(state => state.hrAuth);
                   <div className="home-content">
                     <div className="container">
 
-                    <div className="row">
-                      <div className="col-lg-6 col-md-8 col-sm-12 col-xs-12">
-                          <h5 className="pt-2 mt-2">{hr?.firstname} {hr?.lastname} <span style={{color: '#F95800'}}> Profile </span></h5> 
-                      </div>
+                    <div className="row-display">
+                      
+                        <h5 className="pt-2 mt-2">My <span style={{color: '#007673'}}>Profile</span></h5> 
+
+                        <div className="row-display">
+                              <Link to="/HrDashboard">
+                                  <button className="btn btn-primary mt-3">
+                                      <i className='bx bx-arrow-back'></i>
+                                  </button>
+                              </Link>
+                              &nbsp;&nbsp;
+                              <Link to="/HrDashboard">
+                                  <button className="btn btn-primary mt-3">
+                                  <i className='bx bxs-home'></i>
+                                  </button>
+                              </Link>
+                          </div> 
                     </div>  
                     <hr />
 

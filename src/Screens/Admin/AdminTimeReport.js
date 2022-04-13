@@ -61,8 +61,22 @@ const AdminTimeReport = () => {
         <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
             <div className="home-content">
 
-            <div className="col-md-7">
+            <div className="row-display">
                 <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report</span></h5>
+
+                <div className="row-display">
+                    <Link to="/adminDashboard">
+                        <button className="btn btn-primary mt-3">
+                            <i className='bx bx-arrow-back'></i>
+                        </button>
+                    </Link>
+                    &nbsp;&nbsp;
+                    <Link to="/adminDashboard">
+                        <button className="btn btn-primary mt-3">
+                        <i className='bx bxs-home'></i>
+                        </button>
+                    </Link>
+                </div>   
             </div>
             <hr />
 
