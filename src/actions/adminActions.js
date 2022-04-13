@@ -1578,18 +1578,16 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
 
         let device;
 
-        if(data.status === 201){
         
-            device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
-                assignedTime: moment(new Date()).tz("America/New_York").format("DD/MM/YYYY"),
-                assigned_patient_id: patientId 
-            }, {
-                headers: {
-                    "Authorization":`Bearer ${token}`
-                }  
-            })
-        }
-       
+        device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
+            assignedTime: moment(new Date()).tz("America/New_York").format("DD/MM/YYYY"),
+            assigned_patient_id: patientId 
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }  
+        })
+        
         
         dispatch({
             type: UPDATE_DEVICE_SUCCESS,

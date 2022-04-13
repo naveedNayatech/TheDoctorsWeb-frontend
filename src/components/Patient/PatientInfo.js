@@ -119,8 +119,10 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                                 {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                 <div key={index}>
                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass, patientid)}>
-                                    <i className="bx bx-trash"></i>
+                                <button className="btn" style={{color: 'red'}} 
+                                // onClick={() => removeAssignDevice(deviceass, patientid)}
+                                >
+                                <i className="bx bx-trash"></i>
                                 </button>
                                 </p>
                                 

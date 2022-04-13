@@ -19,6 +19,7 @@ const RPMDeviceBasicInformation = (props) => {
     const { error, patients} = useSelector(state => state.admin);
     const { patient } = useSelector(state => state.patientProfile);
     const { error: deviceError, isUpdated} = useSelector(state => state.device);
+    const {error:commonMessage, message} = useSelector(state => state.common);
 
     const [patientId, setPatientId] = useState('');
     const [smShow, setSmShow] = useState(false); //RPM Consent modal
@@ -33,6 +34,13 @@ const RPMDeviceBasicInformation = (props) => {
             return alert.error(error);
         }
 
+        if(message){
+            return alert.success(message)
+        }
+
+        if(commonMessage) {
+            return alert.error
+        }
         dispatch(getPatients());
 
         if(patientId){
@@ -50,7 +58,7 @@ const RPMDeviceBasicInformation = (props) => {
             });
         }
         
-    }, [dispatch, alert, error, isUpdated, patientId]);
+    }, [dispatch, alert, error, isUpdated, patientId, message, commonMessage]);
 
     const AssignDeviceToPatient = () => {
         dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));
@@ -186,7 +194,10 @@ const RPMDeviceBasicInformation = (props) => {
                                         <div >
                                         {patient?.block === false ? 
                                         <Fragment>
-                                            <button className="add-staff-btn" onClick={AssignDeviceToPatient}>Assign Device</button>
+                                            <button 
+                                            className="add-staff-btn" 
+                                            // onClick={AssignDeviceToPatient}
+                                            >Assign Device</button>
                                         </Fragment>
                                         : 
                                         <Fragment>

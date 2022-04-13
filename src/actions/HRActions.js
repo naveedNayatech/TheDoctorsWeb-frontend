@@ -45,6 +45,8 @@ try {
     const token = JSON. parse(localStorage.getItem('token'));
 
     const { data } = await axios.post(`${Prod01}/hr/patientlist/${id}`,{
+        name: 'hammad'
+    },{
         headers: {
             "Authorization":`Bearer ${token}`
          }
