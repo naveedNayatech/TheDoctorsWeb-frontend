@@ -168,7 +168,7 @@ const DoctorProfile = (props) => {
                                         </thead>
                                         <tbody>
                                         {sort ? <>
-                                            {doctorpatients && doctorpatients.filter(item => keys.some(key => item[key].toLowerCase().includes(query))).map((patient, index) => ( 
+                                            {doctorpatients && doctorpatients.filter(item => keys.some(key => item[key]?.toLowerCase().includes(query))).map((patient, index) => ( 
                                             <tr align="center" key={index}>
                                             <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>
                                                 {patient?.firstname} {patient?.lastname}  

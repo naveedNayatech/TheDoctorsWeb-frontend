@@ -11,7 +11,7 @@ const DashboardGraphs = () => {
 
   const alert = useAlert();
   const dispatch = useDispatch();
-  const [patientId, setPatientId] = useState('61fd0bfbc623a9712882cfc5');
+  const [patientId, setPatientId] = useState('620e683097b688395e4ff22e');
   const {loading, error,  deviceData } = useSelector(state => state.deviceData);
   const { patients } = useSelector(state => state.admin);
   const [recordsPerpage, setRecordsPerPage] = useState(5);

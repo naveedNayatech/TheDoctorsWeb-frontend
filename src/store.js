@@ -73,6 +73,17 @@ const reducer = combineReducers({
 let initialState = {}
 
 const middleware = [thunk];
-const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
+
+// const store = createStore(reducer, initialState, disableReactDevTools(applyMiddleware(...middleware)))
+
+let mode = "production"
+const devTools =
+  mode === "production"
+    ? applyMiddleware(...middleware)
+    : composeWithDevTools(applyMiddleware(...middleware));
+
+const store = createStore(reducer, initialState, devTools);
 
 export default store;
+
+// const store = createStore(reducer, initialState, disableReactDevTools(applyMiddleware(...middleware)))
