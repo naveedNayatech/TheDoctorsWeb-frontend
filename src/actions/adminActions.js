@@ -132,6 +132,8 @@ export const getDoctorsPatientList = (docId) => async(dispatch) => {
         const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${docId}`, {
+            name: 'Hammad'
+        },{
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -158,7 +160,9 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
         
         const token = JSON. parse(localStorage.getItem('token'));
         
-        const { data } = await axios.post(`${Prod01}/hr/patientlist/${hrId}`, {
+        const { data } = await axios.post(`${Prod01}/hr/patientlist/${hrId}`,{
+            name: 'Hammad'
+        }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -584,6 +588,8 @@ export const getDoctorPatients = (id) => async(dispatch) => {
         const token = JSON.parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${id}`, {
+            name: 'Hammad'
+        },{
             headers: {
                 "Authorization":`Bearer ${token}`
             }
@@ -920,35 +926,38 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    }
    
 
-   export const removeAssignedDevice = (Device, patientId) => async(dispatch) => {
+   export const removeAssignedDevice = (device, patientid) => async(dispatch) => {
+
+    
     try {
-    //    dispatch({ 
-    //        type: ASSIGN_DEVICE_TO_PATIENT_REQUEST
-    //    });
- 
+
        const token = JSON. parse(localStorage.getItem('token'));
 
-        const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
+       console.log('patient ID is ' + patientid);
+        console.log('device_id ' + device._id);
+        console.log('deviceId ' + device.deviceObjectId?._id)
+
+        const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientid}`, {
             "assignDevice":false,
-            "deviceId":Device._id
+            "device_id":device._id,
+            "deviceId":device.deviceObjectId?._id
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             } 
         });
 
-        let device;
+        let deviceUpdate;
 
-        if(data.status === 201){
-      
-            device = await axios.put(`${Prod01}/device/edit/${Device.deviceObjectId._id}`, {
-                assigned_patient_id: null 
-            }, {
-                headers: {
-                    "Authorization":`Bearer ${token}`
-                }  
-            })
-        } 
+        
+        deviceUpdate = await axios.put(`${Prod01}/device/edit/${device?.deviceObjectId?._id}`, {
+            assigned_patient_id: null 
+        }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }  
+        })
+         
    
        dispatch({
            type: ASSIGN_DEVICE_TO_PATIENT_SUCCESS,

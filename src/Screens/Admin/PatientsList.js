@@ -88,9 +88,9 @@ const PatientsList = () => {
        
     
     
-    const getPatientsList = () => {
-       dispatch(getPatients(resPerPage, currentPage));
-    }
+    // const getPatientsList = () => {
+    //    dispatch(getPatients(resPerPage, currentPage));
+    // }
 
     const changeConsentStatus = (id, value) => {
         dispatch(updatePatientConsentStatus(id, value));

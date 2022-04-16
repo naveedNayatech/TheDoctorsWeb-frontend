@@ -196,7 +196,7 @@ const RPMDeviceBasicInformation = (props) => {
                                         <Fragment>
                                             <button 
                                             className="add-staff-btn" 
-                                            // onClick={AssignDeviceToPatient}
+                                            onClick={AssignDeviceToPatient}
                                             >Assign Device</button>
                                         </Fragment>
                                         : 
