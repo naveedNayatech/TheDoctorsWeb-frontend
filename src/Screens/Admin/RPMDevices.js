@@ -20,6 +20,7 @@ const RPMDevices = (props) => {
     const alert = useAlert();
 
     const { loading, error, deviceCount, devices, isDeleted } = useSelector(state => state.devices);
+    
 
     const [deviceModel, setDeviceModel] = useState(null);
     const [deviceToDelete, setDeviceToDelete] = useState(null);
@@ -32,7 +33,7 @@ const RPMDevices = (props) => {
 
     useEffect(() => {
         if(error){
-            return alert.error(error);
+        return alert.error(error);
         }
 
         if(isDeleted) {
@@ -185,7 +186,7 @@ const RPMDevices = (props) => {
                             <button 
                             className="btn add-staff-btn" style={{height: '40px'}}
                             onClick={searchDevice}
-                            ><i class='bx bx-search-alt-2'></i></button>
+                            ><i className='bx bx-search-alt-2'></i></button>
                         </div>
                         
                      </div>

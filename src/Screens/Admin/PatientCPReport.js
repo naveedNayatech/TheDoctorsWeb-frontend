@@ -70,7 +70,7 @@ const PatientCPReport = () => {
 
 
             {patientCompleteCP && patientCompleteCP.map((initialreport, index) => (
-                    <Fragment>
+                    <div key={index}>
                         <div className="row" key={index}>
                            <div className="col-md-1">
                                <span style={{color: 'gray', fontWeight: 'bold'}}>{index}</span>
@@ -106,7 +106,7 @@ const PatientCPReport = () => {
                             </div>
                         </div>
                         <hr />
-                    </Fragment>
+                    </div>
                 ))}
             </div>
         </div>

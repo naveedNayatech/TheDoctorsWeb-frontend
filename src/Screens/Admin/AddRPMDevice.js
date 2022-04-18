@@ -3,12 +3,11 @@ import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
 import MetaData from '../../layouts/MetaData';
-import { addRPMDevice, clearErrors } from '../../actions/adminActions';
+import { addRPMDevice } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
 import TextField from '../../components/Form/TextField';
 import DeviceTypeSelectbox from '../../components/Form/DeviceTypeSelectbox';
 import BrokenDeviceSelectbox from '../../components/Form/BrokenDeviceSelectbox';
-import { ADD_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
@@ -37,27 +36,23 @@ const AddRPMDevice = (props) => {
         hardwareVersion: Yup.string()
 	  });
 
-    const { loading, error, success} = useSelector(state => state.device);
+    const {message, error } = useSelector(state => state.common);
 
     useEffect(() => {
        
         if(error){
             alert.error(error);
-            dispatch(clearErrors());
         }
 
-        if(success) {
-            alert.success('Device Added');
+        if(message) {
+            alert.success(message);
             props.history.push('/devices');
-            dispatch({
-                type: ADD_RPM_DEVICE_RESET
-            });
         }
-    }, [dispatch, alert, success, error])
+
+    }, [dispatch, message, error])
 
     
-    const submitHandler = (values) => {
-        console.log('borken status is ' + values.broken); 
+    const submitHandler = (values) => { 
         dispatch(addRPMDevice(values));
     }
 

@@ -71,7 +71,6 @@ const PatientsList = () => {
                 return
             }
             dispatch(getDoctorsPatientList(id));
-            setHrId('');
         }
 
 
@@ -143,7 +142,7 @@ const PatientsList = () => {
                             </div>
 
                             
-                            <Link to="adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
+                            <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
                             <button className="btn refresh-btn" onClick={refreshHandler}><i className='bx bx-refresh'></i></button> &nbsp;
                             <Link to="/addpatient" className="add-staff-btn"><i className='bx bxs-user'></i> &nbsp;Add New Patient</Link>
                                                         
@@ -220,7 +219,7 @@ const PatientsList = () => {
                             <button 
                             className="btn add-staff-btn" style={{height: '40px'}}
                             onClick={searchhandler}
-                            ><i class='bx bx-search-alt-2'></i></button>
+                            ><i className='bx bx-search-alt-2'></i></button>
                             </div>
                         </div>
                     </div>  
@@ -271,7 +270,7 @@ const PatientsList = () => {
                                                 onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
                                             />
 
-                                            <label style={{ cursor: 'pointer' }} for={index}>
+                                            <label style={{ cursor: 'pointer' }} htmlFor={index}>
                                             {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
                                                 Signed</span>
                                                 : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}
@@ -284,9 +283,8 @@ const PatientsList = () => {
                                     
                                     {patient?.block === false ? <Link className="rounded-button-delete" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-alt'></i></Link> 
                                     : 
-                                    <Link>
                                     <Link className="rounded-button-activate" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-open'></i></Link>
-                                    </Link> }
+                                     }
                                     </td>
                                 </tr>    
                                 ))}

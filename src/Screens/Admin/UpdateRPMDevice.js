@@ -112,6 +112,7 @@ const UpdateRPMDevice = (props) => {
                                                     className='form-control shadow-none'
                                                     placeholder="Device ID"
                                                     value={dvcId}
+                                                    disabled
                                                     onChange={(e) => setDvcId(e.target.value)} 
                                                 />
                                             </div>

@@ -39,9 +39,6 @@ import {
     GET_DEVICE_DETAILS_REQUEST,
     GET_DEVICE_DETAILS_SUCCESS,
     GET_DEVICE_DETAILS_FAIL,
-    ADD_RPM_DEVICE_REQUEST,
-    ADD_RPM_DEVICE_SUCCESS,
-    ADD_RPM_DEVICE_FAIL,
     UPDATE_DEVICE_REQUEST,
     UPDATE_DEVICE_SUCCESS,
     UPDATE_DEVICE_FAIL,
@@ -1329,31 +1326,33 @@ export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
 
 
 export const addRPMDevice = (values) => async(dispatch) => {
-    const { deviceId, imei, modelNumber, deviceType, broken, firmwareVersion, hardwareVersion } = values;
-   
-    try {
-        dispatch({ 
-            type: ADD_RPM_DEVICE_REQUEST
-        });
-        
+    try {   
         const token = JSON. parse(localStorage.getItem('token'));
 
-        const {data} = await axios.post(`${Prod01}/device/add`, values , {
+        await axios.post(`${Prod01}/device/add`, values , {
                 headers: {
                     "Authorization":`Bearer ${token}`
                 }      
             });
-        
+
             dispatch({
-                type: ADD_RPM_DEVICE_SUCCESS,
-                payload: data
+                type: SHOW_ALERT_MESSAGE,
+                payload: "New Device Added"
+                });
+            
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
             })
         
     } catch (error) {
+
         dispatch({
-            type: ADD_RPM_DEVICE_FAIL,
-            payload: error.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to add a new device'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 

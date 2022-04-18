@@ -39,9 +39,6 @@ import {
     GET_DEVICE_DETAILS_REQUEST,
     GET_DEVICE_DETAILS_SUCCESS,
     GET_DEVICE_DETAILS_FAIL,
-    ADD_RPM_DEVICE_REQUEST,
-    ADD_RPM_DEVICE_SUCCESS,
-    ADD_RPM_DEVICE_FAIL,
     ADD_RPM_DEVICE_RESET,
     UPDATE_DEVICE_REQUEST,
     UPDATE_DEVICE_SUCCESS,
@@ -461,19 +458,13 @@ export const deviceDetailsReducers = (state = {deviceDetails: {}}, action) => {
 
 export const newDeviceReducers = (state = {devices: {} }, action) => {
     switch (action.type) {
- 
-     case ADD_RPM_DEVICE_REQUEST: 
+  
      case UPDATE_DEVICE_REQUEST:
       return {
           ...state,
           loading: true
       }
- 
-     case ADD_RPM_DEVICE_SUCCESS: 
-         return {
-             loading: false,
-             success: true,
-         }  
+
 
     case UPDATE_DEVICE_SUCCESS: 
          return {
@@ -487,7 +478,6 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
             isUpdated: false
         }
      
-     case ADD_RPM_DEVICE_FAIL:
      case UPDATE_DEVICE_FAIL:
          return {
              ...state,
