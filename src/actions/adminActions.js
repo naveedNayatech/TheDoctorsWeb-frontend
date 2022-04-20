@@ -9,9 +9,6 @@ import {
     ALL_DOCTORS_REQUEST,
     ALL_DOCTORS_SUCCESS,
     ALL_DOCTORS_FAIL,
-    ADD_DOCTOR_REQUEST,
-    ADD_DOCTOR_SUCCESS,
-    ADD_DOCTOR_FAIL,
     DOCTOR_PROFILE_REQUEST,
     DOCTOR_PROFILE_SUCCESS,
     DOCTOR_PROFILE_FAIL,
@@ -21,9 +18,6 @@ import {
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
-    UPDATE_DOCTOR_REQUEST,
-    UPDATE_DOCTOR_SUCCESS,
-    UPDATE_DOCTOR_FAIL,
     ASSIGN_PATIENT_TO_DOCTOR_REQUEST,
     ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
     ASSIGN_PATIENT_TO_DOCTOR_FAIL,
@@ -57,12 +51,6 @@ import {
     ALL_HRS_REQUEST,
     ALL_HRS_SUCCESS,
     ALL_HRS_FAIL,
-    ADD_HR_REQUEST,
-    ADD_HR_SUCCESS,
-    ADD_HR_FAIL,
-    UPDATE_HR_REQUEST,
-    UPDATE_HR_SUCCESS,
-    UPDATE_HR_FAIL,
     ASSIGN_DOCTOR_TO_HR_REQUEST,
     ASSIGN_DOCTOR_TO_HR_SUCCESS,
     ASSIGN_DOCTOR_TO_HR_FAIL,
@@ -86,20 +74,20 @@ import {
 } from '../constants/adminConstants';
 
 import { 
+    FETCH_START,
     SHOW_ALERT_MESSAGE,
     HIDE_ALERT_MESSAGE,
     FETCH_ERROR
 } from '../constants/Common';
 
+let token = JSON. parse(localStorage.getItem('token'));
 
 export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
     try {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
-
+    
         const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -125,8 +113,6 @@ export const getDoctorsPatientList = (docId) => async(dispatch) => {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${docId}`, {
             name: 'Hammad'
@@ -155,8 +141,6 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
             type: ALL_PATIENTS_REQUEST,
         })
         
-        const token = JSON. parse(localStorage.getItem('token'));
-        
         const { data } = await axios.post(`${Prod01}/hr/patientlist/${hrId}`,{
             name: 'Hammad'
         }, {
@@ -184,8 +168,6 @@ export const searchPatient = (searchBy, keyword) => async(dispatch) => {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/patient/search`,{
             key: searchBy,
@@ -215,8 +197,6 @@ export const updatePatient = (_id, pFirstName, pLastName, pEmail, pDOB, pGender,
         dispatch({
             type: UPDATE_PATIENT_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.put(`${Prod01}/patient/edit/${_id}`,{
             firstname: pFirstName,
@@ -256,8 +236,6 @@ export const patientDeActivate = (_id) => async(dispatch) => {
         dispatch({
             type: UPDATE_PATIENT_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/patient/block/${_id}`,{
             block: true
@@ -286,8 +264,6 @@ export const patientActivate = (_id) => async(dispatch) => {
         dispatch({
             type: UPDATE_PATIENT_REQUEST,
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/patient/block/${_id}`,{
             block: false
@@ -312,44 +288,49 @@ export const patientActivate = (_id) => async(dispatch) => {
 
 
 export const doctorDeActivate = (_id) => async(dispatch) => {
-    try {
+    try {   
         dispatch({
-            type: UPDATE_DOCTOR_REQUEST,
+            type: FETCH_START
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.put(`${Prod01}/doctor/edit/${_id}`,{
+        await axios.put(`${Prod01}/doctor/edit/${_id}`,{
             block: true
         }, {
             headers: {
                 "Authorization":`Bearer ${token}`
             }
         });
+
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Doctor Account De-activated"
+            });
         
         dispatch({
-            type: UPDATE_DOCTOR_SUCCESS,
-            payload: data
+            type: HIDE_ALERT_MESSAGE
         })
+        
+        
         
     } catch (error) {
         dispatch({
-            type: UPDATE_DOCTOR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update doctor'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
 
 export const doctorActivate = (_id) => async(dispatch) => {
-    try {
+    try {  
         dispatch({
-            type: UPDATE_DOCTOR_REQUEST,
+            type: FETCH_START
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
-        const { data } = await axios.put(`${Prod01}/doctor/edit/${_id}`,{
+       await axios.put(`${Prod01}/doctor/edit/${_id}`,{
             block: false
         }, {
             headers: {
@@ -358,23 +339,31 @@ export const doctorActivate = (_id) => async(dispatch) => {
         });
         
         dispatch({
-            type: UPDATE_DOCTOR_SUCCESS,
-            payload: data
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Doctor account activated"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
         
     } catch (error) {
         dispatch({
-            type: UPDATE_DOCTOR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update doctor'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
 
 export const updatePatientConsentStatus = (patientId, value) => async(dispatch) => {
     try {
-        
-        const token = JSON. parse(localStorage.getItem('token'));
+        dispatch({
+            type: FETCH_START
+        })
 
         const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
             rpmconsent : value
@@ -400,13 +389,8 @@ export const updatePatientConsentStatus = (patientId, value) => async(dispatch) 
 
 // Get list of all doctors => admin
 export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
-
-    const token = JSON. parse(localStorage.getItem('token'));
-
     try {
         dispatch({ type: ALL_DOCTORS_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/doctor/list/${resPerPage}/${currentPage}`, {
             headers: {
@@ -432,8 +416,6 @@ export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
 export const searchDoctor = (value) => async(dispatch) => {
     try {
         dispatch({ type: ALL_DOCTORS_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/doctor/search`,{
             search: value
@@ -459,13 +441,8 @@ export const searchDoctor = (value) => async(dispatch) => {
 
 // Get list of all HRs => admin
 export const getHrLists = () => async(dispatch) => {
-
-    const token = JSON. parse(localStorage.getItem('token'));
-
     try {
         dispatch({ type: ALL_HRS_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/hr/list`, {
             headers: {
@@ -489,33 +466,31 @@ export const getHrLists = () => async(dispatch) => {
 // Add New HR => admin
 export const addHR = (values) => async(dispatch) => {
     try {
-        dispatch({ 
-            type: ADD_HR_REQUEST
-        });
-
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const {data} = await axios.post(`${Prod01}/hr/signup`, values, {
+        await axios.post(`${Prod01}/hr/signup`, values, {
                 headers: {
                 "Authorization":`Bearer ${token}`
             }
             });
         
         dispatch({
-            type: ADD_HR_SUCCESS,
-            payload: data
+            type: SHOW_ALERT_MESSAGE,
+            payload: "New HR Added"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
         
     } catch (error) {
         dispatch({
-            type: ADD_HR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to add a new hr'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
-
-
-
 
 
 // Get doctor profile => admin
@@ -524,8 +499,6 @@ export const doctorProfile = (id) => async(dispatch) => {
         dispatch({ 
             type: DOCTOR_PROFILE_REQUEST 
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/doctor/doctorbyid/${id}`, {
             headers: {
@@ -549,9 +522,6 @@ export const doctorProfile = (id) => async(dispatch) => {
 
 export const getHrProfile = (id) => async(dispatch) => {
     try {
-        
-        const token = JSON.parse(localStorage.getItem('token'));
-
         const { data } = await axios.get(`${Prod01}/hr/hrbyid/${id}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -581,8 +551,6 @@ export const getDoctorPatients = (id) => async(dispatch) => {
         dispatch({ 
             type: DOCTOR_PATIENTS_REQUEST 
         })
-        
-        const token = JSON.parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${id}`, {
             name: 'Hammad'
@@ -608,9 +576,7 @@ export const getDoctorPatients = (id) => async(dispatch) => {
 
 export const removePatientsDoctor = (patientId, doctorId) => async(dispatch) => {
     try {
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const res = await axios.post(`${Prod01}/patient/unsetHrDr`,{
+        await axios.post(`${Prod01}/patient/unsetHrDr`,{
             patientId: patientId,
             drId: true
         }, {
@@ -619,7 +585,6 @@ export const removePatientsDoctor = (patientId, doctorId) => async(dispatch) => 
             }
         });
 
-        
         dispatch({
             type: SHOW_ALERT_MESSAGE,
             payload: "Patient removed from Doctor"
@@ -644,8 +609,6 @@ export const removePatientsDoctor = (patientId, doctorId) => async(dispatch) => 
 
 export const removePatientsHR = (patientId) => async(dispatch) => {
     try {
-        const token = JSON. parse(localStorage.getItem('token'));
-
         const res = await axios.post(`${Prod01}/patient/unsetHrDr`,{
             patientId: patientId,
             hrId: true
@@ -679,8 +642,6 @@ export const removePatientsHR = (patientId) => async(dispatch) => {
 
 export const removeDoctorFromHR = (hrId) => async(dispatch) => {
     try {
-        const token = JSON. parse(localStorage.getItem('token'));
-
         const res = await axios.post(`${Prod01}/hr/removeDr`,{
             hrId: hrId
         }, {
@@ -716,11 +677,7 @@ export const removeDoctorFromHR = (hrId) => async(dispatch) => {
 // Update doctor Profile -> ADMIN
 export const updateDoctor = (_id, docfirstname, doclastname, docDOB, docemail, docgender, docphone1, docmobileno, docnpi, doclicenseNumber) => async(dispatch) => {
     try {
-        dispatch({  type: UPDATE_DOCTOR_REQUEST });
-
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const  { data }  = await axios.put(`${Prod}/doctor/edit/${_id}`, {
+        await axios.put(`${Prod}/doctor/edit/${_id}`, {
             firstname: docfirstname,
             lastname: doclastname,
             DOB: docDOB,
@@ -735,17 +692,24 @@ export const updateDoctor = (_id, docfirstname, doclastname, docDOB, docemail, d
                 "Authorization":`Bearer ${token}`
             }
         } );
-            
-        dispatch({ 
-            type: UPDATE_DOCTOR_SUCCESS, 
-            payload: data
+
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Doctor information Updated"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
-    
+            
     } catch (error) {
         dispatch({
-            type: UPDATE_DOCTOR_FAIL,
-            payload: error.response.data.errMessage
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update a doctor'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
       }
     }
 
@@ -756,8 +720,6 @@ export const patientProfile = (id) => async(dispatch) => {
         dispatch({ 
             type: PATIENT_PROFILE_REQUEST 
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data }= await axios.get(`${Prod01}/patient/patientprofile/${id}`, {
             headers: {
@@ -782,28 +744,29 @@ export const patientProfile = (id) => async(dispatch) => {
 // Add New Doctor => admin
 export const addDoctor = (values) => async(dispatch) => {
     try {
-        dispatch({ 
-            type: ADD_DOCTOR_REQUEST
-        });
-
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const {data} = await axios.post(`${Prod01}/doctor/signup`, values, {
+        await axios.post(`${Prod01}/doctor/signup`, values, {
                 headers: {
                 "Authorization":`Bearer ${token}`
             }
+        });
+
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "New Doctor Added"
             });
         
         dispatch({
-            type: ADD_DOCTOR_SUCCESS,
-            payload: data
+            type: HIDE_ALERT_MESSAGE
         })
         
     } catch (error) {
         dispatch({
-            type: ADD_DOCTOR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to add a new doctor'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
@@ -812,8 +775,6 @@ export const assignPatientToDoctor = (doctorid, patientid) => async(dispatch) =>
     dispatch({ 
         type: ASSIGN_PATIENT_TO_DOCTOR_REQUEST
     });
-
-    const token = JSON. parse(localStorage.getItem('token'));
 
     const { data } = await axios.put(`${Prod01}/patient/edit/${patientid}`, {
         assigned_doctor_id: doctorid
@@ -843,8 +804,6 @@ export const assignDoctorToHR = (hrId, doctorId) => async(dispatch) => {
            type: ASSIGN_DOCTOR_TO_HR_REQUEST
        });
    
-       const token = JSON. parse(localStorage.getItem('token'));
-   
        const { data } = await axios.put(`${Prod01}/hr/edit/${hrId}`, {
            assigned_doctor_id: doctorId
        },{
@@ -872,8 +831,6 @@ export const assignPatientToHR = (hrId, patientId) => async(dispatch) => {
        dispatch({ 
            type: ASSIGN_DOCTOR_TO_HR_REQUEST
        });
-   
-       const token = JSON. parse(localStorage.getItem('token'));
    
        const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
         assigned_hr_id: hrId
@@ -924,16 +881,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
    
 
    export const removeAssignedDevice = (device, patientid) => async(dispatch) => {
-
-    
     try {
-
-       const token = JSON. parse(localStorage.getItem('token'));
-
-       console.log('patient ID is ' + patientid);
-        console.log('device_id ' + device._id);
-        console.log('deviceId ' + device.deviceObjectId?._id)
-
         const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientid}`, {
             "assignDevice":false,
             "device_id":device._id,
@@ -946,7 +894,6 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
 
         let deviceUpdate;
 
-        
         deviceUpdate = await axios.put(`${Prod01}/device/edit/${device?.deviceObjectId?._id}`, {
             assigned_patient_id: null 
         }, {
@@ -954,8 +901,7 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
                 "Authorization":`Bearer ${token}`
             }  
         })
-         
-   
+        
        dispatch({
            type: ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
            loading: false,
@@ -977,7 +923,6 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
-       const token = JSON. parse(localStorage.getItem('token'));
        const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/${recordsPerPage}/${currentPage}`, {
                patientId: patientId,
                createdAt: sort
@@ -1007,7 +952,6 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
            type: GET_PATIENT_DEVICE_DATA_REQUEST
        });
        
-       const token = JSON. parse(localStorage.getItem('token'));
        const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/100/1`, {
                 patientId: patientId,
                 startDate: startDate,
@@ -1034,8 +978,6 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
 
 export const getRemainingReadings = (id) => async(dispatch) => {
     try{
-    const token = JSON. parse(localStorage.getItem('token'));
-    
     const {data} =  await axios.get(`${Prod01}/patient/getReadingCount/${id}`, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1053,11 +995,9 @@ export const getRemainingReadings = (id) => async(dispatch) => {
             payload: error.message
         })
     }
-
 }
 
-   export const insertComment = (deviceid, comment, patientid) => async(dispatch) => {
-    
+   export const insertComment = (deviceid, comment) => async(dispatch) => {
     try {
        dispatch({ 
            type: GET_PATIENT_DEVICE_DATA_REQUEST
@@ -1067,8 +1007,7 @@ export const getRemainingReadings = (id) => async(dispatch) => {
                id : deviceid,
                comment: comment
            });
-   
-        // dispatch(getPatientTelemetryData(patientid))    
+       
    
     } catch (error) {
        dispatch({
@@ -1081,10 +1020,6 @@ export const getRemainingReadings = (id) => async(dispatch) => {
 
 //    Search Device Data by Date 
    export const getDeviceDataByDate = (deviceId, patientId, searchDate) => async(dispatch) => {
-    
-    console.log('deviceId is ' + deviceId);
-    console.log('patientId is ' + patientId);
-
     try {
        dispatch({ 
            type: GET_PATIENT_DEVICE_DATA_REQUEST
@@ -1114,8 +1049,6 @@ export const getRemainingReadings = (id) => async(dispatch) => {
 export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
     try {
         dispatch({ type: GET_DEVICES_LIST_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/device/list/${resperpage}/${currentpage}`, {
             headers: {
@@ -1140,8 +1073,6 @@ export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
 export const getAllLogs = () => async(dispatch) => {
     try {
         dispatch({ type: GET_LOGS_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/admin/logs`, {
             headers: {
@@ -1167,9 +1098,6 @@ export const getAllLogs = () => async(dispatch) => {
 // Get Admin Stats 
 export const getAdminStats = () => async(dispatch) => {
     try {
-        
-        const token = JSON. parse(localStorage.getItem('token'));
-
         const { data } = await axios.get(`${Prod01}/admin/stats`, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1191,9 +1119,6 @@ export const getAdminStats = () => async(dispatch) => {
 
 export const getInventoryStats = () => async(dispatch) => {
     try {
-        
-        const token = JSON. parse(localStorage.getItem('token'));
-
         const { data } = await axios.get(`${Prod01}/device/stats`, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1219,8 +1144,6 @@ export const getDeviceDetails = (id) => async(dispatch) => {
         dispatch({ 
             type: GET_DEVICE_DETAILS_REQUEST 
         })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.get(`${Prod01}/device/byid/${id}`, {
             headers: {
@@ -1246,8 +1169,6 @@ export const sortRPMDevicesByBroken = () => async(dispatch) => {
     try {
         dispatch({ type: SORT_DEVICES_BY_BROKEN_REQUEST })
         
-        const token = JSON. parse(localStorage.getItem('token'));
-        
         const { data } = await axios.get(`${Prod01}/device/broken`, { 
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1271,8 +1192,6 @@ export const sortRPMDevicesByBroken = () => async(dispatch) => {
 export const sortRPMDevices = (stock) => async(dispatch) => {
     try {
         dispatch({ type: SORT_DEVICES_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/device/liststock`, {
             stock: stock
@@ -1299,8 +1218,6 @@ export const sortRPMDevices = (stock) => async(dispatch) => {
 export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
     try {
         dispatch({ type: SORT_DEVICES_REQUEST })
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const { data } = await axios.post(`${Prod01}/device/search`, {
             key: searchBy,
@@ -1326,9 +1243,7 @@ export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
 
 
 export const addRPMDevice = (values) => async(dispatch) => {
-    try {   
-        const token = JSON. parse(localStorage.getItem('token'));
-
+    try { 
         await axios.post(`${Prod01}/device/add`, values , {
                 headers: {
                     "Authorization":`Bearer ${token}`
@@ -1358,14 +1273,10 @@ export const addRPMDevice = (values) => async(dispatch) => {
 
 // Add Patient
 export const addPatient = (values) => async(dispatch) => {
-    // const { deviceId, imei, modelNumber, deviceType, broken, firmwareVersion, hardwareVersion } = values;
-   
     try {
         dispatch({ 
             type: ADD_PATIENT_REQUEST
         });
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const {data} = await axios.post(`${Prod01}/patient/add`, values , {
                 headers: {
@@ -1395,8 +1306,6 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
         dispatch({ 
             type: UPDATE_DEVICE_REQUEST
         });
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const {data} = await axios.put(`${Prod01}/device/edit/${dvcId}`, {
                 imei: dvcimei,
@@ -1415,8 +1324,6 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
             type: UPDATE_DEVICE_SUCCESS,
             payload: data
         })
-
-        console.log(data);
         
     } catch (error) {
         dispatch({
@@ -1429,14 +1336,9 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
 // Update HR 
 export const updateHR = (id, firstname, lastname, email, gender, DOB, phone1, mobileNo) => async(dispatch) => {
     
-    try {
-        dispatch({ 
-            type: UPDATE_HR_REQUEST
-        });
-        
-        const token = JSON. parse(localStorage.getItem('token'));
+    try {  
 
-        const {data} = await axios.put(`${Prod01}/hr/edit/${id}`, {
+       await axios.put(`${Prod01}/hr/edit/${id}`, {
                 firstname: firstname,
                 lastname:lastname,
                 email: email,
@@ -1451,30 +1353,28 @@ export const updateHR = (id, firstname, lastname, email, gender, DOB, phone1, mo
         });
         
         dispatch({
-            type: UPDATE_HR_SUCCESS,
-            payload: data
+            type: SHOW_ALERT_MESSAGE,
+            payload: "HR Information updated"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
-
-        // console.log(data);
         
     } catch (error) {
         dispatch({
-            type: UPDATE_HR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update hr'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
-
 export const HRDeactivate = (_id) => async(dispatch) => {
     try {
-        dispatch({ 
-            type: UPDATE_HR_REQUEST
-        });
-        
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const {data} = await axios.put(`${Prod01}/hr/edit/${_id}`, {
+        await axios.put(`${Prod01}/hr/edit/${_id}`, {
                 block: true
         }, {
             headers: {
@@ -1483,28 +1383,29 @@ export const HRDeactivate = (_id) => async(dispatch) => {
         });
         
         dispatch({
-            type: UPDATE_HR_SUCCESS,
-            payload: data
+            type: SHOW_ALERT_MESSAGE,
+            payload: "HR Account De-activated"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
         
     } catch (error) {
         dispatch({
-            type: UPDATE_HR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update hr'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
 
 export const HRActivate = (_id) => async(dispatch) => {
-    try {
-        dispatch({ 
-            type: UPDATE_HR_REQUEST
-        });
-        
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const {data} = await axios.put(`${Prod01}/hr/edit/${_id}`, {
+    try { 
+        await axios.put(`${Prod01}/hr/edit/${_id}`, {
                 loginAttemps: 0,
                 block: false
         }, {
@@ -1514,27 +1415,31 @@ export const HRActivate = (_id) => async(dispatch) => {
         });
         
         dispatch({
-            type: UPDATE_HR_SUCCESS,
-            payload: data
+            type: SHOW_ALERT_MESSAGE,
+            payload: "HR Account activated"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
         
     } catch (error) {
         dispatch({
-            type: UPDATE_HR_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update hr'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
 // Delete RPM Device 
 export const deleteRPMDevice = (id) => async(dispatch) => {
-    
     try {
         dispatch({ 
             type: DELETE_RPM_DEVICE_REQUEST
         });
-
-        const token = JSON. parse(localStorage.getItem('token'));
         
     
         await axios.delete(`${Prod01}/device/delete/${id}`, { 
@@ -1565,9 +1470,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
             type: UPDATE_DEVICE_REQUEST
         });
 
-        const token = JSON. parse(localStorage.getItem('token'));
-
-        const data = await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
+       await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
             "assignDevice":true,
             "deviceId":deviceId
         }, {
@@ -1576,7 +1479,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
             } 
         });
 
-        const rpm = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
+        await axios.put(`${Prod01}/patient/edit/${patientId}`, {
             rpmconsent: true,
         }, {
             headers: {
@@ -1615,8 +1518,6 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
 export const getAdminNotifications = () => async(dispatch) => {
     try {
         dispatch({ type: GET_ADMIN_NOTIFICATIONS_REQUEST})
-        
-        const token = JSON. parse(localStorage.getItem('token'));
 
         const data = await axios.post(`${Prod01}/general/notifications`, {
                 admin: true

@@ -14,7 +14,8 @@ const UpdateHR = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    const { loading, error, isUpdated} = useSelector(state => state.hrslist);
+    const { error, isUpdated} = useSelector(state => state.hrslist);
+    const {message, error: hrUpdateError } = useSelector(state => state.common);
 
     let hrInfo = props?.location?.state?.hr;
 
@@ -34,12 +35,17 @@ const UpdateHR = (props) => {
             return alert.error(error);
         }
 
-        if(isUpdated){
-            alert.success('HR Updated');
+        if(hrUpdateError) {
+            return alert.error(hrUpdateError);
+        }
+
+
+        if(message){
+            alert.success(message);
             props?.history?.push('/hrlist');
         }
 
-    }, [dispatch, error, isUpdated]);
+    }, [dispatch, error, message, hrUpdateError]);
 
     const validate = Yup.object().shape({
 		firstname: Yup.string()
@@ -68,7 +74,6 @@ const UpdateHR = (props) => {
       }
 
       const updateHandler = () => {
-        console.log('HR First Name is ' + hrfirstName, 'DOB is ' + hrDOB, 'Gender is ' + hrgender );
         dispatch(updateHR(hrId, hrfirstName, hrlastName, hrEmail, hrgender, hrDOB, hrphone1, hrMobileNo));
     }
 

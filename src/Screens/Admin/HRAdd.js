@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 const HRAdd = (props) => {
 
     const dispatch = useDispatch();
-    const { loading, error, isAdded} = useSelector(state => state.hrslist);
+    const {message, error } = useSelector(state => state.common);
     const alert = useAlert();
 
     useEffect(() =>{
@@ -22,12 +22,12 @@ const HRAdd = (props) => {
             return alert.error(error);
         }
 
-        if(isAdded){
-            alert.success('HR ADDED');
+        if(message){
+            alert.success(message);
             props?.history?.push('/hrlist');
         }
 
-    }, [dispatch, error, isAdded]);
+    }, [dispatch, error, message]);
 
 
 

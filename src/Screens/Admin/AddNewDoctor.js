@@ -2,12 +2,10 @@ import React, { useEffect, useState, Fragment } from 'react';
 import MetaData from '../../layouts/MetaData';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
-import MultiSelect from  'react-multiple-select-dropdown-lite'
 import  'react-multiple-select-dropdown-lite/dist/index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addDoctor, clearErrors } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
-import { ADD_DOCTOR_RESET} from '../../constants/adminConstants';
 import TextField from '../../components/Form/TextField';
 import GenderSelectbox from '../../components/Form/GenderSelectbox';
 import { Formik, Form } from 'formik';
@@ -19,7 +17,7 @@ const AddNewDoctor = ({ history }) => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    const { loading, error, success} = useSelector(state => state.newDoctor);
+    const {message, error } = useSelector(state => state.common);
 
     const validate = Yup.object().shape({
 		firstname: Yup.string()
@@ -50,14 +48,12 @@ const AddNewDoctor = ({ history }) => {
             dispatch(clearErrors());
         }
 
-    if(success){
-        alert.success('Doctor Added');
+    if(message){
+        alert.success(message);
         history.push('/doctors');
-        dispatch({
-            type: ADD_DOCTOR_RESET
-        });
     }
-}, [dispatch, alert, error, success, history]);
+
+}, [dispatch, alert, error, message, history]);
 
     const submitHandler = (values) => {
 		dispatch(addDoctor(values));

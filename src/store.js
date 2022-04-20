@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { adminReducers } from './reducers/adminReducers';
 import { authReducers } from './reducers/authReducers';
-import { newDoctorReducers } from './reducers/adminReducers';
 import { doctorProfileReducers } from './reducers/adminReducers'; 
 import { patientProfileReducers } from './reducers/adminReducers';
 import { doctorReducers } from './reducers/adminReducers';
@@ -38,7 +37,6 @@ import { commonReducers } from './reducers/Common';
 const reducer = combineReducers({
     admin: adminReducers,
     auth: authReducers,
-    newDoctor: newDoctorReducers,
     doctorProfile: doctorProfileReducers,
     patientProfile: patientProfileReducers,
     doctor: doctorReducers,

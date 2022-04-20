@@ -9,13 +9,14 @@ import { getHrLists, HRDeactivate, HRActivate } from '../../actions/adminActions
 import { useDispatch, useSelector} from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
-import {UPDATE_HR_RESET} from '../../constants/adminConstants';
+
 
 const HRList = () => {
 
     const dispatch = useDispatch();
     const alert = useAlert();
-    const { loading, error, hrs, isUpdated} = useSelector(state => state.hrslist);
+    const { loading, error, hrs } = useSelector(state => state.hrslist);
+    const {message, error: hrUpdateError } = useSelector(state => state.common);
 
     const [smShow, setSmShow] = useState(false); //small confirm modal
     const [HRModel, setHRModel] = useState(null);
@@ -29,17 +30,19 @@ const HRList = () => {
             return alert.error(error);
         }
 
-        if(isUpdated){
-            alert.success('Account Updated');
-            dispatch({ type: UPDATE_HR_RESET});
+        if(hrUpdateError){
+            return alert.error(hrUpdateError);
+        }
+
+        if(message){
+            alert.success(message);
             setSmShow(false);
             dispatch(getHrLists());
-
         }
 
         dispatch(getHrLists());
 
-    }, [dispatch, error, isUpdated]);
+    }, [dispatch, error, message, hrUpdateError]);
 
     const deActivateHR = () => {
         dispatch(HRDeactivate(HRModel));

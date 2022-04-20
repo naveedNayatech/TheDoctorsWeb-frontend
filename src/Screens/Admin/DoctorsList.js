@@ -4,13 +4,12 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctors, searchDoctor, doctorDeActivate, doctorActivate } from '../../actions/adminActions';
+import { getDoctors, doctorDeActivate, doctorActivate } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import Pagination from 'react-js-pagination';
 import {Badge, Table, Modal } from 'react-bootstrap';
 import moment from 'moment';
-import { UPDATE_DOCTOR_RESET } from '../../constants/adminConstants';
 
 const DoctorsList = () => {
 
@@ -27,9 +26,8 @@ const DoctorsList = () => {
     const [query, setQuery] = useState("");
     const keys = ["firstname", "lastname", "email", "npinumber", "phone1"];
 
-
-
-    const { loading, error, isUpdated} = useSelector(state => state.admin);
+    // const { loading, error, isUpdated} = useSelector(state => state.admin);
+    const {loading, message, error } = useSelector(state => state.common);
     const { doctors } = useSelector(state => state.doctor);
     const { totalDrs } = useSelector(state => state.adminStat);
         
@@ -38,27 +36,19 @@ const DoctorsList = () => {
             alert.error(error);
         }
 
-        if(isUpdated) {
-            alert.success('Account Status Changed');
+        if(message) {
+            alert.success(message);
             dispatch(getDoctors(resPerPage, currentPage));
-            dispatch({type: UPDATE_DOCTOR_RESET})
             setSmShow(false);
         }
 
         dispatch(getDoctors(resPerPage, currentPage));
 
-    }, [dispatch, alert, error, currentPage, isUpdated]);
+    }, [dispatch, error, currentPage, message]);
 
     function setCurrentPageNumber(pageNumber) {
         setCurrentPage(pageNumber);
     } 
-
-    const refreshHandler = () => {
-        dispatch(getDoctors(resPerPage, currentPage));
-        setIsSearch(false);
-        setKeyword('');
-
-    }
 
     const deActivateDoctor = () => {
         dispatch(doctorDeActivate(doctorModel));
@@ -79,7 +69,6 @@ const DoctorsList = () => {
 
                 {loading ? <Loader /> : (
                 <Fragment>   
-                {/*  patients List Filter Section */}
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
 

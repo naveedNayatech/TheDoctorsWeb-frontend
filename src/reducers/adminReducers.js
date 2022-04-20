@@ -5,10 +5,6 @@ import {
     ALL_DOCTORS_REQUEST,
     ALL_DOCTORS_SUCCESS,
     ALL_DOCTORS_FAIL,
-    ADD_DOCTOR_REQUEST,
-    ADD_DOCTOR_SUCCESS,
-    ADD_DOCTOR_FAIL,
-    ADD_DOCTOR_RESET,
     DOCTOR_PROFILE_REQUEST,
     DOCTOR_PROFILE_SUCCESS,
     DOCTOR_PROFILE_FAIL,
@@ -19,10 +15,6 @@ import {
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
-    UPDATE_DOCTOR_REQUEST,
-    UPDATE_DOCTOR_SUCCESS,
-    UPDATE_DOCTOR_RESET,
-    UPDATE_DOCTOR_FAIL,
     ASSIGN_PATIENT_TO_DOCTOR_REQUEST,
     ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
     ASSIGN_PATIENT_TO_DOCTOR_FAIL,
@@ -61,13 +53,6 @@ import {
     ALL_HRS_REQUEST,
     ALL_HRS_SUCCESS,
     ALL_HRS_FAIL,
-    ADD_HR_REQUEST,
-    ADD_HR_SUCCESS,
-    ADD_HR_FAIL,
-    UPDATE_HR_REQUEST,
-    UPDATE_HR_SUCCESS,
-    UPDATE_HR_FAIL,
-    UPDATE_HR_RESET,
     ASSIGN_DOCTOR_TO_HR_REQUEST,
     ASSIGN_DOCTOR_TO_HR_SUCCESS,
     ASSIGN_DOCTOR_TO_HR_FAIL,
@@ -121,23 +106,6 @@ export const adminReducers = (state = { patients: []}, action) => {
             error: action.payload
         }
 
-        case UPDATE_DOCTOR_SUCCESS: 
-            return {
-             loading: false,
-             isUpdated: true,
-            }  
-
-        case UPDATE_DOCTOR_RESET:
-            return {
-                loading: false,
-                isUpdated: false,
-            }
-        
-        case UPDATE_DOCTOR_FAIL: 
-            return {
-             error: action.payload
-            }
-
         case UPDATE_PATIENT_RESET: return {
             loading: false,
             isUpdated: false
@@ -184,45 +152,6 @@ export const doctorReducers = (state = {doctors: []}, action) => {
             }     
     }
 }
-
-
-
-export const newDoctorReducers = (state = {}, action) => {
-    switch (action.type) {
- 
-     case ADD_DOCTOR_REQUEST: 
-      return {
-          loading: true
-      }
- 
-     case ADD_DOCTOR_SUCCESS: 
-         return {
-             loading: false,
-             success: true,
-         }  
-     
-     case ADD_DOCTOR_FAIL:
-         return {
-             ...state,
-             error: action.payload
-         }    
-     
-     case ADD_DOCTOR_RESET: 
-     return {
-         ...state,
-         success: false,
-         loading: false
-     }    
-     
-     case CLEAR_ERRORS: 
-         return {
-            ...state,
-            error: null   
-         }    
-     default: 
-        return state; 
-    } 
- }
 
  export const doctorProfileReducers = (state = {doctor: {}}, action) => {
     switch (action.type) {
@@ -536,8 +465,6 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
 export const hrsReducers =  (state = { hrs: []}, action) => {
     switch (action.type) {
         case ALL_HRS_REQUEST: 
-        case ADD_HR_REQUEST:
-        case UPDATE_HR_REQUEST:
         case ASSIGN_DOCTOR_TO_HR_REQUEST:
          return {
              loading: true
@@ -547,19 +474,7 @@ export const hrsReducers =  (state = { hrs: []}, action) => {
             return {
                 loading: false,
                 hrs: action.payload
-            }
-         
-        case ADD_HR_SUCCESS: 
-         return {
-            loading: false,
-            isAdded: true
-         }   
-
-         case UPDATE_HR_SUCCESS: 
-             return {
-                 loading: false,
-                 isUpdated: true
-             }
+            }   
 
          case ASSIGN_DOCTOR_TO_HR_SUCCESS: 
             return { 
@@ -572,15 +487,7 @@ export const hrsReducers =  (state = { hrs: []}, action) => {
                 isAssigned: false,
             }
 
-        case UPDATE_HR_RESET: 
-        return { 
-            loading: false,
-            isUpdated: false
-        }
-
-        case ALL_HRS_FAIL:
-        case ADD_HR_FAIL:
-        case UPDATE_HR_FAIL: 
+        case ALL_HRS_FAIL: 
         case ASSIGN_DOCTOR_TO_HR_FAIL:
         return {
             error: action.payload

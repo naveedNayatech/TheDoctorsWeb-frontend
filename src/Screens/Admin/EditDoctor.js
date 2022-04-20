@@ -1,14 +1,11 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import MetaData from '../../layouts/MetaData';
-import Loader from '../../layouts/Loader';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
-import { doctorProfile, updateDoctor, clearErrors } from '../../actions/adminActions';
+import { updateDoctor, clearErrors } from '../../actions/adminActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { UPDATE_DOCTOR_RESET } from '../../constants/adminConstants';
 import { Formik, Form } from 'formik';
-
 
 
 const EditDoctor = (props) => {
@@ -30,8 +27,7 @@ const EditDoctor = (props) => {
     const [docnpi, setDocNpi] = useState(npinumber);
     const [doclicenseNumber, setDocLicenseNumber] = useState(licensenumber);
     
-    const { loading, error, isUpdated } = useSelector(state => state.admin);
-
+    const {message, error } = useSelector(state => state.common);
 
     useEffect(() => {
         if(error){
@@ -39,15 +35,12 @@ const EditDoctor = (props) => {
             dispatch(clearErrors());
         }
 
-        if(isUpdated){
-            alert.success('Doctor Updated');
+        if(message){
+            alert.success(message);
             props.history.push('/doctors');
-            dispatch({
-                type: UPDATE_DOCTOR_RESET 
-            });
         }
             
-    }, [dispatch, isUpdated]);
+    }, [dispatch, error, message]);
 
 
     const updateHandler = () => {
@@ -64,7 +57,7 @@ const EditDoctor = (props) => {
                 {/* TopBar */}
                 <TopBar />
 
-                {loading ? <Loader /> : <Fragment>
+              <Fragment>
                 <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card">
                     <div className="home-content">
                         <h5 className="pt-2 mt-2">Update <span style={{color: '#F95800'}}>Dr. {firstname} {lastname} </span></h5>
@@ -215,7 +208,7 @@ const EditDoctor = (props) => {
                     
                     </div>
                 </div>
-                </Fragment> }
+                </Fragment> 
 
 
                 </section>
