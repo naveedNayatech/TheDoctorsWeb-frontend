@@ -9,7 +9,6 @@ import { useAlert } from 'react-alert';
 import Loader from '../../layouts/Loader';
 import Pagination from 'react-js-pagination';
 import { Badge, Modal, Table } from 'react-bootstrap';
-import { DELETE_RPM_DEVICE_RESET } from '../../constants/adminConstants';
 import InventoryAnalytics from '../../components/inventory/InventoryAnalytics';
 import ReactTooltip from "react-tooltip";
 
@@ -19,8 +18,8 @@ const RPMDevices = (props) => {
 
     const alert = useAlert();
 
-    const { loading, error, deviceCount, devices, isDeleted } = useSelector(state => state.devices);
-    
+    const { loading, deviceCount, devices } = useSelector(state => state.devices);
+    const {message, error } = useSelector(state => state.common);
 
     const [deviceModel, setDeviceModel] = useState(null);
     const [deviceToDelete, setDeviceToDelete] = useState(null);
@@ -36,18 +35,15 @@ const RPMDevices = (props) => {
         return alert.error(error);
         }
 
-        if(isDeleted) {
-            alert.success('Deleted');
+        if(message) {
+            alert.success(message);
             props?.history.push('/devices');
-            dispatch({
-                type: DELETE_RPM_DEVICE_RESET
-            });
             setSmShow(false);    
         }
 
         dispatch(getAllDevices(resPerPage, currentPage));
 
-    }, [dispatch, alert, error, isDeleted, currentPage])
+    }, [dispatch, alert, error, message, currentPage])
 
     const sortDevices = (event) => {
         let updatedValue = event.target.value;

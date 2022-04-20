@@ -15,9 +15,6 @@ import {
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
-    ASSIGN_PATIENT_TO_DOCTOR_REQUEST,
-    ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
-    ASSIGN_PATIENT_TO_DOCTOR_FAIL,
     RESET_ASSIGN_PATIENT_TO_HR,
     ASSIGN_DEVICE_TO_PATIENT_REQUEST,
     ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
@@ -32,24 +29,12 @@ import {
     GET_DEVICE_DETAILS_SUCCESS,
     GET_DEVICE_DETAILS_FAIL,
     ADD_RPM_DEVICE_RESET,
-    UPDATE_DEVICE_REQUEST,
-    UPDATE_DEVICE_SUCCESS,
-    UPDATE_DEVICE_RESET,
-    UPDATE_DEVICE_FAIL,
     SORT_DEVICES_BY_BROKEN_REQUEST,
     SORT_DEVICES_BY_BROKEN_SUCCESS,
     SORT_DEVICES_BY_BROKEN_FAIL,
     SORT_DEVICES_REQUEST,
     SORT_DEVICES_SUCCESS,
     SORT_DEVICES_FAIL,
-    DELETE_RPM_DEVICE_REQUEST,
-    DELETE_RPM_DEVICE_SUCCESS,
-    DELETE_RPM_DEVICE_FAIL,
-    DELETE_RPM_DEVICE_RESET,
-    ADD_PATIENT_REQUEST,
-    ADD_PATIENT_SUCCESS,
-    ADD_PATIENT_FAIL,
-    PATIENT_RESET,
     ALL_HRS_REQUEST,
     ALL_HRS_SUCCESS,
     ALL_HRS_FAIL,
@@ -219,7 +204,6 @@ export const doctorpatientsReducers = (state = {}, action) => {
 export const patientProfileReducers = (state = {patient: {}, readingsCount: ""}, action) => {
     switch (action.type) {
         case PATIENT_PROFILE_REQUEST: 
-        case ASSIGN_PATIENT_TO_DOCTOR_REQUEST:
         case ASSIGN_DEVICE_TO_PATIENT_REQUEST:
             return {
                 loading: true,
@@ -232,8 +216,7 @@ export const patientProfileReducers = (state = {patient: {}, readingsCount: ""},
                 success: true,
                 patient: action.payload
             }
-        
-        case ASSIGN_PATIENT_TO_DOCTOR_SUCCESS: 
+         
         case ASSIGN_DEVICE_TO_PATIENT_SUCCESS:
         return {
             ...state,
@@ -244,7 +227,6 @@ export const patientProfileReducers = (state = {patient: {}, readingsCount: ""},
         }    
         
         case PATIENT_PROFILE_FAIL:
-        case ASSIGN_PATIENT_TO_DOCTOR_FAIL:
         case ASSIGN_DEVICE_TO_PATIENT_FAIL:
             return {
                 loading: false,
@@ -298,7 +280,6 @@ export const devicesReducers = (state = { devices: []}, action) => {
         case GET_DEVICES_LIST_REQUEST:
         case SORT_DEVICES_REQUEST:
         case SORT_DEVICES_BY_BROKEN_REQUEST:     
-        case DELETE_RPM_DEVICE_REQUEST:
         return { 
             loading: true,      
         }
@@ -322,23 +303,9 @@ export const devicesReducers = (state = { devices: []}, action) => {
             devices: action.payload,
         }
 
-        case DELETE_RPM_DEVICE_SUCCESS: 
-        return {
-            loading: false, 
-            isDeleted: true
-        }
-
-        case DELETE_RPM_DEVICE_RESET: 
-        return { 
-            ...state,
-         loading: false,
-         isDeleted: false
-        }
-
         case GET_DEVICES_LIST_FAIL: 
         case SORT_DEVICES_BY_BROKEN_FAIL:
         case SORT_DEVICES_FAIL:
-        case DELETE_RPM_DEVICE_FAIL:
         return { 
             loading: false,  
             error: action.payload        
@@ -387,32 +354,6 @@ export const deviceDetailsReducers = (state = {deviceDetails: {}}, action) => {
 
 export const newDeviceReducers = (state = {devices: {} }, action) => {
     switch (action.type) {
-  
-     case UPDATE_DEVICE_REQUEST:
-      return {
-          ...state,
-          loading: true
-      }
-
-
-    case UPDATE_DEVICE_SUCCESS: 
-         return {
-             loading: false,
-             isUpdated: true
-         }    
-    
-    case UPDATE_DEVICE_RESET: 
-        return {
-            loading: false,
-            isUpdated: false
-        }
-     
-     case UPDATE_DEVICE_FAIL:
-         return {
-             ...state,
-             error: action.payload
-         }    
-    
 
     case ADD_RPM_DEVICE_RESET: 
         return { 
@@ -431,35 +372,6 @@ export const newDeviceReducers = (state = {devices: {} }, action) => {
         return state; 
     } 
  }
-
- export const patientReducers =  (state = {}, action) => {
-    switch (action.type) {
-        case ADD_PATIENT_REQUEST: 
-         return {
-             ...state,
-             loading: true
-         }
-
-         case ADD_PATIENT_SUCCESS: 
-        return {
-            loading: false,
-             isAdded: true
-        }
-
-        case ADD_PATIENT_FAIL: 
-        return {
-            error: action.payload
-        }
-
-        case PATIENT_RESET: 
-        return {
-            isAdded: false,
-            loading: false,
-        }
-        default: // need this for default case
-        return state 
-    }
-}
 
 // HRs Reducers
 export const hrsReducers =  (state = { hrs: []}, action) => {

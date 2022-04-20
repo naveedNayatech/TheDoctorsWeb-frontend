@@ -9,17 +9,16 @@ import { useAlert } from 'react-alert';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useEffect } from 'react';
-import { ADD_RPM_DEVICE_RESET } from '../../constants/adminConstants';
+
 
 const UpdateRPMDevice = (props) => {
 
     let deviceInfo = props?.location?.state?.deviceDetails;
-    // let id = deviceInfo?._id;
 
     const alert = useAlert();
     const dispatch = useDispatch();
 
-    const { loading, error, isUpdated} = useSelector(state => state.device);
+    const {message, error } = useSelector(state => state.common);
 
     useEffect(() => {
        
@@ -28,15 +27,12 @@ const UpdateRPMDevice = (props) => {
             dispatch(clearErrors());
         }
 
-        if(isUpdated) {
-            alert.success('Updated');
+        if(message) {
+            alert.success(message);
             props.history.push('/devices');
-            dispatch({
-                type: ADD_RPM_DEVICE_RESET
-            });
         }
 
-    }, [dispatch, alert, isUpdated, error])
+    }, [dispatch, alert, message, error])
 
     const { _id, imei, modelNumber, deviceType, broken, firmwareVersion, hardwareVersion} = deviceInfo;
 

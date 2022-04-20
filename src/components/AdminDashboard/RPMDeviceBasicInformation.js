@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import { getPatients, patientProfile, assignRPMDeviceToPatient, getDeviceDetails } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { UPDATE_DEVICE_RESET } from '../../constants/adminConstants';
 import { Link, useHistory } from 'react-router-dom';
 
 const RPMDeviceBasicInformation = (props) => {
@@ -19,7 +18,7 @@ const RPMDeviceBasicInformation = (props) => {
     const { error, patients} = useSelector(state => state.admin);
     const { patient } = useSelector(state => state.patientProfile);
     const { error: deviceError, isUpdated} = useSelector(state => state.device);
-    const {error:commonMessage, message} = useSelector(state => state.common);
+    const {error:commonError, message} = useSelector(state => state.common);
 
     const [patientId, setPatientId] = useState('');
     const [smShow, setSmShow] = useState(false); //RPM Consent modal
@@ -34,12 +33,8 @@ const RPMDeviceBasicInformation = (props) => {
             return alert.error(error);
         }
 
-        if(message){
-            return alert.success(message)
-        }
-
-        if(commonMessage) {
-            return alert.error
+        if(commonError) {
+            return alert.error(commonError)
         }
         dispatch(getPatients());
 
@@ -47,18 +42,13 @@ const RPMDeviceBasicInformation = (props) => {
             dispatch(patientProfile(patientId))
         }
 
-        if(isUpdated) {
-            alert.success('Device Assigned');
+        if(message) {
+            alert.success(message);
             history.push('/devicedetails');
-
             dispatch(getDeviceDetails(deviceDetails?._id));
-
-            dispatch({
-                type: UPDATE_DEVICE_RESET
-            });
         }
         
-    }, [dispatch, alert, error, isUpdated, patientId, message, commonMessage]);
+    }, [dispatch, alert, error, message, patientId, commonError]);
 
     const AssignDeviceToPatient = () => {
         dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));

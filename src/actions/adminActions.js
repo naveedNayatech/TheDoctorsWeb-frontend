@@ -18,9 +18,6 @@ import {
     PATIENT_PROFILE_REQUEST,
     PATIENT_PROFILE_SUCCESS,
     PATIENT_PROFILE_FAIL,
-    ASSIGN_PATIENT_TO_DOCTOR_REQUEST,
-    ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
-    ASSIGN_PATIENT_TO_DOCTOR_FAIL,
     ASSIGN_DEVICE_TO_PATIENT_REQUEST,
     ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
     ASSIGN_DEVICE_TO_PATIENT_FAIL,
@@ -33,21 +30,12 @@ import {
     GET_DEVICE_DETAILS_REQUEST,
     GET_DEVICE_DETAILS_SUCCESS,
     GET_DEVICE_DETAILS_FAIL,
-    UPDATE_DEVICE_REQUEST,
-    UPDATE_DEVICE_SUCCESS,
-    UPDATE_DEVICE_FAIL,
     SORT_DEVICES_BY_BROKEN_REQUEST,
     SORT_DEVICES_BY_BROKEN_SUCCESS,
     SORT_DEVICES_BY_BROKEN_FAIL,
     SORT_DEVICES_REQUEST,
     SORT_DEVICES_SUCCESS,
     SORT_DEVICES_FAIL,
-    DELETE_RPM_DEVICE_REQUEST,
-    DELETE_RPM_DEVICE_SUCCESS,
-    DELETE_RPM_DEVICE_FAIL,
-    ADD_PATIENT_REQUEST,
-    ADD_PATIENT_SUCCESS,
-    ADD_PATIENT_FAIL,
     ALL_HRS_REQUEST,
     ALL_HRS_SUCCESS,
     ALL_HRS_FAIL,
@@ -773,28 +761,35 @@ export const addDoctor = (values) => async(dispatch) => {
 export const assignPatientToDoctor = (doctorid, patientid) => async(dispatch) => {
  try {
     dispatch({ 
-        type: ASSIGN_PATIENT_TO_DOCTOR_REQUEST
+        type: FETCH_START
     });
 
-    const { data } = await axios.put(`${Prod01}/patient/edit/${patientid}`, {
+    await axios.put(`${Prod01}/patient/edit/${patientid}`, {
         assigned_doctor_id: doctorid
     },{
         headers: {
             "Authorization":`Bearer ${token}`
             }
-        });
+    });
 
     dispatch({
-        type: ASSIGN_PATIENT_TO_DOCTOR_SUCCESS,
-        loading: false,
-        payload: data
-    })    
+		type: SHOW_ALERT_MESSAGE,
+		payload: "Patient assigned to doctor"
+		});
+	
+	dispatch({
+		type: HIDE_ALERT_MESSAGE
+	})
 
+    
  } catch (error) {
     dispatch({
-        type: ASSIGN_PATIENT_TO_DOCTOR_FAIL,
-        payload: error.response.data.message
-    })
+		type: FETCH_ERROR,
+		payload: 'Cannot assign patient.'
+	  })
+	dispatch({
+		type: HIDE_ALERT_MESSAGE
+	  })
  }   
 }
 
@@ -1275,26 +1270,33 @@ export const addRPMDevice = (values) => async(dispatch) => {
 export const addPatient = (values) => async(dispatch) => {
     try {
         dispatch({ 
-            type: ADD_PATIENT_REQUEST
+            type: FETCH_START
         });
 
-        const {data} = await axios.post(`${Prod01}/patient/add`, values , {
-                headers: {
-                    "Authorization":`Bearer ${token}`
-                }      
-            });
+      await axios.post(`${Prod01}/patient/add`, values , {
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }      
+        });
     
 
-            dispatch({
-                type: ADD_PATIENT_SUCCESS,
-                payload: data
-            })
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "New Patient Added"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
         
     } catch (error) {
         dispatch({
-            type: ADD_PATIENT_FAIL,
-            payload: error.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to add a new patient'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
@@ -1304,10 +1306,10 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
     
     try {
         dispatch({ 
-            type: UPDATE_DEVICE_REQUEST
+            type: FETCH_START
         });
 
-        const {data} = await axios.put(`${Prod01}/device/edit/${dvcId}`, {
+        await axios.put(`${Prod01}/device/edit/${dvcId}`, {
                 imei: dvcimei,
                 modelNumber:dvcModelNumber,
                 deviceType: dvcType,
@@ -1319,17 +1321,25 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
                 "Authorization":`Bearer ${token}`
             }
         });
+
+        dispatch({
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Device Updated"
+            });
         
         dispatch({
-            type: UPDATE_DEVICE_SUCCESS,
-            payload: data
+            type: HIDE_ALERT_MESSAGE
         })
         
+                
     } catch (error) {
         dispatch({
-            type: UPDATE_DEVICE_FAIL,
-            payload: error.response.data.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to update a device'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
@@ -1438,10 +1448,9 @@ export const HRActivate = (_id) => async(dispatch) => {
 export const deleteRPMDevice = (id) => async(dispatch) => {
     try {
         dispatch({ 
-            type: DELETE_RPM_DEVICE_REQUEST
+            type: FETCH_START
         });
         
-    
         await axios.delete(`${Prod01}/device/delete/${id}`, { 
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -1449,15 +1458,23 @@ export const deleteRPMDevice = (id) => async(dispatch) => {
         });
         
         dispatch({
-            type: DELETE_RPM_DEVICE_SUCCESS
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Device Deleted"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
 
         
     } catch (error) {
         dispatch({
-            type: DELETE_RPM_DEVICE_FAIL,
-            payload: error.message
-        })
+            type: FETCH_ERROR,
+            payload: 'Unable to delete a device'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 
@@ -1467,7 +1484,7 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
     
     try {
         dispatch({ 
-            type: UPDATE_DEVICE_REQUEST
+            type: FETCH_START
         });
 
        await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
@@ -1501,17 +1518,23 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         
         
         dispatch({
-            type: UPDATE_DEVICE_SUCCESS,
+            type: SHOW_ALERT_MESSAGE,
+            payload: "Device Assigned to Patient"
+            });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
         })
 
         
     } catch (error) {
-        console.log(error);
-    
         dispatch({
-            type: UPDATE_DEVICE_FAIL,
-            payload: error
-        })
+            type: FETCH_ERROR,
+            payload: 'Cannot assign device to patient'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 

@@ -9,7 +9,6 @@ import GenderSelectbox from '../../components/Form/GenderSelectbox';
 import { addPatient } from '../../actions/adminActions';
 import {useDispatch, useSelector} from 'react-redux'
 import { useAlert } from 'react-alert';
-import { PATIENT_RESET } from '../../constants/adminConstants';
 
 
 const HRAddPatient = (props) => {
@@ -17,25 +16,21 @@ const HRAddPatient = (props) => {
     const dispatch = useDispatch();
     const alert = useAlert();
 
-    const { loading, error ,  isAdded} = useSelector(state => state.patientCRUD);
+    const {message, error } = useSelector(state => state.common);
 
     useEffect(() => {
         if(error){
             alert.error('Patient Not Added');
             props?.history.push('/HrPatients');
-            dispatch({
-                type: PATIENT_RESET
-            });
         }
 
-        if(isAdded) {
-            alert.success('Patient Added');
-            props?.history.push('/HrPatients');
-            dispatch({
-                type: PATIENT_RESET
-            });   
+        if(message) {
+            alert.success(message);
+            props?.history.push('/HrPatients');   
         }
-    }, [dispatch, alert, error, isAdded]);
+
+    }, [dispatch, alert, error, message]);
+
 
     const validate = Yup.object().shape({
 		firstname: Yup.string()

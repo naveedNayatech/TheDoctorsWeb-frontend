@@ -23,12 +23,17 @@ const AssignDoctorToPatient = (props) => {
     const [patientId, setPatientId] = useState('');
 
     const { loading, error, patients} = useSelector(state => state.admin);
-    const { loading: profileLoading, error: profileError, patient, isUpdated} = useSelector(state => state.patientProfile);
+    const { patient} = useSelector(state => state.patientProfile);
+    const {message, error: commonError } = useSelector(state => state.common);
 
     useEffect(() => {
         
         if(error){
             return alert.error(error);
+        }
+
+        if(commonError){
+            return alert.error(commonError);
         }
 
         dispatch(getPatients());
@@ -37,12 +42,12 @@ const AssignDoctorToPatient = (props) => {
             dispatch(patientProfile(patientId))
         }
 
-        if(isUpdated === true){
-            alert.success('Patient Assigned');
+        if(message){
+            alert.success(message);
             props.history.push({pathname: '/doctorProfile', state: {id: id}});
         }
         
-    }, [dispatch, alert, error, patientId, isUpdated]);
+    }, [dispatch, alert, error, patientId, message, commonError]);
 
 
     const getPatientProfile = (e) => {

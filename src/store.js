@@ -10,7 +10,6 @@ import { deviceDataReducers } from './reducers/adminReducers';
 import { devicesReducers } from './reducers/adminReducers';
 import { deviceDetailsReducers } from './reducers/adminReducers';
 import { newDeviceReducers } from './reducers/adminReducers';
-import { patientReducers } from './reducers/adminReducers';
 import { doctorpatientsReducers } from './reducers/adminReducers';
 import {staffAuthReducers} from './reducers/authReducers';
 import { hrsReducers } from './reducers/adminReducers';
@@ -45,7 +44,6 @@ const reducer = combineReducers({
     deviceDetails: deviceDetailsReducers,
     device : newDeviceReducers,
     staffAuth: staffAuthReducers,
-    patientCRUD: patientReducers,
     docPatients: doctorpatientsReducers,
     hrslist: hrsReducers,
     hrAuth: hrAuthReducers,
