@@ -4,8 +4,9 @@ import { getPatientTelemetryData} from '../../actions/adminActions';
 import {useAlert} from 'react-alert';
 import {useDispatch, useSelector} from 'react-redux';
 import { getDoctorPatients } from '../../actions/adminActions';
-const moment = require('moment-timezone');
 import {Spinner} from 'react-bootstrap';
+
+const moment = require('moment-timezone');
 
 const StaffPieGraph = () => {
   

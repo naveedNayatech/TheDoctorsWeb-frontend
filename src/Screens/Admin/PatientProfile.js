@@ -44,6 +44,7 @@ const PatientProfile = (props) => {
 
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
+        
         dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
         
@@ -64,7 +65,7 @@ const PatientProfile = (props) => {
         dispatch(getPatientCarePlan(patientid));
         setStartDate('');
         setEndDate('');
-        setSort('')
+        // setSort('')
     }
 
     

@@ -10,6 +10,8 @@ import { useAlert } from 'react-alert';
 import moment from 'moment';
 import { RESET_ASSIGN_PATIENT_TO_HR } from '../../constants/adminConstants';
 import { Badge } from 'react-bootstrap';
+import Select from 'react-select';
+
 
 const AssignDrToHr = (props) => {
 
@@ -55,6 +57,16 @@ const AssignDrToHr = (props) => {
         dispatch(assignDoctorToHR(hrId, doctorId))
     }
 
+    const funcSetDrId = (dr) =>{
+        setDoctorId(dr.value)
+        console.log('Dr ID is ' + dr.value);
+    }
+
+    const options = []
+    doctors && doctors.filter(doctors => !doctors.assigned_hr_id).map((doc, index) => (
+       options.push({value:doc?._id , label:[doc?.firstname, doc?.lastname, doc?.npinumber].join(" ") })
+    ))
+
     return (
         <Fragment>
         <MetaData title="Assign Patient"/>
@@ -73,7 +85,7 @@ const AssignDrToHr = (props) => {
                         <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Doctor </span></h5>
                         <br />
 
-                            <select 
+                            {/* <select 
                                 name="patientlist"
                                 className="form-control"
                                 defaultValue={'Select Doctor'}
@@ -85,7 +97,12 @@ const AssignDrToHr = (props) => {
                                     <option value={doc?._id} key={index}> {doc?.firstname} {doc?.lastname} {doc?.npinumber} </option>
                                 ))}    
                                 
-                            </select> 
+                            </select>  */}
+
+                            <Select
+                                    options={options}
+                                    onChange={funcSetDrId}
+                                />
                     </div>
 
                     <div className="col-md-8">

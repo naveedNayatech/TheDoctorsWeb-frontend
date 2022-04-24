@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Prod, Prod01 } from '../constants/ActionType';
-const moment = require('moment-timezone');
 
 import { 
     ALL_PATIENTS_REQUEST, 
@@ -68,7 +67,9 @@ import {
     FETCH_ERROR
 } from '../constants/Common';
 
-let token = JSON. parse(localStorage.getItem('token'));
+let token = JSON.parse(localStorage.getItem('token'));
+const moment = require('moment-timezone');
+
 
 export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
     try {
@@ -76,11 +77,7 @@ export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
             type: ALL_PATIENTS_REQUEST,
         })
     
-        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, );
         
         dispatch({
             type: ALL_PATIENTS_SUCCESS,
@@ -104,11 +101,7 @@ export const getDoctorsPatientList = (docId) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${docId}`, {
             name: 'Hammad'
-        },{
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        },);
         
         dispatch({
             type: ALL_PATIENTS_SUCCESS,
@@ -131,11 +124,7 @@ export const getHrsPatientList = (hrId) => async(dispatch) => {
         
         const { data } = await axios.post(`${Prod01}/hr/patientlist/${hrId}`,{
             name: 'Hammad'
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: ALL_PATIENTS_SUCCESS,
@@ -160,11 +149,7 @@ export const searchPatient = (searchBy, keyword) => async(dispatch) => {
         const { data } = await axios.post(`${Prod01}/patient/search`,{
             key: searchBy,
             value:keyword
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: ALL_PATIENTS_SUCCESS,
@@ -200,11 +185,7 @@ export const updatePatient = (_id, pFirstName, pLastName, pEmail, pDOB, pGender,
             ssn: pSSN,
             diseases: pDiseases,
             insurancecompany: pInsurance
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: UPDATE_PATIENT_SUCCESS,
@@ -227,11 +208,7 @@ export const patientDeActivate = (_id) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/patient/block/${_id}`,{
             block: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: UPDATE_PATIENT_SUCCESS,
@@ -255,11 +232,7 @@ export const patientActivate = (_id) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/patient/block/${_id}`,{
             block: false
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: UPDATE_PATIENT_SUCCESS,
@@ -283,11 +256,7 @@ export const doctorDeActivate = (_id) => async(dispatch) => {
 
         await axios.put(`${Prod01}/doctor/edit/${_id}`,{
             block: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
 
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -320,11 +289,7 @@ export const doctorActivate = (_id) => async(dispatch) => {
 
        await axios.put(`${Prod01}/doctor/edit/${_id}`,{
             block: false
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -355,11 +320,7 @@ export const updatePatientConsentStatus = (patientId, value) => async(dispatch) 
 
         const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
             rpmconsent : value
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch(getPatients(10, 1));
         // dispatch({
@@ -380,11 +341,7 @@ export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
     try {
         dispatch({ type: ALL_DOCTORS_REQUEST })
 
-        const { data } = await axios.get(`${Prod01}/doctor/list/${resPerPage}/${currentPage}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/doctor/list/${resPerPage}/${currentPage}`, );
         
         dispatch({
             type: ALL_DOCTORS_SUCCESS,
@@ -407,11 +364,7 @@ export const searchDoctor = (value) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/doctor/search`,{
             search: value
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: ALL_DOCTORS_SUCCESS,
@@ -432,11 +385,7 @@ export const getHrLists = () => async(dispatch) => {
     try {
         dispatch({ type: ALL_HRS_REQUEST })
 
-        const { data } = await axios.get(`${Prod01}/hr/list`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/hr/list`, );
         
         dispatch({
             type: ALL_HRS_SUCCESS,
@@ -454,11 +403,7 @@ export const getHrLists = () => async(dispatch) => {
 // Add New HR => admin
 export const addHR = (values) => async(dispatch) => {
     try {
-        await axios.post(`${Prod01}/hr/signup`, values, {
-                headers: {
-                "Authorization":`Bearer ${token}`
-            }
-            });
+        await axios.post(`${Prod01}/hr/signup`, values);
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -488,11 +433,7 @@ export const doctorProfile = (id) => async(dispatch) => {
             type: DOCTOR_PROFILE_REQUEST 
         })
 
-        const { data } = await axios.get(`${Prod01}/doctor/doctorbyid/${id}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/doctor/doctorbyid/${id}`, );
         
         dispatch({
             loading: false,
@@ -510,11 +451,7 @@ export const doctorProfile = (id) => async(dispatch) => {
 
 export const getHrProfile = (id) => async(dispatch) => {
     try {
-        const { data } = await axios.get(`${Prod01}/hr/hrbyid/${id}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/hr/hrbyid/${id}`, );
         
         dispatch({
             loading: false,
@@ -542,11 +479,7 @@ export const getDoctorPatients = (id) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/doctor/patientlist/${id}`, {
             name: 'Hammad'
-        },{
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        },);
         
         dispatch({
             loading: false,
@@ -567,11 +500,7 @@ export const removePatientsDoctor = (patientId, doctorId) => async(dispatch) => 
         await axios.post(`${Prod01}/patient/unsetHrDr`,{
             patientId: patientId,
             drId: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
 
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -600,11 +529,7 @@ export const removePatientsHR = (patientId) => async(dispatch) => {
         const res = await axios.post(`${Prod01}/patient/unsetHrDr`,{
             patientId: patientId,
             hrId: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
 
         if(res){
             dispatch({
@@ -632,11 +557,7 @@ export const removeDoctorFromHR = (hrId) => async(dispatch) => {
     try {
         const res = await axios.post(`${Prod01}/hr/removeDr`,{
             hrId: hrId
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
 
         if(res){
             dispatch({
@@ -675,11 +596,7 @@ export const updateDoctor = (_id, docfirstname, doclastname, docDOB, docemail, d
             mobileNo: docmobileno,
             npi: docnpi,
             licensenumber: doclicenseNumber
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        } );
+        },  );
 
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -709,11 +626,7 @@ export const patientProfile = (id) => async(dispatch) => {
             type: PATIENT_PROFILE_REQUEST 
         })
 
-        const { data }= await axios.get(`${Prod01}/patient/patientprofile/${id}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data }= await axios.get(`${Prod01}/patient/patientprofile/${id}`, );
         
         dispatch({
             type: PATIENT_PROFILE_SUCCESS,
@@ -732,11 +645,7 @@ export const patientProfile = (id) => async(dispatch) => {
 // Add New Doctor => admin
 export const addDoctor = (values) => async(dispatch) => {
     try {
-        await axios.post(`${Prod01}/doctor/signup`, values, {
-                headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        await axios.post(`${Prod01}/doctor/signup`, values);
 
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -766,10 +675,6 @@ export const assignPatientToDoctor = (doctorid, patientid) => async(dispatch) =>
 
     await axios.put(`${Prod01}/patient/edit/${patientid}`, {
         assigned_doctor_id: doctorid
-    },{
-        headers: {
-            "Authorization":`Bearer ${token}`
-            }
     });
 
     dispatch({
@@ -801,11 +706,7 @@ export const assignDoctorToHR = (hrId, doctorId) => async(dispatch) => {
    
        const { data } = await axios.put(`${Prod01}/hr/edit/${hrId}`, {
            assigned_doctor_id: doctorId
-       },{
-           headers: {
-               "Authorization":`Bearer ${token}`
-               }
-           });
+       });
    
        dispatch({
            type: ASSIGN_DOCTOR_TO_HR_SUCCESS,
@@ -829,11 +730,7 @@ export const assignPatientToHR = (hrId, patientId) => async(dispatch) => {
    
        const { data } = await axios.put(`${Prod01}/patient/edit/${patientId}`, {
         assigned_hr_id: hrId
-       },{
-           headers: {
-               "Authorization":`Bearer ${token}`
-               }
-           });
+       });
    
        dispatch({
            type: ASSIGN_DOCTOR_TO_HR_SUCCESS,
@@ -881,20 +778,12 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
             "assignDevice":false,
             "device_id":device._id,
             "deviceId":device.deviceObjectId?._id
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            } 
         });
 
         let deviceUpdate;
 
         deviceUpdate = await axios.put(`${Prod01}/device/edit/${device?.deviceObjectId?._id}`, {
             assigned_patient_id: null 
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }  
         })
         
        dispatch({
@@ -921,10 +810,6 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
        const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/${recordsPerPage}/${currentPage}`, {
                patientId: patientId,
                createdAt: sort
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-                }
            });
    
        dispatch({
@@ -951,10 +836,6 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
                 patientId: patientId,
                 startDate: startDate,
                 endDate: endDate,
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-                }
            });
    
        dispatch({
@@ -973,11 +854,7 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
 
 export const getRemainingReadings = (id) => async(dispatch) => {
     try{
-    const {data} =  await axios.get(`${Prod01}/patient/getReadingCount/${id}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-                }
-           });
+    const {data} =  await axios.get(`${Prod01}/patient/getReadingCount/${id}`);
     
     dispatch({
         type: GET_PATIENT_REMAINING_READINGS,
@@ -1045,11 +922,7 @@ export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
     try {
         dispatch({ type: GET_DEVICES_LIST_REQUEST })
 
-        const { data } = await axios.get(`${Prod01}/device/list/${resperpage}/${currentpage}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        })
+        const { data } = await axios.get(`${Prod01}/device/list/${resperpage}/${currentpage}`, )
 
         dispatch({
             type: GET_DEVICES_LIST_SUCCESS,
@@ -1069,11 +942,7 @@ export const getAllLogs = () => async(dispatch) => {
     try {
         dispatch({ type: GET_LOGS_REQUEST })
 
-        const { data } = await axios.get(`${Prod01}/admin/logs`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        })
+        const { data } = await axios.get(`${Prod01}/admin/logs`, )
 
         dispatch({
             type: GET_LOGS_SUCCESS,
@@ -1093,11 +962,7 @@ export const getAllLogs = () => async(dispatch) => {
 // Get Admin Stats 
 export const getAdminStats = () => async(dispatch) => {
     try {
-        const { data } = await axios.get(`${Prod01}/admin/stats`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        })
+        const { data } = await axios.get(`${Prod01}/admin/stats`, )
 
         dispatch({
             type: ADMIN_STATS_SUCCESS,
@@ -1114,11 +979,7 @@ export const getAdminStats = () => async(dispatch) => {
 
 export const getInventoryStats = () => async(dispatch) => {
     try {
-        const { data } = await axios.get(`${Prod01}/device/stats`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        })
+        const { data } = await axios.get(`${Prod01}/device/stats`, )
 
         dispatch({
             type: INVENTORY_STATS_SUCCESS,
@@ -1140,11 +1001,7 @@ export const getDeviceDetails = (id) => async(dispatch) => {
             type: GET_DEVICE_DETAILS_REQUEST 
         })
 
-        const { data } = await axios.get(`${Prod01}/device/byid/${id}`, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/device/byid/${id}`, );
         
         dispatch({
             type: GET_DEVICE_DETAILS_SUCCESS,
@@ -1164,11 +1021,7 @@ export const sortRPMDevicesByBroken = () => async(dispatch) => {
     try {
         dispatch({ type: SORT_DEVICES_BY_BROKEN_REQUEST })
         
-        const { data } = await axios.get(`${Prod01}/device/broken`, { 
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        const { data } = await axios.get(`${Prod01}/device/broken`);
         
         dispatch({
             type: SORT_DEVICES_BY_BROKEN_SUCCESS,
@@ -1190,11 +1043,7 @@ export const sortRPMDevices = (stock) => async(dispatch) => {
 
         const { data } = await axios.post(`${Prod01}/device/liststock`, {
             stock: stock
-        },{
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        },);
+        });
         
         dispatch({
             type: SORT_DEVICES_SUCCESS,
@@ -1217,10 +1066,6 @@ export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
         const { data } = await axios.post(`${Prod01}/device/search`, {
             key: searchBy,
             value: search
-        },{
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
         },);
         
         dispatch({
@@ -1239,11 +1084,7 @@ export const searchRPMDevices = (searchBy, search) => async(dispatch) => {
 
 export const addRPMDevice = (values) => async(dispatch) => {
     try { 
-        await axios.post(`${Prod01}/device/add`, values , {
-                headers: {
-                    "Authorization":`Bearer ${token}`
-                }      
-            });
+        await axios.post(`${Prod01}/device/add`, values );
 
             dispatch({
                 type: SHOW_ALERT_MESSAGE,
@@ -1273,11 +1114,7 @@ export const addPatient = (values) => async(dispatch) => {
             type: FETCH_START
         });
 
-      await axios.post(`${Prod01}/patient/add`, values , {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }      
-        });
+      await axios.post(`${Prod01}/patient/add`, values );
     
 
         dispatch({
@@ -1316,11 +1153,7 @@ export const updateRPMDevice = (dvcId, dvcimei, dvcModelNumber, dvcType, dvcBrok
                 broken: dvcBroken,
                 firmwareVersion: dvcFirmwareVersion,
                 hardwareVersion:dvcHardwareVersion
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
 
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -1356,11 +1189,7 @@ export const updateHR = (id, firstname, lastname, email, gender, DOB, phone1, mo
                 DOB: DOB,
                 phone1:phone1,
                 mobileNo: mobileNo
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -1386,11 +1215,7 @@ export const HRDeactivate = (_id) => async(dispatch) => {
     try {
         await axios.put(`${Prod01}/hr/edit/${_id}`, {
                 block: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -1418,11 +1243,7 @@ export const HRActivate = (_id) => async(dispatch) => {
         await axios.put(`${Prod01}/hr/edit/${_id}`, {
                 loginAttemps: 0,
                 block: false
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        }, );
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -1451,11 +1272,7 @@ export const deleteRPMDevice = (id) => async(dispatch) => {
             type: FETCH_START
         });
         
-        await axios.delete(`${Prod01}/device/delete/${id}`, { 
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });
+        await axios.delete(`${Prod01}/device/delete/${id}`);
         
         dispatch({
             type: SHOW_ALERT_MESSAGE,
@@ -1490,19 +1307,11 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
        await axios.post(`${Prod01}/patient/addremovedevice/${patientId}`, {
             "assignDevice":true,
             "deviceId":deviceId
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            } 
         });
 
         await axios.put(`${Prod01}/patient/edit/${patientId}`, {
             rpmconsent: true,
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        })
+        }, )
 
         let device;
 
@@ -1510,10 +1319,6 @@ export const assignRPMDeviceToPatient = (deviceId, patientId) => async(dispatch)
         device = await axios.put(`${Prod01}/device/edit/${deviceId}`, {
             assignedTime: moment(new Date()).tz("America/New_York").format("DD/MM/YYYY"),
             assigned_patient_id: patientId 
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }  
         })
         
         
@@ -1544,10 +1349,6 @@ export const getAdminNotifications = () => async(dispatch) => {
 
         const data = await axios.post(`${Prod01}/general/notifications`, {
                 admin: true
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            } 
         });
 
         dispatch({ 

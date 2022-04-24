@@ -45,6 +45,7 @@ export const login = (values) => async(dispatch) => {
        });
        
        if (res.data) {
+        axios.defaults.headers.common["authorization"] = "Bearer " + res.data.tokens.access.token;
         localStorage.setItem(
           "token",
           JSON.stringify(res.data.tokens.access.token)
@@ -84,6 +85,8 @@ export const staffLogin = (values) => async(dispatch) => {
        const res = await axios.post(`${Prod01}/doctor/login`, values);
 
        if (res.data) {
+        axios.defaults.headers.common["authorization"] = "Bearer " + res.data.tokens.access.token;
+
         localStorage.setItem(
           "token",
           JSON.stringify(res.data.tokens.access.token)
@@ -117,6 +120,8 @@ export const hrLogin = (values) => async(dispatch) => {
        const res = await axios.post(`${Prod01}/hr/login`, values);
 
        if (res.data) {
+        axios.defaults.headers.common["authorization"] = "Bearer " + res.data.tokens.access.token;
+
         localStorage.setItem(
           "token",
           JSON.stringify(res.data.tokens.access.token)

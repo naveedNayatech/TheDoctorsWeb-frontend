@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
-const moment = require('moment-timezone');
 import { CSVLink } from 'react-csv';
+const moment = require('moment-timezone');
 
 const ExportInventoryTOCSV = ({csvData, fileName}) => {
 

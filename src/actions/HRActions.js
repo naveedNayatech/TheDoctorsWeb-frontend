@@ -36,22 +36,18 @@ import {
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
-export const getHRPatients = (id) => async(dispatch) => {   
-try {
-    dispatch({
-        type: HR_PATIENTS_REQUEST,
-    }) 
+export const getHRPatients = (id) => async (dispatch) => {
+    try {
+        dispatch({
+            type: HR_PATIENTS_REQUEST,
+        })
 
-    const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-    const { data } = await axios.post(`${Prod01}/hr/patientlist/${id}`,{
-        name: 'hammad'
-    },{
-        headers: {
-            "Authorization":`Bearer ${token}`
-         }
-    });
-        
+        const { data } = await axios.post(`${Prod01}/hr/patientlist/${id}`, {
+            name: 'hammad'
+        });
+
         dispatch({
             type: HR_PATIENTS_SUCCESS,
             payload: data
@@ -62,400 +58,346 @@ try {
         dispatch({
             type: HR_PATIENTS_FAIL,
             payload: error.response.data.message
-        })   
+        })
     }
 }
 
 // HR comment on reading
-export const commentOnReading = (readingId, hrId, comment) => async(dispatch) => {
-    
-    try {
-       dispatch({ 
-           type: ADDING_COMMENT_REQUEST
-       });
-    
-       const token = JSON. parse(localStorage.getItem('token'));
+export const commentOnReading = (readingId, hrId, comment) => async (dispatch) => {
 
-       const { data } = await axios.put(`${Prod01}/patient/commentonreading/${readingId}`, {
-            conclusion_hr_id:hrId,
+    try {
+        dispatch({
+            type: ADDING_COMMENT_REQUEST
+        });
+
+        const token = JSON.parse(localStorage.getItem('token'));
+
+        const { data } = await axios.put(`${Prod01}/patient/commentonreading/${readingId}`, {
+            conclusion_hr_id: hrId,
             conclusion: comment
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        });
+
+        dispatch({
             type: ADDING_COMMENT_SUCCESS,
             payload: data
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: ADDING_COMMENT_FAIL,
-           payload: error.response.data.message
-       })
-    }   
-   }
+        dispatch({
+            type: ADDING_COMMENT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 
 
 // Time Spent on Patient
-export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) => {
+export const timeSpentOnPatient = (patientId, hrId, values) => async (dispatch) => {
     try {
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
-                assigned_patient_id : patientId,
-                timeSpentInMinutes:values.timespent,
-                conclusion: values.conclusion
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
+            assigned_patient_id: patientId,
+            timeSpentInMinutes: values.timespent,
+            conclusion: values.conclusion
+        });
+
+        dispatch({
             type: ADDING_TIME_SPENT_SUCCESS,
             payload: data
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: ADDING_TIME_SPENT_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: ADDING_TIME_SPENT_FAIL,
+            payload: error.message
+        })
+    }
 }
 
 
-export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth, readingsInDay, readingsInNight, fileName) => async(dispatch) => {
-    let data ; 
+export const carePlanOfPatient = (patientId, hrId, description, readingsPerMonth, readingsInDay, readingsInNight, fileName) => async (dispatch) => {
+    let data;
     try {
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
         data = await axios.post(`${Prod01}/patient/addCarePlan`, {
-                assigned_hr_id : hrId,
-                assigned_patient_id:patientId,
-                Description: description,
-                readingsPerMonth:readingsPerMonth,
-                readingsInSlot1:readingsInDay,
-                readingsInSlot2: readingsInNight,
-                fileName:fileName.name
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });
-           
-       
-        let formData = new FormData();
-		formData.append('file', fileName);
+            assigned_hr_id: hrId,
+            assigned_patient_id: patientId,
+            Description: description,
+            readingsPerMonth: readingsPerMonth,
+            readingsInSlot1: readingsInDay,
+            readingsInSlot2: readingsInNight,
+            fileName: fileName.name
+        });
 
-        if(fileName){
-        fetch(`${Prod01}/general/uploadfile`,{
+
+        let formData = new FormData();
+        formData.append('file', fileName);
+
+        if (fileName) {
+            fetch(`${Prod01}/general/uploadfile`, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    "Authorization":`Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 }
             }
-        )
+            )
         }
 
-        dispatch({ 
+        dispatch({
             type: ADDING_CARE_PLAN_SUCCESS,
             payload: data
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: ADDING_CARE_PLAN_FAIL,
-           payload: 'Care plan already exists'
-       })
-    }   
+        dispatch({
+            type: ADDING_CARE_PLAN_FAIL,
+            payload: 'Care plan already exists'
+        })
+    }
 }
 
-export const getTimeReport = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
+export const getTimeReport = (patientId, hrId, startDate, endDate) => async (dispatch) => {
     try {
-        dispatch({ 
+        dispatch({
             type: TIME_REPORT_REQUEST
         });
 
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
-                    hrId: hrId,
-                    patientId: patientId,
-                    startDate:startDate,
-                    endDate: endDate
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+            hrId: hrId,
+            patientId: patientId,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        dispatch({
             type: TIME_REPORT_SUCCESS,
             payload: data,
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: TIME_REPORT_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: TIME_REPORT_FAIL,
+            payload: error.message
+        })
+    }
 }
 
-export const getTimeReportByHR = (hrId, startDate, endDate) => async(dispatch) => {    
+export const getTimeReportByHR = (hrId, startDate, endDate) => async (dispatch) => {
     try {
-        dispatch({ 
+        dispatch({
             type: TIME_REPORT_REQUEST
         });
 
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
-                    hrId: hrId,
-                    startDate:startDate,
-                    endDate: endDate
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+            hrId: hrId,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        dispatch({
             type: TIME_REPORT_SUCCESS,
             payload: data,
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: TIME_REPORT_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: TIME_REPORT_FAIL,
+            payload: error.message
+        })
+    }
 }
 
 
-export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) => async(dispatch) => {    
+export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) => async (dispatch) => {
     try {
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime/${hrId}/${patientId}`, {
-                    startDate:startDate,
-                    endDate: endDate
-           }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+            hrId: hrId,
+            patientId: patientId,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        dispatch({
             type: TIME_SPENT_OF_CURRENT_MONTH_SUCCESS,
             payload: data,
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: TIME_SPENT_OF_CURRENT_MONTH_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+            payload: error.message
+        })
+    }
 }
 
-export const getInitialMonthReport = (hrId, doctorId, month) => async(dispatch) => {
+export const getInitialMonthReport = (hrId, doctorId, month) => async (dispatch) => {
     try {
-        dispatch({ 
+        dispatch({
             type: INITIAL_MONTH_REPORT_REQUEST
         });
 
 
-       const token = JSON. parse(localStorage.getItem('token'));
-       let data;
-       
-       if(month){
-        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
-            month: month
-       }, {
-        headers: {
-            "Authorization":`Bearer ${token}`
-         }
-       });   
-       }
+        const token = JSON.parse(localStorage.getItem('token'));
+        let data;
 
-       if(month && hrId){
-        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
-            month: month,
-            hrId:hrId
-       }, {
-        headers: {
-            "Authorization":`Bearer ${token}`
-         }
-       });   
-       }
+        if (month) {
+            data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+                month: month
+            });
+        }
 
-       if(month && doctorId){
-           console.log('Doctor ID is ' + doctorId);
-        data = await axios.post(`${Prod01}/general/report/initialsetup`, {
-            month: month,
-            doctorId:doctorId
-       }, {
-        headers: {
-            "Authorization":`Bearer ${token}`
-         }
-       });   
-       }
-        
-           
-        dispatch({ 
+        if (month && hrId) {
+            data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+                month: month,
+                hrId: hrId
+            });
+        }
+
+        if (month && doctorId) {
+            console.log('Doctor ID is ' + doctorId);
+            data = await axios.post(`${Prod01}/general/report/initialsetup`, {
+                month: month,
+                doctorId: doctorId
+            });
+        }
+
+
+        dispatch({
             type: INITIAL_MONTH_REPORT_SUCCESS,
             payload: data,
         });
-        
-    } catch (error) {
-       dispatch({
-           type: INITIAL_MONTH_REPORT_FAIL,
-           payload: error.message
-       })
-    }
-} 
 
-export const getCompletePatientCP = () => async(dispatch) => {
+    } catch (error) {
+        dispatch({
+            type: INITIAL_MONTH_REPORT_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+export const getCompletePatientCP = () => async (dispatch) => {
     try {
-        dispatch({ 
+        dispatch({
             type: PATIENT_CP_REPORT_REQUEST
         });
 
-        const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/general/report/initialsetup`, {
-        
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            }
-        });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/general/report/initialsetup`, {
+
+        });
+
+        dispatch({
             type: PATIENT_CP_REPORT_SUCCESS,
             payload: data,
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: PATIENT_CP_REPORT_FAIL,
-           payload: error.message
-       })
+        dispatch({
+            type: PATIENT_CP_REPORT_FAIL,
+            payload: error.message
+        })
     }
-} 
+}
 
 
-export const getPatientCarePlan = (patientId) => async(dispatch) => {    
+export const getPatientCarePlan = (patientId) => async (dispatch) => {
     try {
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const data  = await axios.get(`${Prod01}/patient/CarePlan/${patientId}` , {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const data = await axios.get(`${Prod01}/patient/CarePlan/${patientId}`);
+
+        dispatch({
             type: PATIENT_CARE_PLAN_SUCCESS,
             payload: data,
         });
 
-        
+
     } catch (error) {
-       dispatch({
-           type: PATIENT_CARE_PLAN_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: PATIENT_CARE_PLAN_FAIL,
+            payload: error.message
+        })
+    }
 }
 
-export const getHRCareplans = (hrId) => async(dispatch) => {    
+export const getHRCareplans = (hrId) => async (dispatch) => {
     try {
 
         dispatch({
             type: GET_CAREPLAN_LIST_REQUEST
         })
 
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data }  = await axios.post(`${Prod01}/patient/CarePlanbydrhr`, {
-           "hr_Id":hrId
-       }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.post(`${Prod01}/patient/CarePlanbydrhr`, {
+            "hr_Id": hrId
+        });
+
+        dispatch({
             type: GET_CAREPLAN_LIST_SUCCESS,
             payload: data,
         });
 
-        
+
     } catch (error) {
-       dispatch({
-           type: GET_CAREPLAN_LIST_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: GET_CAREPLAN_LIST_FAIL,
+            payload: error.message
+        })
+    }
 }
 
-export const updateCarePan = (description, readingsPerMonth, readingsPerDay, careplanId) => async(dispatch) => {    
+export const updateCarePan = (description, readingsPerMonth, readingsPerDay, careplanId) => async (dispatch) => {
     try {
-       const token = JSON. parse(localStorage.getItem('token'));
+        const token = JSON.parse(localStorage.getItem('token'));
 
-       const { data } = await axios.put(`${Prod01}/patient/editcareplan/${careplanId}`,{
-           Description: description,
-           readingsPerMonth:readingsPerMonth,
-           readingsPerDay:readingsPerDay
-       }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-             }
-           });    
-           
-        dispatch({ 
+        const { data } = await axios.put(`${Prod01}/patient/editcareplan/${careplanId}`, {
+            Description: description,
+            readingsPerMonth: readingsPerMonth,
+            readingsPerDay: readingsPerDay
+        });
+
+        dispatch({
             type: UPDATE_CARE_PLAN_SUCCESS,
             payload: data,
         });
-        
+
     } catch (error) {
-       dispatch({
-           type: UPDATE_CARE_PLAN_FAIL,
-           payload: error.message
-       })
-    }   
+        dispatch({
+            type: UPDATE_CARE_PLAN_FAIL,
+            payload: error.message
+        })
+    }
 }
 
-export const getHRNotifications = (id) => async(dispatch) => {
+export const getHRNotifications = (id) => async (dispatch) => {
     try {
-        dispatch({ type: GET_HR_NOTIFICATIONS_REQUEST})
-        
-        const token = JSON. parse(localStorage.getItem('token'));
+        dispatch({ type: GET_HR_NOTIFICATIONS_REQUEST })
+
+        const token = JSON.parse(localStorage.getItem('token'));
 
         const data = await axios.post(`${Prod01}/general/notifications`, {
-                hrId: id
-        }, {
-            headers: {
-                "Authorization":`Bearer ${token}`
-            } 
+            hrId: id
         });
 
-        dispatch({ 
+        dispatch({
             type: GET_HR_NOTIFICATIONS_SUCCESS,
             payload: data
         })
-        
+
     } catch (error) {
-        dispatch({ 
+        dispatch({
             type: GET_HR_NOTIFICATIONS_FAIL,
             payload: error
         })
@@ -463,7 +405,7 @@ export const getHRNotifications = (id) => async(dispatch) => {
 }
 
 // Clear errors
-export const clearErrors = () => async(dispatch) => {
+export const clearErrors = () => async (dispatch) => {
     dispatch({
         type: CLEAR_ERRORS,
     })
