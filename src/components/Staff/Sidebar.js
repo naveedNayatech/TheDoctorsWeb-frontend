@@ -51,6 +51,13 @@ const Sidebar = (props) => {
                     </NavLink>
                 </li>
 
+                <li>
+                    <NavLink key="doctors" to="/doctor/careplan" activeClassName="link-name-active">
+                        <i className="bx bx-file"></i>
+                        <span className="link_name">Careplan</span>
+                    </NavLink>
+                </li>
+
  
                 <li>
                     <Link key="logout" to="#" onClick={logoutHandler}>

@@ -99,6 +99,7 @@ const PatientProfile = (props) => {
                                     ReadingsperMonth={ReadingsperMonth}
                                     readingsThisMonth={readingsThisMonth}
                                     careplan={careplan}
+                                    telemetaryReadings={deviceData}
                                     patientid={patientid}
                                 />
 

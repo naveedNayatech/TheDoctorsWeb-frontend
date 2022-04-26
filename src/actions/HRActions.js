@@ -128,6 +128,33 @@ export const timeSpentOnPatient = (patientId, hrId, values) => async(dispatch) =
     }   
 }
 
+export const timeSpentOnPatientAuto = (patientId, hrId, minutes, description) => async(dispatch) => {
+    try {
+       const token = JSON. parse(localStorage.getItem('token'));
+
+       const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
+                assigned_patient_id : patientId,
+                timeSpentInMinutes:minutes,
+                conclusion: description
+           }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: ADDING_TIME_SPENT_SUCCESS,
+            payload: data
+        });
+        
+    } catch (error) {
+       dispatch({
+           type: ADDING_TIME_SPENT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
 
 export const carePlanOfPatient = (patientId, hrId, description,readingsPerMonth, readingsInDay, readingsInNight, fileName) => async(dispatch) => {
     let data ; 
@@ -244,9 +271,11 @@ export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) =
     try {
        const token = JSON. parse(localStorage.getItem('token'));
 
-       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime/${hrId}/${patientId}`, {
-                    startDate:startDate,
-                    endDate: endDate
+       const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+            hrId:hrId,
+            patientId: patientId,
+            startDate:startDate,
+            endDate: endDate
            }, {
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -298,7 +327,6 @@ export const getInitialMonthReport = (hrId, doctorId, month) => async(dispatch) 
        }
 
        if(month && doctorId){
-           console.log('Doctor ID is ' + doctorId);
         data = await axios.post(`${Prod01}/general/report/initialsetup`, {
             month: month,
             doctorId:doctorId
@@ -379,15 +407,10 @@ export const getPatientCarePlan = (patientId) => async(dispatch) => {
 
 export const getHRCareplans = (hrId) => async(dispatch) => {    
     try {
-
-        dispatch({
-            type: GET_CAREPLAN_LIST_REQUEST
-        })
-
        const token = JSON. parse(localStorage.getItem('token'));
 
        const { data }  = await axios.post(`${Prod01}/patient/CarePlanbydrhr`, {
-           "hr_Id":hrId
+           "hrId":hrId
        }, {
             headers: {
                 "Authorization":`Bearer ${token}`

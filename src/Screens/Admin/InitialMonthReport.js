@@ -18,11 +18,12 @@ import { Link } from 'react-router-dom';
 const InitialMonthReport = () => {
     const alert = useAlert();
 
-    const [month, setMonth] = useState('');
+    const [month, setMonth] = useState('April');
     const dispatch = useDispatch();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(20);
+    const [year, setYear] = useState("2022");
 
     const {error, initialMonthPatients} = useSelector(state => state.initialMonthReport);
     const { doctors } = useSelector(state => state.doctor);
@@ -84,8 +85,8 @@ const InitialMonthReport = () => {
                 </div>
                 <hr />
                 
-                <div className="row">
-                <div className="col-md-3">
+                <div className="row-display">
+                <div className="col-md-2">
                 <label htmlFor="from">Select Month </label>
                         <select 
                             label="From" 
@@ -107,6 +108,23 @@ const InitialMonthReport = () => {
                             <option value="October">October</option>
                             <option value="November">November</option>
                             <option value="December">December</option>
+                        </select>
+                    </div>
+
+                    <div className="col-md-2">
+                        <label htmlFor="year">Select Year</label>
+                        <select 
+                            label="From" 
+                            name="from" 
+                            className="form-control"
+                            value={year}
+                            onChange={(e) => setYear(e.target.value)}
+                        >
+                            <option value="SelectYear">Select Year</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
                         </select>
                     </div>
 
@@ -142,7 +160,7 @@ const InitialMonthReport = () => {
                     </select>
                     </div>
 
-                    <div className="col-md-3">
+                    <div>
                         <label>&nbsp;</label>
                         <button className="btn submit-btn shadow-none" onClick={generateInitialReport}>Search</button>
                     </div>

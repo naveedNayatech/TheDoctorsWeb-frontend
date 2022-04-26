@@ -1147,7 +1147,9 @@ nav .profile-details i {
 }
 
 .left-div {
-  width: 53vw;
+  /* width: 53vw; */
+  width: 28vw;
+
 }
 
 .right-div{

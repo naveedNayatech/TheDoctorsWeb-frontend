@@ -58,6 +58,9 @@ import {
     GET_LOGS_FAIL,
     HR_PROFILE_SUCCESS,
     HR_PROFILE_FAIL,
+    GET_CAREPLAN_LIST_REQUEST,
+    GET_CAREPLAN_LIST_SUCCESS,
+    GET_CAREPLAN_LIST_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -1298,6 +1301,31 @@ export const addPatient = (values) => async(dispatch) => {
             type: HIDE_ALERT_MESSAGE
           })
     }
+}
+
+// Doctor Careplan List
+export const getDoctorCareplans = (DrId) => async(dispatch) => {    
+    try {
+       const { data }  = await axios.post(`${Prod01}/patient/CarePlanbydrhr`, {
+           "doctorId":DrId
+       }, {
+            headers: {
+                "Authorization":`Bearer ${token}`
+             }
+           });    
+           
+        dispatch({ 
+            type: GET_CAREPLAN_LIST_SUCCESS,
+            payload: data,
+        });
+
+        
+    } catch (error) {
+       dispatch({
+           type: GET_CAREPLAN_LIST_FAIL,
+           payload: error.message
+       })
+    }   
 }
 
 

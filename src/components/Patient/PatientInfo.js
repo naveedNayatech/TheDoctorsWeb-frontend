@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge} from 'react-bootstrap';
+import { Badge, Image} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
 import { useDispatch} from 'react-redux';
+import systolicImg from '../../assets/Images/blood-pressure.png';
+const moment = require('moment-timezone');
 
-const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, patientid}) => {
+const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, patientid, telemetaryReadings}) => {
 
     const dispatch = useDispatch();
     
@@ -16,7 +18,7 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
   return (
     <>
         <div className="col-md-3">
-            <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
+            <h5 className="pt-2 mt-2">Patient <span style={{ color: '#007673'}}>Details </span></h5>
         </div>
         <hr />
 
@@ -99,10 +101,18 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <span className="patient-profile-col-heading">Physician Information</span>                                 
                         <hr />
                     {patient?.assigned_doctor_id ? <>
-                        <span className="profile-label">Name</span>
+                        <span className="profile-label">Doctor</span>
                     <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
                     </> : <>
-                    <span className="profile-label">Doctor Not Assigned Yet</span>
+                    <span className="profile-label">Doctor Not Assigned Yet <br /></span>
+                    </>}
+                    
+                    {/* HR Information */}
+                    {patient?.assigned_hr_id ? <>
+                        <span className="profile-label">HR</span>
+                    <p className="patient-profile-card-text">Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
+                    </> : <>
+                    <span className="profile-label">HR Not Assigned Yet</span>
                     </>}
                     
                 </div>
@@ -136,25 +146,36 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                 <div className="col-md-3">
                     <span className="patient-profile-col-heading">Insurance companies</span>                                 
                         <hr />
-                    <div className="row">    
-                        <div className="col-md-7">
-                        <p className="patient-profile-card-text">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A' }</p> 
-                        </div>    
-                    </div>
+                            <div className="row">    
+                                <div className="col-md-7">
+                                <p className="patient-profile-card-text">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A' }</p> 
+                                </div>    
+                            </div>
+                        <hr />
+                            {careplan && careplan ? <>
+                            <span style={{marginTop: 10}}>
+                                <small><b>Careplan Added</b></small> <br/>
+                                <b>By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
+                                &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
+                                </b>
+                            </span>  
+                        </> : 'N/A'}
                 </div>
                 
 
                 <div className="col-md-3">
-                    <span className="patient-profile-col-heading">Patient Careplan</span>                                 
+                    <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
                     <hr /> 
-                    {careplan && careplan ? <>
-                        <span style={{float: 'right', marginTop: 10}}>
-                            <i>Careplan Added.</i> <br/>
-                            <i>By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
-                            &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
-                            </i>
-                        </span>  
-                    </> : 'N/A'}
+                    {telemetaryReadings && telemetaryReadings.length > 0 ? <>
+                        {telemetaryReadings && telemetaryReadings.slice(0,5).map((devicedata, index) => (
+                            <div key={index} className="row-display mt-2" >
+                                <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                 <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
+                            </div>
+                        ))}
+                    </> : 'N/A' }
+                    
                 </div>
             </div>
     </>

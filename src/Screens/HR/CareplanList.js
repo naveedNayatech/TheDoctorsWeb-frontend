@@ -68,7 +68,8 @@ const CareplanList = () => {
                             </thead>
 
                              <tbody>
-                                 {careplanlist && careplanlist.map((careplan, index) => ( 
+                                 {careplanlist.length > 0 ? <>
+                                    {careplanlist && careplanlist.map((careplan, index) => ( 
                                     <tr key={index}>
                                     
                                     <td>
@@ -96,7 +97,9 @@ const CareplanList = () => {
                                 </tr> 
                                 
                                 ))}
-                                
+                                 </> : <td>
+                                  <small>No Careplan for this HR</small>
+                                  </td>}
                                 </tbody> 
                         </Table> }
                     </>

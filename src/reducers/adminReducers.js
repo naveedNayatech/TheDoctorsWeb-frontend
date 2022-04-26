@@ -56,6 +56,9 @@ import {
     GET_LOGS_REQUEST,
     GET_LOGS_SUCCESS,
     GET_LOGS_FAIL,
+    GET_CAREPLAN_LIST_REQUEST,
+    GET_CAREPLAN_LIST_SUCCESS,
+    GET_CAREPLAN_LIST_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -451,6 +454,37 @@ export const inventoryStatsReducers = (state={totalDevices:0, instockDevices: 0,
         default: 
         return state
     }
+}
+
+export const careplanListReducers = (state={doccareplanlist:[]}, action) => {
+    switch (action.type) {
+        
+        case GET_CAREPLAN_LIST_REQUEST:
+            return {
+                loading: true
+        }
+
+        case GET_CAREPLAN_LIST_SUCCESS: 
+            return {
+                loading: false,
+                doccareplanlist: action.payload
+            }
+        
+        case GET_CAREPLAN_LIST_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }
+         
+        default: 
+        return state;
+        }
 }
 
 export const adminNotificationsReducers = (state = { notifications:[] }, action) => {

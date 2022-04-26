@@ -1,17 +1,34 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { hrLogout } from '../../actions/authActions';
-import { getHRNotifications} from '../../actions/HRActions';
+import { getHRNotifications, timeSpentOnPatientAuto} from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Alert } from 'react-bootstrap';
 const moment = require('moment-timezone');
+import { Modal, Button } from 'react-bootstrap';
+import { Formik, Form } from 'formik';
+import {useAlert} from 'react-alert';
 
-const TopBar = () => {
+const TopBar = ({displayTimer, patientid}) => {
     
     const dispatch = useDispatch();
+    const alert = useAlert();
+
+    // start/stop timer
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+    const [running, setRunning] = useState(false);
+
+
+    // submit Modal
+    const [addTimeShow, setAddTimeShow] = useState(false);
+    const [description, setDescription] = useState('');
+    const handleShow = () => setAddTimeShow(true);
+    const [error, setError] = useState('');
 
     const { isAuthenticated, hr } = useSelector(state => state.hrAuth);
-    const {loading, notifications} = useSelector(state => state.hrNoti);
+    const { notifications} = useSelector(state => state.hrNoti);
+    const { isSuccessful } = useSelector(state => state.timeSpent);
 
     let hrId = hr._id;
 
@@ -23,14 +40,63 @@ const TopBar = () => {
                 sidebar.classList.toggle("active")
     }
 
+
     dispatch(getHRNotifications(hrId));
-    }, [dispatch]);
+    }, [dispatch, isSuccessful]);
 
     const logoutHandler = () => {
         dispatch(hrLogout());
     }
 
+    const handleClose = () => setAddTimeShow(false);
 
+    
+
+    var counter;
+    React.useEffect(() => {
+        if(running === true){
+            counter = setInterval(() => {
+            setSeconds(seconds + 1)
+    
+            if(seconds === 59){
+                setMinutes(minutes + 1)
+                setSeconds(0)
+            }
+        }, 1000)
+    
+        return () => clearInterval(counter)
+         }
+    })
+
+
+        const startTimer = () => {
+            setRunning(true);
+        }
+
+        const stopTimer = () => {
+            clearInterval(counter)  
+        }
+
+        const resetTimer = () => {
+            setRunning(false);
+            setSeconds(0);
+            setMinutes(0);
+        }
+
+        const submitHandler = () => {
+            if(minutes < 1) {
+                setError('minute shouldnt be less than 1');
+                return
+            }
+
+            if(description === '') {
+                setError('Notes cannot be empty');
+            }
+
+            dispatch(timeSpentOnPatientAuto(patientid, hrId ,minutes, description));
+            resetTimer();
+            setAddTimeShow(false)
+        }
     
     return (
         <Fragment>
@@ -40,10 +106,39 @@ const TopBar = () => {
                 <div className="left-div">
                     <div className="sidebar-button">
                         <i className="bx bx-menu sidebarBtn"></i>
-                        <span className="dashboard">HR <span style={{color: '#F95800'}}>Dashboard</span></span>    
+                        <span className="dashboard">HR <span style={{color: '#007673'}}>Dashboard</span></span>    
                     </div>
                 </div>
 
+
+                {/* TIMER */}
+                {displayTimer === 'yes' ? <>
+                <div style={{
+                    backgroundColor: '#F1F1F1',
+                    width: '32%',
+                    padding: '15px',
+                    overflowX: 'hidden'
+                }} className="row-display">
+                <h4 id="counter">{minutes < 10 ? '0'+minutes : minutes} : {seconds < 10 ? '0'+seconds : seconds}</h4>
+                
+                   <div className="ml-5">
+                       <button className="btn btn-success btn-sm start-button shadow-none" onClick={startTimer} disabled={running === true ? true: false}><i className='bx bx-play'></i></button>&nbsp;
+                       <button className="btn btn-danger btn-sm stop-button shadow-none" onClick={stopTimer}><i className='bx bx-stop'></i></button> &nbsp;
+                       <button className="btn btn-warning btn-sm shadow-none" onClick={resetTimer}><i className='bx bx-reset' ></i></button>
+                       <button className="btn btn-info btn-sm ml-1 shadow-none" onClick={handleShow}><small>Submit</small></button>
+                   </div>
+                </div>
+                {/* TIMER */}
+                </> : <>
+                <div style={{
+                    width: '25vw',
+                    padding: '15px',
+                }} className="row-display"></div>
+                </>}
+                
+
+                
+                &nbsp;&nbsp;&nbsp;    
                 <div className="right-div">
                 <div className="notification-dropdown">
                         <Dropdown className="admin-topbar-dropdown">
@@ -105,6 +200,57 @@ const TopBar = () => {
             </div>
         </nav>
         <br />
+
+
+        {/* Time spent Modal */}
+        <Modal show={addTimeShow} onHide={handleClose}>
+         <Modal.Header >
+            <Modal.Title>Add Time</Modal.Title> 
+            <Button variant="danger" onClick={handleClose}><i className='bx bx-x'></i></Button>
+         </Modal.Header>
+
+            <Modal.Body>
+
+            {error ? <small style={{color: 'red'}}>{error}</small> : ' '}
+
+                <Formik 
+                initialValues={{
+                    description: '', 
+                }}
+                onSubmit={() => {submitHandler()}}>
+                { formik => (
+                    <div>
+                        <Form>
+                        <input 
+                                label="Mins Spent"
+                                className="form-control"	
+                                value={minutes} 
+                                placeholder="Type description here .... "
+                                disabled
+                        />
+                    
+                        <br />
+                        <textarea 
+                                label="Description" 
+                                name="description"
+                                className="form-control shadow-none"
+                                rows="4"	
+                                value={description} 
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Type description here .... "
+                        />
+                        <br />
+
+                        <div className="row-class" style={{justifyContent: 'space-between'}}>
+                            <button className="reset-btn ml-3 shadow-none" type="submit">Submit</button>
+                        </div>
+                        </Form>
+                    </div>
+                )}   
+                </Formik>   
+            </Modal.Body>
+        </Modal>
+        {/* Time spent Modal ended here */}
         </Fragment>
     )
 }
