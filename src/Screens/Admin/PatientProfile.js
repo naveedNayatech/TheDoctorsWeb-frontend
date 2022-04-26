@@ -14,6 +14,7 @@ import moment from 'moment';
 import { Tabs, Tab, Row, Col, Nav} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
+
  
 
 const PatientProfile = (props) => {
@@ -44,6 +45,7 @@ const PatientProfile = (props) => {
 
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
+        
         dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
         
@@ -64,7 +66,7 @@ const PatientProfile = (props) => {
         dispatch(getPatientCarePlan(patientid));
         setStartDate('');
         setEndDate('');
-        setSort('')
+        // setSort('')
     }
 
     

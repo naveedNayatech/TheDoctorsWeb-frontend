@@ -4,8 +4,8 @@ import { logout } from '../../actions/authActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Alert } from 'react-bootstrap';
 import { getAdminNotifications } from '../../actions/adminActions';
-const moment = require('moment-timezone');
 import { useAlert } from 'react-alert';
+const moment = require('moment-timezone');
 
 const TopBar = () => {
     

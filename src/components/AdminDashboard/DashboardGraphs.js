@@ -4,8 +4,8 @@ import { LineChart, Line } from 'recharts';
 import {getPatientTelemetryData, getPatients } from '../../actions/adminActions';
 import { useAlert } from 'react-alert';
 import { useSelector, useDispatch } from 'react-redux';
-const moment = require('moment-timezone');
 import {Spinner} from 'react-bootstrap';
+const moment = require('moment-timezone');
 
 const DashboardGraphs = () => {
 

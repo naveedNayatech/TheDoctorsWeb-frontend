@@ -3,12 +3,12 @@ import systolicImg from '../../assets/Images/blood-pressure.png';
 import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
 import { Image, Badge } from 'react-bootstrap';
-const moment = require('moment-timezone');
 import { useSelector, useDispatch } from 'react-redux';
 import { commentOnReading } from '../../actions/HRActions';
 
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 
+const moment = require('moment-timezone');
 
 const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 

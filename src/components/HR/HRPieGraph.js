@@ -4,9 +4,9 @@ import { getPatientTelemetryData} from '../../actions/adminActions';
 import {useAlert} from 'react-alert';
 import {useDispatch, useSelector} from 'react-redux';
 import { getHRPatients } from '../../actions/HRActions';
-const moment = require('moment-timezone');
 import {Spinner} from 'react-bootstrap';
 import { LineChart, Line } from 'recharts';
+const moment = require('moment-timezone');
 
 const HRPieGraph = () => {
   

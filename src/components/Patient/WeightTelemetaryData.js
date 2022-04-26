@@ -3,10 +3,10 @@ import weightImg from '../../assets/Images/scale.png';
 import fatImg from '../../assets/Images/fat.png';
 import bmiImg from '../../assets/Images/bmi.png';
 import { Image, Badge } from 'react-bootstrap';
-const moment = require('moment-timezone');
 import { commentOnReading } from '../../actions/HRActions';
 import {COMMENT_RESET} from '../../constants/HRConstants';
 import { useSelector, useDispatch } from 'react-redux';
+const moment = require('moment-timezone');
 
 const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 

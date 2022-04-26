@@ -5,9 +5,10 @@ import MetaData from '../../layouts/MetaData';
 import { getPatients, patientProfile, assignPatientToDoctor } from '../../actions/adminActions';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import Loader from '../../layouts/Loader';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
+import Select from 'react-select'
 
 const AssignDoctorToPatient = (props) => {
 
@@ -17,127 +18,124 @@ const AssignDoctorToPatient = (props) => {
 
 
     const dispatch = useDispatch();
-    const alert = useAlert();    
-    
+    const alert = useAlert();
+
     const [patientEmail, setPatientEmail] = useState('');
     const [patientId, setPatientId] = useState('');
 
-    const { loading, error, patients} = useSelector(state => state.admin);
-    const { patient} = useSelector(state => state.patientProfile);
-    const {message, error: commonError } = useSelector(state => state.common);
+    const { loading, error, patients } = useSelector(state => state.admin);
+    const { patient } = useSelector(state => state.patientProfile);
+    const { message, error: commonError } = useSelector(state => state.common);
 
     useEffect(() => {
-        
-        if(error){
+
+        if (error) {
             return alert.error(error);
         }
 
-        if(commonError){
+        if (commonError) {
             return alert.error(commonError);
         }
 
         dispatch(getPatients());
 
-        if(patientId){
+        if (patientId) {
             dispatch(patientProfile(patientId))
         }
 
-        if(message){
+        if (message) {
             alert.success(message);
-            props.history.push({pathname: '/doctorProfile', state: {id: id}});
+            props.history.push({ pathname: '/doctorProfile', state: { id: id } });
         }
-        
+
     }, [dispatch, alert, error, patientId, message, commonError]);
 
 
-    const getPatientProfile = (e) => {
-        e.preventDefault();
-        console.log('patient ID is ' + patientId);
+    const getPatientProfile = (patient) => {
+        // e.preventDefault();
+        setPatientId(patient.value)
+        console.log('patient ID is ' + patient.value);
     }
 
     const assignDoctor = (id) => {
         dispatch(assignPatientToDoctor(id, patientId))
     }
 
+    const options = []
+    patients && patients.filter(patients => !patients.assigned_doctor_id).map((patient, index) => (
+        options.push({ value: patient?._id, label: [patient?.firstname, patient?.lastname, patient?.ssn].join(" ")  })
+    ))
+
     return (
         <Fragment>
-        <MetaData title="Assign Patient"/>
-            <Sidebar />    
+            <MetaData title="Assign Patient" />
+            <Sidebar />
 
             <section className="home-section">
-            {/* TopBar */}
-            <TopBar />
+                {/* TopBar */}
+                <TopBar />
 
-            <div className="col-md-0 shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">
-                <div className="row">
-                    <div className="col-md-4">
-                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Patient </span></h5>
-                        <hr />
+                <div className="col-md-0 shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">
+                    <div className="row">
+                        <div className="col-md-4">
+                            <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800' }}>Patient </span></h5>
+                            <hr />
 
-                        <form onSubmit={getPatientProfile}>
-                            <select 
-                                name="patientlist"
-                                className="form-control"
-                                defaultValue={'Select Patient'}
-                                value={patientId} 
-                                onChange={(e) => setPatientId(e.target.value)}
-                                >
-                                <option> Select Patient</option>    
-                                {patients && patients.filter(patients => !patients.assigned_doctor_id).map((patient, index) => (
-                                    <option value={patient?._id} key={index}> {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
-                                ))}    
-                                
-                            </select> 
-                        </form>
-                    </div>
+                            {/* <form onSubmit={getPatientProfile}> */}
+                                <Select
+                                    options={options}
+                                    onChange={getPatientProfile}
+                                />
+                            {/* </form> */}
+                        </div>
 
-                    <div className="col-md-8">
-                        <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800'}}>Details </span></h5>
-                        <hr />
+                        <div className="col-md-8">
+                            <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800' }}>Details </span></h5>
+                            <hr />
 
-                        {patientId && patient && <Fragment>
-                
-                                    <div className="col-md-12">
-                                        <div className="row">
-                                            <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
-                                            <p className="profile-name pl-3 pb-2">{patient?.title} {patient?.firstname} {patient?.lastname} </p>
-                                        </div>
+                            {patientId && patient && <Fragment>
 
-                                        <br />
+                                <div className="col-md-12">
+                                    <div className="row">
+                                        <img src={patientProfileImg} className="patient-profile-card-img" alt="patientProfile" />
+                                        <p className="profile-name pl-3 pb-2">{patient?.title} {patient?.firstname} {patient?.lastname} </p>
+                                    </div>
+
+                                    <br />
 
                                     <div className="row">
-                                        <div className="col-md-4">    
-                                        <span className="profile-label">Email Address: </span>
-                                        <p className="profile-value-text">{patient?.email ? patient?.email : 'N/A'}</p>
+                                        <div className="col-md-4">
+                                            <span className="profile-label">Email Address: </span>
+                                            <p className="profile-value-text">{patient?.email ? patient?.email : 'N/A'}</p>
 
-                                        <span className="profile-label">Address: </span>
-                                        <p className="profile-value-text">{patient?.address} , {patient?.state}</p>
-    
+                                            <span className="profile-label">Address: </span>
+                                            <p className="profile-value-text">{patient?.address} , {patient?.state}</p>
+
                                         </div>
 
-                                        <div className="col-md-4">    
-                                        <span className="profile-label">D.O.B: </span>
-                                        <p className="profile-value-text">{moment(patient?.DOB).format("ll")}</p>
+                                        <div className="col-md-4">
+                                            <span className="profile-label">D.O.B: </span>
+                                            <p className="profile-value-text">{moment(patient?.DOB).format("ll")}</p>
 
-                                        <span className="profile-label">Role: </span>
-                                            <p className="profile-value-text">{patient?.role}</p>                                 
+                                            <span className="profile-label">Role: </span>
+                                            <p className="profile-value-text">{patient?.role}</p>
                                         </div>
 
-                                        <div className="col-md-4">    
-                                        <span className="profile-label">Gender: </span>
+                                        <div className="col-md-4">
+                                            <span className="profile-label">Gender: </span>
                                             <p className="profile-value-text">{patient?.gender}</p>
 
                                             <span className="profile-label">SSN: </span>
-                                            <p className="profile-value-text">{patient?.ssn}</p>                                
+                                            <p className="profile-value-text">{patient?.ssn}</p>
                                         </div>
                                     </div>
-                            </div>
-                            <button className="add-staff-btn mr-5" style={{ float: 'right' }} onClick={() => assignDoctor(id)}> Assign {patient?.title} {patient?.firstname} to Dr. {firstName && firstName} {lastName && lastName} </button>             
-                            
-                        </Fragment>}
+                                </div>
+                                <button className="add-staff-btn mr-5" style={{ float: 'right' }} onClick={() => assignDoctor(id)}> Assign {patient?.title} {patient?.firstname} to Dr. {firstName && firstName} {lastName && lastName} </button>
+
+                            </Fragment>}
+                        </div>
                     </div>
                 </div>
-            </div>
 
             </section>
         </Fragment>

@@ -6,6 +6,7 @@ import { getPatients, patientProfile, assignRPMDeviceToPatient, getDeviceDetails
 import { useAlert } from 'react-alert';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import { Link, useHistory } from 'react-router-dom';
+import Select from 'react-select';
 
 const RPMDeviceBasicInformation = (props) => {
 
@@ -53,6 +54,17 @@ const RPMDeviceBasicInformation = (props) => {
     const AssignDeviceToPatient = () => {
         dispatch(assignRPMDeviceToPatient(deviceDetails?._id, patientId));
     }
+
+    const getPatientProfile = (patient) => {
+        // e.preventDefault();
+        setPatientId(patient.value)
+        console.log('patient ID is ' + patient.value);
+    }
+
+    const options = []
+    patients && patients.map((patient, index) => (
+        options.push({ value: patient?._id, label: [patient?.firstname, patient?.lastname, patient?.ssn].join(" ")  })
+    ))
     
     return (
         <Fragment>
@@ -109,7 +121,7 @@ const RPMDeviceBasicInformation = (props) => {
                 <div className="row">
                     <div className="col-md-4">
                         <label className="form-label mt-3">Select Patient</label>
-                        <select 
+                        {/* <select 
                             name="patientlist"
                             className="form-control"
                             defaultValue={'Select Patient'} 
@@ -120,7 +132,11 @@ const RPMDeviceBasicInformation = (props) => {
                                     {patients && patients.map((patient, index) => (
                                         <option value={patient?._id} key={index} > {patient?.firstname} {patient?.lastname} {patient?.ssn} </option>
                                     ))}    
-                        </select>
+                        </select> */}
+                           <Select
+                                    options={options}
+                                    onChange={getPatientProfile}
+                                />
                     </div>
 
                     {/* Patient Profile */}
