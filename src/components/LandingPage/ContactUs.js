@@ -32,19 +32,19 @@ const ContactUs = () => {
               <div className="address">
                 <img src={PlaceholderImg} />
                 <h4>Location:</h4>
-                <p>KIST Hospital Road, 44700</p>
+                <p>The Doctors Web</p>
               </div>
 
               <div className="email">
                 <img src={GmailImg} />
                 <h4>Email:</h4>
-                <p>thedoctorsweb@example.com</p>
+                <p>support@thedoctorsweb.com</p>
               </div>
 
               <div className="phone">
                 <img src={PhoneCallImg} />
                 <h4>Call:</h4>
-                <p>+1 55234 5112 33</p>
+                <p>+1 813 606 4008</p>
               </div>
             </div>
           </div>

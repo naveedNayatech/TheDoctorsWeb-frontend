@@ -51,7 +51,7 @@ const TopBar = () => {
                     </div>
 
                         {/* Notifications */}
-                        <div className="right-div">
+                        <div className="right-div" style={{marginLeft: '20px'}}>
                         <div className="notification-dropdown">
                         <Dropdown className="admin-topbar-dropdown">
                             <Dropdown.Toggle variant="link" id="dropdown-basic">

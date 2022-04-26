@@ -79,8 +79,8 @@ const Header = () => {
   <div id="topbar" className="d-flex align-items-center fixed-top">
     <div className="container d-flex justify-content-between">
       <div className="contact-info d-flex align-items-center">
-        <i className='bx bx-mail-send'></i> <a href="mailto:contact@example.com">thedoctorsweb@example.com</a>
-        <i className='bx bx-phone'></i> +1 5567 23453 21
+        <i className='bx bx-mail-send'></i> <a href="mailto:contact@example.com">support@thedoctorsweb.com</a>
+        <i className='bx bx-phone'></i> +1 813 606 4002
       </div>
       <div className="d-none d-lg-flex social-links align-items-center">
         <a href="#" className="facebook"><i className='bx bxl-facebook'></i></a>

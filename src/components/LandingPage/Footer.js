@@ -13,13 +13,13 @@ const Footer = () => {
                     <div className="footer-info">
                     <h3>THEDOCTORSWEB</h3>
                     <p>
-                        KIST Hospital Road<br />
-                        44700 KTM, NEPAL<br /><br />
-                        <strong>Phone:</strong> +1 5589 55488 55<br />
-                        <strong>Email:</strong> prcare@example.com<br />
+                        The Doctors Web<br />
+                        Tampa, FL USA<br /><br />
+                        <strong>Phone:</strong> +1 813 606 4002<br />
+                        <strong>Email:</strong> support@ethedoctorsweb.com<br />
                     </p>
                     <div className="social-links mt-3">
-                        <a href="https://www.facebook.com/groups/577400563258704" className="facebook"><i className="bx bxl-facebook"></i></a>
+                        <a href="#" className="facebook"><i className="bx bxl-facebook"></i></a>
                         <a href="#" className="instagram"><i className="bx bxl-instagram"></i></a>
                         <a href="#" className="twitter"><i className="bx bxl-twitter"></i></a>
                         <a href="#" className="google-plus"><i className="bx bxl-skype"></i></a>  

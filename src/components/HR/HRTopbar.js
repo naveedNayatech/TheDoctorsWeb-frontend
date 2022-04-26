@@ -16,7 +16,7 @@ const TopBar = ({displayTimer, patientid}) => {
 
     // start/stop timer
     const [seconds, setSeconds] = useState(0);
-    const [minutes, setMinutes] = useState(10);
+    const [minutes, setMinutes] = useState(0);
     const [running, setRunning] = useState(false);
 
 
