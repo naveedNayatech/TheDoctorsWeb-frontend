@@ -39,7 +39,7 @@ const PatientsList = () => {
     const { hrs} = useSelector(state => state.hrslist);
     const { totalPatients } = useSelector(state => state.adminStat);
     const [keyword, setKeyword] = useState('');
-    const [searchBy ,setSearchBy] = useState('');
+    const [searchBy ,setSearchBy] = useState('firstname');
     const [isSearch, setIsSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(10);

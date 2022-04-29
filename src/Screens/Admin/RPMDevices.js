@@ -26,7 +26,7 @@ const RPMDevices = (props) => {
     const [currentPage, setCurrentPage] = useState(1); //for pagination, current page
     const [resPerPage, setResPerPage] = useState(10); //for pagination, how many responses we want to show
     const [search, setSearch] = useState(''); 
-    const [searchBy, setSearchBy] = useState('');
+    const [searchBy, setSearchBy] = useState('_id');
 
     const [smShow, setSmShow] = useState(false); //small confirm modal
 
@@ -159,6 +159,7 @@ const RPMDevices = (props) => {
                             onChange={e => setSearchBy(e.target.value)}
                             >
                                 <option value="undefined">Search device By </option>
+                                <option value="_id">Device ID</option>
                                     <option value="imei">IMEI</option>
                                     <option value="modelNumber">Model Number</option>
                                     <option value="deviceType">Device Type</option>

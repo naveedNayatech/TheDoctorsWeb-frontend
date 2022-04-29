@@ -132,7 +132,7 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <br />
                     {patient?.assigned_hr_id ? <>
                         <span className="profile-label">HR Name</span>
-                        <p className="patient-profile-card-text">Dr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
+                        <p className="patient-profile-card-text">Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
                     </> : <>
                         <span className="profile-label">HR Not Assigned Yet</span>
                     </>}
