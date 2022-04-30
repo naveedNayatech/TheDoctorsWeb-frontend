@@ -18,10 +18,17 @@ const HRPatientInfo = ({patient}) => {
  const dispatch = useDispatch();   
  const alert = useAlert();
 
- const input = new Date();
- const output = moment(input, "DD-MM-YY");
- let startDate = output.startOf('month').format('L');
- let endDate = output.endOf('month').format('L');
+//  const input = new Date();
+//  const output = moment(input, "DD-MM-YY");
+//  let startDate = output.startOf('month').format('L');
+//  let endDate = output.endOf('month').format('L');
+
+
+ var check = moment(new Date(), 'YYYY/MM/DD');
+
+ let month = check.format('M');
+ month = Number(month)
+ var year = check.format('YYYY');
 
 //  Careplan Fields
 const [carePlanShow ,setCarePlanShow] = useState(false);
@@ -69,7 +76,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     }
 
     dispatch(getPatientCarePlan(patientid));
-    dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
+    dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
     dispatch(getRemainingReadings(patientid));
 
     },[dispatch, careplanerror, isSuccessful, carePlanAdded]);

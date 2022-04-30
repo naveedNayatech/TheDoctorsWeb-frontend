@@ -15,6 +15,8 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
         dispatch(removeAssignedDevice(device, patientid));
     }
     const { totalTime } = useSelector(state => state.totalTimeSpent);
+
+    
     useEffect(() => {
         var check = moment(new Date(), 'YYYY/MM/DD');
 

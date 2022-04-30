@@ -36,7 +36,13 @@ const TimeReport = () => {
 	}, [dispatch])
 
     const submitHandler = () => {
-        dispatch(getTimeReport(patientId, id, startDate, endDate));
+        var check = moment(new Date(), 'YYYY/MM/DD');
+
+        let month = check.format('M');
+        month = Number(month)
+        var year = check.format('YYYY');
+
+        dispatch(getTimeReport(patientId, id, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
     }
 
     const resetData = () => {
@@ -164,9 +170,9 @@ const TimeReport = () => {
 
 
                                 {targets.map((trgt, index) => ( 
-                                 <Fragment>
+                                 <div key={index}>
                                      <br/>
-                                     <p className="reportsHeading">Patient Details:{}</p> 
+                                     <p className="reportsHeading">{index + 1}</p> 
                                      <div className="row">
                                          <div className="col-md-3">
                                             <label className="form-label">Name: </label> <label className="report-label">{trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
@@ -203,7 +209,7 @@ const TimeReport = () => {
                                             <label className="bubble bubble-alt bubble-green">{trgt?.conclusion}</label>
                                          </div>
                                      </div>
-                                 </Fragment>
+                                 </div>
                              ))}
 
                              </Fragment> : ''}

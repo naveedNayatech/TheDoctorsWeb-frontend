@@ -95,8 +95,6 @@ export const commentOnReading = (readingId, hrId, comment) => async (dispatch) =
 // Time Spent on Patient
 export const timeSpentOnPatient = (patientId, hrId, values) => async (dispatch) => {
     try {
-        const token = JSON.parse(localStorage.getItem('token'));
-
         const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
             assigned_patient_id: patientId,
             timeSpentInMinutes: values.timespent,
