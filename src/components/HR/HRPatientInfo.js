@@ -226,11 +226,19 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                                     <span className="patient-profile-col-heading">Physician Information</span>                                 
                                         <hr />
                                     {patient?.assigned_doctor_id ? <>
-                                        <span className="profile-label">Name</span>
+                                        <span className="profile-label">Doctor</span>
                                     <p className="patient-profile-card-text">
-                                        {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
+                                        Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
                                     </> : <>
                                         <small>No doctor assigned yet</small>
+                                    </>}
+
+                                    {patient?.assigned_hr_id ? <>
+                                        <span className="profile-label">HR</span>
+                                    <p className="patient-profile-card-text">
+                                        Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
+                                    </> : <>
+                                        <small>No hr assigned yet</small>
                                     </>}
                                     </div>
 

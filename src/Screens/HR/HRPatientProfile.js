@@ -208,9 +208,7 @@ const HRPatientProfile = (props) => {
                                 <Tab.Pane eventKey="second">
                                 {deviceData && deviceData.map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
-                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false} />
-                                        </Fragment> : ''}   
+                                        <WeightTelemetaryData healthData={devicedata} isAdmin={false} />    
                                     </div>
                                 ))}
                                 </Tab.Pane>
