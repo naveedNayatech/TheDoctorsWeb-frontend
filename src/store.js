@@ -74,7 +74,7 @@ const middleware = [thunk];
 
 let mode = "production"
 const devTools =
-  mode === "development"
+  mode === "production"
     ? applyMiddleware(...middleware)
     : composeWithDevTools(applyMiddleware(...middleware));
 

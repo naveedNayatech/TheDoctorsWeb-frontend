@@ -42,7 +42,7 @@ const TimeReport = () => {
         month = Number(month)
         var year = check.format('YYYY');
 
-        dispatch(getTimeReport(patientId, id, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
+        dispatch(getTimeReport(patientId, id, startDate, endDate));
     }
 
     const resetData = () => {
