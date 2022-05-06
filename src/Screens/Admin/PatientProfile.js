@@ -217,15 +217,14 @@ const PatientProfile = (props) => {
                                 </div>
                                 )} 
                                 </Tab.Pane>
-                                
-                                
+        
 
                                 <Tab.Pane eventKey="second">
                                 {deviceData && deviceData.map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
-                                            <WeightTelemetaryData healthData={devicedata} isAdmin={true} />
-                                        </Fragment> : ''}   
+                                         <Fragment>
+                                            <WeightTelemetaryData healthData={devicedata} count={Count} isAdmin={true} />
+                                        </Fragment>   
                                     </div>
                                 ))}
                                 </Tab.Pane>

@@ -12,9 +12,9 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const dispatch = useDispatch();
 
-    console.log('isAdmin is ' + isAdmin);
+
     const { hr} = useSelector(state => state.hrAuth);
-    const { isAuthenticated, staff} = useSelector(state => state.staffAuth);
+    const { staff} = useSelector(state => state.staffAuth);
 
     let telemetaryData = healthData?.telemetaryData;
     let patientInfo = healthData?.assigned_patient_id;
@@ -35,11 +35,12 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 
   return <Fragment>
       <br /><br /> 
-      <div className="row">
+      {telemetaryData?.wt && <>
+        <div className="row">
       <div className="col-md-1">
           <Image src={weightImg} className="systolic-image" />    
       </div>
-      
+
       <div className="col-md-3">
           <span className="profile-label">Weight : {telemetaryData?.wt}</span>
           {telemetaryData?.wt >= 40 && telemetaryData?.wt <= 60 ? <p className="normalBP">Under Weight</p> : telemetaryData?.wt >= 61 && telemetaryData?.wt <= 80 ? 
@@ -137,8 +138,9 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
                         </p>
                         </div>
             </Fragment> : ''}
-
-             <br/> 
+      
+      </> }
+        <br/> 
     </Fragment>
 };
 
