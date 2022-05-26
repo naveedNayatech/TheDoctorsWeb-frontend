@@ -556,11 +556,16 @@ export const removePatientsHR = (patientId) => async(dispatch) => {
     }
 }
 
-export const removeDoctorFromHR = (hrId) => async(dispatch) => {
+export const removeDoctorFromHR = (hrId, drId) => async(dispatch) => {
     try {
         const res = await axios.post(`${Prod01}/hr/removeDr`,{
             hrId: hrId
         }, );
+
+        await axios.post(`${Prod01}/doctor/removeHr`, {
+            drId: drId
+        });
+
 
         if(res){
             dispatch({
@@ -710,6 +715,10 @@ export const assignDoctorToHR = (hrId, doctorId) => async(dispatch) => {
        const { data } = await axios.put(`${Prod01}/hr/edit/${hrId}`, {
            assigned_doctor_id: doctorId
        });
+
+       await axios.put(`${Prod01}/doctor/edit/${doctorId}`, {
+        assigned_hr_id: hrId
+    })
    
        dispatch({
            type: ASSIGN_DOCTOR_TO_HR_SUCCESS,

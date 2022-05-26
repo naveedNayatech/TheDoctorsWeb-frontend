@@ -11,7 +11,7 @@ const StaffProtectedRoute = ({isStaff, component: Component, ...rest}) => {
             {loading === false && (
                 <Route {...rest} render={props => {
                     if(isAuthenticated === false){
-                        return <Redirect to="/stafflogin" />
+                        return <Redirect to="/doctor/login" />
                     }
 
                     if(isStaff === true && staff.role === 'Doctor'){

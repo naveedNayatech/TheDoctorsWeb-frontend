@@ -209,10 +209,33 @@ export const getTimeReportByHR = (hrId, startDate, endDate) => async (dispatch) 
             type: TIME_REPORT_REQUEST
         });
 
-        const token = JSON.parse(localStorage.getItem('token'));
-
         const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
             hrId: hrId,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        dispatch({
+            type: TIME_REPORT_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: TIME_REPORT_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+export const getTimeReportByDR = (drId, startDate, endDate) => async (dispatch) => {
+    try {
+        dispatch({
+            type: TIME_REPORT_REQUEST
+        });
+
+        const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
+            drId: drId,
             startDate: startDate,
             endDate: endDate
         });

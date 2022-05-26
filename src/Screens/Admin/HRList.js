@@ -113,10 +113,10 @@ const HRList = () => {
                                 <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/hrProfile", state: {hr: hr}}}> {hr?.firstname} {hr?.lastname} <p style={{color: 'gray'}}>({hr?.role})</p> </Link></td>
                                 <td>{moment(hr?.DOB).format("ll")}</td>    
                                 <td style={{wordWrap: 'break-word'}}>{hr?.email}</td>    
-                                {hr?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="warning text-white" className="female-tag">Female</Badge></td>}    
-                                {hr?.assigned_doctor_id ? <td style={{backgroundColor: '#007673', color: '#FFF'}}>
+                                {hr?.gender === 'male' ? <td><Badge bg="primary text-white" className="male-tag">Male</Badge></td> : <td><Badge bg="warning text-white" className="female-tag">Female</Badge></td>}    
+                                {hr?.assigned_doctor_id ? <td style={{fontWeight: 'bold', color: '#23408e'}}>
                                     Dr. {hr?.assigned_doctor_id?.firstname} {hr?.assigned_doctor_id?.lastname} 
-                                    <p style={{ wordWrap: 'break-word'}}> {hr?.assigned_doctor_id?.email}</p></td> : 
+                                    </td> : 
                                 <td>N/A</td>}
                                 {hr?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>

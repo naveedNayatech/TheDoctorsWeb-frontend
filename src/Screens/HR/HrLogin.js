@@ -55,8 +55,8 @@ const HrLogin = ({ history }) => {
 						<div className="row content">
 								
 							<div className="col-md-12" >
-								<h3 className="signin-text">HR <span style={{color: '#F95800'}}> Sign in</span></h3>
-								<small style={{color: 'dodgerblue'}}>Enter valid credentials to log into your account.</small>
+								<h3 className="signin-text">HR <span style={{color: '#ed1b24'}}> Sign in</span></h3>
+								<small style={{color: '#385399'}}>Enter valid credentials to log into your account.</small>
 
 								<hr />
 								<Formik initialValues={{
@@ -93,7 +93,7 @@ const HrLogin = ({ history }) => {
 												<br/><br/>
 												
 
-												<div className="row-display">
+												<div className="row" style={{float: 'right'}}>
 													<button className="reset-btn" type="reset"><i className='bx bx-reset' ></i></button>
 													<button className="submit-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Login'}</button>
 												</div>
@@ -101,8 +101,8 @@ const HrLogin = ({ history }) => {
 
 											<br/><br/><br/>
 												<div className="row-display">
-													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
-													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Doctor</Link></small>
+													<Link to="/" style={{textDecoration: 'none', color: '#385399'}}><small>TheDoctorWeb.com</small></Link>
+													<small>Switch to <Link to="/doctor/login" style={{textDecoration: 'none', color: '#385399'}}>Doctor</Link></small>
 												</div>
 										</div>
 									)}

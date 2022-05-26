@@ -25,7 +25,7 @@ const DoctorAddPatient = (props) => {
 
         if(message) {
             alert.success(message);
-            props?.history.push('/staffPatients');   
+            props?.history.push('/doctor/patients');   
         }
 
     }, [dispatch, alert, error, message]);

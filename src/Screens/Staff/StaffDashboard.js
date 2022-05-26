@@ -4,18 +4,19 @@ import MetaData from '../../layouts/MetaData';
 import StaffPieGraph from '../../components/Staff/StaffPieGraph';
 import TopBar from '../../components/Staff/TopBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDoctorPatients } from '../../actions/adminActions';
+import { getDoctorPatients, doctorProfile } from '../../actions/adminActions';
 import folderImg from '../../assets/Images/folder.png';
 import { Link } from 'react-router-dom';
-import { Badge, Form } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 import Loader from '../../layouts/Loader';
-import patientProfileImg from '../../assets/Images/patientProfile.png';
 import moment from 'moment';
+import patientProfileImg from "../../assets/Images/patientProfile.png";
 
 const StaffDashboard = (props) => {
 
     const { loading, staff, isAuthenticated} = useSelector(state => state.staffAuth);
     const { loading: patientsLoading, doctorpatients } = useSelector(state => state.docPatients);
+    const { doctor } = useSelector(state => state.doctorProfile);
     
     let id = staff._id;
 
@@ -23,10 +24,11 @@ const StaffDashboard = (props) => {
 
     useEffect(() => {	
 		if(isAuthenticated === false) {
-			props?.history?.push("/stafflogin");
+			props?.history?.push("/doctor/login");
 		}
 
         dispatch(getDoctorPatients(id));
+        dispatch(doctorProfile(id));
 
 	}, [isAuthenticated])
 
@@ -41,33 +43,33 @@ const StaffDashboard = (props) => {
                 <TopBar />
 
                 <div className="container row">
-                    <div className="col-md-12">
+                    <div className="col-md-9">
                         <div className="home-content">
                             <StaffPieGraph />
                         </div>    
                     </div>
 
-                    {/* <div className="col-md-3 alerts-section rounded-card">
-                        HR Details   
-                         <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" /> 
-                         <p className="patient-profile-name"> Alex Adeel</p>
-                         <p className="patient-profile-name"> adeelahmad@gmail.com</p>
-                         <p className="patient-profile-name"> +844-569-558</p>
-
-                    </div> */}
+                    <div className="col-md-3 alerts-section rounded-card">
+                        <h5 className="text-center">HR Details</h5><hr/>
+                        <br/>   
+                        {doctor && doctor?.assigned_hr_id ? <>
+                            <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" /> 
+                            <p className="text-center mt-3" style={{fontSize: "12px", wordWrap: 'break-word'}}>HR. {doctor?.assigned_hr_id?.firstname} {doctor?.assigned_hr_id?.lastname}</p>
+                            <p className="text-center mt-3" style={{fontSize: "12px", wordWrap: 'break-word'}}> {doctor?.assigned_hr_id?.email}</p>
+                            <p className="text-center mt-3" style={{fontSize: "12px", wordWrap: 'break-word'}}> {doctor?.assigned_hr_id?.mobileNo}</p>
+                        </> : <> <small style={{fontSize: "12px", marginLeft: "50px"}}>No HR Assigned yet</small></>}
+                    </div>
                 </div>
-                
-
             <div>
 
             <br />
             {patientsLoading ? <Loader /> : <Fragment>
-                    <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
+                    <div className="shadow-lg p-3 mb-5 mr-4 ml-4">        
                         <div className="home-content">
                             <div className="container">
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#F95800'}}> ({doctorpatients && doctorpatients.length}) </span></h5> 
+                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#ed1b24'}}> ({doctorpatients && doctorpatients?.length < 10 ? '0'+doctorpatients?.length : doctorpatients?.length}) </span></h5> 
                                         <hr />
                                     </div>
                                 </div> 
@@ -83,14 +85,14 @@ const StaffDashboard = (props) => {
                                             <th>Email</th>
                                             <th>Acc Status</th>
                                             <th>Physician</th>
-                                            <th>Devices Assigned</th>
+                                            <th>Total Devices Assigned</th>
                                         </tr> 
                                         </thead>
                                         <tbody>
                                         {doctorpatients && doctorpatients.map((patient, index) => ( 
                                             <tr align="center" key={index}>
                                             
-                                            <td><Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                            <td><Link className="link" to={{ pathname: "/doctor/patient/profile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
                                             
                                             <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
                                             
@@ -102,12 +104,12 @@ const StaffDashboard = (props) => {
                                             </td>}
                                             
                                             {patient?.assigned_doctor_id ? <>
-                                                <td>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                                <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
                                             </> : <>
                                             <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                             </>}
 
-                                            {patient?.assigned_devices ? <td>{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
+                                            {patient?.assigned_devices ? <td>0{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
                                             
                                         </tr> 
                                         ))}
@@ -128,14 +130,8 @@ const StaffDashboard = (props) => {
                                 </div>
                             </div>
                          </Fragment> }
-
-            </div>
-
-             
-
-                
-            </section>
-
+                    </div>
+                </section>
         </Fragment>
     )
 }

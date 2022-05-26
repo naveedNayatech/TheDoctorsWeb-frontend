@@ -29,7 +29,7 @@ const TimeReport = () => {
 
     useEffect(() => {
 		if(error) {
-			alert.error("/hrLogin");
+			alert.error(error);
 		}
 
         dispatch(getHRPatients(id));

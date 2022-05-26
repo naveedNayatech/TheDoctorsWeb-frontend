@@ -94,15 +94,15 @@ function App() {
         <ProtectedRoute exact path='/Admin/Inventory/Download' isAdmin={true} component={CompleteInventoryList} />
         <ProtectedRoute exact path="/Credentials" isAdmin={true} component={AdminResetPassword} />
          {/* Staff Routes */}
-        <Route exact path="/stafflogin" component={StaffLogin} />
-        <StaffProtectedRoute exact path="/Dashboard" isStaff={true} component={StaffDashboard} />
+        <Route exact path="/doctor/login" component={StaffLogin} />
+        <StaffProtectedRoute exact path="/doctor/dashboard" isStaff={true} component={StaffDashboard} />
         <StaffProtectedRoute exact path="/staffProfile" component={StaffProfile} />
-        <StaffProtectedRoute exact path="/staffPatients" component={StaffPatient} />
-        <StaffProtectedRoute exact path="/staffPatientProfile" component={StaffPatientProfile} />
+        <StaffProtectedRoute exact path="/doctor/patients" component={StaffPatient} />
+        <StaffProtectedRoute exact path="/doctor/patient/profile" component={StaffPatientProfile} />
         <StaffProtectedRoute exact path="/doctor/Addpatient" component={DoctorAddPatient} />
         <StaffProtectedRoute exact path="/doctor/careplan" component={DocCareplanList} />
         {/* HR Routes */}
-        <Route exact path="/hrLogin" component={HrLogin} />
+        <Route exact path="/hr/login" component={HrLogin} />
         <HRProtectedRoute exact path="/HrDashboard" isHR={true} component={HRDashboard} />
         <HRProtectedRoute exact path="/HrPatients" isHR={true} component={HRPatientsList} />
         <HRProtectedRoute exact path="/hrpatientProfile" isHR={true} component={HRPatientProfile} />

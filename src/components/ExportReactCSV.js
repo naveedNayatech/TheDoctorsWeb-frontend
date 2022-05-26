@@ -7,7 +7,7 @@ export const ExportReactCSV = ({csvData, fileName}) => {
     let result = csvData.map((patient, index) => {
         return {
             'Sr No':index + 1,
-            'initial Month':'February',
+            'initial Month':patient?.initialsetup,
             'First Name':patient?.firstname,
             'Last Name': patient.lastname,
             'DOB': moment(patient?.DOB).tz("America/New_York").format("ll"),

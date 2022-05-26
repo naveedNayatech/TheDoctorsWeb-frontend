@@ -2,8 +2,8 @@ import React, {useEffect, useState, Fragment} from 'react';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
-import { getPatients, patientProfile, getHrLists } from '../../actions/adminActions';
-import { getTimeReport, getTimeReportByHR } from '../../actions/HRActions';
+import { getPatients, patientProfile, getHrLists, getDoctors } from '../../actions/adminActions';
+import { getTimeReport, getTimeReportByHR, getTimeReportByDR } from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -19,11 +19,13 @@ const AdminTimeReport = () => {
     const { patient } = useSelector(state => state.patientProfile);
     const { loading, targets, totalTime} = useSelector(state => state.target);
     const { hrs } = useSelector(state => state.hrslist);
+    const { doctors } = useSelector(state => state.doctor);
 
     const [patientId, setPatientId] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [hrId, setHRId] = useState('');
+    const [drId, setDRId] = useState('');
     const [reportBy, setReportBy] = useState('patient');
 
     useEffect(() =>{
@@ -34,6 +36,7 @@ const AdminTimeReport = () => {
         }
 
         dispatch(getHrLists());
+        dispatch(getDoctors(10, 1));
 
     }, [dispatch, patientId])
 
@@ -41,8 +44,11 @@ const AdminTimeReport = () => {
         if(reportBy === 'patient'){
             dispatch(getTimeReport(patientId, patient?.assigned_hr_id?._id, startDate, endDate)); 
         }
-        else {
+        if(reportBy === 'hr'){
             dispatch(getTimeReportByHR(hrId, startDate, endDate)); 
+        }
+        else {
+            dispatch(getTimeReportByDR(drId, startDate, endDate)); 
         }
     }
 
@@ -62,7 +68,7 @@ const AdminTimeReport = () => {
             <div className="home-content">
 
             <div className="row-display">
-                <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report</span></h5>
+                <h5 className="pt-2 mt-2">Time Spent <span style={{color: '#ed1b24'}}>Report</span></h5>
 
                 <div className="row-display">
                     <Link to="/adminDashboard">
@@ -78,7 +84,9 @@ const AdminTimeReport = () => {
                     </Link>
                 </div>   
             </div>
-            <hr />
+            <br />
+
+            <p className='text-center'>Generate Time Report By:</p>
 
             <div className="row justify-content-center">
                 <button className={`btn + ${reportBy === 'patient' ?'submit-btn shadow-none' : 'link'} m-3`} 
@@ -89,8 +97,13 @@ const AdminTimeReport = () => {
                     className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
                     onClick={() => setReportBy("hr")}> By HR
                 </button>
+
+                <button 
+                    className={`btn + ${reportBy === 'doctor' ? 'submit-btn shadow-none' : 'link'} m-3`}
+                    onClick={() => setReportBy("doctor")}> By Doctor
+                </button>
             </div>
-           
+           <hr />
 
             {/* first row */}
             <div className="row">
@@ -109,7 +122,8 @@ const AdminTimeReport = () => {
                         <option key={index} value={patient._id} > {patient.firstname} {patient.lastname} -  {moment(patient.DOB).format("ll")} </option>
                     ))}
                     </select>                
-                </> : <>
+                </> : reportBy === 'hr' ? <>
+                    
                 <label htmlFor="from">Select HR </label>
                 <select 
                       className="form-control"
@@ -119,7 +133,20 @@ const AdminTimeReport = () => {
 
                       <option>Select HR</option>
                       {hrs && hrs.map((hr, index) => (
-                              <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname} {hr?.npinumber} </option>
+                              <option value={hr?._id} key={index}> HR. {hr?.firstname} {hr?.lastname} {hr?.npinumber} </option>
+                          ))} 
+                </select>                        
+                </>
+                 : <>
+                <label htmlFor="from">Select Doctor </label>
+                <select 
+                      className="form-control"
+                      value={drId}
+                      onChange={(e) => setDRId(e.target.value)}
+                      >
+                      <option>Select Doctor</option>
+                      {doctors && doctors.map((doctor, index) => (
+                              <option value={doctor?._id} key={index}> Dr. {doctor?.firstname} {doctor?.lastname} {doctor?.npinumber} </option>
                           ))} 
                 </select>                        
                 </>}
@@ -169,10 +196,10 @@ const AdminTimeReport = () => {
                                  <br /><hr />
                                  <div className="row-display">
                                      <div className="col-md-4">
-                                         <h5>Query <span style={{color: '#007673'}}>Result</span></h5>
+                                         <h5>Search <span style={{color: '#ed1b24'}}>Result</span></h5>
                                      </div>
  
-                                     <span>Total Time Spent: <span style={{color: '#007673', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
+                                     <span>Total Time Spent: <span style={{color: '#23408e', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
  
  
                                      <div className="row-display">
@@ -194,7 +221,7 @@ const AdminTimeReport = () => {
                                 {targets && targets.map((trgt, index) => ( 
                                   <div className="m-5">
                                       <br/>
-                                      <p className="reportsHeading">0{index + 1}</p> 
+                                      <p className="reportsHeading">{index + 1}</p> 
                                       <div className="row-display">
                                           <div>
                                              <label className="profile-label">Patient Name: </label> 
@@ -227,7 +254,7 @@ const AdminTimeReport = () => {
                                      </div>
  
                                           <div className="col-md-12">
-                                             <label className="bubble bubble-alt bubble-green">{trgt?.conclusion}</label>
+                                             <label className="bubble bubble-alt bubble-green"><b>Notes : </b> {trgt?.conclusion}</label>
                                           </div>
                                       
                                       <br /><br />

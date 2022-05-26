@@ -150,7 +150,7 @@ const PatientsList = () => {
 
                         <div className="row-display">
                             
-                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#006762'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
+                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#ed1b24'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
                             
 
                             <div className="mt-2">
@@ -184,7 +184,7 @@ const PatientsList = () => {
                             <div
                             className="row-display"
                             style={{
-                                backgroundColor: '#D3D3D3',
+                                backgroundColor: '#CCCCCC',
                                 padding: '10px',
                                 borderRadius: '10px',
                             }}>
@@ -255,7 +255,7 @@ const PatientsList = () => {
                                     </td>}
                                         
                                      {patient?.assigned_doctor_id ? <>
-                                        <td style={{backgroundColor: '#007673', color: '#FFF'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                        <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
                                     </> : <>
                                     <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                     </>}

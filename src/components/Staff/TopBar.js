@@ -29,14 +29,14 @@ const TopBar = () => {
             <nav>
                 <div className="sidebar-button">
                     <i className="bx bx-menu sidebarBtn"></i>
-                    <span className="dashboard">Doctor <span style={{color: '#F95800'}}>Dashboard</span></span>    
+                    <span className="dashboard">Doctor <span style={{color: '#ed1b24'}}>Dashboard</span></span>    
                 </div>
 
 
                 <div style={{marginLeft: '50%'}} className="profile-details btn dropdown-toggle" type="button" 
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" area-expanded="false">
                     <img src="https://i.stack.imgur.com/l60Hf.png" alt="profileimg" />
-                <span className="admin-name">{isAuthenticated == true && staff && <Fragment>{staff?.firstname} {staff?.lastname}</Fragment>}</span>
+                <span className="admin-name">{isAuthenticated == true && staff && <Fragment>Dr. {staff?.firstname} {staff?.lastname}</Fragment>}</span>
                 
                 </div>
 

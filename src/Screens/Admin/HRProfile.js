@@ -2,7 +2,7 @@ import React, {useState, useEffect, Fragment} from 'react';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
-import Loader from '../../layouts/Loader';
+import defaultImg from '../../assets/Images/defaultUser.png';
 import moment from 'moment';
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { removePatientsHR, removeDoctorFromHR } from '../../actions/adminActions
 import { useAlert } from 'react-alert';
 import folderImg from '../../assets/Images/folder.png';
 import {Badge, Table, Modal } from 'react-bootstrap';
+
 
 const HRProfile = (props, history) => {
 
@@ -56,7 +57,7 @@ const HRProfile = (props, history) => {
     }
 
   const removeDoctor = () => {
-      dispatch(removeDoctorFromHR(hrId))
+      dispatch(removeDoctorFromHR(hrId, doctor._id))
       setDoctorDetails("");
   }
 
@@ -73,7 +74,7 @@ const HRProfile = (props, history) => {
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-6 col-md-8 col-sm-12 col-xs-12">
-                        <h5 className="pt-2 mt-2">HR <span style={{color: '#F95800'}}> Profile </span></h5> 
+                        <h5 className="pt-2 mt-2">HR <span style={{color: '#ed1b24'}}> Profile </span></h5> 
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -96,7 +97,7 @@ const HRProfile = (props, history) => {
                         <div className="row">
                             <div className="col-md-3">
                                 <div>
-                                    <img src='https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png' className="img-responsive profile-card-img"/>     
+                                    <img src={defaultImg} className="img-responsive profile-card-img"/>     
                                     <p className="profile-name">{hrDetails?.firstname} {hrDetails?.lastname} </p>
                                     <p className="profile-value-text text-center">{moment(hrDetails?.createdAt).format("lll")}</p>
                                 </div>
@@ -135,10 +136,10 @@ const HRProfile = (props, history) => {
                             </div>
 
                             <div className="col-md-3">
-                                <h5 className="text-cemter">Assigned <span style={{color: '#F95800'}}> Doctor Details </span></h5> 
+                                <h5 className="text-cemter">Assigned <span style={{color: '#ed1b24'}}> Doctor Details </span></h5> 
                                 {doctorDetails ? doctorDetails && <>
                                     <div>
-                                    <img src={'https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png'} className="img-responsive profile-card-img"/>
+                                    <img src={defaultImg} className="img-responsive profile-card-img"/>
                                     <p className="profile-name">Dr. {doctorDetails?.firstname} {doctorDetails?.lastname} </p>
                                     <p className="profile-value-text text-center">{doctorDetails?.email}</p>
                                     <p className="profile-value-text text-center">{doctorDetails?.phone1 ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctorDetails?.phone1} </span> : 'N/A'}</p>

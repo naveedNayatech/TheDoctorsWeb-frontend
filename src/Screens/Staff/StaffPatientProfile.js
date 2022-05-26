@@ -4,38 +4,44 @@ import TopBar from '../../components/Staff/TopBar';
 import MetaData from '../../layouts/MetaData';
 import Loader from '../../layouts/Loader';
 import {useSelector, useDispatch} from 'react-redux';
-import { patientProfile, getPatientTelemetryData, getRemainingReadings} from '../../actions/adminActions';
+import { patientProfile, getPatientTelemetryData, getRemainingReadings, sortTelemetartData} from '../../actions/adminActions';
 import { getPatientCarePlan } from '../../actions/HRActions';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
 import moment from 'moment';
 import { COMMENT_RESET } from '../../constants/HRConstants';
-import { Badge, Tabs, Tab } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Badge, Tab, Row, Col, Nav, Image, Accordion } from 'react-bootstrap';
+import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
+import Pagination from 'react-js-pagination';
+import PatientProfileGraph from '../../components/PatientProfileGraph';
 
 const StaffPatientProfile = (props) => {
     
     const dispatch = useDispatch();
     const alert = useAlert();
 
-
     let patientid = props?.location?.state?.patientid;
     let readingmonth;
 
     const { loading, error, patient, isUpdated} = useSelector(state => state.patientProfile);
-    const {loading: commentLoading, commentSuccess} = useSelector(state => state.comments);
-    const { loading: deviceDataLoading, deviceData } = useSelector(state => state.deviceData);
+    const { commentSuccess} = useSelector(state => state.comments);
+    const { deviceData, Count } = useSelector(state => state.deviceData);
     const { isAuthenticated} = useSelector(state => state.staffAuth);
     const { careplan } = useSelector(state => state.careplan);
     const { count } = useSelector(state => state.readingsCount);
 
-    const [addTimeShow, setAddTimeShow] = useState(false);
+    const [readingPerPage, setReadingsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sort, sortBy] = useState(-1);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [accordion, setAccordion] = useState(false);
 
     useEffect(() => {
         if(isAuthenticated === false) {
-			props?.history?.push("/stafflogin");
+			props?.history?.push("/doctor/login");
 		}
 
         if(error){
@@ -44,7 +50,7 @@ const StaffPatientProfile = (props) => {
 
 
         dispatch(patientProfile(patientid));
-        dispatch(getPatientTelemetryData(patientid));
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
         dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
         
@@ -59,16 +65,33 @@ const StaffPatientProfile = (props) => {
             alert.success('Updated Successfully');
         }
 
-    }, [dispatch, alert, error, isUpdated, commentSuccess,]);
+    }, [dispatch, alert, error, isUpdated, commentSuccess, currentPage, sort]);
 
-    const handleClose = () => setAddTimeShow(false);
-    const handleShow = () => setAddTimeShow(true);
+
+    function setCurrentPageNumber(currentPage) {
+        setCurrentPage(currentPage);
+    }
 
     let readingsThisMonth;
     let ReadingsperMonth; 
  
     readingsThisMonth = count;
     ReadingsperMonth = careplan?.data?.readingsPerMonth;
+
+    const refreshHandler = () => {
+        dispatch(patientProfile(patientid));
+        dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
+        dispatch(getPatientCarePlan(patientid));
+        setStartDate('');
+        setEndDate('');
+        // setSort('')
+    }
+
+    const sortPatientTelemetaryData = () => {
+        dispatch(sortTelemetartData(patientid, startDate, endDate, readingPerPage, currentPage));
+    }
+
+    console.log(accordion);
 
 
     return (
@@ -91,10 +114,6 @@ const StaffPatientProfile = (props) => {
                                 <div className="col-md-10">
                                     <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
                                 </div>
-
-                                {/* <div className="col-md-2">
-                                    <button className="submit-btn mt-2" onClick={handleShow}>Add Time</button>
-                                </div> */}
                                 </div>
                             <hr />
 
@@ -173,14 +192,22 @@ const StaffPatientProfile = (props) => {
                                  <br />   
                                 <div className="row">
                                 <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Physician Information</span>                                 
-                                        <hr />
-
-                                    <span className="profile-label">Name</span>
-                                    <p className="patient-profile-card-text">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id && patient?.assigned_doctor_id.lastname}</p>
-
-                                    <span className="profile-label">Gender</span>
-                                    <p className="patient-profile-card-text"><Badge bg="info text-white" className="male-tag">{patient?.assigned_doctor_id && patient?.assigned_doctor_id.gender}</Badge> </p>
+                                <span className="patient-profile-col-heading">Physician Information</span>
+                                <hr />
+                                {patient?.assigned_doctor_id ? <>
+                                    <span className="profile-label">Dr Name</span>
+                                    <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
+                                </> : <>
+                                    <span className="profile-label">Doctor Not Assigned Yet</span>
+                                </>}
+                    
+                                <br />
+                                    {patient?.assigned_hr_id ? <>
+                                        <span className="profile-label">HR Name</span>
+                                        <p className="patient-profile-card-text">Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
+                                    </> : <>
+                                        <span className="profile-label">HR Not Assigned Yet</span>
+                                    </>}
                                 </div>
 
                                 <div className="col-md-3">
@@ -195,9 +222,7 @@ const StaffPatientProfile = (props) => {
                                              {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                                 <Fragment>
                                                 <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                                {/* <button className="btn" style={{color: 'red'}} onClick={() => removeAssignDevice(deviceass?.deviceid)}>
-                                                    <i className="bx bx-trash"></i>
-                                                </button> */}
+                                             
                                                 </p>
                                                 
                                                 </Fragment>
@@ -214,53 +239,164 @@ const StaffPatientProfile = (props) => {
                                     
                                 </div>
 
-                                <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Patient Careplan</span>                                 
-                                        <hr />
-                                        {careplan && ( <Fragment>
-                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.data?.Description}</small>            
-                                                <small style={{float: 'right', marginTop: 10}}>
-                                                    <i>Added By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
-                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
-                                                    </i>
-                                                </small>    
-                                                
-                                            </Fragment>)}
-                                   
-                                  </div>
-                                  </div> {/* row ends here */}
-
-                                  {/* Patient Telemetary Data */}
                                     <div className="col-md-3">
-                                        <h5 className="pt-2 mt-2">Telemetary <span style={{ color: '#F95800'}}>Data </span></h5>
-                                    </div>
-
-
-                                    <Tabs defaultActiveKey="cuff" id="uncontrolled-tab-example" selectedTabClassName="bg-white">
-                                        <Tab eventKey="cuff" title="Cuff ( Telemetary Data )">
-                                            {deviceData && deviceData.map((devicedata, index) => (
-                                                <div key={index}>
-                                                    {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                                        <CuffTelemetaryData healthData= {devicedata} isAdmin={false} />
-                                                    </Fragment> : ''}
+                                        <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
+                                        <hr /> 
+                                        {deviceData && deviceData.length > 0 ? <>
+                                            {deviceData && deviceData.slice(0,5).map((devicedata, index) => (
+                                                <div key={index} className="row-display mt-2" >
+                                                    {devicedata?.telemetaryData?.sys ? <>
+                                                        <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                                            {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                                        <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
+                                                    </> : ""}
                                                 </div>
                                             ))}
-                                            </Tab>
+                                        </> : 'N/A' }
+                                        
+                                    </div>
 
-                                            <Tab eventKey="weight" title="Weight ( Telemetary Data )">
-                                                {deviceData && deviceData.map((devicedata, index) => (
-                                                    <div key={index}>
-                                                        {devicedata?.telemetaryData?.wt && devicedata?.telemetaryData?.fat ? <Fragment>
-                                                            <WeightTelemetaryData healthData={devicedata} isAdmin={false}/>
-                                                        </Fragment> : ''}   
-                                                    </div>
-                                                ))}
-                                            </Tab>
-                                        </Tabs>   
+                                  </div> {/* row ends here */}
+
+                        {/* Patient Telemetary Data */}
+                        {deviceData && deviceData.length > 0 ? <Fragment>
+                        <br/><br/>
+                        <div className="col-md-3">
+                            <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#ed1b24'}}> ( {Count} ) </span></h5>
+                        </div>
+
+                        <div className="row-display patient-profile-col-heading" style={{ 
+                                padding: 10,
+                                borderRadius: '10px'
+                                }}> 
+                            
+                            <div style={{width: '30%'}}>
+                            <label>To: </label>
+                              <input 
+                                type="date"
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                                max={moment().format("YYYY-MM-DD")} 
+                                className="form-control"
+                                />
+                            </div>
+                            
+                            &nbsp;&nbsp;
+                            <div style={{width: '30%'}}>                            
+                            <label>From: </label>
+                              <input 
+                                type="date"
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
+                                max={moment().format("YYYY-MM-DD")} 
+                                className="form-control"
+                             />
+                             </div>
+                            
+                             &nbsp;&nbsp;
+                             <div style={{width: '30%'}}>                            
+                                <label>Sort By: </label>
+                                    <select 
+                                    value={sort}
+                                    onChange={e => sortBy(e.target.value)}
+                                    className="form-control">
+                                        <option value="-1">Descending (last to first)</option>
+                                        <option value="1">Ascending (first to last)</option>
+                                    </select>
+                             </div>
+                            
+                            &nbsp;&nbsp;
+                             <div> 
+                                 <label>Search</label>
+                                    <button 
+                                        className="btn add-staff-btn"
+                                        onClick={sortPatientTelemetaryData}>Search
+                                    </button>    
+                            </div>
+
+                            <div> 
+                                 <label>Reset</label>
+                                    <button
+                                        onClick={refreshHandler} 
+                                        className="btn add-staff-btn">Reset
+                                    </button>    
+                            </div>
+                            </div>
+
+                        <br /><br />
 
 
+                        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                            <Row>
+                                <Col sm={12}>
+                                    <Nav variant="pills" className="flex-row">
+                                        <Nav.Item style={{cursor: 'pointer'}}>
+                                        <Nav.Link eventKey="first">Cuff (B.P | Telemetary Data)</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item style={{cursor: 'pointer'}}>
+                                        <Nav.Link eventKey="second">Weight (Telemetary Data)</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
+                                </Col>
 
+                        {/* Accordion for graphical representation */}
+                        <div className="container graphWrapper">
+                            <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
+                                Show Graphical Representation
+                                <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
+                            </button>
 
+                            {accordion === true ? <div className="panel">
+                                <PatientProfileGraph healthData={deviceData} />
+                            </div> : ""}
+                        </div>
+                        {/* Accordion for graphical representation ends here */}
+                        
+
+                        <Col sm={12}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                {deviceData && deviceData.map((devicedata, index) => (
+                                    <div key={index}>
+                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
+                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
+                                        </Fragment> : ''}
+                                    </div>
+                                ))}
+
+                                    {/* Pagination */}
+                                    {readingPerPage <= Count && (
+                                        <div className="d-flex justify-content-center mt-5"> 
+                                        <Pagination activePage={currentPage} 
+                                        itemsCountPerPage={readingPerPage} 
+                                        totalItemsCount = {Count}
+                                        onChange={setCurrentPageNumber} 
+                                        nextPageText = {'⟩'}
+                                        prevPageText = {'⟨'}
+                                        firstPageText = {'«'}
+                                        lastPageText = {'»'}
+                                        itemClass='page-item'
+                                        linkClass="page-link"
+                                        />           
+                                    </div>
+                                    )} 
+                                    </Tab.Pane>
+        
+
+                                        <Tab.Pane eventKey="second">
+                                        {deviceData && deviceData.map((devicedata, index) => (
+                                            <div key={index}>
+                                                <Fragment>
+                                                    <WeightTelemetaryData healthData={devicedata} count={Count} isAdmin={false} />
+                                                </Fragment>   
+                                            </div>
+                                        ))}
+                                        </Tab.Pane>
+                                    </Tab.Content>
+                                    </Col>
+                                  </Row>
+                                </Tab.Container>
+                                </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-link" onClick={refreshHandler}>Refresh List</button></small>}
                                 </Fragment> }
                             </div>
 

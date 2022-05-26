@@ -53,7 +53,7 @@ const InventoryAnalytics = () => {
 
                 <div className="box box1">
                     <div className="left-side">
-                        <div className="box_topic">Out of Stock</div>
+                        <div className="box_topic">Assigned Devices</div>
                         <div className="number">{outstockDevices && outstockDevices > 10 ? outstockDevices : '0'+outstockDevices}</div>
                         <div className="indicator">
                             <i className="bx bx-up-arrow-alt down"></i>

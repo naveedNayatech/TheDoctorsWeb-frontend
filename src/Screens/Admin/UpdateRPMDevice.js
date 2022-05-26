@@ -155,7 +155,7 @@ const UpdateRPMDevice = (props) => {
 
                                             {/* broken */}
                                             <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                            <label htmlFor="deviceId" className="form-label mt-3">Broken Status</label>
+                                            <label htmlFor="deviceId" className="form-label mt-3">Physical Status</label>
                                                 <select 
                                                         name="broken"
                                                         className="form-control"

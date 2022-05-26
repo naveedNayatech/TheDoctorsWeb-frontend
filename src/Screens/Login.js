@@ -1,14 +1,12 @@
 import React, { Fragment, useEffect } from 'react'
 import { Link  } from 'react-router-dom';
 import TextField from '../components/Form/TextField';
-import Selectbox from '../components/Form/Selectbox';
 import MetaData from '../layouts/MetaData';
-import Loader from '../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Spinner } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap';
 
 import { login, clearErrors } from '../actions/authActions'; 
 
@@ -61,9 +59,10 @@ const Login = ({ history }) => {
 						<div className="row content">
 								
 							<div className="col-md-12" >
-								<h3 className="signin-text">Sign <span style={{color: '#F95800'}}>in</span></h3>
-								<small style={{color: 'dodgerblue'}}>Enter valid credentials to log into your account.</small>
+								<h3 className="signin-text">Admin <span style={{color: '#ed1b24'}}> Sign in</span></h3>
+								<small style={{color: "#385399"}}>Enter valid credentials to log into your account.</small>
 
+								<hr />
 								<Formik initialValues={{
 									email: '',
 									password: '', 
@@ -91,11 +90,6 @@ const Login = ({ history }) => {
 													placeholder="Enter Password"
 												/>
 
-												<Selectbox 
-													label="Select Role"
-													name="role"
-												/>
-
 												
 												<Link to="/auth/forgot">
 													<span className="forgot-password-link">Forgot Password?</span>
@@ -104,16 +98,19 @@ const Login = ({ history }) => {
 												<br/><br/>
 												
 
-												<div className="row-display">
+												<div className="row" style={{float: 'right'}}>
 													<button className="reset-btn" type="reset"><i className='bx bx-reset' ></i></button>
-													<button className="submit-btn ml-3" type="submit">{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 'Login'}</button>
+													<button className="submit-btn ml-3" type="submit">
+														{loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : 
+														'Login'}
+													</button>
 												</div>
 											</Form>
 
 											<br/><br/><br/>
 												<div className="row-display">
-													<Link to="/" style={{textDecoration: 'none'}}><small>TheDoctorWeb.com</small></Link>
-													<small>Login as <Link to="/stafflogin" style={{textDecoration: 'none'}}>Doctor</Link></small>
+													<Link to="/" style={{textDecoration: 'none', color: "#385399"}}><small>TheDoctorWeb.com</small></Link>
+													<small>Switch to <Link to="/doctor/login" style={{textDecoration: 'none', color: "#385399"}}>Doctor</Link></small>
 												</div>
 										</div>
 									)}

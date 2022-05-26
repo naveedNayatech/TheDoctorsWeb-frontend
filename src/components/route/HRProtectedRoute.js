@@ -11,7 +11,7 @@ const HRProtectedRoute = ({isHR, component: Component, ...rest}) => {
             {loading === false && (
                 <Route {...rest} render={props => {
                     if(isAuthenticated === false){
-                        return props?.history.push('/hrLogin')
+                        return props?.history.push('/hr/login')
                     }
 
                     if(isHR === true && hr.role === 'HrMedical'){

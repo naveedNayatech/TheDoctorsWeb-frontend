@@ -52,7 +52,7 @@
   max-width: 80%;
   position: relative;
   clear: both;
-  background: #ebebf0;
+  background: #cccccc;
   border: solid 1px rgba(0,0,0,0.5);
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -326,25 +326,29 @@
 .female-tag {
   width: 70px;
   font-size: 12px;
-  margin: 0 auto
+  margin: 0 auto;
+  background-color:#23408e !important;
 }
 
 .male-tag {
   width: 70px;
   font-size: 12px;
-  margin: 0 auto
+  margin: 0 auto;
+  background-color:#ed1b24 !important;
 }
 
 .assigned-tag {
   width: 70px;
   font-size: 12px;
-  margin: 0 auto
+  margin: 0 auto;
+  background-color:#ed1b24 !important;
 }
 
 .not-assigned-tag {
   width: 110px;
   font-size: 12px;
-  margin: 0 auto
+  margin: 0 auto;
+  background-color:#385399 !important;
 }
 
 .signed-icon {
@@ -993,7 +997,7 @@ How it works
   width: 280px;
   margin-top: -25px;
   /* background: #0A2558; */
-  background-color: #0C2F46; 
+  background-color: #23408e; 
   transition: all 0.5s ease;
 }
 
@@ -1009,10 +1013,8 @@ How it works
 }
 
 .sidebar .logo-details i {
-  font-size: 28px;
-  font-weight: 500;
-  color: #F95800;
-  margin-left: 8px;
+  font-size: 24px;
+  color: #ed1b24;
   min-width: 50px;
   text-align: center;
   margin-top: 20px;
@@ -1021,7 +1023,7 @@ How it works
 .sidebar .logo-details .logo_name{
   font-size: 22px;
   font-weight: 500;
-  color: #FFF;
+  color: #CCCCCC;
   margin-top: 20px;
 }
 
@@ -1059,7 +1061,7 @@ How it works
 }
 
 .link-name-active {
-  background-color: #006762;
+  background-color: #ed1b24;
 }
 
 .sidebarBtn {
@@ -1115,10 +1117,11 @@ How it works
   align-items: center;
   height: 50px;
   min-width: 190px;
-  background: #F5F6FA;
-  border: 2px solid #EFEEF1;
+  background: #fff;
+  border: 2px solid #cccccc;
   border-radius: 6px;
   padding: 0 15px 0 2px;
+  margin-top: 10px;
 }
 
 nav .profile-details img{
@@ -1214,7 +1217,7 @@ nav .profile-details i {
 }
 
 .home-content .overview-boxes .box0{
-  background-image: linear-gradient(#ff0000, #141212);
+  background-image: linear-gradient(#ed1b24, #141212);
 }
 
 .home-content .overview-boxes .box1{
@@ -1226,7 +1229,7 @@ nav .profile-details i {
 }
 
 .home-content .overview-boxes .box3{
-  background-image: linear-gradient(#003f5c , #141212);
+  background-image: linear-gradient(#23408e , #141212);
 }
 
 .home-content .overview-boxes .staff-box0{
@@ -1355,8 +1358,8 @@ table tr td{
 } */
 
 th {
-  background-color: #373041;
-  color: #FFF;
+  background-color: #ccc;
+  color: #333;
   font-size: 12px;
 }
 
@@ -1412,7 +1415,7 @@ tr {
   width: 100%;
   font-size: 13px;
   line-height: 1.2;
-  border-color: #353935;
+  border-color: #cccccc;
   border-style: solid;
   padding: 10px !important;
   height:auto;
@@ -1421,11 +1424,13 @@ tr {
 }
 
 .forgot-password-link {
+  color: #385399;
   font-size: 12px;
   margin-top: -4px;
   float: right;
   cursor: pointer;
   margin: 5px;
+  font-weight: 500;
 }
 
 .forgot-password-link:hover {
@@ -1435,7 +1440,7 @@ tr {
 
 /* CSS */
 .submit-btn {
-  background-color: #007673;
+  background-color: #23408e;
   color: #FFF;
   padding: 7px;
   border-radius: 5px;
@@ -1443,7 +1448,7 @@ tr {
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
   margin-bottom: 20px;
   transition: all .4s;
-  width: auto;
+  width: 140px;
   display: block;
 }
 
@@ -1452,7 +1457,7 @@ tr {
 }
 
 .reset-btn {
-  background-color: #F95800;
+  background-color: #ed1b24;
   color: #FFF;
   padding: 5px;
   border-radius: 5px;
@@ -1460,17 +1465,15 @@ tr {
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
   margin-bottom: 20px;
   transition: all .4s;
-  min-width: 60px
+  min-width: 60px;
 }
 
-.reset-btn:hover {
-  background-color: orangered
-}
+
 
 .excelreportbutton{
-  background-color: #1D6F42;
+  background-color: #23408e;
   color: #FFF;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   border: none !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
@@ -1563,7 +1566,6 @@ tr {
 .profile-label {
   color: #010101;
   font-size: 12px;
-  font-weight: bolder !important;
   text-transform: uppercase;
 }
 
@@ -1649,7 +1651,7 @@ tr {
 }
 
 .patient-profile-disease-span {
-  background-color: #006762;
+  background-color: #23408e;
   display: inline-block;
   padding: 8px;
   border-radius: 20px;
@@ -1673,7 +1675,7 @@ tr {
 
 /* Pagination */
 .page-item.active .page-link {
-  background-color: #007673;
+  background-color: #ed1b24;
   border-color: #D3D3D3;
 }
 
@@ -1731,7 +1733,7 @@ tr {
 }
 
 .add-staff-btn {
-  background-color: #006762;
+  background-color: #23408e;
   color: #FFF;
   font-size: 14px;
   padding: 10px;
@@ -1749,7 +1751,7 @@ tr {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background-color: #006762;
+  background-color: #23408e;
   -webkit-box-shadow: 0px 0px 15px -10px #000000;
   box-shadow: 0px 0px 15px -10px #000000;
   color: #FFF;
@@ -1757,7 +1759,7 @@ tr {
 }
 
 .check-icon {
-  color: #F8C113;
+  color: #fff;
 }
 
 .cross-icon {
@@ -2025,7 +2027,7 @@ tr {
 
 /* HR & DR Reports */
 .reportsHeading {
-  background-color: #007673;
+  background-color: #eb1b24;
   color: white;
   padding: 3px;
   border-radius: 50px;
@@ -2041,7 +2043,7 @@ tr {
 }
 
 .spentTime {
-  background-color: #007673;
+  background-color: #ed1b24;
   font-size: 12px;
   color: #FFF;
   text-transform: uppercase;
@@ -2125,14 +2127,14 @@ tr {
 }
 
 .select-input-type {
-  background-color: #006762;
+  background-color: #23408e;
   color: #FFF;
   height: 40px;
   font-size: 12px;
 }
 
 .select-input-type:focus {
-  background-color: #006762;
+  background-color: #23408e;
   color: #FFF;
   height: 40px;
   border: none !important;
@@ -2147,10 +2149,52 @@ tr {
 }
 
 .logs-card {
-  background: #afe9f3;
+  background: #23408e;
   border-radius: 10px;
   padding: 10px;
-  color: #0a0a0a;
+  color: #FFF;
   max-height: 680px;
   overflow-y: auto;
 }
+
+.link {
+  text-decoration: none !important; 
+}
+
+.graphWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.accordion {
+  background-color: #ed1b24;
+  color: #FFF;
+  cursor: pointer;
+  padding: 10px;
+  width: 260px;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: auto;
+}
+
+.accordion:focus {
+  border: none;
+  outline: none;
+}
+
+.accordion i {
+  font-size: 14px;
+  float:right;
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+.panel {
+  margin-top: 12px;
+}
+

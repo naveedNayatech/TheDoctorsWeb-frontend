@@ -28,7 +28,7 @@ const StaffDashboard = (props) => {
     
     useEffect(() => {
 		if(error) {
-			alert.error("/hrLogin");
+			alert.error("/hr/login");
 		}
 
         dispatch(getHRPatients(id));

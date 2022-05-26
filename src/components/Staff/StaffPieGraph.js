@@ -1,5 +1,6 @@
 import React, {useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line } from 'recharts';
 import { getPatientTelemetryData} from '../../actions/adminActions';
 import {useAlert} from 'react-alert';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,6 +14,10 @@ const StaffPieGraph = () => {
   const { staff } = useSelector(state => state.staffAuth);
   const { doctorpatients } = useSelector(state => state.docPatients);
   const {loading, error,  deviceData } = useSelector(state => state.deviceData);
+
+  const [recordsPerpage, setRecordsPerPage] = useState(5);
+  const [graphType, setGraphType] = useState('bar');
+  const [currentPage, setCurrentPage] = useState(1);
 
     const dispatch = useDispatch();
     const [patientId, setPatientId] = useState('');
@@ -33,12 +38,12 @@ const StaffPieGraph = () => {
         if(patientId === 'default'){
           return
         }
-        dispatch(getPatientTelemetryData(patientId))
+        dispatch(getPatientTelemetryData(patientId, recordsPerpage, currentPage))
       }
   
-    }, [dispatch, error, patientId]);
+    }, [dispatch, error, patientId, recordsPerpage, recordsPerpage, currentPage]);
 
-    let data = deviceData && deviceData.slice(0,10).map((deviceData, index) => {
+    let data = deviceData && deviceData.filter(healthData => healthData?.deviceId?.deviceType === "bp").map((deviceData) => {
       return {
           'date': moment(deviceData?.createdAt).tz("America/New_York").format("ll"),
           'sys': deviceData?.telemetaryData?.sys,
@@ -48,23 +53,49 @@ const StaffPieGraph = () => {
     });
 
     return (
-      <section className="alerts-section rounded-card graph-card" style={{width: '100%'}}>
+      <section className="alerts-section rounded-card graph-card">
+        <h5 className="title">Patient B.P Analysis</h5>
+       <br/>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <h5 className="title">B.P Analytics </h5>
               <select 
-              className="patient-list-style" 
-              name="patientlist"
-              value={patientId}
-              onChange={(e) => setPatientId(e.target.value)}
+                className="form-control" 
+                style={{width: '220px'}}
+                name="patientlist"
+                value={patientId}
+                onChange={(e) => setPatientId(e.target.value)}
               >
               <option value="default">Select Patient</option>
               {doctorpatients && doctorpatients.map((patient, index) => (
                   <option value={patient?._id} key={index} > {patient?.firstname} {patient?.lastname} </option>
               ))}  
               </select>
+
+              <select 
+              className="form-control"
+              style={{width: '220px'}}
+              onChange={e => setRecordsPerPage(e.target.value)}
+              >
+              <option value="default">Select Readings </option>
+                <option value="5">Last 5 Readings</option>
+                <option value="10">Last 10 Readings</option>
+                <option value="25">Last 25 Readings</option>
+                <option value="50">Last 50 Readings</option>
+                <option value="100">Last 100 Readings</option>
+              </select>
+
+              <select 
+                className="form-control"
+                style={{width: '220px'}}
+                onChange={e => setGraphType(e.target.value)}
+                >
+              <option value="default">Graph Type </option>
+                <option value="line">Line Graphs</option>
+                <option value="bar"> Bar Graph</option>
+              </select>
         </div> 
         <br />
-
+      
+        {graphType === 'bar' ? <>
       <ResponsiveContainer width="100%" aspect={4/1} style={{overflowY: 'hidden !important' }}>
         {loading === true ? <Spinner animation="border" style={{marginLeft: '45%'}}/> : <BarChart data={data}
                   >
@@ -73,13 +104,27 @@ const StaffPieGraph = () => {
                   <CartesianGrid strokeDasharray="1 1" />
                   <Tooltip />
                   <Legend/> 
-                  <Bar dataKey="sys" fill="#FE9E15" />
-                  <Bar dataKey="dia" fill="#003366" />
-                  <Bar dataKey="pul" fill="#F95800" />
+                  <Bar dataKey="sys" fill="#ed1b24" />
+                      <Bar dataKey="dia" fill="#23408e" />
+                      <Bar dataKey="pul" fill="#007673" />
               </BarChart>
         }
       </ResponsiveContainer>
-      </section>
+      </> : <>
+      <ResponsiveContainer width="100%" aspect={4/1}>
+              <LineChart data={data}>
+              <XAxis dataKey="dia" stroke="#007673"/>
+              <YAxis/>
+              <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5"/>
+              <Line type="monotone" dataKey="sys" stroke="#ed1b24"/>
+              <Line type="monotone" dataKey="dia" stroke="#23408e"/>
+              <Tooltip />
+              <Legend />
+              </LineChart>
+            </ResponsiveContainer>
+      </>
+      }
+       </section>
     );
 }
 

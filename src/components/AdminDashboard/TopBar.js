@@ -46,21 +46,21 @@ const TopBar = () => {
                         <div className="left-div">
                             <div className="sidebar-button">
                                 <i className="bx bx-menu sidebarBtn"></i>
-                                <span className="dashboard">Admin <span style={{color: '#F95800'}}>Dashboard</span></span>    
+                                <span className="dashboard">Admin <span style={{color: '#ed1b24'}}>Dashboard</span></span>    
                         </div>
-                    </div>
+                        </div>
 
                         {/* Notifications */}
-                        <div className="right-div" style={{marginLeft: '20px'}}>
+                        <div className="right-div" style={{marginLeft: '420px'}}>
                         <div className="notification-dropdown">
                         <Dropdown className="admin-topbar-dropdown">
                             <Dropdown.Toggle variant="link" id="dropdown-basic">
 
-                            <i className='bx bx-bell' style={{color: 'red', fontSize: '20px'}}></i>
+                            <i className='bx bx-bell' style={{color: '#ed1b24', fontSize: '20px'}}></i>
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu className="admin-topbar-notification-dropdown">
-                            {notifications && notifications?.data?.map((noti, index) =>(
+                            {notifications && notifications?.data?.slice(0,50).map((noti, index) =>(
                                 <Dropdown.Item key={index} className="drop-down-item-active">
                                     {noti?.noti_type === 'bp' ? <>
                                     <Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: noti?.patientId}}}>

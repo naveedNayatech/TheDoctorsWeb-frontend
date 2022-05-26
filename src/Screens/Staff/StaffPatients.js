@@ -36,7 +36,7 @@ const StaffPatients = ({ history }) => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-md-9">
-                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#F95800'}}> ({doctorpatients && doctorpatients.length}) </span></h5> 
+                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#ed1b24'}}> ({doctorpatients && doctorpatients?.length < 10 ? '0'+doctorpatients?.length : doctorpatients?.length}) </span></h5> 
                                     </div>
 
                                     <div className="col-md-3">
@@ -63,16 +63,14 @@ const StaffPatients = ({ history }) => {
                                         <tbody>
                                         {doctorpatients && doctorpatients.map((patient, index) => ( 
                                             <tr align="center" key={index}>
-                                            <td><Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
-                                            <td>{patient?.contactno} <p>(English)</p></td>
+                                            <td><Link class="link" to={{ pathname: "/doctor/patient/profile", state: {patientid: patient?._id, deviceid: patient?.deviceassigned?.deviceid}}}>{patient?.title} {patient?.firstname} {patient?.lastname} <p style={{color: 'gray'}}>09/22/1975</p></Link></td>
+                                            <td>{patient?.phone1} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
                                             <td>{patient?.email}</td>
                                             <td>{patient?.doctorid === null ? <Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge> : <Badge bg="info text-white" className="assigned-tag">Assigned</Badge>}</td>
                                             <td>{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'} </td>
                                             <td>{patient?.rpmconsent === true ? <p>Signed</p> : <p>Not Signed</p>}</td>
                                             <td>
-                                            <Link to={{ pathname: "/staffPatientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
-                                                {/* <Link to={{ pathname: "/staffPatients", state: {id: doctor?._id}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link> &nbsp; */}
-                                                {/* <Link to="/staffPatients" className="rounded-button-delete"><i className='bx bxs-user-minus'></i></Link> &nbsp; */}
+                                            <Link to={{ pathname: "/doctor/patient/profile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link> &nbsp;
                                             </td>
                                         </tr> 
                                         

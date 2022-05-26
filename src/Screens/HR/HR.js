@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import {useSelector} from 'react-redux';
 import  HRSidebar from '../../components/HR/HRSidebar';
 import HRTopBar from '../../components/HR/HRTopbar';
@@ -10,43 +10,6 @@ import { Link } from 'react-router-dom';
 const HR = () => {
   
 const {hr} = useSelector(state => state.hrAuth);
-
-const [seconds, setSeconds] = useState(0);
-const [minutes, setMinutes] = useState(0);
-const [running, setRunning] = useState(false);
-
-var timer;
-
-const startTimer = () => {
-    setRunning(true);
-    // document.querySelector('.stop-button').removeAttribute("disabled")
- }
-
- const resetTimer = () => {
-     setRunning(false);
-     setSeconds(0);
-     setMinutes(0);
- }
-
-
-useEffect(() => {
-    if(running === true){
-    timer = setInterval(() => {
-        setSeconds(seconds + 1)
-
-        if(seconds === 59){
-            setMinutes(minutes + 1)
-            setSeconds(0)
-        }
-    }, 1000)
-
-    return () => clearInterval(timer)
-     }
-})
-
-const stopTimer = () => {
-  clearInterval(timer)  
-}
 
   return <Fragment>
     <MetaData title="Profile" />
@@ -125,18 +88,6 @@ const stopTimer = () => {
                 </div>
                 </div>
             </div>
-
-            {/* Practising auto time spent here */}
-            <div className="counter-container">
-                <p id="counter">{minutes < 10 ? '0'+minutes : minutes} : {seconds < 10 ? '0'+seconds : seconds}</p>
-                <button className="btn btn-success start-button shadow-none" onClick={startTimer} disabled={running === true ? true: false}>start</button>&nbsp;
-                <button className="btn btn-danger stop-button shadow-none" onClick={stopTimer}>stop</button> &nbsp;
-                <button className="btn btn-warning shadow-none" onClick={resetTimer}>Reset</button>
-
-            </div>
-
-            
-            <br />
 
           </div>
         </section>

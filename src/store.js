@@ -72,7 +72,7 @@ const middleware = [thunk];
 
 // const store = createStore(reducer, initialState, disableReactDevTools(applyMiddleware(...middleware)))
 
-let mode = "production"
+let mode = "development"
 const devTools =
   mode === "production"
     ? applyMiddleware(...middleware)

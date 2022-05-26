@@ -11,7 +11,7 @@ const HRSidebar = (props) => {
 
     useEffect(() => {
 		if(isAuthenticated === false) {
-			props?.history?.push("/hrlogin");
+			props?.history?.push("/hr/login");
 		}
 	}, [isAuthenticated])
 
@@ -38,7 +38,7 @@ const HRSidebar = (props) => {
                 </li>
 
                 <li>
-                    <Link key="staffPatients" to="/HrPatients">
+                    <Link key="hrpatients" to="/HrPatients">
                     <i className='bx bx-user'></i>
                         <span className="link_name">Patients</span>
                     </Link>

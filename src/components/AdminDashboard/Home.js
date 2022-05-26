@@ -28,7 +28,7 @@ const Home = () => {
 
         <section className="home-section">
             <TopBar />
-
+                
             {/*  Home content  */}
             <div className="home-content">
                 <div className="overview-boxes">
@@ -46,7 +46,7 @@ const Home = () => {
 
                     <div className="box box1">
                         <div className="left-side">
-                            <Link to="/devices" className="box_topic">RPM Inventory <br /></Link>
+                            <Link to="/devices" className="box_topic">RPM Devices <br /></Link>
                             <div className="number">{totalDevices && totalDevices < 10 ? '0'+totalDevices : totalDevices }</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt down"></i>
@@ -131,12 +131,13 @@ const Home = () => {
                                 <div className="col-md-4 col-lg-4 logs-card">
                                     <h5 className="title">Logs</h5>
                                     <hr />
-                                    {logs && logs.map((log, index) => (
+                                    {logs && logs.slice(0,50).map((log, index) => (
                                          <div key={index}>        
                                              <ul>
-                                                 <ol><small>{log?.text}.</small> <p><small><i>
+                                                 <ol><small>{log?.text}.</small> 
+                                                 &nbsp;&nbsp;&nbsp;<span><small>
                                                  {moment(log.createdAt).tz("America/New_York").format("lll")}
-                                                 </i></small></p></ol>
+                                                 </small></span></ol>
                                              </ul>
                                          </div>
                                     ))} 

@@ -173,7 +173,7 @@ const InitialMonthReport = () => {
                     <hr />
                     <div className="row">
                      <div className="col-md-8 col-lg-8">
-                         <p style={{color: 'gray', fontWeight: 'bold'}}>Results Found: <span style={{color: '#F95800'}}>{initialMonthPatients && initialMonthPatients.length} </span></p>
+                         <p style={{color: 'gray', fontWeight: 'bold'}}>Results Found: <span style={{color: '#ed1b24'}}>{initialMonthPatients && initialMonthPatients.length} </span></p>
                      </div>
 
                     <div className="col-md-2 col-lg-2">
@@ -184,7 +184,7 @@ const InitialMonthReport = () => {
                         <button className="reset-btn" onClick={resetHandler}>Reset</button>
                     </div>
                     </div>
-                     <hr/>
+                    <br/>
                     </Fragment>)}                     
                 
                 {/* Heading */}
@@ -194,11 +194,11 @@ const InitialMonthReport = () => {
                     <Fragment>
                         <div className="row" key={index}>
                            <div className="col-md-1">
-                               <span style={{color: 'gray', fontWeight: 'bold'}}>{index}</span>
+                               <span>{index + 1}</span>
                            </div>
                             <div className="col-md-3">
                                 <b>Patient Details</b>
-                                <br/>
+                                <hr/>
                                 <span className="profile-label">Name: {initialreport?.firstname} {initialreport?.lastname}</span><br/>
                                 <span className="profile-label">DOB: {moment(initialreport?.DOB).format("ll")}</span><br/>
                                 <span className="profile-label">Gender: <Badge bg="info text-white">{initialreport?.gender}</Badge></span><br/>
@@ -210,21 +210,21 @@ const InitialMonthReport = () => {
 
                             <div className="col-md-3">
                                 <b>Doctor Details</b>
-                                <br/>
+                                <hr />
                                 <span className="profile-label">Name: {initialreport?.assigned_doctor_id?.firstname} {initialreport?.assigned_doctor_id?.lastname}</span><br/>
                                 <span className="profile-label">Gender: <Badge bg="danger text-white">{initialreport?.assigned_doctor_id?.gender}</Badge></span><br/>
                             </div>
 
                             <div className="col-md-2">
                                 <b>HR Details</b>
-                                <br/>
+                                <hr/>
                                 <span className="profile-label">Name: {initialreport?.assigned_hr_id?.firstname} {initialreport?.assigned_hr_id?.lastname}</span><br/>
                                 <span className="profile-label">Gender: <Badge bg="danger text-white">{initialreport?.assigned_hr_id?.gender}</Badge></span><br/>
                             </div>
 
                             <div className="col-md-3">
                                 <b>Device Details</b>
-                                <br/>
+                                <hr/>
                                 {initialreport?.assigned_devices && initialreport?.assigned_devices.map((device, index) => (
                                     <div key={index}>
                                         <span className="profile-label">Device ID: {device?.deviceObjectId?._id}</span><br/>

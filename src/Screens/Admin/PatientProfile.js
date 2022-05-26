@@ -11,7 +11,7 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
-import { Tabs, Tab, Row, Col, Nav} from 'react-bootstrap';
+import { Tab, Row, Col, Nav} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
 
@@ -109,15 +109,13 @@ const PatientProfile = (props) => {
                             <br/><br/>
                         
                             <div className="col-md-12">
-                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#F95800'}}>(Total Readings: {Count}) </span></h5>
+                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#ed1b24'}}>(Total Readings: {Count}) </span></h5>
                             </div>
 
                             <div className="row-display patient-profile-col-heading" style={{ 
                                 padding: 10,
                                 borderRadius: '10px'
-                                }}
-                                
-                                > 
+                                }}> 
                             
                             <div style={{width: '30%'}}>
                             <label>To: </label>

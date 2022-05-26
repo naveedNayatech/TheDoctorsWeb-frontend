@@ -15,7 +15,7 @@ const StaffProfile = ({ history }) => {
     useEffect(() => {
 		
 		if(isAuthenticated === false) {
-			history.push("/stafflogin");
+			history.push("/doctor/login");
 		}
 
 	}, [isAuthenticated])

@@ -2,6 +2,7 @@ import React, { useEffect, Fragment, useState } from 'react';
 import MetaData from '../../layouts/MetaData';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
+import defaultImg from '../../assets/Images/defaultUser.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { doctorProfile, getDoctorPatients, removePatientsDoctor } from '../../actions/adminActions';
 import folderImg from '../../assets/Images/folder.png';
@@ -63,7 +64,7 @@ const DoctorProfile = (props) => {
                         <div className="home-content">
                         <div className="container">
                          <div className="row-display">
-                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '#F95800'}}> Details </span></h5> 
+                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '	#ed1b24'}}> Details </span></h5> 
                                                          
                             <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
                             className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
@@ -77,7 +78,7 @@ const DoctorProfile = (props) => {
                             <div className="row">
                             <div className="col-md-4">
                                 <div>
-                                    <img src={doctor?.avatar?.url ? doctor?.avatar?.url : 'https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png'} className="img-responsive profile-card-img"/>
+                                    <img src={defaultImg} className="img-responsive profile-card-img"/>
                                         
                                     <p className="profile-name">Dr. {doctor?.firstname} {doctor?.lastname} </p>
                                     

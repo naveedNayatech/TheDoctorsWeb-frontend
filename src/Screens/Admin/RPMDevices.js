@@ -96,7 +96,7 @@ const RPMDevices = (props) => {
                     
                     <div className="row-display">
                         
-                        <h5 className="pt-2">Inventory <span style={{color: '#F95800'}}>( {deviceCount && deviceCount < 10 ? '0'+deviceCount : 'N/A'} )</span> </h5>
+                        <h5 className="pt-2">Inventory <span style={{color: '#ed1b24'}}>( {deviceCount && deviceCount < 10 ? '0'+deviceCount : 'N/A'} )</span> </h5>
                             
                             
                             <div className="row-display">
@@ -224,7 +224,8 @@ const RPMDevices = (props) => {
                                     {device?.broken === true ? <td style={{color: 'red', fontWeight: 'bold'}}>Broken</td> : <td>unbroken</td> }
                                     
                                     {device?.assigned_patient_id ? <td style={{backgroundColor: 'green', color: '#FFF'}}>Assigned</td> : <td style={{color: 'green', fontWeight: 'bold'}}>In Stock</td>}
-                                    <td>{device?.assigned_patient_id ? device?.assigned_patient_id?.lastname : 'N/A'}</td>
+                                    <td>{device?.assigned_patient_id ? <span style={{fontWeight: 'bold', color: '#23408e'}}>Pt. {device?.assigned_patient_id?.firstname} 
+                                    {device?.assigned_patient_id?.lastname}</span> : 'N/A'}</td>
                                     <td>
                                         <Link to={{ pathname:"/devicedetails", state: {id: device?._id}}} className="rounded-button-profile"><i className='bx bx-list-ul'></i></Link>
                                         <Link to={{ pathname:"/updatedevice", state: {deviceDetails: device}}} className="rounded-button-edit"><i className='bx bx-edit-alt'></i></Link>                       

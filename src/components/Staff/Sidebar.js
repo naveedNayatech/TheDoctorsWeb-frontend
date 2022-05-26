@@ -11,7 +11,7 @@ const Sidebar = (props) => {
     useEffect(() => {
 		
 		if(isAuthenticated === false) {
-			props?.history?.push("/stafflogin");
+			props?.history?.push("/doctor/login");
 		}
 	}, [isAuthenticated])
 
@@ -31,14 +31,14 @@ const Sidebar = (props) => {
 
             <ul className="nav-links">
                 <li>
-                    <NavLink key="dashboard" to="/Dashboard" activeClassName="link-name-active">
+                    <NavLink key="dashboard" to="/doctor/dashboard" activeClassName="link-name-active">
                     <i className='bx bx-list-ul'></i>
                         <span className="link_name">My Dashboard</span>
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink key="staffPatients" to="/staffPatients" activeClassName="link-name-active">
+                    <NavLink key="staffPatients" to="/doctor/patients" activeClassName="link-name-active">
                     <i className='bx bx-list-ul'></i>
                         <span className="link_name">My Patients</span>
                     </NavLink>

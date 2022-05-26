@@ -34,7 +34,7 @@ const DashboardGraphs = () => {
 
   }, [dispatch, error, patientId, recordsPerpage]);
 
-        let data = deviceData && deviceData.map((deviceData, index) => {
+        let data = deviceData && deviceData.map((deviceData) => {
               return {
                   'date': moment(deviceData?.createdAt).tz("America/New_York").format("ll"),
                   'sys': deviceData?.telemetaryData?.sys,
@@ -97,8 +97,8 @@ const DashboardGraphs = () => {
                       <CartesianGrid strokeDasharray="1 1" />
                       <Tooltip />
                       <Legend/> 
-                      <Bar dataKey="sys" fill="#FE9E15" />
-                      <Bar dataKey="dia" fill="#003366" />
+                      <Bar dataKey="sys" fill="#ed1b24" />
+                      <Bar dataKey="dia" fill="#23408e" />
                       <Bar dataKey="pul" fill="#007673" />
                   </BarChart>
                   } 
@@ -111,8 +111,8 @@ const DashboardGraphs = () => {
               <XAxis dataKey="dia" stroke="#007673"/>
               <YAxis/>
               <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5"/>
-              <Line type="monotone" dataKey="sys" stroke="#F95800"/>
-              <Line type="monotone" dataKey="dia" stroke="#007673"/>
+              <Line type="monotone" dataKey="sys" stroke="#ed1b24"/>
+              <Line type="monotone" dataKey="dia" stroke="#23408e"/>
               <Tooltip />
               <Legend />
               </LineChart>

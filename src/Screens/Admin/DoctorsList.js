@@ -74,7 +74,7 @@ const DoctorsList = () => {
 
                     <div className="row-display">
                             <div className="col-md-6">
-                                <h5 className="pt-2">Doctors List <span style={{color: '#007673'}}>( 
+                                <h5 className="pt-2">Doctors List <span style={{color: '#ed1b24'}}>( 
                                      {doctors && doctors?.length} )</span></h5> 
                             </div>
                             <div className="row-display">
@@ -108,6 +108,7 @@ const DoctorsList = () => {
                                     <th>Gender </th>
                                     <th>NPI Number</th>
                                     <th>Phone 1</th>
+                                    <th>HR</th>
                                     <th>Acc Status</th>
                                     <th>Action</th>
                                 </tr> 
@@ -118,9 +119,10 @@ const DoctorsList = () => {
                                 <tr key={index}>
                                 <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/doctorProfile", state: {id: doctor?._id}}}> Dr. {doctor?.firstname} {doctor?.lastname} <p style={{color: 'gray'}}>{moment(doctor?.DOB).format("ll")}</p> </Link></td>
                                 <td style={{wordWrap: 'break-word'}}>{doctor?.email}</td>
-                                {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td className="female-tag"> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
+                                {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
                                 <td>{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</td>
                                 <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
+                                <td>{doctor?.assigned_hr_id ? <>HR. {doctor?.assigned_hr_id?.firstname}  {doctor?.assigned_hr_id?.lastname}</> : 'N/A'} </td>
                                 {doctor?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
                                         </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>

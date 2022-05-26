@@ -58,7 +58,6 @@ const RPMDeviceBasicInformation = (props) => {
     const getPatientProfile = (patient) => {
         // e.preventDefault();
         setPatientId(patient.value)
-        console.log('patient ID is ' + patient.value);
     }
 
     const options = []
@@ -103,9 +102,9 @@ const RPMDeviceBasicInformation = (props) => {
                         {deviceDetails?.assigned_patient_id && <Fragment>
                             <tr> 
                             <th scope="col-md-3">Assigned To: </th>
-                            <td scope="col-md-3" style={{backgroundColor: '#007376', color: '#FFF', letterSpacing:1}}>{deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname} ( {deviceDetails?.assigned_patient_id?.gender} )</td>
+                            <td scope="col-md-3" style={{backgroundColor: '#23408e', color: '#FFF', letterSpacing:1}}>{deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname} ( {deviceDetails?.assigned_patient_id?.gender} )</td>
                             <th scope="col-md-3">Assigned Date: </th>
-                            <td scope="col-md-3" style={{backgroundColor: '#007376', color: '#FFF', letterSpacing:1}}>{deviceDetails?.assignedTime || 'N/A'}</td>
+                            <td scope="col-md-3" style={{backgroundColor: '#23408e', color: '#FFF', letterSpacing:1}}>{deviceDetails?.assignedTime || 'N/A'}</td>
                         </tr>
                         </Fragment> 
                         }
@@ -221,7 +220,7 @@ const RPMDeviceBasicInformation = (props) => {
                 </> : <>
                 <b>Device Assigned.</b> <br/>
                 <small>This device is already assigned to Patient 
-                <b> {deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname}</b>, 
+                <Link to={{ pathname: "/patientProfile", state: {patientid: deviceDetails?.assigned_patient_id?._id }}} className="link"> {deviceDetails?.assigned_patient_id?.firstname} {deviceDetails?.assigned_patient_id?.lastname}</Link>, 
                 if you want to assign this device to other patient, first remove it from patient profile. 
                 <Link to={{ pathname: "/printReceipt", state: {deviceAssigned: deviceDetails, patientDetails: patient }}} className="ml-3 mt-2">Print Receipt</Link>
                 </small>
