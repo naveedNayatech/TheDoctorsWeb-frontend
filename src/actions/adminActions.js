@@ -57,9 +57,11 @@ import {
     GET_LOGS_FAIL,
     HR_PROFILE_SUCCESS,
     HR_PROFILE_FAIL,
-    GET_CAREPLAN_LIST_REQUEST,
     GET_CAREPLAN_LIST_SUCCESS,
     GET_CAREPLAN_LIST_FAIL,
+    GET_DOCTOR_TELEMETARY_REPORT_REQUEST,
+    GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
+    GET_DOCTOR_TELEMETARY_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -1400,6 +1402,31 @@ export const getAdminNotifications = () => async(dispatch) => {
         })
     }
 }
+
+export const getDoctorTelemetaryReport = (doctorId) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: GET_DOCTOR_TELEMETARY_REPORT_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod01}/doctor/allPatientHealthRecords`, {
+            drId: doctorId
+        });
+   
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
 
 // Clear errors
 export const clearErrors = () => async(dispatch) => {

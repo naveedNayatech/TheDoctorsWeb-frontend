@@ -5,17 +5,21 @@ import HRPieGraph from '../../components/HR/HRPieGraph';
 import HRTopBar from '../../components/HR/HRTopbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHRPatients } from '../../actions/HRActions';
+import { getHrProfile } from '../../actions/adminActions';
 import folderImg from '../../assets/Images/folder.png';
 import { Link } from 'react-router-dom';
 import { Badge, Table } from 'react-bootstrap';
 import Loader from '../../layouts/Loader';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
+import patientProfileImg from "../../assets/Images/patientProfile.png";
 
 const StaffDashboard = (props) => {
 
     const { loading, hr, isAuthenticated} = useSelector(state => state.hrAuth);
     const {  error, hrpatients} = useSelector(state => state.hrPatients);
+    const { hrProfile } = useSelector(state => state.hrprofile);
+
 
     const [sort, setSort] = useState(true);
     const [query, setQuery] = useState("");
@@ -32,6 +36,8 @@ const StaffDashboard = (props) => {
 		}
 
         dispatch(getHRPatients(id));
+        dispatch(getHrProfile(id))
+
 	}, [dispatch, isAuthenticated])
 
     return (
@@ -42,12 +48,25 @@ const StaffDashboard = (props) => {
             <section className="home-section">
                 <HRTopBar />
 
+                <div className="container row">
+                    <div className="col-md-9">
+                        <div className="home-content">
+                            <HRPieGraph />
+                        </div>    
+                    </div>
 
-                <div className="home-content">
-                <div className="overview-boxes">
-                    <HRPieGraph />
+                    <div className="col-md-3 alerts-section rounded-card">
+                        <h5 className="text-center">Doctor Details</h5><hr/>
+                        <br/>   
+                        {hrProfile && hrProfile?.assigned_doctor_id ? <>
+                            <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" /> 
+                            <p className="text-center mt-2" style={{fontSize: "12px", wordWrap: 'break-word'}}>Dr. {hrProfile?.assigned_doctor_id?.firstname} {hrProfile?.assigned_doctor_id?.lastname}</p>
+                            <p className="text-center mt-2" style={{fontSize: "12px", wordWrap: 'break-word'}}> {hrProfile?.assigned_doctor_id?.email}</p>
+                            <p className="text-center mt-2" style={{fontSize: "12px", wordWrap: 'break-word'}}> Phone # {hrProfile?.assigned_doctor_id?.phone1}</p>
+                            <p className="text-center mt-2" style={{fontSize: "12px", wordWrap: 'break-word'}}>Lic # {hrProfile?.assigned_doctor_id?.licensenumber}</p>
+                        </> : <> <small style={{fontSize: "12px", marginLeft: "50px"}}>No Doctor Assigned yet</small></>}
+                    </div>
                 </div>
-            </div>
             <div>
             <br />
 
@@ -58,7 +77,7 @@ const StaffDashboard = (props) => {
                                 <div className="row">
                                     <div className="col-md-12">
                                     <div className="row-display">
-                                        <h5 className="pt-2 mt-2">Patients ({hrpatients && hrpatients.length}) </h5> 
+                                        <h5 className="pt-2 mt-2">Patients <span style={{color: '#ed1b24'}}> ({hrpatients && hrpatients?.length < 10 ? '0'+hrpatients?.length : hrpatients?.length}) </span></h5> 
 
                                         <div className="row-display"> 
                                             <input 
@@ -103,7 +122,7 @@ const StaffDashboard = (props) => {
                                             <tr key={index}>
                                             
                                             <td>
-                                                <Link style={{textDecoration: 'none'}} to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link>
+                                                <Link className="link" to={{ pathname: "/hrPatientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link>
                                             </td>
 
                                             <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td>
@@ -116,7 +135,7 @@ const StaffDashboard = (props) => {
                                             </td>}
 
 
-                                            {patient?.assigned_doctor_id ? <td style={{backgroundColor:'#D3D3D3'}}> {patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id.lastname}</td> : 'N/A' }
+                                            {patient?.assigned_doctor_id ? <td style={{color:'#23408e', fontWeight: 'bold'}}> Dr. {patient?.assigned_doctor_id.firstname} {patient?.assigned_doctor_id.lastname}</td> : 'N/A' }
                                             {patient?.assigned_devices ? <td>0{patient?.assigned_devices.length}</td> : 'No Device Assigend'}
                                             
                                         </tr> 

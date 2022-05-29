@@ -64,14 +64,14 @@ const DoctorProfile = (props) => {
                         <div className="home-content">
                         <div className="container">
                          <div className="row-display">
-                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '	#ed1b24'}}> Details </span></h5> 
+                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '	#ed1b24'}}> Profile </span></h5> 
                                                          
                             <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
                             className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
                             </Link>
                          </div>   
 
-                         <hr className="blue-hr"/>
+                         <hr />
                         
 
                         {doctor && <Fragment>
@@ -81,7 +81,8 @@ const DoctorProfile = (props) => {
                                     <img src={defaultImg} className="img-responsive profile-card-img"/>
                                         
                                     <p className="profile-name">Dr. {doctor?.firstname} {doctor?.lastname} </p>
-                                    
+                                    <p className="profile-value-text text-center" style={{wordWrap: 'break-word'}}>{doctor?.email}</p>
+                                    <p className="text-center"><Badge bg="info text-white" className="male-tag">{doctor?.gender}</Badge></p>                                    
                                 </div>
                             </div>
 
@@ -90,36 +91,39 @@ const DoctorProfile = (props) => {
                                     <div className="card-inner-margin">
                                         <div className="row">
                                         <div className="col-md-4">
-                                            <span className="profile-label">Email: </span>
-                                            <p className="profile-value-text" style={{wordWrap: 'break-word'}}>{doctor?.email}</p>
-
-                                            <span className="profile-label">Gender: </span>
-                                            <p className="profile-value-text">{doctor?.gender}</p>
 
                                             <span className="profile-label">License Number: </span>
                                             <p className="profile-value-text">{doctor?.licensenumber ? doctor?.licensenumber : 'N/A'}</p>
                                             
-                                            </div>
-
-
-                                            <div className="col-md-4">
-                                                <span className="profile-label">DOB : </span>
+                                            <span className="profile-label">DOB : </span>
                                                 <p className="profile-value-text">{moment(doctor.DOB).format("ll")}</p>
 
                                                 <span className="profile-label">Phone 1: </span>
                                                 <p className="profile-value-text">{doctor?.phone1 ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.phone1} </span> : 'N/A'}</p>
-                                                
-                                                <span className="profile-label">Created At: </span>
+
+                                                <span className="profile-label">Acc. Created At: </span>
                                                 <p className="profile-value-text">{moment(doctor?.createdAt).format("lll")}</p>
-                                            
                                             </div>
 
-                                            <div className="col-md-4">
+
+                                            <div className="col-md-3" style={{borderRightStyle: 'solid', borderRightWidth: '2px', borderRightColor: '#ccc'}}>
+                                                
                                                 <span className="profile-label">NPI #: </span>
                                                 <p className="profile-value-text">{doctor?.licensenumber}</p>
 
                                                 <span className="profile-label">Mobile No: </span>
                                                 <p className="profile-value-text">{doctor?.mobileNo ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.mobileNo} </span> : 'N/A'}</p>
+                                            </div>
+
+                                            <div className="col-md-5 text-center">
+                                            <h5 className="text-cemter">Assigned <span style={{color: '#ed1b24'}}> HR Details </span></h5> 
+                                                {doctor && doctor?.assigned_hr_id?._id ? <>
+                                                <img src={defaultImg} className="img-responsive profile-card-img"/>
+                                                <p className="profile-name">Hr. {doctor?.assigned_hr_id?.firstname} {doctor?.assigned_hr_id?.lastname} </p>
+                                                <p className="profile-value-text text-center" style={{wordWrap: 'break-word'}}>{doctor?.assigned_hr_id?.email}</p>
+                                                <p className="profile-value-text text-center">{doctor?.assigned_hr_id?.phone1 ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.assigned_hr_id?.phone1} </span> : 'N/A'}</p>
+                                                <button className="btn btn-danger ml-5">Remove HR</button>
+                                                </> : <small style={{color: 'gray'}}>No HR assigned yet</small>}
                                             </div>
                                         </div>
                                     </div>
@@ -131,7 +135,7 @@ const DoctorProfile = (props) => {
                         {/* paste patients list fragment here */}
                         {doctorpatients && doctorpatients?.length > 0 ? (<Fragment>
                             <div className="row-display">
-                                <h5 className="pt-2 mt-2">Patient's List <span style={{color: '#F95800'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
+                                <h5 className="pt-2 mt-2">Assigned Patients <span style={{color: '#ed1b24'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
                                 
                             <div className="row-display">
                                 <input 

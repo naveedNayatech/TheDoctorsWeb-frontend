@@ -64,7 +64,14 @@ const Sidebar = () => {
                 </li>
 
                 <li className="nav_link">
-                    <NavLink key="initialmonthreport" to="/Admin/Report/patient" activeClassName="link-name-active">
+                    <NavLink key="telemetarydatareport" to="/report/telemetary" activeClassName="link-name-active">
+                    <i className='bx bx-heart'></i>
+                        <span className="link_name">Telemetary Data Report</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
+                    <NavLink key="patientCPReport" to="/Admin/Report/patient" activeClassName="link-name-active">
                         <i className='bx bxs-report'></i>
                         <span className="link_name">Patient CP</span>
                     </NavLink>
@@ -81,6 +88,13 @@ const Sidebar = () => {
                     <NavLink key="credentials" to="/credentials" activeClassName="link-name-active">
                         <i className='bx bxs-lock'></i>
                         <span className="link_name">Manage Credentials</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
+                    <NavLink key="logs" to="/logs" activeClassName="link-name-active">
+                    <i className='bx bxs-collection'></i>
+                        <span className="link_name">Logs</span>
                     </NavLink>
                 </li>
 

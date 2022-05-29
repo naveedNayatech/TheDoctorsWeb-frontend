@@ -13,6 +13,7 @@ import { COMMENT_RESET } from '../../constants/HRConstants';
 import moment from 'moment';
 import Pagination from 'react-js-pagination';
 import HRPatientInfo from '../../components/HR/HRPatientInfo';
+import PatientProfileGraph from '../../components/PatientProfileGraph';
 
 
 const HRPatientProfile = (props) => {
@@ -29,7 +30,8 @@ const HRPatientProfile = (props) => {
   const { loading, error, patient} = useSelector(state => state.patientProfile);
   const { deviceData, Count } = useSelector(state => state.deviceData);
   const { commentSuccess} = useSelector(state => state.comments);
-  const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent); 
+//   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent); 
+  const [accordion, setAccordion] = useState(false);
 
   const [readingPerPage, setReadingsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,14 +83,15 @@ const HRPatientProfile = (props) => {
         />
 
         {loading ? <Loader /> : <Fragment>
-                <div className="shadow-lg p-3 mb-5 mr-4 ml-4 bg-white rounded">        
+                <div className="shadow-lg m-3 bg-white rounded">        
                         <div className="home-content">
-                            <div className="container">    
+                            <div>    
 
 
                             {patient && <Fragment>
                                 <HRPatientInfo 
                                     patient={patient}
+                                    healthData={deviceData}
                                 />
 
 
@@ -96,11 +99,11 @@ const HRPatientProfile = (props) => {
                         {deviceData && deviceData.length > 0 ? <Fragment>
                        
 
-                        <div className="col-md-12">
-                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#F95800'}}>(Total Readings: {Count}) </span></h5>
+                        <div className="col-md-12 container">
+                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#ed1b24'}}>(Total Readings: {Count}) </span></h5>
                             </div>
 
-                            <div className="row-display patient-profile-col-heading" style={{ 
+                            <div className="row-display patient-profile-col-heading container" style={{ 
                                 padding: 10,
                                 borderRadius: '10px'
                                 }}
@@ -160,7 +163,8 @@ const HRPatientProfile = (props) => {
                             </div>
 
                         <br /><br />
-                        
+
+                        <div className="container">
                         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                         <Row>
                             <Col sm={12}>
@@ -173,6 +177,19 @@ const HRPatientProfile = (props) => {
                                     </Nav.Item>
                                 </Nav>
                             </Col>
+
+                             {/* Accordion for graphical representation */}
+                        <div className="container graphWrapper">
+                            <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
+                                Show Graphical Representation
+                                <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
+                            </button>
+
+                            {accordion === true ? <div className="panel">
+                                <PatientProfileGraph healthData={deviceData} />
+                            </div> : ""}
+                        </div>
+                        {/* Accordion for graphical representation ends here */}
 
                             <Col sm={12}>
                             <Tab.Content>
@@ -216,7 +233,7 @@ const HRPatientProfile = (props) => {
                             </Col>
                     </Row>
                     </Tab.Container>
-
+                    </div>
                     
                        
                         </Fragment> : <small className="text-center" style={{color: 'gray', marginLeft: '350px'}}>No telemetary data found <button className="btn btn-primary btn-sm"onClick={refreshHandler}>Refresh List</button></small>}

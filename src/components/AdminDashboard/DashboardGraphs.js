@@ -34,7 +34,7 @@ const DashboardGraphs = () => {
 
   }, [dispatch, error, patientId, recordsPerpage]);
 
-        let data = deviceData && deviceData.map((deviceData) => {
+        let data = deviceData && deviceData.filter(healthData => healthData?.deviceId?.deviceType === "bp").map((deviceData) => {
               return {
                   'date': moment(deviceData?.createdAt).tz("America/New_York").format("ll"),
                   'sys': deviceData?.telemetaryData?.sys,
@@ -67,7 +67,6 @@ const DashboardGraphs = () => {
               style={{width: '250px'}}
               onChange={e => setRecordsPerPage(e.target.value)}
               >
-              <option value="default">Select Readings </option>
                 <option value="5">Last 5 Readings</option>
                 <option value="10">Last 10 Readings</option>
                 <option value="25">Last 25 Readings</option>
@@ -80,9 +79,9 @@ const DashboardGraphs = () => {
                 style={{width: '250px'}}
                 onChange={e => setGraphType(e.target.value)}
                 >
-              <option value="default">Graph Type </option>
-                <option value="line">Line Graphs</option>
                 <option value="bar"> Bar Graph</option>
+                <option value="line">Line Graphs</option>
+                
               </select>
             </div> 
             <br />

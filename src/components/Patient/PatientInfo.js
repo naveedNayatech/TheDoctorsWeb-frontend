@@ -182,13 +182,11 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
                     <hr /> 
                     {telemetaryReadings && telemetaryReadings.length > 0 ? <>
-                        {telemetaryReadings && telemetaryReadings.slice(0,5).map((devicedata, index) => (
+                        {telemetaryReadings && telemetaryReadings.filter(healthData => healthData?.deviceId?.deviceType === "bp").slice(0,5).map((devicedata, index) => (
                             <div key={index} className="row-display mt-2" >
-                                {devicedata?.telemetaryData?.sys ? <>
-                                    <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
-                                        {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
-                                    <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
-                                </> : ""}
+                                <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                    {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
                             </div>
                         ))}
                     </> : 'N/A' }

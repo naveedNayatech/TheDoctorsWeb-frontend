@@ -14,7 +14,7 @@ import moment from 'moment';
 import { Tab, Row, Col, Nav} from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
-
+import PatientProfileGraph from '../../components/PatientProfileGraph';
  
 
 const PatientProfile = (props) => {
@@ -33,6 +33,7 @@ const PatientProfile = (props) => {
     const { careplan } = useSelector(state => state.careplan);
     const { count } = useSelector(state => state.readingsCount);
 
+    const [accordion, setAccordion] = useState(false);
     const [readingPerPage, setReadingsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [sort, sortBy] = useState(-1);
@@ -185,6 +186,19 @@ const PatientProfile = (props) => {
                                 </Nav.Item>
                             </Nav>
                         </Col>
+
+                        {/* Accordion for graphical representation */}
+                        <div className="container graphWrapper">
+                            <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
+                                Show Graphical Representation
+                                <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
+                            </button>
+
+                            {accordion === true ? <div className="panel">
+                                <PatientProfileGraph healthData={deviceData} />
+                            </div> : ""}
+                        </div>
+                        {/* Accordion for graphical representation ends here */}
                         
 
                         <Col sm={12}>

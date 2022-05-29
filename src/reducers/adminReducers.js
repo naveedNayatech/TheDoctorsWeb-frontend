@@ -59,6 +59,9 @@ import {
     GET_CAREPLAN_LIST_REQUEST,
     GET_CAREPLAN_LIST_SUCCESS,
     GET_CAREPLAN_LIST_FAIL,
+    GET_DOCTOR_TELEMETARY_REPORT_REQUEST,
+    GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
+    GET_DOCTOR_TELEMETARY_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -556,6 +559,37 @@ export const logsReducers = (state = {logs: []}, action) => {
             }
             
         case GET_LOGS_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+            }        
+        
+        default:{
+            return state
+            }     
+    }
+}
+
+export const doctorTelemetaryReportReducer = (state = {telemetaryReport: []}, action) => {
+    switch(action.type) {
+        case GET_DOCTOR_TELEMETARY_REPORT_REQUEST:
+            return { 
+                loading: true,     
+            }
+
+        case GET_DOCTOR_TELEMETARY_REPORT_SUCCESS:
+            return { 
+                loading: false,  
+                telemetaryReport: action.payload 
+            }
+            
+        case GET_DOCTOR_TELEMETARY_REPORT_FAIL:
             return { 
                 loading: false,  
                 error: action.payload

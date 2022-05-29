@@ -43,8 +43,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             <span className="profile-label">Systolic : {telemetaryData?.sys}</span>
                 {telemetaryData?.sys <= 70 ? <p className="normalBP">Very Low</p> : telemetaryData?.sys > 70 && telemetaryData?.sys <= 120 ? 
                 <p className="normalBP">Normal</p> : telemetaryData?.sys > 120 && telemetaryData?.sys <= 140 ? <p className="elevatedBP">Elevated</p> : 
-                telemetaryData?.sys > 140 && telemetaryData?.sys <= 160 ? <p className="elevatedBP">High BP</p> : 
-                telemetaryData?.sys > 160 && telemetaryData?.sys < 180 ? <p className="elevatedBP">Hypertension</p> : ''}
+                telemetaryData?.sys > 140 && telemetaryData?.sys <= 160 ? <p className="highBP">High BP</p> : 
+                telemetaryData?.sys > 160 && telemetaryData?.sys < 180 ? <p className="highBP">Hypertension</p> : ''}
             </div>
 
             <div className="col-md-1">

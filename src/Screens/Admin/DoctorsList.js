@@ -122,7 +122,7 @@ const DoctorsList = () => {
                                 {doctor?.gender === 'male' ? <td><Badge bg="info text-white" className="male-tag">Male</Badge></td> : <td> <Badge bg="danger text-white" className="female-tag">Female</Badge></td>}
                                 <td>{doctor?.npinumber ? doctor?.npinumber : 'N/A'}</td>
                                 <td>{doctor?.phone1 ? doctor?.phone1 : 'N/A'} <p>( English )</p></td>
-                                <td>{doctor?.assigned_hr_id ? <>HR. {doctor?.assigned_hr_id?.firstname}  {doctor?.assigned_hr_id?.lastname}</> : 'N/A'} </td>
+                                <td style={{color:"#23408e", fontWeight: 'bold'}}>{doctor?.assigned_hr_id ? <>HR. {doctor?.assigned_hr_id?.firstname}  {doctor?.assigned_hr_id?.lastname}</> : 'N/A'} </td>
                                 {doctor?.block === false ? <td>
                                         <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
                                         </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>

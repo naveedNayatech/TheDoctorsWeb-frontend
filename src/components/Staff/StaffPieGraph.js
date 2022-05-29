@@ -104,7 +104,7 @@ const StaffPieGraph = () => {
                   <CartesianGrid strokeDasharray="1 1" />
                   <Tooltip />
                   <Legend/> 
-                  <Bar dataKey="sys" fill="#ed1b24" />
+                      <Bar dataKey="sys" fill="#ed1b24" />
                       <Bar dataKey="dia" fill="#23408e" />
                       <Bar dataKey="pul" fill="#007673" />
               </BarChart>

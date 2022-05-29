@@ -13,7 +13,7 @@ import folderImg from '../../assets/Images/folder.png';
 import {Badge, Table, Modal } from 'react-bootstrap';
 
 
-const HRProfile = (props, history) => {
+const HRProfile = (props) => {
 
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -98,7 +98,7 @@ const HRProfile = (props, history) => {
                             <div className="col-md-3">
                                 <div>
                                     <img src={defaultImg} className="img-responsive profile-card-img"/>     
-                                    <p className="profile-name">{hrDetails?.firstname} {hrDetails?.lastname} </p>
+                                    <p className="profile-name">HR. {hrDetails?.firstname} {hrDetails?.lastname} </p>
                                     <p className="profile-value-text text-center">{moment(hrDetails?.createdAt).format("lll")}</p>
                                 </div>
                             </div>

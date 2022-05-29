@@ -54,11 +54,12 @@ const HRPieGraph = () => {
 
     return (
       <section className="alerts-section rounded-card graph-card" style={{width: '100%'}}>
+      <h5 className="title">Patient B.P Analytics </h5>
       <div className='row-display'>
-            <h5 className="title">B.P Analytics </h5>
-              <select 
+            
+            <select 
               className="form-control" 
-              style={{width: '250px'}} 
+              style={{width: '220px'}} 
               name="patientlist"
               value={patientId}
               onChange={(e) => setPatientId(e.target.value)}
@@ -72,10 +73,9 @@ const HRPieGraph = () => {
               {/* Number of readings */}
               <select 
               className="form-control"
-              style={{width: '250px'}}
+              style={{width: '220px'}}
               onChange={e => setRecordsPerPage(e.target.value)}
               >
-              <option value="default">Select Readings </option>
                 <option value="5">Last 5 Readings</option>
                 <option value="10">Last 10 Readings</option>
                 <option value="25">Last 25 Readings</option>
@@ -85,12 +85,11 @@ const HRPieGraph = () => {
 
               <select 
                 className="form-control"
-                style={{width: '250px'}}
+                style={{width: '220px'}}
                 onChange={e => setGraphType(e.target.value)}
                 >
-              <option value="default">Graph Type </option>
-                <option value="line">Line Graphs</option>
                 <option value="bar"> Bar Graph</option>
+                <option value="line">Line Graphs</option>
               </select>
         </div> 
         <br />
@@ -104,9 +103,9 @@ const HRPieGraph = () => {
                   <CartesianGrid strokeDasharray="1 1" />
                   <Tooltip />
                   <Legend/> 
-                  <Bar dataKey="sys" fill="#870074" />
-                  <Bar dataKey="dia" fill="#003366" />
-                  <Bar dataKey="pul" fill="#007673" />
+                  <Bar dataKey="sys" fill="#ed1b24" />
+                      <Bar dataKey="dia" fill="#23408e" />
+                      <Bar dataKey="pul" fill="#007673" />
               </BarChart>
         }
       </ResponsiveContainer>
@@ -116,8 +115,8 @@ const HRPieGraph = () => {
               <XAxis dataKey="dia" stroke="#007673"/>
               <YAxis/>
               <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5"/>
-              <Line type="monotone" dataKey="sys" stroke="#870074"/>
-              <Line type="monotone" dataKey="dia" stroke="#007673"/>
+              <Line type="monotone" dataKey="sys" stroke="#ed1b24"/>
+              <Line type="monotone" dataKey="dia" stroke="#23408e"/>
               <Tooltip />
               <Legend />
               </LineChart>

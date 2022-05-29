@@ -60,8 +60,9 @@ const StaffDashboard = (props) => {
                         </> : <> <small style={{fontSize: "12px", marginLeft: "50px"}}>No HR Assigned yet</small></>}
                     </div>
                 </div>
-            <div>
 
+            
+            <div>
             <br />
             {patientsLoading ? <Loader /> : <Fragment>
                     <div className="shadow-lg p-3 mb-5 mr-4 ml-4">        

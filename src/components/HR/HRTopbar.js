@@ -114,10 +114,12 @@ const TopBar = ({displayTimer, patientid}) => {
                 {/* TIMER */}
                 {displayTimer === 'yes' ? <>
                 <div style={{
-                    backgroundColor: '#F1F1F1',
+                    backgroundColor: '#23408e',
                     width: '32%',
-                    padding: '15px',
-                    overflowX: 'hidden'
+                    padding: '10px',
+                    overflowX: 'hidden',
+                    borderRadius: '10px',
+                    color: "#FFF"
                 }} className="row-display">
                 <h4 id="counter">{minutes < 10 ? '0'+minutes : minutes} : {seconds < 10 ? '0'+seconds : seconds}</h4>
                 

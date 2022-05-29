@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import clockImg from '../../assets/Images/clock.png';
+import clockImg from '../../assets/Images/clockImg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Modal, Button } from 'react-bootstrap';
+import { Badge, Modal, Button, Image } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import TextField from '../../components/Form/TextField';
 import { carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth, timeSpentOnPatient } from '../../actions/HRActions';
@@ -9,19 +9,14 @@ import { getRemainingReadings} from '../../actions/adminActions';
 import moment from 'moment';
 import { ADDING_CARE_PLAN_RESET, ADDING_TIME_SPENT_RESET } from '../../constants/HRConstants';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import {Link} from 'react-router-dom';
+import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
 
 
-const HRPatientInfo = ({patient}) => {
+const HRPatientInfo = ({patient, healthData}) => {
 
  const dispatch = useDispatch();   
  const alert = useAlert();
-
-//  const input = new Date();
-//  const output = moment(input, "DD-MM-YY");
-//  let startDate = output.startOf('month').format('L');
-//  let endDate = output.endOf('month').format('L');
 
 
  var check = moment(new Date(), 'YYYY/MM/DD');
@@ -118,33 +113,33 @@ const [addTimeShow, setAddTimeShow] = useState(false);
 
   return (
     <>
-      <div className="row-display">
-            <div>
-                <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#007673'}}> Details </span></h5>
-            </div>
+      <div className="row-display header-wrapper">
             
-            
+            <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#ed1b24'}}> Details </span></h5>
+        
             <div>
-                <img src={clockImg} className="img-responsive img-thumbnail" width="50" height="50"/>
+                <img src={clockImg} className="img-responsive" width="50" height="50"/>
                 <small className="total-time-spent">{totalTime} mins spent in month of <span style={{color: '#007673'}}>{currMonthName}</span> </small>
             </div>
 
-            {careplan ? <Fragment>
-                <div className="col-md-2">
-                    <button disabled className="btn btn-outline-danger mt-2"><small>+ Careplan</small></button>
-                </div>
-            </Fragment> : <Fragment>
-                <div className="col-md-2">
-                    <button className="reset-btn mt-2" onClick={handleCarePlanModalShow}>+ Careplan</button>
-                </div>    
-            </Fragment>}
+            <div className="row-display">    
+                {careplan ? <Fragment>
+                    <div>
+                        <button disabled className="btn btn-outline-danger mt-2"><small>Careplan Added</small></button>
+                    </div>
+                </Fragment> : <Fragment>
+                    <div>
+                        <button className="reset-btn mt-2" onClick={handleCarePlanModalShow}>Add Careplan</button>
+                    </div>    
+                </Fragment>}
 
-            <button className="btn btn-info btn-sm shadow-none" onClick={handleShow}><small>Add Time Manually</small></button>
+                <button className="submit-btn shadow-none ml-3 mt-2" onClick={handleShow}><small>Add Time Manually</small></button>
+            </div>
 
             </div>
             <br/><br/>
     
-            <div className="row">
+            <div className="row container">
                 <div className="col-md-3">
                     <div>
                         <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
@@ -221,7 +216,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
 
                 
                 <br />   
-                                <div className="row">
+                            <div className="row container">
                                 <div className="col-md-3">
                                     <span className="patient-profile-col-heading">Physician Information</span>                                 
                                         <hr />
@@ -272,20 +267,19 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                                         </div>
 
                                         <div className="col-md-3">
-                                            <span className="patient-profile-col-heading">Patient Careplan</span>                                 
-                                            <hr />        
-                                                
-                                            {careplan && ( <Fragment>
-                                                <small className="patient-profile-careplan-desc">{careplan && careplan?.data?.Description}</small>            
-                                                <small style={{float: 'right', marginTop: 10}}>
-                                                    <i>Added By: {careplan?.data?.assigned_hr_id?.firstname} {careplan?.data?.assigned_hr_id?.lastname}
-                                                    &nbsp;&nbsp;<Badge bg="success text-white">{careplan?.data?.assigned_hr_id?.role}</Badge> 
-                                                    </i>
-                                                </small>    
-                                                <br/><br/>
-                                                <Link to={{pathname: "/HR/Careplan/Details", state: {patientId: patientid}}} className="btn btn-dark btn-block"> Read More</Link>
-                                            </Fragment>)}
-                                        </div>
+                                        <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
+                                        <hr /> 
+                                        {healthData && healthData.length > 0 ? <>
+                                            {healthData && healthData.filter(healthdata => healthdata?.deviceId?.deviceType === "bp").slice(0,5).map((devicedata, index) => (
+                                                <div key={index} className="row-display mt-2" >
+                                                    <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                                        {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                                    <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
+                                                </div>
+                                            ))}
+                                        </> : 'N/A' }
+                                        
+                                    </div>
                                 </div> {/* Second row ends here*/}
 
 

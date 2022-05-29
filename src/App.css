@@ -1777,15 +1777,32 @@ tr {
 .normalBP {
   color: green;
   font-weight: bold;
-  font-size: 14px;
-  margin-left: 10px 
+  font-size: 14px; 
 }
 
 .elevatedBP {
-  color: orangered;
+  color: #ed1b24;
+  font-size: 14px;
+  background-color: #cccccc;
+  padding: 5px;
+  border-radius: 5px;
+  animation: highBpAnimation 0.5s ease infinite alternate;
+}
+
+.highBP {
+  color: #ed1b24;
   font-weight: bold;
   font-size: 14px;
-  margin-left: 10px
+  animation: highBpAnimation 0.5s ease infinite alternate;
+}
+
+@keyframes highBpAnimation {
+  from {
+      opacity: 0
+  }
+  to {
+      opacity: 1
+  }
 }
 
 .devicedata-createddata{
@@ -2198,3 +2215,40 @@ tr {
   margin-top: 12px;
 }
 
+.header-wrapper {
+  background-color: #D3D3D3;
+  padding: 12px;
+  border-radius: 10px;
+  color: #ed1b24
+}
+
+.notes-header {
+  background-color: #DCBB57;
+  padding: 8px;
+  border-radius: 5px;
+  color: #FFF;
+}
+
+.cardWrapper {
+  text-align: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.cardButton {
+  padding: 20px;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 2px;
+  transition: all 0.5s ease-in;
+
+}
+
+.cardActive {
+  background-color: #23408e;
+  color: #fff;
+}
+
+.react-selectbox{
+  font-size: 12px;
+}

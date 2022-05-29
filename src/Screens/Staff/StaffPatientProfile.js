@@ -11,7 +11,7 @@ import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
 import moment from 'moment';
 import { COMMENT_RESET } from '../../constants/HRConstants';
-import { Badge, Tab, Row, Col, Nav, Image, Accordion } from 'react-bootstrap';
+import { Badge, Tab, Row, Col, Nav, Image } from 'react-bootstrap';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
 import Pagination from 'react-js-pagination';
@@ -91,9 +91,6 @@ const StaffPatientProfile = (props) => {
         dispatch(sortTelemetartData(patientid, startDate, endDate, readingPerPage, currentPage));
     }
 
-    console.log(accordion);
-
-
     return (
         <Fragment>
            <MetaData title="Patient Profile"/>
@@ -112,7 +109,7 @@ const StaffPatientProfile = (props) => {
                             {patient && <Fragment>
                             <div className="row">
                                 <div className="col-md-10">
-                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#F95800'}}> Details </span></h5>
+                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#ed1b24'}}> Details </span></h5>
                                 </div>
                                 </div>
                             <hr />
@@ -243,13 +240,11 @@ const StaffPatientProfile = (props) => {
                                         <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
                                         <hr /> 
                                         {deviceData && deviceData.length > 0 ? <>
-                                            {deviceData && deviceData.slice(0,5).map((devicedata, index) => (
+                                            {deviceData && deviceData.filter(healthData => healthData?.deviceId?.deviceType === "bp").slice(0,5).map((devicedata, index) => (
                                                 <div key={index} className="row-display mt-2" >
-                                                    {devicedata?.telemetaryData?.sys ? <>
-                                                        <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
-                                                            {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
-                                                        <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
-                                                    </> : ""}
+                                                    <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                                        {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                                    <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
                                                 </div>
                                             ))}
                                         </> : 'N/A' }

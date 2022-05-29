@@ -5,7 +5,7 @@ import HRTopBar from '../../components/HR/HRTopbar';
 import MetaData from '../../layouts/MetaData';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-
+import patientProfileImg from "../../assets/Images/patientProfile.png";
 
 const HR = () => {
   
@@ -25,7 +25,7 @@ const {hr} = useSelector(state => state.hrAuth);
 
                     <div className="row-display">
                       
-                        <h5 className="pt-2 mt-2">My <span style={{color: '#007673'}}>Profile</span></h5> 
+                        <h5 className="pt-2 mt-2">My <span style={{color: '#ed1b24'}}>Profile</span></h5> 
 
                         <div className="row-display">
                               <Link to="/HrDashboard">
@@ -46,9 +46,9 @@ const {hr} = useSelector(state => state.hrAuth);
                     <div className="row">
                     <div className="col-md-4">
                         <div>
-                            <img src='https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png' className="img-responsive profile-card-img"/>
+                            <img src={patientProfileImg} className="img-responsive profile-card-img"/>
                                 
-                            <p className="profile-name">{hr?.firstname} {hr?.lastname} </p>
+                            <p className="profile-name">HR. {hr?.firstname} {hr?.lastname} </p>
                             
                         </div>
                     </div>
@@ -59,7 +59,7 @@ const {hr} = useSelector(state => state.hrAuth);
                               <div className="row">
                               <div className="col-md-4">
                                   <span className="profile-label">Email: </span>
-                                  <p className="profile-value-text">{hr?.email}</p>
+                                  <p className="profile-value-text" style={{wordWrap: 'break-word'}}>{hr?.email}</p>
 
                                   <span className="profile-label">Gender: </span>
                                   <p className="profile-value-text">{hr?.gender}</p>                            
