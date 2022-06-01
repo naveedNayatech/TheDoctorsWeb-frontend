@@ -4,7 +4,7 @@ import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import defaultImg from '../../assets/Images/defaultUser.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { doctorProfile, getDoctorPatients, removePatientsDoctor } from '../../actions/adminActions';
+import { doctorProfile, getDoctorPatients, removePatientsDoctor, removeHRFromDoctor } from '../../actions/adminActions';
 import folderImg from '../../assets/Images/folder.png';
 import Loader from '../../layouts/Loader';
 import { useAlert } from 'react-alert';
@@ -46,6 +46,11 @@ const DoctorProfile = (props) => {
     const removePatient = () => {
         dispatch(removePatientsDoctor(patientToRemove, doctorId));
         setSmShow(false);
+    }
+
+    const removeHR = (hrId) => {
+        dispatch(removeHRFromDoctor(hrId, doctorId));
+        props.history.push('/doctors');
     }
 
 
@@ -122,7 +127,7 @@ const DoctorProfile = (props) => {
                                                 <p className="profile-name">Hr. {doctor?.assigned_hr_id?.firstname} {doctor?.assigned_hr_id?.lastname} </p>
                                                 <p className="profile-value-text text-center" style={{wordWrap: 'break-word'}}>{doctor?.assigned_hr_id?.email}</p>
                                                 <p className="profile-value-text text-center">{doctor?.assigned_hr_id?.phone1 ? <span style={{color: 'dodgerblue'}}><i className='bx bx-phone'></i> {doctor?.assigned_hr_id?.phone1} </span> : 'N/A'}</p>
-                                                <button className="btn btn-danger ml-5">Remove HR</button>
+                                                <button className="btn btn-danger ml-5" onClick={() => removeHR(doctor?.assigned_hr_id?._id)}>Remove HR</button>
                                                 </> : <small style={{color: 'gray'}}>No HR assigned yet</small>}
                                             </div>
                                         </div>

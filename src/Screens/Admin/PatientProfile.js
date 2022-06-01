@@ -188,31 +188,37 @@ const PatientProfile = (props) => {
                         </Col>
 
                         {/* Accordion for graphical representation */}
+                        {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp') ? <>
                         <div className="container graphWrapper">
                             <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
-                                Show Graphical Representation
+                                Show Graphically
                                 <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
                             </button>
-
+                            
                             {accordion === true ? <div className="panel">
                                 <PatientProfileGraph healthData={deviceData} />
                             </div> : ""}
-                        </div>
+                        </div> 
+                        </> : <></> }
+                        
+                               
+                                
+                        
+                        
                         {/* Accordion for graphical representation ends here */}
                         
 
                         <Col sm={12}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                {deviceData && deviceData.map((devicedata, index) => (
+                                
+                                {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={true} />
-                                        </Fragment> : ''}
+                                        <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={true} />
                                     </div>
                                 ))}
 
-                                {/* Pagination */}
+                                
                                 {readingPerPage <= Count && (
                                     <div className="d-flex justify-content-center mt-5"> 
                                     <Pagination activePage={currentPage} 
@@ -228,11 +234,14 @@ const PatientProfile = (props) => {
                                     />           
                                 </div>
                                 )} 
+                                
+                                {/* Pagination */}
+                                
                                 </Tab.Pane>
         
 
                                 <Tab.Pane eventKey="second">
-                                {deviceData && deviceData.map((devicedata, index) => (
+                                {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'weight').map((devicedata, index) => (
                                     <div key={index}>
                                          <Fragment>
                                             <WeightTelemetaryData healthData={devicedata} count={Count} isAdmin={true} />

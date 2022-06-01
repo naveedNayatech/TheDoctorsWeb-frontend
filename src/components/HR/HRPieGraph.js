@@ -43,7 +43,7 @@ const HRPieGraph = () => {
   
     }, [dispatch, error, patientId, recordsPerpage]);
 
-    let data = deviceData && deviceData.map((deviceData) => {
+    let data = deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((deviceData) => {
       return {
           'date': moment(deviceData?.createdAt).tz("America/New_York").format("ll"),
           'sys': deviceData?.telemetaryData?.sys,

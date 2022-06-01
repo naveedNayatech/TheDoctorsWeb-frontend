@@ -337,7 +337,7 @@ const StaffPatientProfile = (props) => {
                         {/* Accordion for graphical representation */}
                         <div className="container graphWrapper">
                             <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
-                                Show Graphical Representation
+                                Show Graphically
                                 <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
                             </button>
 
@@ -353,9 +353,9 @@ const StaffPatientProfile = (props) => {
                                 <Tab.Pane eventKey="first">
                                 {deviceData && deviceData.map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
-                                        </Fragment> : ''}
+                                    {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((devicedata, index) => (
+                                        <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />    
+                                    ))}
                                     </div>
                                 ))}
 
@@ -379,11 +379,9 @@ const StaffPatientProfile = (props) => {
         
 
                                         <Tab.Pane eventKey="second">
-                                        {deviceData && deviceData.map((devicedata, index) => (
+                                        {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'weight').map((devicedata, index) => (
                                             <div key={index}>
-                                                <Fragment>
-                                                    <WeightTelemetaryData healthData={devicedata} count={Count} isAdmin={false} />
-                                                </Fragment>   
+                                                <WeightTelemetaryData healthData={devicedata} count={Count} isAdmin={false} />
                                             </div>
                                         ))}
                                         </Tab.Pane>

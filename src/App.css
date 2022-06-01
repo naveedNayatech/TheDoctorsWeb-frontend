@@ -36,9 +36,8 @@
 }
 
 .vl {
-  border-left: 1px solid gray;
-  height: 20px;
-  margin-left: 20px;
+  border-left: 2px solid #000;
+  height: 30px;
 }
 
 .rounded-card {
@@ -1783,7 +1782,7 @@ tr {
 .elevatedBP {
   color: #ed1b24;
   font-size: 14px;
-  background-color: #cccccc;
+  font-weight: bold;
   padding: 5px;
   border-radius: 5px;
   animation: highBpAnimation 0.5s ease infinite alternate;
@@ -2189,7 +2188,7 @@ tr {
   color: #FFF;
   cursor: pointer;
   padding: 10px;
-  width: 260px;
+  width: 200px;
   border: none;
   text-align: center;
   outline: none;
@@ -2223,7 +2222,7 @@ tr {
 }
 
 .notes-header {
-  background-color: #DCBB57;
+  background-color: dodgerblue;
   padding: 8px;
   border-radius: 5px;
   color: #FFF;

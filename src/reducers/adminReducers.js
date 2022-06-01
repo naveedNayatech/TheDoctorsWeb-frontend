@@ -62,6 +62,7 @@ import {
     GET_DOCTOR_TELEMETARY_REPORT_REQUEST,
     GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
     GET_DOCTOR_TELEMETARY_REPORT_FAIL,
+    GET_DOCTOR_TELEMETARY_REPORT_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -594,6 +595,12 @@ export const doctorTelemetaryReportReducer = (state = {telemetaryReport: []}, ac
                 loading: false,  
                 error: action.payload
         }
+
+        case GET_DOCTOR_TELEMETARY_REPORT_RESET: 
+        return {
+            loading: false, 
+            telemetaryReport: []
+         }
 
         case CLEAR_ERRORS: 
             return {

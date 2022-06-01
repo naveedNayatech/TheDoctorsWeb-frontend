@@ -1,25 +1,44 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import patientIcon from '../../assets/Images/patientIcon.png';
 import doctorIcon from '../../assets/Images/doctorIcon.png'
-import { getPatients, getDoctors, getDoctorTelemetaryReport } from '../../actions/adminActions';
+import hrIcon from '../../assets/Images/network.png'
+import { getPatients, getDoctors, getHrLists, getDoctorTelemetaryReport, getPatientTelemetaryReport, getHRTelemetaryReport  } from '../../actions/adminActions';
 import Select from 'react-select';
 import { useAlert } from 'react-alert';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../layouts/Loader';
 import moment from 'moment';
+import { useReactToPrint } from 'react-to-print';
+import MyDocument from '../../components/MyDocument';
+import { GET_DOCTOR_TELEMETARY_REPORT_RESET } from '../../constants/adminConstants';
 
 
 const TelemetaryReport = () => {
+
+    const componentRef = useRef();
+
+    const handlePrint = useReactToPrint({
+        pageStyle:"A5",
+        documentTitle:"Telemetary Report",
+        content: () => componentRef.current,
+    });
+
     const alert = useAlert();
     const [reportBy, setReportBy] = useState('patient');
     const [patientId, setPatientId] = useState("");
     const [doctorId, setDoctorId] = useState("");
+    const [hrId, sethrId] = useState("");
+
+
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     const { error, patients} = useSelector(state => state.admin);
     const { doctors } = useSelector(state => state.doctor);
+    const {  hrs } = useSelector(state => state.hrslist);
     const {loading, telemetaryReport} = useSelector(state => state.telemetaryReport);
 
 
@@ -32,6 +51,7 @@ const TelemetaryReport = () => {
         
         dispatch(getPatients());
         dispatch(getDoctors(10, 1));
+        dispatch(getHrLists());
         
     }, [dispatch]);
 
@@ -45,14 +65,75 @@ const TelemetaryReport = () => {
         doctorOptions.push({ value: doctor?._id, label: [doctor?.firstname, doctor?.lastname].join(" ")})
     ))
 
+    const hrOptions = []
+    hrs && hrs.map((hr) => (
+        hrOptions.push({ value: hr?._id, label: [hr?.firstname, hr?.lastname].join(" ")})
+    ))
+
     const getPatientProfile = (patient) => {    
         setPatientId(patient.value);
-
     }
 
     const getDoctorProfile = (doctor) => {
         setDoctorId(doctor.value);
-        dispatch(getDoctorTelemetaryReport(doctor.value));
+    }
+
+    const getHRProfile = (hr) => {
+        sethrId(hr.value);
+    }
+
+    const resetReport = () => {
+        setPatientId("");
+        setStartDate("");
+        setEndDate("");
+        dispatch({
+            type: GET_DOCTOR_TELEMETARY_REPORT_RESET
+        })
+    } 
+
+    const generateReportByPatient = () => {
+        if(!patientId) {
+            alert.error('Please select patient');
+            return;
+        } else if(!startDate) {
+            alert.error('Please select start Date');
+            return;
+        } else if(!endDate) {
+            alert.error('Please select end Date');
+            return;
+        } else {
+            dispatch(getPatientTelemetaryReport(patientId, startDate, endDate));
+        }
+    }
+
+    const generateReportByHR = () => {
+        if(!hrId) {
+            alert.error('Please select doctor');
+            return;
+        } else if(!startDate) {
+            alert.error('Please select start Date');
+            return;
+        } else if(!endDate) {
+            alert.error('Please select end Date');
+            return;
+        } else {
+            dispatch(getHRTelemetaryReport(hrId, startDate, endDate));
+        }
+    }
+
+    const generateReportByDoctor = () => {
+        if(!hrId) {
+            alert.error('Please select HR');
+            return;
+        } else if(!startDate) {
+            alert.error('Please select start Date');
+            return;
+        } else if(!endDate) {
+            alert.error('Please select end Date');
+            return;
+        } else {
+            dispatch(getDoctorTelemetaryReport(doctorId, startDate, endDate));
+        }
     }
 
 
@@ -71,12 +152,12 @@ const TelemetaryReport = () => {
                 <h5 className="pt-2 mt-2">Telemetary Data<span style={{color: '#ed1b24'}}> Report </span></h5>
                 <hr />
 
-                <span className="notes-header"><b>Note: </b> You can generate patient's telemetary data report by patient and by doctor.</span>
+                <span className="notes-header"><b>Note: </b> You can generate patient's telemetary data report by patient, by doctor and by HR.</span>
 
                 <div className="row cardWrapper">
                     <div className={`card cardButton ${reportBy === "patient" ? "cardActive" : ""}`}
                         onClick={() => setReportBy("patient")}>
-                        <img src={patientIcon} alt="" height="80" width="80"/>
+                    <img src={patientIcon} alt="" height="80" width="80"/>
                         By Patient
                     </div>
 
@@ -85,86 +166,148 @@ const TelemetaryReport = () => {
                     <img src={doctorIcon} alt="" height="80" width="80"/>
                         By doctor
                     </div>
+
+                    <div className={`card cardButton ${reportBy === "hr" ? "cardActive" : ""}`} 
+                        onClick={() => setReportBy("hr")}>
+                    <img src={hrIcon} alt="" height="80" width="80"/>
+                        By HR
+                    </div>
                 </div>
 
                 <div>
                 {reportBy === "patient" ? <>
-                <span className="notes-header"><b>Note: </b> Please select patient from dropdown list.</span>
+                <span className="notes-header"><b>Note: </b> Please select patient, start date and end date to generate report.</span>
+
+                <div className="row-display">    
+                    <div className="col-md-3 mt-4">
+                    <label>Select Patient <span style={{color: '#ed1b24'}}> *</span> </label>
+                    <Select
+                        options={options}
+                        onChange={getPatientProfile}
+                        className="react-selectbox"
+                    />
+                    </div>
+
+                    <div className="col-md-3 mt-4">
+                    <label>From  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="From"/>
+                    </div>
+
+                    <div className="col-md-3 mt-4">
+                    <label>To <span style={{color: '#ed1b24'}}> *</span></label>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="To"/> 
+                        
+                    </div>
+
+                    <div className="col-md-3 mt-4">
+                        <label>Action</label>
+                        <button className="submit-btn" onClick={generateReportByPatient}>Generate</button>
+                    </div>
+                </div>
                 
-                <div className="col-md-4 mt-4">
-                <Select
-                    options={options}
-                    onChange={getPatientProfile}
-                    className="react-selectbox"
-                />
-                </div></> : <>
-                <span className="notes-header"><b>Note: </b> Please select doctor from dropdown list.</span>
                 
+                </> : reportBy === "doctor" ?  <>
+                <span className="notes-header"><b>Note: </b> Please select doctor, start date and end date to generate report.</span>
+                
+                <div className="row-display">
                 <div className="col-md-4 mt-4">
+                <label>Select Doctor  <span style={{color: '#ed1b24'}}> *</span>  </label>
                 <Select
                     options={doctorOptions}
                     onChange={getDoctorProfile}
                     className="react-selectbox"
                 />
                 </div>
-                </>}
 
+                <div className="col-md-3 mt-4">
+                    <label>From  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="From"/>
                 </div>
+
+                <div className="col-md-3 mt-4">
+                    <label>To <span style={{color: '#ed1b24'}}> *</span></label>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="To"/> 
+                        
+                </div>
+
+                <div className="col-md-3 mt-4">
+                    <label>Action</label>
+                    <button className="submit-btn" onClick={generateReportByDoctor}>Generate</button>
+                </div>
+                </div>
+                </> : <>
+                <span className="notes-header"><b>Note: </b> Please select HR, start date and end date to generate report.</span>
+                
+                <div className="row-display">
+                <div className="col-md-4 mt-4">
+                <label>Select HR  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                <Select
+                    options={hrOptions}
+                    onChange={getHRProfile}
+                    className="react-selectbox"
+                />
+                </div>
+
+                <div className="col-md-3 mt-4">
+                    <label>From  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="From"/>
+                </div>
+
+                <div className="col-md-3 mt-4">
+                    <label>To <span style={{color: '#ed1b24'}}> *</span></label>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)}
+                        max={moment().format("YYYY-MM-DD")} 
+                        className="form-control" placeholder="To"/> 
+                </div>
+
+                <div className="col-md-3 mt-4">
+                    <label>Action</label>
+                    <button className="submit-btn" onClick={generateReportByHR}>Generate</button>
+                </div>
+                </div>
+                </>
+                }
+                </div>
+                
+                {telemetaryReport && telemetaryReport?.length > 0 ? <>
+                    <div className="row-display">
+                    <div className="col-md-7">
+
+                    </div>
+                    <button className="accordion" onClick={resetReport}><i className='bx bxs-file-pdf'></i> Reset</button> &nbsp;    
+                    
+                    <div>
+                        <div
+                            style={{ display: "none" }}// This make ComponentToPrint show   only while printing
+                        > 
+                        <MyDocument healthData={telemetaryReport} ref={componentRef} />
+                        </div>
+                        <button onClick={handlePrint} className="accordion"><i className='bx bxs-file-pdf'></i> Download PDF</button>
+                    </div>
+                </div>
+                </> : null }
+                
 
                 {/* Report Result */}
                 <br />
                 {loading ? <Loader /> : <>
-                   {telemetaryReport && telemetaryReport?.length > 0 ? telemetaryReport.map((report, index) => (
-                       <div key={index}>
-                        <div className="container row cardWrapper">
-                            <div className="card cardButton">
-                                <b>Patient Details</b>
-                                <hr />
-                                <span className="row-display"><b>Name: </b> &nbsp; {report.assigned_patient_id?.firstname} {report.assigned_patient_id?.lastname}</span>
-                                <span className="row-display"><b>Gender: </b>{report.assigned_patient_id?.gender} </span>
-
-                            </div>
-
-                            <div className="card cardButton">
-                                <b>Device Details</b>
-                                <hr />
-                                <span className="row-display"><b>Device ID: </b>{report.deviceId?._id} </span>
-                                <span className="row-display"><b>IMEI: </b>{report.deviceId?.imei} </span>
-                                <span className="row-display"><b>Model #: </b> &nbsp;{report.deviceId?.modelNumber} </span>
-                                <span className="row-display"><b>Device Type: </b>{report.deviceId?.deviceType} </span>
-                            </div>
-
-                            <div className="card cardButton">
-                                <b>Telemetary Result</b>
-                                <hr/>
-                                <span>{report?.deviceId?.deviceType === "bp" ? <>
-                                <span className="row-display"><b>Systolic: </b>{report.telemetaryData?.sys} </span></> : <>
-                                <span className="row-display"><b>Fat: </b>{report.telemetaryData?.fat} </span>
-                                </> }</span>
-
-                                <span>{report?.deviceId?.deviceType === "bp" ? <>
-                                <span className="row-display"><b>Diastolic: </b>{report.telemetaryData?.dia} </span></> : <>
-                                <span className="row-display"><b>Weight: </b>{report.telemetaryData?.wt} </span>
-                                </> }</span>
-
-                                <span>{report?.deviceId?.deviceType === "bp" ? <>
-                                <span className="row-display"><b>Pulse: </b>{report.telemetaryData?.pul} </span></> : <>
-                                <span className="row-display"><b>BMI: </b>{report.telemetaryData?.bmi} </span>
-                                </> }</span>
-                            </div>  
-
-                            <div className="card cardButton">
-                                <b>Added Details</b>
-                                <hr />
-                                    <div key={index}>
-                                        <span className="row-display"><b> Date: </b> &nbsp;{moment(report?.createdAt).tz("America/New_York").format("lll")}</span>
-                                    </div>
-                                <span> </span>
-                            </div>
-                        </div>    
-                       </div>
-
-                   )) : <>
+                   {telemetaryReport && telemetaryReport?.length > 0 ? <>
+                        <div className="text-center"><span style={{ 
+                            color: '#ed1b24',
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                        }}>{telemetaryReport?.length}</span> records found.</div>
+                   </> : <>
                    <div className="text-center">
                        <b>No Result Found.</b>
                    </div>

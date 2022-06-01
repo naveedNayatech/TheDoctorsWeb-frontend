@@ -63,7 +63,7 @@ const AssignDrToHr = (props) => {
     }
 
     const options = []
-    doctors && doctors.filter(doctors => !doctors.assigned_hr_id).map((doc, index) => (
+    doctors && doctors.filter(doctors => !doctors.assigned_hr_id)   .map((doc, index) => (
        options.push({value:doc?._id , label:[doc?.firstname, doc?.lastname, doc?.npinumber].join(" ") })
     ))
 
@@ -80,36 +80,23 @@ const AssignDrToHr = (props) => {
                 
                 <p style={{ color: 'gray', textTransform: 'uppercase', fontSize: '14px'}}>Assign Doctor To HR</p>
                 <hr />
+                <span className="notes-header"><b>Note: </b> Doctor with no HR, will be showing in the list below. Only one HR allowed per doctor.</span>
+                
                 <div className="row">
                     <div className="col-md-4">
-                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#F95800'}}>Doctor </span></h5>
-                        <br />
-
-                            {/* <select 
-                                name="patientlist"
-                                className="form-control"
-                                defaultValue={'Select Doctor'}
-                                value={doctorId} 
-                                onChange={(e) => setDoctorId(e.target.value)}
-                                >
-                                <option value="Select Doctor">Select Doctor</option>    
-                                {doctors && doctors.map((doc, index) => (
-                                    <option value={doc?._id} key={index}> {doc?.firstname} {doc?.lastname} {doc?.npinumber} </option>
-                                ))}    
-                                
-                            </select>  */}
-
+                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#ed1b24'}}>Doctor </span></h5>
+                
                             <Select
-                                    options={options}
-                                    onChange={funcSetDrId}
-                                />
+                                options={options}
+                                onChange={funcSetDrId}
+                            />
                     </div>
 
                     <div className="col-md-8">
                         
 
                         {doctorId && doctor && <Fragment>
-                            <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#F95800'}}>Details </span></h5>
+                            <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#ed1b24'}}>Details </span></h5>
                             <br />
                                     <div className="col-md-12">
                                         <div className="row">

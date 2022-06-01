@@ -4,7 +4,6 @@ import fatImg from '../../assets/Images/fat.png';
 import bmiImg from '../../assets/Images/bmi.png';
 import { Image, Badge } from 'react-bootstrap';
 import { commentOnReading } from '../../actions/HRActions';
-import {COMMENT_RESET} from '../../constants/HRConstants';
 import { useSelector, useDispatch } from 'react-redux';
 const moment = require('moment-timezone');
 
@@ -34,7 +33,7 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
     }
 
   return <Fragment>
-      <br /><br /> 
+      <div className="telemetary-card"> 
       {telemetaryData?.wt && <>
         <div className="row">
       <div className="col-md-1">
@@ -42,7 +41,7 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
       </div>
 
       <div className="col-md-3">
-          <span className="profile-label">Weight : {telemetaryData?.wt}</span>
+          <span className="profile-label">Weight : {(telemetaryData?.wt / 454).toFixed()} lbs.</span>
           {telemetaryData?.wt >= 40 && telemetaryData?.wt <= 60 ? <p className="normalBP">Under Weight</p> : telemetaryData?.wt >= 61 && telemetaryData?.wt <= 80 ? 
           <p className="normalBP">Healthy Weight</p> : telemetaryData?.wt >=81 && telemetaryData?.wt <= 100 ? <p className="elevatedBP">Obese</p> : 
           telemetaryData?.wt >= 101 ? <p className="elevatedBP">Very Obese</p> : ''}
@@ -72,34 +71,19 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
     </div>
 
     {/* Device & Patient Info */}
-        <div className="row">
-                <div className="col-md-5">
-                    <span className="profile-label">Patient Name: </span>
-                    <span className="profile-label"> {patientInfo?.firstname} {patientInfo?.lastname}</span>
+        <div className="row-display telemetary-patient-row pl-2 pr-2">
+                
+                    <span className="telemetary-patient-row">Device ID: </span>
+                    <span className="telemetary-patient-row"> {deviceDetails?._id}</span>
 
-                    <span className="vl"></span>
+                    <span className="telemetary-patient-row ml-2">Device Type: </span>
+                    <span className="telemetary-patient-row"> <Badge bg="info text-white">{deviceDetails?.deviceType}</Badge></span>
 
-                    <span className="profile-label ml-4">Gender: </span>
-                    <span className="profile-label"> <Badge bg="info text-white">{patientInfo?.gender}</Badge></span>
-                </div>
-
-                <div className="col-md-7">
-                    <span className="profile-label">Device ID: </span>
-                    <span className="profile-label"> {deviceDetails?._id}</span>
-
-                    <span className="vl"></span>
-
-                    <span className="profile-label ml-2">Device Type: </span>
-                    <span className="profile-label"> <Badge bg="info text-white">{deviceDetails?.deviceType}</Badge></span>
-
-                    <span className="vl"></span>
-
-                    <span className="profile-label ml-2">Created At: </span>
-                    <span className="profile-label"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
-                </div>
+                    <span className="telemetary-patient-row ml-2">Created At: </span>
+                    <span className="telemetary-patient-row"> {moment(healthData?.createdAt).tz("America/New_York").format("lll")}</span>
             </div>
 
-
+            <br />
             {/* Comment on reading */}
             {isAdmin === true ? <Fragment>
             </Fragment> : 
@@ -140,7 +124,8 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
             </Fragment> : ''}
       
       </> }
-        <br/> 
+      </div>
+      <br/> 
     </Fragment>
 };
 

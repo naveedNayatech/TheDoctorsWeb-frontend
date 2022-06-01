@@ -591,7 +591,38 @@ export const removeDoctorFromHR = (hrId, drId) => async(dispatch) => {
     }
 }
 
+export const removeHRFromDoctor = (hrId, drId) => async(dispatch) => {
+    try {
+        const res = await axios.post(`${Prod01}/doctor/removeHr`,{
+            drId: drId
+        }, );
 
+        await axios.post(`${Prod01}/hr/removeDr`, {
+            hrId: hrId
+        });
+
+
+        if(res){
+            dispatch({
+                type: SHOW_ALERT_MESSAGE,
+                payload: "HR removed from Doctor"
+              });
+            
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
+            })
+           }
+        
+    } catch (error) {
+        dispatch({
+            type: FETCH_ERROR,
+            payload: 'cannot remove doctor'
+          })
+          dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
+    }
+}
 
 // Update doctor Profile -> ADMIN
 export const updateDoctor = (_id, docfirstname, doclastname, docDOB, docemail, docgender, docphone1, docmobileno, docnpi, doclicenseNumber) => async(dispatch) => {
@@ -850,7 +881,7 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
                 patientId: patientId,
                 startDate: startDate,
                 endDate: endDate,
-           });
+        });
    
        dispatch({
            type: GET_PATIENT_DEVICE_DATA_SUCCESS,
@@ -1403,7 +1434,7 @@ export const getAdminNotifications = () => async(dispatch) => {
     }
 }
 
-export const getDoctorTelemetaryReport = (doctorId) => async(dispatch) => {
+export const getDoctorTelemetaryReport = (doctorId, startDate, endDate) => async(dispatch) => {
     
     try {
        dispatch({ 
@@ -1411,7 +1442,9 @@ export const getDoctorTelemetaryReport = (doctorId) => async(dispatch) => {
        });
        
        const { data } = await axios.post(`${Prod01}/doctor/allPatientHealthRecords`, {
-            drId: doctorId
+            drId: doctorId,
+            startDate: startDate,
+            endDate: endDate
         });
    
        dispatch({
@@ -1427,6 +1460,57 @@ export const getDoctorTelemetaryReport = (doctorId) => async(dispatch) => {
     }   
 }
 
+export const getHRTelemetaryReport = (hrId, startDate, endDate) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: GET_DOCTOR_TELEMETARY_REPORT_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod01}/hr/allPatientHealthRecords`, {
+            hrId: hrId,
+            startDate: startDate,
+            endDate: endDate
+        });
+   
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+export const getPatientTelemetaryReport = (patientId, startDate, endDate) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: GET_DOCTOR_TELEMETARY_REPORT_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod01}/patient/filterpatienthealthData/100/1`, {
+        patientId: patientId,
+        startDate: startDate,
+        endDate: endDate,
+        });
+   
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
+           payload: data.healthData
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: GET_DOCTOR_TELEMETARY_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
 
 // Clear errors
 export const clearErrors = () => async(dispatch) => {

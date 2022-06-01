@@ -56,6 +56,7 @@ const PatientsList = () => {
 
             setSmShow(false);
         }
+
         dispatch(getPatients(resPerPage, currentPage));
         dispatch(getDoctors(resPerPage, currentPage));
         dispatch(getHrLists(resPerPage, currentPage));

@@ -181,7 +181,7 @@ const HRPatientProfile = (props) => {
                              {/* Accordion for graphical representation */}
                         <div className="container graphWrapper">
                             <button className="accordion" onClick={() => setAccordion(accordion => !accordion)}>
-                                Show Graphical Representation
+                                Show Graphically
                                 <i className={accordion ? `bx bx-minus` : `bx bx-plus`}></i>
                             </button>
 
@@ -194,11 +194,9 @@ const HRPatientProfile = (props) => {
                             <Col sm={12}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                {deviceData && deviceData.map((devicedata, index) => (
+                                {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((devicedata, index) => (
                                     <div key={index}>
-                                        {devicedata?.telemetaryData?.sys && devicedata?.telemetaryData?.dia ? <Fragment>
-                                            <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
-                                        </Fragment> : ''}
+                                        <CuffTelemetaryData key={index} healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
                                     </div>
                                 ))}
 
@@ -223,7 +221,7 @@ const HRPatientProfile = (props) => {
                                 
 
                                 <Tab.Pane eventKey="second">
-                                {deviceData && deviceData.map((devicedata, index) => (
+                                {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'weight').map((devicedata, index) => (
                                     <div key={index}>
                                         <WeightTelemetaryData healthData={devicedata} isAdmin={false} />    
                                     </div>
