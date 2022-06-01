@@ -175,16 +175,14 @@ export const carePlanOfPatient = (patientId, hrId, description, readingsPerMonth
     }
 }
 
-export const getTimeReport = (patientId, hrId, startDate, endDate) => async (dispatch) => {
+export const getTimeReport = (patientId, startDate, endDate) => async (dispatch) => {
     try {
         dispatch({
             type: TIME_REPORT_REQUEST
         });
 
-        const token = JSON.parse(localStorage.getItem('token'));
-
         const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltime`, {
-            hrId: hrId,
+            // hrId: hrId,
             patientId: patientId,
             startDate: startDate,
             endDate: endDate

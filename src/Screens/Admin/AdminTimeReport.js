@@ -42,13 +42,19 @@ const AdminTimeReport = () => {
 
     const submitHandler = () => {
         if(reportBy === 'patient'){
-            dispatch(getTimeReport(patientId, patient?.assigned_hr_id?._id, startDate, endDate)); 
+            console.log("patient");
+            dispatch(getTimeReport(patientId, startDate, endDate)); 
+            return;
         }
         if(reportBy === 'hr'){
+            console.log("hr");
             dispatch(getTimeReportByHR(hrId, startDate, endDate)); 
+            return;
         }
         else {
+            console.log("doctor");
             dispatch(getTimeReportByDR(drId, startDate, endDate)); 
+            return;
         }
     }
 
