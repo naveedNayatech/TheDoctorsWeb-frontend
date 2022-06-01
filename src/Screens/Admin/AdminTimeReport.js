@@ -9,11 +9,13 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { RESET_TIME_REPORT_DATA } from '../../constants/HRConstants';
 import Loader from '../../layouts/Loader';
+import {useAlert} from 'react-alert';
 
 
 const AdminTimeReport = () => {
 
     const dispatch = useDispatch();
+    const alert = useAlert();
 
     const { patients} = useSelector(state => state.admin);
     const { patient } = useSelector(state => state.patientProfile);
@@ -42,19 +44,50 @@ const AdminTimeReport = () => {
 
     const submitHandler = () => {
         if(reportBy === 'patient'){
-            console.log("patient");
-            dispatch(getTimeReport(patientId, startDate, endDate)); 
-            return;
+            if(!patientId){
+                alert.error('please select patient');
+                return;
+            } else if (!startDate) {
+                alert.error('please select start date');
+                return;
+            } else if(!endDate) {
+                alert.error('please select end date');
+                return;
+            } else {
+                dispatch(getTimeReport(patientId, startDate, endDate)); 
+                return;
+            }
+            
         }
         if(reportBy === 'hr'){
-            console.log("hr");
+            if(!hrId){
+                alert.error('please select HR');
+                return;
+            } else if (!startDate) {
+                alert.error('please select start date');
+                return;
+            } else if(!endDate) {
+                alert.error('please select end date');
+                return;
+            } else {
             dispatch(getTimeReportByHR(hrId, startDate, endDate)); 
             return;
+            }
         }
         else {
-            console.log("doctor");
+            if(!drId){
+                alert.error('please select Doctor');
+                return;
+            } else if (!startDate) {
+                alert.error('please select start date');
+                return;
+            } else if(!endDate) {
+                alert.error('please select end date');
+                return;
+            } else {
             dispatch(getTimeReportByDR(drId, startDate, endDate)); 
             return;
+            }
         }
     }
 
@@ -205,7 +238,7 @@ const AdminTimeReport = () => {
                                          <h5>Search <span style={{color: '#ed1b24'}}>Result</span></h5>
                                      </div>
  
-                                     <span>Total Time Spent: <span style={{color: '#23408e', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
+                                     <span>Total Time Spent: <span style={{color: '#ed1b24', fontWeight: 'bold'}}>{totalTime} Minutes  ( {startDate && startDate} {endDate && "=>" + endDate} ) </span></span>
  
  
                                      <div className="row-display">
@@ -225,13 +258,14 @@ const AdminTimeReport = () => {
  
  
                                 {targets && targets.map((trgt, index) => ( 
-                                  <div className="m-5">
-                                      <br/>
+                                  <div className="m-5" key={index}>
+                                      {/* <br/>
                                       <p className="reportsHeading">{index + 1}</p> 
+                                      <br /><br /> */}
                                       <div className="row-display">
                                           <div>
                                              <label className="profile-label">Patient Name: </label> 
-                                             <label className="report-label ml-2"> {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
+                                             <label className="report-label ml-2"> Pt. {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
                                           </div>
  
                                           <div>
@@ -243,30 +277,31 @@ const AdminTimeReport = () => {
                                              <label className="profile-label">Patient DOB: </label> 
                                              <label className="report-label ml-2">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
                                           </div>
+
+                                          <div>
+                                                 {/* <label className="profile-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label> */}
+                                             </div>
                                       </div>
  
                                       <div className="row-display">
-                                             <div>
-                                                 <label className="profile-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label>
-                                             </div>
- 
-                                             <div>
-                                                 <label className="profile-label">By: </label> <label className="report-label">{trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname}</label>
-                                             </div>
- 
-                                             <div>
-                                                 <label className="profile-label">Created At: </label> <label className="report-label">{moment(trgt?.createdAt).format("ll")}</label>
-                                             </div>
+                                             
+
                                      </div>
- 
-                                          <div className="col-md-12">
-                                             <label className="bubble bubble-alt bubble-green"><b>Notes : </b> {trgt?.conclusion}</label>
-                                          </div>
-                                      
-                                      <br /><br />
+
+                                         <div className="notes">
+                                            <div className="row-display">
+                                               <p className="ml-2 mt-2"><small><b> HR. {trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname} </b></small></p>  
+                                                <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label>
+                                             </div>
+                                             
+                                             <b>Notes : </b> 
+                                            {trgt?.conclusion}
+                                            <p className="mt-2" style={{float: 'right'}}><small><b>{moment(trgt?.createdAt).format("ll")}</b></small></p>
+                                        </div>
                                   </div>
                               ))}
                          </Fragment> : ''}
+                         
                         </>}
                        </div>
                     </div>

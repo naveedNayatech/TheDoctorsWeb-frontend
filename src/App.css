@@ -2049,7 +2049,6 @@ tr {
   border-radius: 50px;
   width: 40px;
   text-align: center;
-
 }
 
 .report-label{
@@ -2250,4 +2249,10 @@ tr {
 
 .react-selectbox{
   font-size: 12px;
+}
+
+.notes {
+  background-color: #ccc;
+  padding: 10px;
+  border-radius: 10px;
 }

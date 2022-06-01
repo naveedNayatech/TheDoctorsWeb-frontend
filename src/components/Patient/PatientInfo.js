@@ -32,7 +32,7 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
     return (
         <>
             <div className="col-md-3">
-                <h5 className="pt-2 mt-2">Patient <span style={{ color: '#F95800' }}>Details </span>
+                <h5 className="pt-2 mt-2">Patient <span style={{ color: '#ed1b24' }}>Details </span>
                 </h5>
                 
 
@@ -81,7 +81,7 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A'} </p>
 
                     <span className="profile-label">Time spent (This month) </span>
-                    <p className="patient-profile-card-text">{totalTime || 0}</p>
+                    <p className="patient-profile-card-text spentTime" style={{width: '90px'}}>{totalTime || 0} Mins</p>
                 </div>
 
 
