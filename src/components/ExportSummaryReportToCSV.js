@@ -8,6 +8,7 @@ const ExportSummaryReportToCSV = ({csvData, fileName}) => {
         return {
             'Sr No':index + 1,
             'Patient Name':report?.patientName,
+            'Total Readings':report?.totalReadings,
             'Total Minutes': report?.totalMinutes,
             'Month': report?.Month,
         }
