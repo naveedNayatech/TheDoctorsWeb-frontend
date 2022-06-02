@@ -22,8 +22,7 @@ const AddPatient = (props) => {
     const { doctors } = useSelector(state => state.doctor);
     const { hrs } = useSelector(state => state.hrslist);
     const [doctorId, setDoctorId] = useState('')
-    const [hrId, setHrId] = useState('')
-
+    const [hrId, setHrId] = useState('');
 
     useEffect(() => {
         if (error) {
@@ -70,7 +69,6 @@ const AddPatient = (props) => {
         if(hrId !== '')
         values = {...values,assigned_hr_id:hrId}
 
-
         dispatch(addPatient(values));
     }
 
@@ -91,7 +89,12 @@ const AddPatient = (props) => {
     hrs && hrs.map((hr, index) => (
         optionsForHr.push({ value: hr?._id, label: [hr?.firstname, hr?.lastname].join(" ") })
     ))
-    console.log("any")
+    
+    const childToParent = () => {
+        console.log('Helloo' + value);
+    }
+
+
     return <Fragment>
         <MetaData title="Add Patient" />
         <Sidebar />
@@ -103,7 +106,7 @@ const AddPatient = (props) => {
             <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{ backgroundColor: '#FAFAFA' }}>
                 <div className="home-content">
                     <div className="row-display">
-                        <h5 className="pt-2 mt-2">Add <span style={{ color: '#007673' }}>Patient </span></h5>
+                        <h5 className="pt-2 mt-2">Add <span style={{ color: '#ed1b24' }}> New Patient </span></h5>
                         <div className="row-display">
                             <Link to="/patients">
                                 <button className="btn btn-primary mt-3">
@@ -118,7 +121,7 @@ const AddPatient = (props) => {
                             </Link>
                         </div>
                     </div>
-                    <hr className="blue-hr" />
+                    <hr />
 
                     <Formik initialValues={{
                         firstname: '',

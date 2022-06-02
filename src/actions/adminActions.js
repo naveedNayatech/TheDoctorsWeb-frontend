@@ -62,6 +62,9 @@ import {
     GET_DOCTOR_TELEMETARY_REPORT_REQUEST,
     GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
     GET_DOCTOR_TELEMETARY_REPORT_FAIL,
+    TIME_SUMMARY_REPORT_REQUEST,
+    TIME_SUMMARY_REPORT_SUCCESS,
+    TIME_SUMMARY_REPORT_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -1511,6 +1514,59 @@ export const getPatientTelemetaryReport = (patientId, startDate, endDate) => asy
        })
     }   
 }
+
+export const getTimeSummaryReportByDoctor = (doctorId, month, year) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: TIME_SUMMARY_REPORT_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod01}/general/minutereadingtotaldrhr`, {
+        drId: doctorId,
+        month: month,
+        year: year,
+        });
+   
+       dispatch({
+           type: TIME_SUMMARY_REPORT_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: TIME_SUMMARY_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+export const getTimeSummaryReportByHR = (hrId, month, year) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: TIME_SUMMARY_REPORT_REQUEST
+       });
+       
+       const { data } = await axios.post(`${Prod01}/general/minutereadingtotaldrhr`, {
+        hrId: hrId,
+        month: month,
+        year: year,
+        });
+   
+       dispatch({
+           type: TIME_SUMMARY_REPORT_SUCCESS,
+           payload: data
+       })    
+   
+    } catch (error) {
+       dispatch({
+           type: TIME_SUMMARY_REPORT_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
 
 // Clear errors
 export const clearErrors = () => async(dispatch) => {

@@ -63,6 +63,10 @@ import {
     GET_DOCTOR_TELEMETARY_REPORT_SUCCESS,
     GET_DOCTOR_TELEMETARY_REPORT_FAIL,
     GET_DOCTOR_TELEMETARY_REPORT_RESET,
+    TIME_SUMMARY_REPORT_REQUEST,
+    TIME_SUMMARY_REPORT_SUCCESS,
+    TIME_SUMMARY_REPORT_FAIL,
+    TIME_SUMMARY_REPORT_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -600,6 +604,43 @@ export const doctorTelemetaryReportReducer = (state = {telemetaryReport: []}, ac
         return {
             loading: false, 
             telemetaryReport: []
+         }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+            }        
+        
+        default:{
+            return state
+            }     
+    }
+}
+
+export const timeSummaryReportReducer = (state = {timeSummaryReport: []}, action) => {
+    switch(action.type) {
+        case TIME_SUMMARY_REPORT_REQUEST:
+            return { 
+                loading: true,     
+            }
+
+        case TIME_SUMMARY_REPORT_SUCCESS:
+            return { 
+                loading: false,  
+                timeSummaryReport: action.payload 
+            }
+            
+        case TIME_SUMMARY_REPORT_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case TIME_SUMMARY_REPORT_RESET: 
+        return {
+            loading: false, 
+            timeSummaryReport: []
          }
 
         case CLEAR_ERRORS: 

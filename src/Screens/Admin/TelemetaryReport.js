@@ -4,7 +4,7 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import patientIcon from '../../assets/Images/patientIcon.png';
 import doctorIcon from '../../assets/Images/doctorIcon.png'
-import hrIcon from '../../assets/Images/network.png'
+import hrIcon from '../../assets/Images/network.png';
 import { getPatients, getDoctors, getHrLists, getDoctorTelemetaryReport, getPatientTelemetaryReport, getHRTelemetaryReport  } from '../../actions/adminActions';
 import Select from 'react-select';
 import { useAlert } from 'react-alert';

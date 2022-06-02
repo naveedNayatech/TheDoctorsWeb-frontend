@@ -36,6 +36,7 @@ import PatientCPReport from './Screens/Admin/PatientCPReport';
 import CompleteInventoryList from './Screens/Admin/CompleteInventoryList';
 import AdminResetPassword from './Screens/Admin/AdminResetPassword';
 import TelemetaryReport from './Screens/Admin/TelemetaryReport';
+import TimeSummaryReport from './Screens/Admin/TimeSummaryReport';
 
 
 // Staff Screens
@@ -97,7 +98,8 @@ function App() {
         <ProtectedRoute exact path='/Admin/Inventory/Download' isAdmin={true} component={CompleteInventoryList} />
         <ProtectedRoute exact path="/Credentials" isAdmin={true} component={AdminResetPassword} />
         <ProtectedRoute exact path='/report/telemetary' isAdmin={true} component={TelemetaryReport} />
-
+        <ProtectedRoute exact path='/report/timesummaryreport' isAdmin={true} component={TimeSummaryReport} />
+         
          {/* Staff Routes */}
         <Route exact path="/doctor/login" component={StaffLogin} />
         <StaffProtectedRoute exact path="/doctor/dashboard" isStaff={true} component={StaffDashboard} />

@@ -31,6 +31,7 @@ import { logsReducers } from './reducers/adminReducers';
 import { hrProfilesReducer } from './reducers/adminReducers';
 import { careplanListReducers } from './reducers/HRReducers'; //Get list of careplans for doctor and hrs 
 import {doctorTelemetaryReportReducer} from './reducers/adminReducers';
+import { timeSummaryReportReducer } from './reducers/adminReducers';
 
 // COMMON REDUCERS
 import { commonReducers } from './reducers/Common';
@@ -66,7 +67,9 @@ const reducer = combineReducers({
     common: commonReducers,
     hrprofile: hrProfilesReducer,
     careplans: careplanListReducers,
-    telemetaryReport: doctorTelemetaryReportReducer
+    telemetaryReport: doctorTelemetaryReportReducer,
+    summaryReport: timeSummaryReportReducer,
+
 })
 
 let initialState = {}
