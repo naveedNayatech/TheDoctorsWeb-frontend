@@ -58,6 +58,13 @@ const Sidebar = (props) => {
                     </NavLink>
                 </li>
 
+                <li className="nav_link">
+                    <NavLink key="timesummaryreport" to="/doctor/report/timesummaryreport" activeClassName="link-name-active">
+                    <i className='bx bxs-timer'></i>
+                        <span className="link_name">Time Summary Report</span>
+                    </NavLink>
+                </li>
+
  
                 <li>
                     <Link key="logout" to="#" onClick={logoutHandler}>

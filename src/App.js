@@ -47,6 +47,7 @@ import StaffPatient from './Screens/Staff/StaffPatients';
 import StaffPatientProfile from './Screens/Staff/StaffPatientProfile';
 import DoctorAddPatient from './Screens/Staff/DoctorAddPatient';
 import DocCareplanList from './Screens/Staff/DocCareplanList';
+import DoctorTimeSummaryReport from './Screens/Staff/DoctorTimeSummaryReport';
 // HR Screens
 import HrLogin from './Screens/HR/HrLogin';
 import HRDashboard from './Screens/HR/HRDashboard'; 
@@ -109,6 +110,7 @@ function App() {
         <StaffProtectedRoute exact path="/doctor/patient/profile" component={StaffPatientProfile} />
         <StaffProtectedRoute exact path="/doctor/Addpatient" component={DoctorAddPatient} />
         <StaffProtectedRoute exact path="/doctor/careplan" component={DocCareplanList} />
+        <StaffProtectedRoute exact path="/doctor/report/timesummaryreport" component={DoctorTimeSummaryReport} />
         {/* HR Routes */}
         <Route exact path="/hr/login" component={HrLogin} />
         <HRProtectedRoute exact path="/HrDashboard" isHR={true} component={HRDashboard} />
