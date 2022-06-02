@@ -52,6 +52,13 @@ const HRSidebar = (props) => {
                 </li>
 
                 <li className="nav_link">
+                    <NavLink key="timesummaryreport" to="/hr/report/timesummaryreport" activeClassName="link-name-active">
+                    <i className='bx bxs-timer'></i>
+                        <span className="link_name">Time Summary Report</span>
+                    </NavLink>
+                </li>
+
+                <li className="nav_link">
                     <NavLink key="careplans" to="/HR/careplans" activeClassName="link-name-active">
                         <i className="bx bx-file"></i>
                         <span className="link_name">Careplans</span>

@@ -58,6 +58,7 @@ import PrintReport from './Screens/HR/PrintReport';
 import HRAddPatient from './Screens/HR/HRAddPatient';
 import CareplanDetails from './Screens/HR/CareplanDetails';
 import CareplanList from './Screens/HR/CareplanList';
+import HRSummaryReport from './Screens/HR/HRSummaryReport'
 // General links
 import ForgotPassword from './Screens/ForgotPassword';
 import ResetPassword from './Screens/ResetPassword';
@@ -119,6 +120,7 @@ function App() {
         <HRProtectedRoute exact path="/Hr/AddPatient" component={HRAddPatient} />
         <HRProtectedRoute exact path="/HR/Careplan/Details" isHR={true} component={CareplanDetails} />
         <HRProtectedRoute exact path="/HR/careplans" isHR={true} component={CareplanList} />
+        <HRProtectedRoute exact path="/hr/report/timesummaryreport" isHR={true} component={HRSummaryReport} />
     </Router>
   )      
 };
