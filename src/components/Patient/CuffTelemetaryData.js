@@ -6,11 +6,11 @@ import { Image, Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { commentOnReading } from '../../actions/HRActions';
 
-import patientProfileImg from '../../assets/Images/patientProfile.png';
+import patientProfileImg from '../../assets/Images/doctorIcon.png';
 
 const moment = require('moment-timezone');
 
-const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
+const CuffTelemetaryData = ({ healthData, isAdmin}) => {
 
     const  dispatch = useDispatch();
 
@@ -32,6 +32,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
     }
 
   return <Fragment>
+      {telemetaryData?.sys && telemetaryData?.dia !== " " && telemetaryData?.sys && telemetaryData?.dia !== undefined ? 
+      <>
       <div className="telemetary-card">
         <br />
           <div className="row">
@@ -41,8 +43,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             
             <div className="col-md-3">
             <span className="profile-label">Systolic : {telemetaryData?.sys}</span>
-                {telemetaryData?.sys <= 70 ? <p className="normalBP">Very Low</p> : telemetaryData?.sys > 70 && telemetaryData?.sys <= 120 ? 
-                <p className="normalBP">Normal</p> : telemetaryData?.sys > 120 && telemetaryData?.sys <= 140 ? <p className="elevatedBP">Elevated</p> : 
+                {telemetaryData?.sys <= 70 && telemetaryData?.sys >= 0 ? <p className="normalBP">Very Low</p> : telemetaryData?.sys >= 71 && telemetaryData?.sys <= 100 ? 
+                <p className="lowBP">Low</p> : telemetaryData?.sys >= 101 && telemetaryData?.sys <=120 ? <p className="normalBP">Normal</p> : telemetaryData?.sys > 120 && telemetaryData?.sys <= 140 ? <p className="elevatedBP">Elevated</p> : 
                 telemetaryData?.sys > 140 && telemetaryData?.sys <= 160 ? <p className="highBP">High BP</p> : 
                 telemetaryData?.sys > 160 && telemetaryData?.sys < 180 ? <p className="highBP">Hypertension</p> : ''}
             </div>
@@ -53,8 +55,8 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
             <div className="col-md-3">
             <span className="profile-label">Diastolic : {telemetaryData?.dia}</span>
-                {telemetaryData?.dia < 80 ? <p className="normalBP">Low</p> : telemetaryData?.dia >= 80 && telemetaryData?.dia < 90 ? 
-                <p className="normalBP">Normal</p> : telemetaryData?.dia >= 90 && telemetaryData?.dia <=100 ? <p className="elevatedBP">Elevated</p> : <p className="elevatedBP">High Blood Pressure</p>}
+                {telemetaryData?.dia >=60 && telemetaryData?.dia <= 70 ? <p className="lowBP">Low</p> : telemetaryData?.dia >= 71 && telemetaryData?.dia <= 90 ? 
+                <p className="normalBP">Normal</p> : telemetaryData?.dia >= 90 && telemetaryData?.dia <=100 ? <p className="elevatedBP">Elevated</p> : ""}
             </div>
 
             <div className="col-md-1">
@@ -63,7 +65,7 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
 
             <div className="col-md-3">
             <span className="profile-label">Pulse : {telemetaryData?.pul}</span>
-                <p className="normalBP">Normal</p>
+                <p className="normalBP">{telemetaryData?.pul == undefined ? "" : 'Normal'}</p>
             </div>
         </div> {/* First Row Ends here */}
 
@@ -124,6 +126,10 @@ const CuffTelemetaryData = ({props, healthData, isAdmin}) => {
             </div> 
             ))}  
         </div>
+      </>
+    
+     : <> </>}   
+      
     </Fragment>;   
 };
 

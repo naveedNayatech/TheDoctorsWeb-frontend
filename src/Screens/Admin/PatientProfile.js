@@ -201,9 +201,6 @@ const PatientProfile = (props) => {
                         </div> 
                         </> : <></> }
                         
-                               
-                                
-                        
                         
                         {/* Accordion for graphical representation ends here */}
                         

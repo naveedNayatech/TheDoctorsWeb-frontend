@@ -1779,7 +1779,7 @@ tr {
   font-size: 14px; 
 }
 
-.elevatedBP {
+.elevatedBP, .lowBP {
   color: #ed1b24;
   font-size: 14px;
   font-weight: bold;
