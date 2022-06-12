@@ -65,6 +65,9 @@ import {
     TIME_SUMMARY_REPORT_REQUEST,
     TIME_SUMMARY_REPORT_SUCCESS,
     TIME_SUMMARY_REPORT_FAIL,
+    SEARCH_LOG_REQUEST,
+    SEARCH_LOG_SUCCESS,
+    SEARCH_LOG_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -833,12 +836,15 @@ export const assignDeviceToPatient = (patientid, deviceid) => async(dispatch) =>
         deviceUpdate = await axios.put(`${Prod01}/device/edit/${device?.deviceObjectId?._id}`, {
             assigned_patient_id: null 
         })
-        
-       dispatch({
-           type: ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
-           loading: false,
-           payload: data.patient
-       })    
+       
+    if(deviceUpdate){
+        dispatch({
+            type: ASSIGN_DEVICE_TO_PATIENT_SUCCESS,
+            loading: false,
+            payload: data
+        })
+    }
+           
    
     } catch (error) {
        dispatch({
@@ -990,7 +996,7 @@ export const getAllLogs = () => async(dispatch) => {
     try {
         dispatch({ type: GET_LOGS_REQUEST })
 
-        const { data } = await axios.get(`${Prod01}/admin/logs`, )
+        const { data } = await axios.post(`${Prod01}/admin/logs`)
 
         dispatch({
             type: GET_LOGS_SUCCESS,
@@ -1567,7 +1573,55 @@ export const getTimeSummaryReportByHR = (hrId, month, year) => async(dispatch) =
     }   
 }
 
+export const searchAdminLogs = (doctorId, type) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: SEARCH_LOG_REQUEST
+       });
+   
+        const { data } = await axios.post(`${Prod01}/admin/logs`, {
+            type: type,
+            doctor_id: doctorId
+            });
+    
+        dispatch({
+            type: SEARCH_LOG_SUCCESS,
+            payload: data
+        })      
+   
+    } catch (error) {
+       dispatch({
+           type: SEARCH_LOG_FAIL,
+           payload: error.message
+       })
+    }   
+}
 
+export const searchAdminLogsByHR = (hrId, type) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: SEARCH_LOG_REQUEST
+       });
+   
+        const { data } = await axios.post(`${Prod01}/admin/logs`, {
+            type: type,
+            hr_id: hrId
+            });
+    
+        dispatch({
+            type: SEARCH_LOG_SUCCESS,
+            payload: data
+        })      
+   
+    } catch (error) {
+       dispatch({
+           type: SEARCH_LOG_FAIL,
+           payload: error.message
+       })
+    }   
+}
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({

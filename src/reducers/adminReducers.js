@@ -67,6 +67,10 @@ import {
     TIME_SUMMARY_REPORT_SUCCESS,
     TIME_SUMMARY_REPORT_FAIL,
     TIME_SUMMARY_REPORT_RESET,
+    SEARCH_LOG_REQUEST,
+    SEARCH_LOG_SUCCESS,
+    SEARCH_LOG_FAIL,
+    SEARCH_LOG_RESET,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -641,6 +645,43 @@ export const timeSummaryReportReducer = (state = {timeSummaryReport: []}, action
         return {
             loading: false, 
             timeSummaryReport: []
+         }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+            }        
+        
+        default:{
+            return state
+            }     
+    }
+}
+
+export const searchLogReducer = (state = {logs: []}, action) => {
+    switch(action.type) {
+        case SEARCH_LOG_REQUEST:
+            return { 
+                loading: true,     
+            }
+
+        case SEARCH_LOG_SUCCESS:
+            return { 
+                loading: false,  
+                logs: action.payload 
+            }
+            
+        case SEARCH_LOG_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case SEARCH_LOG_RESET: 
+        return {
+            loading: false, 
+            logs: []
          }
 
         case CLEAR_ERRORS: 

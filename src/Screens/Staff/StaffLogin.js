@@ -1,15 +1,14 @@
-import React, { useState, Fragment, useEffect } from 'react'
+import React, {Fragment, useEffect } from 'react'
 import { Link  } from 'react-router-dom';
 import MetaData from '../../layouts/MetaData';
-import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/Form/TextField';
 import { useAlert } from 'react-alert';
 import { staffLogin, clearErrors } from '../../actions/authActions';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Spinner } from 'react-bootstrap'
-
+import { Spinner, Image } from 'react-bootstrap'
+import TDW_logo from '../../assets/Images/horizontal_logo.png';
 
 const StaffLogin = ({ history }) => {
 
@@ -53,9 +52,11 @@ const StaffLogin = ({ history }) => {
 			<div className="login-section">
 					<div className="container">
 						<div className="row content">
-								
-							<div className="col-md-12" >
-								<h3 className="signin-text">Doctor <span style={{color: '#ed1b24'}}> Sign in</span></h3>
+						<Image src={TDW_logo} style={{height:"80px"}} alt="logo"/>	
+
+							<div className="col-md-12">
+								<hr />
+								<h3 className="signin-text">Doctor <span style={{color: '#004aad'}}> Sign in</span></h3>
 								<small style={{color: '#385399'}}>Enter valid credentials to log into your account.</small>
 
 								<hr />

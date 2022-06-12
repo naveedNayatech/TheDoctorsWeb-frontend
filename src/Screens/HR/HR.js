@@ -25,7 +25,7 @@ const {hr} = useSelector(state => state.hrAuth);
 
                     <div className="row-display">
                       
-                        <h5 className="pt-2 mt-2">My <span style={{color: '#ed1b24'}}>Profile</span></h5> 
+                        <h5 className="pt-2 mt-2">My <span style={{color: '#004aad'}}>Profile</span></h5> 
 
                         <div className="row-display">
                               <Link to="/HrDashboard">

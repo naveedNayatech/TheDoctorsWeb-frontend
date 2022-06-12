@@ -104,7 +104,7 @@ const Profile = () => {
                     </Modal.Body>
                     
                     <Modal.Footer>
-                        <button className="btn login-btn-class" type="submit">Save</button>
+                        <button className="btn btn-primary" type="submit">Save</button>
                             
                         <Button variant="danger" onClick={handleCloseEditModal}>Cancel</Button>
                     </Modal.Footer>

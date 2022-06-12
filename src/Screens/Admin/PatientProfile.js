@@ -110,7 +110,7 @@ const PatientProfile = (props) => {
                             <br/><br/>
                         
                             <div className="col-md-12">
-                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#ed1b24'}}>(Total Readings: {Count}) </span></h5>
+                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#004aad'}}>(Total Readings: {Count}) </span></h5>
                             </div>
 
                             <div className="row-display patient-profile-col-heading" style={{ 
@@ -179,10 +179,10 @@ const PatientProfile = (props) => {
                         <Col sm={12}>
                             <Nav variant="pills" className="flex-row">
                                 <Nav.Item style={{cursor: 'pointer'}}>
-                                <Nav.Link eventKey="first">Cuff (B.P | Telemetary Data)</Nav.Link>
+                                <Nav.Link eventKey="first">BP Monitor Data</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item style={{cursor: 'pointer'}}>
-                                <Nav.Link eventKey="second">Weight (Telemetary Data)</Nav.Link>
+                                <Nav.Link eventKey="second">Weight Scale Monitor</Nav.Link>
                                 </Nav.Item>
                             </Nav>
                         </Col>

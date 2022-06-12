@@ -26,7 +26,7 @@ const HowItWorks = () => {
               </div>
               </div>
 
-            <hr style={{background: '#F95800', height: '3px'}}/>  
+            <hr style={{background: '#88E0EF', height: '3px'}}/>  
             <div className="col-lg-12 col-md-12 col-sm-12">
               <div className="how-it-works-card">
                 <div className="row"><img src={PatientImg} className="how-it-works-icon"/> <strong className="mt-4">Enroll Patient</strong> </div>
@@ -48,7 +48,7 @@ const HowItWorks = () => {
               </div>
           </div>
 
-          <hr style={{background: '#081D45', height: '3px'}} />
+          <hr style={{background: '#88E0EF', height: '3px'}} />
           <div className="col-lg-12 col-md-12 col-sm-12">
             <div className="how-it-works-card-04">
               <div className="row"><img src={MedicalBookImg} className="how-it-works-icon"/> <strong className="mt-4">Education & Monitoring</strong> </div>

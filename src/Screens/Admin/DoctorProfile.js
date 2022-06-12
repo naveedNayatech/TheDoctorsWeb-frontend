@@ -69,7 +69,7 @@ const DoctorProfile = (props) => {
                         <div className="home-content">
                         <div className="container">
                          <div className="row-display">
-                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '	#ed1b24'}}> Profile </span></h5> 
+                            <h5 className="pt-2 mt-2">Doctor <span style={{color: '	#004aad'}}> Profile </span></h5> 
                                                          
                             <Link to={{ pathname: "/assigndoctor", state: {id: doctor?._id, firstName: doctor?.firstname, lastName: doctor?.lastname}}} 
                             className="add-staff-btn mt-2">Assign Patient to Dr. {doctor?.lastname}
@@ -121,7 +121,7 @@ const DoctorProfile = (props) => {
                                             </div>
 
                                             <div className="col-md-5 text-center">
-                                            <h5 className="text-cemter">Assigned <span style={{color: '#ed1b24'}}> HR Details </span></h5> 
+                                            <h5 className="text-cemter">Assigned <span style={{color: '#004aad'}}> HR Details </span></h5> 
                                                 {doctor && doctor?.assigned_hr_id?._id ? <>
                                                 <img src={defaultImg} className="img-responsive profile-card-img"/>
                                                 <p className="profile-name">Hr. {doctor?.assigned_hr_id?.firstname} {doctor?.assigned_hr_id?.lastname} </p>
@@ -140,7 +140,7 @@ const DoctorProfile = (props) => {
                         {/* paste patients list fragment here */}
                         {doctorpatients && doctorpatients?.length > 0 ? (<Fragment>
                             <div className="row-display">
-                                <h5 className="pt-2 mt-2">Assigned Patients <span style={{color: '#ed1b24'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
+                                <h5 className="pt-2 mt-2">Assigned Patients <span style={{color: '#004aad'}}>({doctorpatients && doctorpatients.length < 10 ? '0'+doctorpatients.length : doctorpatients.length})</span></h5> 
                                 
                             <div className="row-display">
                                 <input 

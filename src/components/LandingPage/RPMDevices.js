@@ -21,9 +21,9 @@ const RPMDevices = () => {
 
             <div className="rpm-devices-card-02 col-md-3 col-sm-12 col-xs-12">
               <img src={BloodPressureGaugeImg} className="rpm-card-images"/>
-              <h5 className="rpm-section-heading text-white">Remote Blood Pressure Cuff</h5>
+              <h5 className="rpm-section-heading">Remote Blood Pressure Cuff</h5>
               <hr style={{backgroundColor:'#081D45'}}/>
-              <p className="text-white">Through a 4G cellular-connected Blood Pressure Cuff, patients with hypertension and other ailments may send real-time information to the provider’s servers upon completing their Blood Pressure Measurement.</p>
+              <p>Through a 4G cellular-connected Blood Pressure Cuff, patients with hypertension and other ailments may send real-time information to the provider’s servers upon completing their Blood Pressure Measurement.</p>
             </div>
 
             <br />
@@ -37,9 +37,9 @@ const RPMDevices = () => {
 
             <div className="rpm-devices-card-02 col-md-3 col-sm-12 col-xs-12">
               <img src={OximeterImg} className="rpm-card-images"/>
-              <h5 className="rpm-section-heading text-white">Remote Pulse Oximeter</h5>
+              <h5 className="rpm-section-heading">Remote Pulse Oximeter</h5>
               <hr style={{backgrounColor:'#081D45'}}/>
-              <p className="text-white">Get accurate vital signs monitoring, such as your blood oxygen level, pulse rate, and perfusion index. Avoid complications by alerting providers in real-time, which allows immediate treatment and prevention.</p>
+              <p>Get accurate vital signs monitoring, such as your blood oxygen level, pulse rate, and perfusion index. Avoid complications by alerting providers in real-time, which allows immediate treatment and prevention.</p>
             </div>
 
 

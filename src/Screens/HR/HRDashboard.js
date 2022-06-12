@@ -77,7 +77,7 @@ const StaffDashboard = (props) => {
                                 <div className="row">
                                     <div className="col-md-12">
                                     <div className="row-display">
-                                        <h5 className="pt-2 mt-2">Patients <span style={{color: '#ed1b24'}}> ({hrpatients && hrpatients?.length < 10 ? '0'+hrpatients?.length : hrpatients?.length}) </span></h5> 
+                                        <h5 className="pt-2 mt-2">Patients <span style={{color: '#004aad'}}> ({hrpatients && hrpatients?.length < 10 ? '0'+hrpatients?.length : hrpatients?.length}) </span></h5> 
 
                                         <div className="row-display"> 
                                             <input 

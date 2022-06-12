@@ -74,7 +74,7 @@ const HRProfile = (props) => {
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-6 col-md-8 col-sm-12 col-xs-12">
-                        <h5 className="pt-2 mt-2">HR <span style={{color: '#ed1b24'}}> Profile </span></h5> 
+                        <h5 className="pt-2 mt-2">HR <span style={{color: '#004aad'}}> Profile </span></h5> 
                     </div>
 
                     <div className="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -136,7 +136,7 @@ const HRProfile = (props) => {
                             </div>
 
                             <div className="col-md-3">
-                                <h5 className="text-cemter">Assigned <span style={{color: '#ed1b24'}}> Doctor Details </span></h5> 
+                                <h5 className="text-cemter">Assigned <span style={{color: '#004aad'}}> Doctor Details </span></h5> 
                                 {doctorDetails ? doctorDetails && <>
                                     <div>
                                     <img src={defaultImg} className="img-responsive profile-card-img"/>

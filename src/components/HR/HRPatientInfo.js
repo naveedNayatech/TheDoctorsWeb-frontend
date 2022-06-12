@@ -115,7 +115,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     <>
       <div className="row-display header-wrapper">
             
-            <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#ed1b24'}}> Details </span></h5>
+            <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#004aad'}}> Details </span></h5>
         
             <div>
                 <img src={clockImg} className="img-responsive" width="50" height="50"/>

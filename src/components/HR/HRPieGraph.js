@@ -103,7 +103,7 @@ const HRPieGraph = () => {
                   <CartesianGrid strokeDasharray="1 1" />
                   <Tooltip />
                   <Legend/> 
-                  <Bar dataKey="sys" fill="#ed1b24" />
+                  <Bar dataKey="sys" fill="#004aad" />
                       <Bar dataKey="dia" fill="#23408e" />
                       <Bar dataKey="pul" fill="#007673" />
               </BarChart>
@@ -115,7 +115,7 @@ const HRPieGraph = () => {
               <XAxis dataKey="dia" stroke="#007673"/>
               <YAxis/>
               <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5"/>
-              <Line type="monotone" dataKey="sys" stroke="#ed1b24"/>
+              <Line type="monotone" dataKey="sys" stroke="#004aad"/>
               <Line type="monotone" dataKey="dia" stroke="#23408e"/>
               <Tooltip />
               <Legend />

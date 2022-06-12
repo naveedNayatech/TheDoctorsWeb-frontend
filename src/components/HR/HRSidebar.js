@@ -26,7 +26,7 @@ const HRSidebar = (props) => {
             <div className="sidebar">
             <div className="logo-details">
             <i className='bx bx-plus-medical'></i>
-                <span className="logo_name">THEDOCTORS<span style={{color: '#ed1b24'}}>WEB</span></span>
+                <span className="logo_name">THEDOCTORS<span style={{color: '#004aad'}}>WEB</span></span>
             </div>
 
             <ul className="nav-links">

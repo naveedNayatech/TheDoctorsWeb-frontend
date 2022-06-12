@@ -139,7 +139,7 @@
 }
 
 .rounded-button-activate:hover{
-  color: #F95800;
+  color: #88E0EF;
 
 }
 
@@ -260,7 +260,7 @@
 }
 
 #topbar .contact-info i {
-  color: #F95800;
+  color: #88E0EF;
   font-size: 22px;
   padding-right: 4px;
   margin-left: 35px;
@@ -303,6 +303,18 @@
   top: 0;
 }
 
+.logoImg {
+  width: 210px;
+  height: 80px;
+  margin: 0px auto;
+  margin-top:20px;
+}
+
+.landingPageHeaderLogo {
+  width:auto;
+  height: 80px;
+}
+
 #header .logo {
   font-size: 30px;
   margin: 0;
@@ -333,14 +345,14 @@
   width: 70px;
   font-size: 12px;
   margin: 0 auto;
-  background-color:#ed1b24 !important;
+  background-color:#004aad !important;
 }
 
 .assigned-tag {
   width: 70px;
   font-size: 12px;
   margin: 0 auto;
-  background-color:#ed1b24 !important;
+  background-color:#004aad !important;
 }
 
 .not-assigned-tag {
@@ -350,32 +362,13 @@
   background-color:#385399 !important;
 }
 
-.signed-icon {
-  color: dodgerblue;
-  font-size: 18px
-}
-
-.not-signed-icon {
-  color: red;
-  font-size: 18px
-}
-
-.insurance-companies-table {
-  color: dodgerblue;
-  margin: 0
-}
-
-.authorize-icon{
-  color: green
-}
-
 /**
 * Appointment Button *
 */
 .appointment-btn {
   margin-left: 25px;
-  background: #F95800;
-  color: #fff;
+  background: #88E0EF;
+  color: #010101;
   border-radius: 50px;
   padding: 8px 25px;
   white-space: nowrap;
@@ -612,12 +605,12 @@ RPM Devices Section
 }
 
 .rpm-devices-card-01 {
-  background: #081D45;
+  background: #004aad;
   box-shadow: 0 0 5px 5px rgba(0,0,0, 0.1);
 }
 
 .rpm-devices-card-02 {
-  background: #F95800;
+  background: #88E0EF;
   box-shadow: 0 0 5px 5px rgba(0,0,0, 0.1);
 }
 /* ------------------------------------------------------------
@@ -665,7 +658,7 @@ How it works
 }
 
 .how-it-works-card-01 {
-  background-color: #081D45;
+  background-color: #004aad;
   color: #FFF;
   padding: 15px;
   border-radius: 25px;
@@ -675,12 +668,11 @@ How it works
 
 
 .how-it-works-card-04 {
-  background-color: #F95800;
-  color: #FFF;
+  background-color: #88E0EF;
+  color: #010101;
   padding: 15px;
   border-radius: 25px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-
 }
 
 
@@ -995,8 +987,8 @@ How it works
   height: 100%;
   width: 280px;
   margin-top: -25px;
-  /* background: #0A2558; */
-  background-color: #23408e; 
+  /* background-color: #E8FFC2; */
+  background-color: #88E0EF;
   transition: all 0.5s ease;
 }
 
@@ -1013,7 +1005,7 @@ How it works
 
 .sidebar .logo-details i {
   font-size: 24px;
-  color: #ed1b24;
+  color: #004aad;
   min-width: 50px;
   text-align: center;
   margin-top: 20px;
@@ -1024,10 +1016,6 @@ How it works
   font-weight: 500;
   color: #CCCCCC;
   margin-top: 20px;
-}
-
-.sidebar .nav-links{
-  margin-top: 5px;   
 }
 
 .sidebar .nav-links li {
@@ -1048,19 +1036,18 @@ How it works
 .sidebar .nav-links li a i {
   min-width: 60px;
   text-align: center;
-  color: #fff;
+  color: #000;
   font-size: 22px;
 }
 
 .sidebar .nav-links li a .link_name{
-  color: #FFF;
+  color: #454545;
   font-size: 12px;
-  font-weight: 500;
   text-transform: uppercase; 
 }
 
 .link-name-active {
-  background-color: #ed1b24;
+  background-color: #D5F3FE;
 }
 
 .sidebarBtn {
@@ -1216,19 +1203,19 @@ nav .profile-details i {
 }
 
 .home-content .overview-boxes .box0{
-  background-image: linear-gradient(#ed1b24, #141212);
+  background-image: linear-gradient(#004aad, #141212);
 }
 
 .home-content .overview-boxes .box1{
-  background-image: linear-gradient(#ffa600 , #141212);
+  background-image: linear-gradient(#004aad , #141212);
 }
 
 .home-content .overview-boxes .box2{
-  background-image: linear-gradient(#216d41 , #141212);
+  background-image: linear-gradient(#004aad , #141212);
 }
 
 .home-content .overview-boxes .box3{
-  background-image: linear-gradient(#23408e , #141212);
+  background-image: linear-gradient(#004aad , #141212);
 }
 
 .home-content .overview-boxes .staff-box0{
@@ -1292,29 +1279,15 @@ nav .profile-details i {
 .overview-boxes .box .cart {
   font-size: 32px;
   font-weight: 500;
-  height:50px;
-  width: 50px;
-  background: #fb8b24; 
+  height:70px;
+  width: 70px; 
   color: #FFF;
   line-height: 50px;
   text-align: center;
   border-radius: 12px;
 }
 
-.overview-boxes .box .cart.two{
-  background: #0f4c5c;
-  color: #FFF;
-}
 
-.overview-boxes .box .cart.three{
-  background: #5f0f40;
-  color: #FFF;
-}
-
-.overview-boxes .box .cart.four{
-  color: #FFF;
-  background: #fdc500;
-}
 
 /* Dashboard Cards */
 .rpm-devices-card {
@@ -1322,23 +1295,6 @@ nav .profile-details i {
   border-radius: 12px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-}
-
-.success-tag {
-  /* background: #87D068; */
-  background: #007C92;
-  color: #fff;
-  padding: 5px;
-  border-radius: 7px;
-  font-size: 12px;
-}
-
-.warning-tag {
-  background: #FF5500;
-  color: #FFF;
-  padding: 5px;
-  border-radius: 7px;
-  font-size: 12px;
 }
 
 /* table classes */
@@ -1366,18 +1322,6 @@ tr {
   color: #444;
   font-size: 13px;
 }
-
-.profile-btn {
-    background: #09425A !important;
-    color: #FFF !important;
-}
-
-.avatar-in-table {
-  border-radius: 50%; 
-  width: 40px; 
-  height: 40px
-}
-
 /*--------------------------------------------------------------
 # Admin Login Form
 --------------------------------------------------------------*/
@@ -1401,12 +1345,8 @@ tr {
   opacity: 0.9;
 }
 
-
-
 .signin-text {
-  font-style: normal;
-  font-weight: 600 !important;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .form-control {
@@ -1456,7 +1396,7 @@ tr {
 }
 
 .reset-btn {
-  background-color: #ed1b24;
+  background-color: #004aad;
   color: #FFF;
   padding: 5px;
   border-radius: 5px;
@@ -1484,36 +1424,6 @@ tr {
 
 .row-class {
   float: right
-}
-
-.login-btn-class {
-  background-color: initial;
-  background-image: linear-gradient(-180deg, #000428, #004e92);
-  float: right;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
-  color: #FFFFFF;
-  cursor: pointer;
-  height: 44px;
-  line-height: 44px;
-  outline: 0;
-  overflow: hidden;
-  padding: 0 20px;
-  position: relative;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  vertical-align: top;
-  white-space: nowrap;
-  width: 150px;
-  z-index: 9;
-  border: 0;
-  transition: all 0.4s;
-  
-}
-
-.login-btn-class:hover {
- color: #DCDCDC
 }
 
 /* -----------------------------Doctor Profile-------------------------- */
@@ -1574,12 +1484,6 @@ tr {
   font-size: 15px;
 }
 
-.authorize-text {
-  color: darkgreen;
-  font-size: 15px;
-  font-weight: bold;
-}
-
 .no-record-found-img {
   width: 100px;
   height: 100px;
@@ -1603,22 +1507,14 @@ tr {
   border-radius: 50%;
   margin-left: 42%;
   margin-top: -10%;
-  border: 6px solid #F95800;
+  border: 6px solid #88E0EF;
 }
 
 .profile-value-bottom-border {
   letter-spacing: 1px;
-  border-bottom: 4px solid #F95800;
+  border-bottom: 4px solid #88E0EF;
   margin: 3px;
   padding: 5px
-}
-
-.selected-multiple-options-values {
-  background-color: #F95800;
-  color: #FFFFFF;
-  border-radius: 20px;
-  padding: 6px;
-  margin: 10px
 }
 
 .patient-profile-card-img {
@@ -1630,11 +1526,6 @@ tr {
   width: 20%;
   border-radius: 50%;
 }
-
-
-/* .card-border-right {
-  border-right: 2px solid #DCDCDC;
-} */
 
 .patient-profile-col-heading {
   background-color: #d9dadb;
@@ -1674,7 +1565,7 @@ tr {
 
 /* Pagination */
 .page-item.active .page-link {
-  background-color: #ed1b24;
+  background-color: #004aad;
   border-color: #D3D3D3;
 }
 
@@ -1780,7 +1671,7 @@ tr {
 }
 
 .elevatedBP, .lowBP {
-  color: #ed1b24;
+  color: #004aad;
   font-size: 14px;
   font-weight: bold;
   padding: 5px;
@@ -1789,7 +1680,7 @@ tr {
 }
 
 .highBP {
-  color: #ed1b24;
+  color: #004aad;
   font-weight: bold;
   font-size: 14px;
   animation: highBpAnimation 0.5s ease infinite alternate;
@@ -1802,15 +1693,6 @@ tr {
   to {
       opacity: 1
   }
-}
-
-.devicedata-createddata{
-  background-color: #14ACDD;
-  border-radius: 15px;
-  color: #FFF;
-  padding: 10px;
-  margin-left: 70%;
-  
 }
 
 @media (max-width: 768px) {
@@ -1836,7 +1718,8 @@ tr {
 --------------------------------------------------------------*/
 
 .navbar {
-  padding: 0px 20px;
+  padding: 0px;
+  margin: 0px;
 }
 
 .navbar ul {
@@ -2001,8 +1884,8 @@ tr {
   margin-top: 30px;
   border-radius: 50px;
   transition: 0.5s;
-  color: #fff;
-  background: #F95800;
+  color: #010101;
+  background: #88E0EF;
 }
 
 #home .btn-get-started:hover {
@@ -2058,7 +1941,7 @@ tr {
 }
 
 .spentTime {
-  background-color: #ed1b24;
+  background-color: #004aad;
   font-size: 12px;
   color: #FFF;
   text-transform: uppercase;
@@ -2183,7 +2066,7 @@ tr {
 }
 
 .accordion {
-  background-color: #ed1b24;
+  background-color: #004aad;
   color: #FFF;
   cursor: pointer;
   padding: 10px;
@@ -2217,7 +2100,7 @@ tr {
   background-color: #D3D3D3;
   padding: 12px;
   border-radius: 10px;
-  color: #ed1b24
+  color: #004aad
 }
 
 .notes-header {
@@ -2255,4 +2138,13 @@ tr {
   background-color: #ccc;
   padding: 10px;
   border-radius: 10px;
+}
+
+.manage_logs_btn{
+  background-color: #FFF;
+  font-size: 14px;
+  color: #004aad;
+  padding: 7px;
+  border-radius: 10px;
+  cursor: pointer;
 }

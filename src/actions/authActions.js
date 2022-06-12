@@ -148,6 +148,9 @@ export const hrLogin = (values) => async(dispatch) => {
 // HR Logout 
 export const hrLogout = () => async(dispatch) => {
     try {
+       
+       await axios.post(`${Prod01}/hr/signout`);
+
        dispatch({
            type: HR_LOGOUT_SUCCESS
        })
@@ -166,8 +169,6 @@ export const updatePassword = (id, oldpassword, password) => async(dispatch) => 
        dispatch({
            type: ADMIN_PASSWORD_UPDATE_REQUEST
        })     
-
-    console.log('id is '+ id, 'oldpassword is ' + oldpassword + 'newPassword is ' + password);
 
        const config = {
            headers: {
@@ -213,9 +214,13 @@ export const logout = () => async(dispatch) => {
 // Logout 
 export const staffLogout = () => async(dispatch) => {
     try {
-       dispatch({
-           type: STAFF_LOGOUT_SUCCESS
-       })
+
+        await axios.post(`${Prod01}/doctor/signout`);
+        dispatch({
+            type: STAFF_LOGOUT_SUCCESS
+        })
+
+
        
     } catch (error) {
         dispatch({

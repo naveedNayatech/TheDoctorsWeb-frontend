@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Image } from 'react-bootstrap';
+import TDW_logo from '../assets/Images/horizontal_logo.png';
 
 import { login, clearErrors } from '../actions/authActions'; 
 
@@ -57,9 +58,11 @@ const Login = ({ history }) => {
 				<div className="login-section">
 					<div className="container">
 						<div className="row content">
+							<Image src={TDW_logo} style={{height:"80px"}} alt="logo"/>		
 								
 							<div className="col-md-12" >
-								<h3 className="signin-text">Admin <span style={{color: '#ed1b24'}}> Sign in</span></h3>
+								<hr />
+								<h3 className="signin-text">Admin <span style={{color: '#004aad'}}> Sign in</span></h3>
 								<small style={{color: "#385399"}}>Enter valid credentials to log into your account.</small>
 
 								<hr />

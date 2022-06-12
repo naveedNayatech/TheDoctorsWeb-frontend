@@ -151,7 +151,7 @@ const PatientsList = () => {
 
                         <div className="row-display">
                             
-                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#ed1b24'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
+                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#004aad'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
                             
 
                             <div className="mt-2">
@@ -160,7 +160,7 @@ const PatientsList = () => {
                                 value={doctorId}
                                 onChange={(e) => {searchPatientByDoctor(e.target.value); setDoctorId(e.target.value)}}
                                 >
-                                    <option value="undefined"> Search By Dr.</option>
+                                    <option value="undefined"> Sort By Physician.</option>
                                     {doctors && doctors.map((doc, index) => (
                                         <option value={doc?._id} key={index}>Dr. {doc?.firstname} {doc?.lastname}</option>                                         
                                     ))}
@@ -173,7 +173,7 @@ const PatientsList = () => {
                                 value={hrId}
                                 onChange={(e) => {searchPatientByHR(e.target.value); setHrId(e.target.value)}} 
                                 >
-                                    <option value="undefined">Search By HR</option>
+                                    <option value="undefined">Search By Nurse Resource</option>
                                     {hrs && hrs.map((hr, index) => (
                                         <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname}</option>
                                     ))}

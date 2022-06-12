@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Badge, Image} from 'react-bootstrap';
+import { Image} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
 import { useDispatch, useSelector} from 'react-redux';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import { hrTimeSpentOfCurrentMonth } from '../../actions/HRActions';
 const moment = require('moment-timezone');
+import { Link } from 'react-router-dom';
 
 const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, patientid, telemetaryReadings}) => {
 
@@ -28,11 +29,15 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
 
     }, [])
 
+    const sendEmail = (email) => {
+        window.open(`mailto:${email}`)
+    }
+
 
     return (
         <>
             <div className="col-md-3">
-                <h5 className="pt-2 mt-2">Patient <span style={{ color: '#ed1b24' }}>Details </span>
+                <h5 className="pt-2 mt-2">Patient <span style={{ color: '#004aad' }}>Details </span>
                 </h5>
                 
 
@@ -44,10 +49,10 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <div>
                         <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
 
-                        <p className="patient-profile-name">{patient?.firstname} {patient?.lastname}  </p>
+                        <p className="patient-profile-name" style={{fontWeight: 'bold'}}>{patient?.firstname} {patient?.lastname}  </p>
 
                         <>
-                            <p className="patient-email">{patient?.email}</p>
+                            <Link to="/patientProfile" className="link" style={{marginLeft: "10%"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
 
                             <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
                         </>
@@ -61,27 +66,22 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                     <span className="profile-label">Address: </span>
                     <p className="patient-profile-card-text">{patient?.address}, {patient?.city}</p>
 
-                    <span className="profile-label">State: </span>
-                    <p className="patient-profile-card-text">{patient?.state} , {patient?.zipCode}</p>
-
                     <span className="profile-label">Line 2: </span>
                     <p className="patient-profile-card-text">{patient?.line2}</p>
 
-                    
+                    <span className="profile-label">City, State & Zipcode: </span>
+                    <p className="patient-profile-card-text">{patient?.city}, {patient?.state} - {patient?.zipCode} </p>                    
                 </div>
 
                 <div className="col-md-3">
                     <span className="patient-profile-col-heading">Contact Information</span>
                     <hr />
 
-                    <span className="profile-label">Phone 1 </span>
+                    <span className="profile-label">Primary Phone </span>
                     <p className="patient-profile-card-text">{patient?.phone1 || 'N/A'}</p>
 
-                    <span className="profile-label">Mobile No </span>
+                    <span className="profile-label">Mobile</span>
                     <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A'} </p>
-
-                    <span className="profile-label">Time spent (This month) </span>
-                    <p className="patient-profile-card-text spentTime" style={{width: '90px'}}>{totalTime || 0} Mins</p>
                 </div>
 
 
@@ -101,6 +101,7 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                         </div>
                     </>}
 
+
                     {careplan !== undefined && <>
                         <div className="patient-profile-data-div mt-2">
                             <p style={{ fontSize: 14 }} className="text-center mt-2">Remaining : </p>
@@ -113,7 +114,10 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                         <p style={{ fontSize: 14 }} className="text-center mt-2">Initial Month : </p>
                         <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
                     </div>
-
+                    
+                    <br/>
+                    <span className="patient-profile-col-heading">Nurse Engagement Time </span>
+                    <p style={{marginTop: "14px", fontSize:"12px"}}>{totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
                    
                 </div>
             </div>
@@ -148,18 +152,26 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                         <span className="profile-label">No Device Assigned Yet</span>
 
                     </> : <>
-                        <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices?.length})</span>
+                        <span className="profile-label">Assigned Devices ( 0{patient?.assigned_devices && patient?.assigned_devices?.length} )</span>
 
                         {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                             <div key={index}>
-                                <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                    <button className="btn" style={{ color: 'red' }}
-                                        onClick={() => removeAssignDevice(deviceass, patientid)}
-                                    >
-                                        <i className="bx bx-trash"></i>
-                                    </button>
-                                </p>
+                                <Link to="/devices">
+                                <div className="card" style={{padding: '5px', marginTop: '5px'}}>
+                                    <div className="row-display">
+                                        <div>
+                                        <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
+                                        <small className="mt-2"><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
+                                        </div>
 
+                                        <button className="btn" style={{ color: 'red' }}
+                                        onClick={() => removeAssignDevice(deviceass, patientid)}
+                                        >
+                                        <i className="bx bx-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                </Link>
                             </div>
                         ))}
 

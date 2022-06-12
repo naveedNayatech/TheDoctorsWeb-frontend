@@ -37,7 +37,7 @@ const PatientCPReport = () => {
 
                 <div className="row-display">
                     
-                    <h5 className="pt-2 mt-2">All Patients<span style={{color: '#ed1b24'}}> (CP Report) </span></h5>
+                    <h5 className="pt-2 mt-2">All Patients<span style={{color: '#004aad'}}> (CP Report) </span></h5>
                     
                     {patientCompleteCP && patientCompleteCP.length > 0 && (<Fragment>
                         <div className="col-md-2 col-lg-2">

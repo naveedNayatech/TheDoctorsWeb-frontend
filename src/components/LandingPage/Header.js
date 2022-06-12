@@ -1,5 +1,7 @@
 import React, { useState, Fragment } from 'react'
 import { Link } from 'react-router-dom';
+import TDW_logo from '../../assets/Images/official_logo.png';
+import { Image } from 'react-bootstrap';
 
 const Header = () => {
 
@@ -97,15 +99,18 @@ const Header = () => {
   <header id="header" className="fixed-top">
     <div className="container d-flex align-items-center">
 
-      <h1 className="logo me-auto"><Link to="/">THEDOCTORSWEB</Link></h1>
-    
+      {/* <h1 className="logo me-auto"><Link to="/">THEDOCTORSWEB</Link></h1> */}
+      <Image src={TDW_logo} className="landingPageHeaderLogo" alt="logo" />
+
       <nav id="navbar" className="navbar order-last order-lg-0">
         <ul>
           <li><a className="nav-link scrollto" href="#about-us">About Us</a></li>
           <li><a className="nav-link scrollto" href="#how_it_works">How It Works?</a></li>
           <li><a className="nav-link scrollto" href="#rpm_devices">RPM Devices</a></li>       
           <li><a className="nav-link scrollto" href="#telemedicine">Tele-Medicine</a></li>
-          <li><Link to="/login" className="nav-link">Login</Link></li>
+
+          <li style={{float: 'right'}}><Link to="/login" className="nav-link">Login</Link></li>
+          
         </ul>
         <i className="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -120,7 +125,7 @@ const Header = () => {
    {/* Home Section  */}
   <section id="home" className="d-flex align-items-center">
     <div className="container">
-    <h1 className="text-white">RPM <span style={{color: '#F95800'}}>Solutions</span>,  <br /> for Physicians</h1>
+    <h1 className="text-white">RPM <span style={{color: '#88E0EF'}}>Solutions</span>,  <br /> for Physicians</h1>
     <h2 className="text-white">We Provide the Best Monitoring Devices
         with <br /> the help of experienced and qualified
         medical <br/> staff right at your door steps

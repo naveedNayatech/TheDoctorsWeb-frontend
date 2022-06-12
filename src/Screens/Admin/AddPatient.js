@@ -106,7 +106,7 @@ const AddPatient = (props) => {
             <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded" style={{ backgroundColor: '#FAFAFA' }}>
                 <div className="home-content">
                     <div className="row-display">
-                        <h5 className="pt-2 mt-2">Add <span style={{ color: '#ed1b24' }}> New Patient </span></h5>
+                        <h5 className="pt-2 mt-2">Add <span style={{ color: '#004aad' }}> New Patient </span></h5>
                         <div className="row-display">
                             <Link to="/patients">
                                 <button className="btn btn-primary mt-3">

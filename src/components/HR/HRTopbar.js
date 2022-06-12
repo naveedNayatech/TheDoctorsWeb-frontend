@@ -106,7 +106,7 @@ const TopBar = ({displayTimer, patientid}) => {
                 <div className="left-div">
                     <div className="sidebar-button">
                         <i className="bx bx-menu sidebarBtn"></i>
-                        <span className="dashboard">HR <span style={{color: '#ed1b24'}}>Dashboard</span></span>    
+                        <span className="dashboard">HR <span style={{color: '#004aad'}}>Dashboard</span></span>    
                     </div>
                 </div>
 

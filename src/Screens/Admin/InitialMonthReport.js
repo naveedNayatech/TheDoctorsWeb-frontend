@@ -14,18 +14,19 @@ import moment from 'moment';
 import ExportReactCSV from '../../components/ExportReactCSV';
 import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
+import Loader from '../../layouts/Loader';
 
 const InitialMonthReport = () => {
     const alert = useAlert();
 
-    const [month, setMonth] = useState('April');
+    const [month, setMonth] = useState('June');
     const dispatch = useDispatch();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(20);
     const [year, setYear] = useState("2022");
 
-    const {error, initialMonthPatients} = useSelector(state => state.initialMonthReport);
+    const {loading, error, initialMonthPatients} = useSelector(state => state.initialMonthReport);
     const { doctors } = useSelector(state => state.doctor);
     const { hrs} = useSelector(state => state.hrslist);
 
@@ -67,7 +68,7 @@ const InitialMonthReport = () => {
             <div className="home-content">
 
                 <div className="row-display">
-                    <h5 className="pt-2 mt-2">Initial Month<span style={{color: '#007673'}}> Report </span></h5>
+                    <h5 className="pt-2 mt-2">Initial Month<span style={{color: '#004aad'}}> Report </span></h5>
                 
                     <div className="row-display">
                         <Link to="/adminDashboard">
@@ -168,12 +169,12 @@ const InitialMonthReport = () => {
                 </div>
 
                  {/* Heading */}
-                       
+                     {loading ? <Loader /> : <>
                      {initialMonthPatients && initialMonthPatients?.data?.length > 0 && (<Fragment>
                     <hr />
                     <div className="row">
                      <div className="col-md-8 col-lg-8">
-                         <p style={{color: 'gray', fontWeight: 'bold'}}>Results Found: <span style={{color: '#ed1b24'}}>{initialMonthPatients && initialMonthPatients.length} </span></p>
+                         <p style={{color: 'gray', fontWeight: 'bold'}}>Results Found: <span style={{color: '#004aad'}}>{initialMonthPatients && initialMonthPatients.length} </span></p>
                      </div>
 
                     <div className="col-md-2 col-lg-2">
@@ -237,6 +238,7 @@ const InitialMonthReport = () => {
                         <hr />
                     </Fragment>
                 ))}
+                </>}
             </div>
         </div>
 

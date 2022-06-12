@@ -104,7 +104,7 @@ const TimeSummaryReport = () => {
 
         <div className="shadow-lg p-3 mb-5 mr-4 ml-4 rounded-card" style={{backgroundColor: '#FAFAFA'}}>
             <div className="home-content">
-                <h5 className="pt-2 mt-2">Time Summary<span style={{color: '#ed1b24'}}> Report </span></h5>
+                <h5 className="pt-2 mt-2">Time Summary<span style={{color: '#004aad'}}> Report </span></h5>
                 <hr />
 
                 <span className="notes-header"><b>Note: </b> You can generate time summary report by doctor and by HR.</span>
@@ -130,7 +130,7 @@ const TimeSummaryReport = () => {
                 
                 <div className="row-display">
                 <div className="col-md-4 mt-4">
-                <label>Select Doctor  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                <label>Select Doctor  <span style={{color: '#004aad'}}> *</span>  </label>
                 <Select
                     options={doctorOptions}
                     onChange={getDoctorProfile}
@@ -139,7 +139,7 @@ const TimeSummaryReport = () => {
                 </div>
 
                 <div className="col-md-3 mt-4">
-                    <label>Month  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                    <label>Month  <span style={{color: '#004aad'}}> *</span>  </label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -162,7 +162,7 @@ const TimeSummaryReport = () => {
                 </div>
 
                 <div className="col-md-3 mt-4">
-                    <label>Year <span style={{color: '#ed1b24'}}> *</span></label>
+                    <label>Year <span style={{color: '#004aad'}}> *</span></label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -187,7 +187,7 @@ const TimeSummaryReport = () => {
                 
                 <div className="row-display">
                 <div className="col-md-4 mt-4">
-                <label>Select HR  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                <label>Select HR  <span style={{color: '#004aad'}}> *</span>  </label>
                 <Select
                     options={hrOptions}
                     onChange={getHRProfile}
@@ -196,7 +196,7 @@ const TimeSummaryReport = () => {
                 </div>
 
                 <div className="col-md-3 mt-4">
-                <label>Month  <span style={{color: '#ed1b24'}}> *</span>  </label>
+                <label>Month  <span style={{color: '#004aad'}}> *</span>  </label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -219,7 +219,7 @@ const TimeSummaryReport = () => {
                 </div>
 
                 <div className="col-md-3 mt-4">
-                <label>Year <span style={{color: '#ed1b24'}}> *</span></label>
+                <label>Year <span style={{color: '#004aad'}}> *</span></label>
                     <select 
                        name="month" 
                        className="form-control"
@@ -268,7 +268,7 @@ const TimeSummaryReport = () => {
                 {loading ? <Loader /> : <>
                    {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
                         <div className="text-center"><span style={{ 
-                            color: '#ed1b24',
+                            color: '#004aad',
                             fontSize: '16px',
                             fontWeight: 'bold'
                         }}>{timeSummaryReport?.length}</span> records found.</div>

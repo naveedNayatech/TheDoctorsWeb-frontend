@@ -8,13 +8,12 @@ import Telemedicine from '../components/LandingPage/Telemedicine';
 import BookDemo from '../components/LandingPage/BookDemo';
 import ContactUs from '../components/LandingPage/ContactUs';
 import Footer from '../components/LandingPage/Footer';
-import MetaData from '../layouts/MetaData';
+
 
 const LandingPage = () => {
     return (
         <Fragment>
             <div className="landingpagebody">
-                <MetaData title="Home" />
                 <Header />
                 <AboutUs />
                 <HowItWorks />

@@ -84,7 +84,7 @@ const AssignDrToHr = (props) => {
                 
                 <div className="row">
                     <div className="col-md-4">
-                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#ed1b24'}}>Doctor </span></h5>
+                        <h5 className="pt-2 mt-2">Select <span style={{ color: '#004aad'}}>Doctor </span></h5>
                 
                             <Select
                                 options={options}
@@ -96,7 +96,7 @@ const AssignDrToHr = (props) => {
                         
 
                         {doctorId && doctor && <Fragment>
-                            <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#ed1b24'}}>Details </span></h5>
+                            <h5 className="pt-2 mt-2">Doctor <span style={{ color: '#004aad'}}>Details </span></h5>
                             <br />
                                     <div className="col-md-12">
                                         <div className="row">

@@ -46,7 +46,7 @@ const TopBar = () => {
                         <div className="left-div">
                             <div className="sidebar-button">
                                 <i className="bx bx-menu sidebarBtn"></i>
-                                <span className="dashboard">Admin <span style={{color: '#ed1b24'}}>Dashboard</span></span>    
+                                <span className="dashboard">Admin <span style={{color: '#004aad'}}>Dashboard</span></span>    
                         </div>
                         </div>
 
@@ -56,7 +56,7 @@ const TopBar = () => {
                         <Dropdown className="admin-topbar-dropdown">
                             <Dropdown.Toggle variant="link" id="dropdown-basic">
 
-                            <i className='bx bx-bell' style={{color: '#ed1b24', fontSize: '20px'}}></i>
+                            <i className='bx bx-bell' style={{color: '#004aad', fontSize: '20px'}}></i>
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu className="admin-topbar-notification-dropdown">

@@ -31,6 +31,98 @@ const CuffTelemetaryData = ({ healthData, isAdmin}) => {
         }
     }
 
+    let sysBPCategory; //variable to store category of BP
+
+    function calcSysBpCategory(sys) {
+        switch(true){
+            case (sys > 210):
+                sysBPCategory = "Hypertension- stage 4"
+                break;
+            case (sys >= 180 && sys <= 210):
+                sysBPCategory = "Hypertension-Stage 3"
+                break;
+            case (sys >= 160 && sys <= 179):
+                sysBPCategory = "Hypertension-Stage 2"
+            break;
+            case (sys >= 140 && sys <= 159):
+                sysBPCategory = "Hypertension-Stage 1"
+            break;
+            case (sys >= 130 && sys <= 139):
+                sysBPCategory = "Pre-hypertension"
+            break;
+            case (sys >= 121 && sys <= 129):
+                sysBPCategory = "High Normal B.P"
+            break;
+            case (sys >= 100 && sys <= 120):
+                sysBPCategory = "Normal Blood Pressure"
+            break;
+            case (sys >= 100 && sys <= 120):
+                sysBPCategory = "Normal Blood Pressure"
+            break;
+            case (sys >= 90 && sys <= 99):
+                sysBPCategory = "Low Normal B.P"
+            break;
+            case (sys >= 70 && sys <= 89):
+                sysBPCategory = "Low Blood Pressure"
+            break;
+            case (sys >= 50 && sys <= 69):
+                sysBPCategory = "Too Low Blood Pressure"
+            break;
+            case (sys < 50):
+                sysBPCategory = "Extremely Low B.P"
+            break;
+            default:
+                sysBPCategory = "Invalid B.P"
+            } 
+        }
+
+    let diaBpCategory;
+
+    function calcDiaBpCategory(dia) {
+        switch(true){
+            case (dia > 120):
+                diaBpCategory = "Hypertension- stage 4"
+                break;
+            case (dia >= 110 && dia <= 120):
+                diaBpCategory = "Hypertension-Stage 3"
+                break;
+            case (dia >= 100 && dia <= 109):
+                diaBpCategory = "Hypertension-Stage 2"
+            break;
+            case (dia >= 90 && dia <= 99):
+                diaBpCategory = "Hypertension-Stage 1"
+            break;
+            case (dia >= 130 && dia <= 139):
+                diaBpCategory = "Pre-hypertension"
+            break;
+            case (dia >= 85 && dia <= 89):
+                diaBpCategory = "High Normal B.P"
+            break;
+            case (dia >= 81 && dia <= 84):
+                diaBpCategory = "Normal Blood Pressure"
+            break;
+            case (dia >= 65 && dia <= 80):
+                diaBpCategory = "Normal Blood Pressure"
+            break;
+            case (dia >= 60 && dia <= 64):
+                diaBpCategory = "Low Normal B.P"
+            break;
+            case (dia >= 40 && dia <= 59):
+                diaBpCategory = "Low Blood Pressure"
+            break;
+            case (dia >= 35 && dia <= 39):
+                diaBpCategory = "Too Low Blood Pressure"
+            break;
+            case (dia < 35):
+                diaBpCategory = "Extremely Low B.P"
+            break;
+            default:
+                diaBpCategory = "Invalid B.P"
+            } 
+        }
+
+    
+
   return <Fragment>
       {telemetaryData?.sys && telemetaryData?.dia !== " " && telemetaryData?.sys && telemetaryData?.dia !== undefined ? 
       <>
@@ -40,33 +132,36 @@ const CuffTelemetaryData = ({ healthData, isAdmin}) => {
             <div className="col-md-1">
                 <Image src={systolicImg} className="systolic-image" />    
             </div>
-            
+
+            {calcSysBpCategory(telemetaryData?.sys)}
+                
             <div className="col-md-3">
             <span className="profile-label">Systolic : {telemetaryData?.sys}</span>
-                {telemetaryData?.sys <= 70 && telemetaryData?.sys >= 0 ? <p className="normalBP">Very Low</p> : telemetaryData?.sys >= 71 && telemetaryData?.sys <= 100 ? 
-                <p className="lowBP">Low</p> : telemetaryData?.sys >= 101 && telemetaryData?.sys <=120 ? <p className="normalBP">Normal</p> : telemetaryData?.sys > 120 && telemetaryData?.sys <= 140 ? <p className="elevatedBP">Elevated</p> : 
-                telemetaryData?.sys > 140 && telemetaryData?.sys <= 160 ? <p className="highBP">High BP</p> : 
-                telemetaryData?.sys > 160 && telemetaryData?.sys < 180 ? <p className="highBP">Hypertension</p> : ''}
+                <br/>
+                <small><b>{sysBPCategory}</b></small>
             </div>
 
             <div className="col-md-1">
                 <Image src={diastolicImg} className="systolic-image" />    
             </div>
 
+            {calcDiaBpCategory(telemetaryData?.dia)}
+
             <div className="col-md-3">
             <span className="profile-label">Diastolic : {telemetaryData?.dia}</span>
-                {telemetaryData?.dia >=60 && telemetaryData?.dia <= 70 ? <p className="lowBP">Low</p> : telemetaryData?.dia >= 71 && telemetaryData?.dia <= 90 ? 
-                <p className="normalBP">Normal</p> : telemetaryData?.dia >= 90 && telemetaryData?.dia <=100 ? <p className="elevatedBP">Elevated</p> : ""}
+                <br/>
+                <small><b>{diaBpCategory}</b></small>
             </div>
 
             <div className="col-md-1">
                 <Image src={pulseImg} className="systolic-image" />    
             </div>
 
-            <div className="col-md-3">
+            <div className="col-md-2">
             <span className="profile-label">Pulse : {telemetaryData?.pul}</span>
-                <p className="normalBP">{telemetaryData?.pul == undefined ? "" : 'Normal'}</p>
             </div>
+
+
         </div> {/* First Row Ends here */}
 
         {/* Device & Patient Info */}

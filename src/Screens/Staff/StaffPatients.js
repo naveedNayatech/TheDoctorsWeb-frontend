@@ -36,7 +36,7 @@ const StaffPatients = ({ history }) => {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-md-9">
-                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#ed1b24'}}> ({doctorpatients && doctorpatients?.length < 10 ? '0'+doctorpatients?.length : doctorpatients?.length}) </span></h5> 
+                                        <h5 className="pt-2 mt-2">My Patients <span style={{color: '#004aad'}}> ({doctorpatients && doctorpatients?.length < 10 ? '0'+doctorpatients?.length : doctorpatients?.length}) </span></h5> 
                                     </div>
 
                                     <div className="col-md-3">

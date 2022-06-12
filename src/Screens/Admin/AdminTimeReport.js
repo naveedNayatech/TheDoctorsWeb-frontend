@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 import { RESET_TIME_REPORT_DATA } from '../../constants/HRConstants';
 import Loader from '../../layouts/Loader';
 import {useAlert} from 'react-alert';
-
+import doctorIcon from '../../assets/Images/doctorIcon.png';
+import hrIcon from '../../assets/Images/network.png';
+import patientIcon from '../../assets/Images/patientIcon.png';
 
 const AdminTimeReport = () => {
 
@@ -107,7 +109,7 @@ const AdminTimeReport = () => {
             <div className="home-content">
 
             <div className="row-display">
-                <h5 className="pt-2 mt-2">Time Spent <span style={{color: '#ed1b24'}}>Report</span></h5>
+                <h5 className="pt-2 mt-2">Time Spent <span style={{color: '#004aad'}}>Report</span></h5>
 
                 <div className="row-display">
                     <Link to="/adminDashboard">
@@ -125,22 +127,40 @@ const AdminTimeReport = () => {
             </div>
             <br />
 
-            <p className='text-center'>Generate Time Report By:</p>
+            <span className="notes-header"><b>Note: </b> You can generate time report by patient, by doctor and by HR.</span>
 
-            <div className="row justify-content-center">
-                <button className={`btn + ${reportBy === 'patient' ?'submit-btn shadow-none' : 'link'} m-3`} 
+
+            <div className="row cardWrapper">
+                <div className={`card cardButton ${reportBy === "patient" ? "cardActive" : ""}`}
+                   onClick={() => setReportBy("patient")}>
+                    <img src={patientIcon} alt="" height="80" width="80"/>
+                        By Patient
+                </div>
+                {/* <button className={`btn + ${reportBy === 'patient' ?'submit-btn shadow-none' : 'link'} m-3`} 
                     onClick={() => setReportBy("patient")}> By Patient
-                </button>
+                </button> */}
 
-                <button 
+                
+                <div className={`card cardButton ${reportBy === "doctor" ? "cardActive" : ""}`}
+                   onClick={() => setReportBy("doctor")}>
+                    <img src={doctorIcon} alt="" height="80" width="80"/>
+                        By Doctor
+                </div>
+                
+                {/* <button 
                     className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
                     onClick={() => setReportBy("hr")}> By HR
-                </button>
-
-                <button 
-                    className={`btn + ${reportBy === 'doctor' ? 'submit-btn shadow-none' : 'link'} m-3`}
-                    onClick={() => setReportBy("doctor")}> By Doctor
-                </button>
+                </button> */}
+                
+                <div className={`card cardButton ${reportBy === "hr" ? "cardActive" : ""}`}
+                   onClick={() => setReportBy("hr")}>
+                    <img src={hrIcon} alt="" height="80" width="80"/>
+                        By HR
+                </div>
+                {/* <button 
+                    className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
+                    onClick={() => setReportBy("hr")}> By HR
+                </button> */}
             </div>
            <hr />
 
@@ -235,10 +255,10 @@ const AdminTimeReport = () => {
                                  <br /><hr />
                                  <div className="row-display">
                                      <div className="col-md-4">
-                                         <h5>Search <span style={{color: '#ed1b24'}}>Result</span></h5>
+                                         <h5>Search <span style={{color: '#004aad'}}>Result</span></h5>
                                      </div>
  
-                                     <span>Total Time Spent: <span style={{color: '#ed1b24', fontWeight: 'bold'}}>{totalTime} Minutes  ( {startDate && startDate} {endDate && "=>" + endDate} ) </span></span>
+                                     <span>Total Time Spent: <span style={{color: '#004aad', fontWeight: 'bold'}}>{totalTime} Minutes  ( {startDate && startDate} {endDate && "=>" + endDate} ) </span></span>
  
  
                                      <div className="row-display">

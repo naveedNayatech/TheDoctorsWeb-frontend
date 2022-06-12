@@ -4,9 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { getPatients, getAllLogs, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
-import {Table, Badge} from 'react-bootstrap';
+import {Table, Badge, Image} from 'react-bootstrap';
 import DashboardGraphs from '../AdminDashboard/DashboardGraphs';
 const moment = require('moment-timezone');
+import hrIcon from '../../assets/Images/network.png';
+import doctorIcon from '../../assets/Images/doctorIcon.png';
+import patientIcon from '../../assets/Images/patientIcon.png';
+import heartIcon from '../../assets/Images/heart.png';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -38,10 +42,11 @@ const Home = () => {
                                     <div className="number">{totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients }</div>
                                     <div className="indicator">
                                         <i className="bx bx-up-arrow-alt down"></i>
-                                        <span className="text">Up from Yesterday</span>
+                                        <span className="text">Updated just now</span>
                                     </div>
                                 </div>
-                                <i className="bx bx-user cart"></i>
+                                <Image src={patientIcon} className="cart" />
+                                {/* <i className="bx bx-user cart"></i> */}
                         </div>
 
                     <div className="box box1">
@@ -50,10 +55,11 @@ const Home = () => {
                             <div className="number">{totalDevices && totalDevices < 10 ? '0'+totalDevices : totalDevices }</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt down"></i>
-                                <span className="text">Up from Yesterday</span>
+                                <span className="text">Updated just now</span>
                             </div>
                         </div>
-                        <i className="bx bx-devices cart two"></i>
+                        <Image src={heartIcon} className="cart"/>
+                        {/* <i className="bx bx-devices cart two"></i> */}
                     </div>
 
                     <div className="box box2">
@@ -62,22 +68,24 @@ const Home = () => {
                             <div className="number">{totalDrs && totalDrs < 10 ? '0'+totalDrs : totalDrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-up-arrow-alt down"></i>
-                                <span className="text">Up from Yesterday</span>
+                                <span className="text">Updated just now</span>
                             </div>
                         </div>
-                        <i className="bx bx-user cart three"></i>
+                        <Image src={doctorIcon} className="cart three" />
                     </div>
 
                     <div className="box box3">
                         <div className="left-side">
-                            <Link to="/hrs" className="box_topic">Total HRs <br/></Link>
+                            <Link to="/hrs" className="box_topic">Nurses <br/></Link>
                             <div className="number">{totalHrs && totalHrs < 10 ? '0'+totalHrs : totalHrs}</div>
                             <div className="indicator">
                                 <i className="bx bx-down-arrow-alt down"></i>
-                                <span className="text">Up from Yesterday</span>
+                                <span className="text">Updated just now</span>
                             </div>
                         </div>
-                        <i className="bx bxs-cart-download cart four"></i>
+                        {/* <i className="bx bxs-cart-download cart four"></i> */}
+                        <Image src={hrIcon} className="cart" />
+
                     </div>
                 </div>
 
@@ -129,17 +137,22 @@ const Home = () => {
 
                             
                                 <div className="col-md-4 col-lg-4 logs-card">
-                                    <h5 className="title">Logs</h5>
+                                    <div className="row-display">
+                                     <h5 className="title">   Logs </h5>
+                                     <Link to="/logs" className="link">
+                                        <span className="manage_logs_btn"><i className='bx bx-slider-alt'></i> Manage Logs</span>
+                                     </Link>
+                                    </div>
                                     <hr />
-                                    {logs && logs.slice(0,50).map((log, index) => (
-                                         <div key={index}>        
-                                             <ul>
-                                                 <ol><small>{log?.text}.</small> 
-                                                 &nbsp;&nbsp;&nbsp;<span><small>
-                                                 {moment(log.createdAt).tz("America/New_York").format("lll")}
-                                                 </small></span></ol>
+                                    {logs && logs.slice(0,50).map((log, index) => (     
+                                             <ul key={index}>
+                                                {loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : <>
+                                                    <ol><small>{log?.text}.</small> 
+                                                    &nbsp;&nbsp;&nbsp;<span><small>
+                                                    {moment(log.createdAt).tz("America/New_York").format("lll")}
+                                                    </small></span></ol>
+                                                </>}
                                              </ul>
-                                         </div>
                                     ))} 
                                 </div>
                             </div>

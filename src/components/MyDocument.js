@@ -86,7 +86,7 @@ export default class MyDocument extends React.PureComponent {
                     </div>
                 </div>
 
-                <h5 className="text-center" style={{color: '#ed1b24', marginTop: '120px'}}><b>Telemetary Result</b></h5>
+                <h5 className="text-center" style={{color: '#004aad', marginTop: '120px'}}><b>Telemetary Result</b></h5>
             <br />
 
             <div className="row-display">

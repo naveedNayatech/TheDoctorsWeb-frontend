@@ -109,7 +109,7 @@ const StaffPatientProfile = (props) => {
                             {patient && <Fragment>
                             <div className="row">
                                 <div className="col-md-10">
-                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#ed1b24'}}> Details </span></h5>
+                                    <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#004aad'}}> Details </span></h5>
                                 </div>
                                 </div>
                             <hr />
@@ -259,7 +259,7 @@ const StaffPatientProfile = (props) => {
                         {deviceData && deviceData.length > 0 ? <Fragment>
                         <br/><br/>
                         <div className="col-md-3">
-                            <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#ed1b24'}}> ( {Count} ) </span></h5>
+                            <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#004aad'}}> ( {Count} ) </span></h5>
                         </div>
 
                         <div className="row-display patient-profile-col-heading" style={{ 
@@ -328,10 +328,10 @@ const StaffPatientProfile = (props) => {
                                 <Col sm={12}>
                                     <Nav variant="pills" className="flex-row">
                                         <Nav.Item style={{cursor: 'pointer'}}>
-                                        <Nav.Link eventKey="first">Cuff (B.P | Telemetary Data)</Nav.Link>
+                                        <Nav.Link eventKey="first">BP Monitor Data</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item style={{cursor: 'pointer'}}>
-                                        <Nav.Link eventKey="second">Weight (Telemetary Data)</Nav.Link>
+                                        <Nav.Link eventKey="second">Weight Scale Monitor</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                 </Col>
