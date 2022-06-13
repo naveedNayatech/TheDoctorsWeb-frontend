@@ -39,8 +39,6 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
             <div className="col-md-3">
                 <h5 className="pt-2 mt-2">Patient <span style={{ color: '#004aad' }}>Details </span>
                 </h5>
-                
-
             </div>
             <hr />
 

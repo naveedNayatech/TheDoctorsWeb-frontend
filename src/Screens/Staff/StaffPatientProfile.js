@@ -16,6 +16,7 @@ import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
 import Pagination from 'react-js-pagination';
 import PatientProfileGraph from '../../components/PatientProfileGraph';
+import { Link } from 'react-router-dom';
 
 const StaffPatientProfile = (props) => {
     
@@ -91,6 +92,10 @@ const StaffPatientProfile = (props) => {
         dispatch(sortTelemetartData(patientid, startDate, endDate, readingPerPage, currentPage));
     }
 
+    const sendEmail = (email) => {
+        window.open(`mailto:${email}`)
+    }
+
     return (
         <Fragment>
            <MetaData title="Patient Profile"/>
@@ -119,10 +124,10 @@ const StaffPatientProfile = (props) => {
                                         <div>
                                             <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
                                             
-                                                <p className="patient-profile-name">{patient?.firstname} {patient?.lastname} </p>
+                                                <p className="patient-profile-name" style={{fontWeight: 'bold'}}>{patient?.firstname} {patient?.lastname} </p>
                                         
                                                 <Fragment>
-                                                    <p className="patient-email">{patient?.email}</p>
+                                                <Link className="link" style={{marginLeft: "10%"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
                                                     <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
                                                 </Fragment>
                                         </div>   
@@ -135,18 +140,18 @@ const StaffPatientProfile = (props) => {
                                              <span className="profile-label">Address: </span>
                                              <p className="patient-profile-card-text">{patient?.address}, {patient?.city}</p>
 
-                                             <span className="profile-label">State: </span>
-                                             <p className="patient-profile-card-text">{patient?.state} , {patient?.zipCode}</p>
-
                                              <span className="profile-label">Line 2: </span>
                                              <p className="patient-profile-card-text">{patient?.line2}</p>
+
+                                             <span className="profile-label">City, State & Zipcode: </span>
+                                             <p className="patient-profile-card-text">{patient?.city}, {patient?.state} - {patient?.zipCode}</p>
                                     </div>
 
                                     <div className="col-md-3">
                                             <span className="patient-profile-col-heading">Contact Information</span>                                 
                                              <hr />
 
-                                             <span className="profile-label">Phone 1 </span>
+                                             <span className="profile-label">Primary Phone </span>
                                              <p className="patient-profile-card-text">{patient?.phone1 ? patient?.phone1 : 'N/A'}</p>
 
                                              <span className="profile-label">Mobile No </span>

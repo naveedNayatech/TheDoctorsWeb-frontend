@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { staffLogout } from '../../actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
+import TDW_logo from '../../assets/Images/official_logo.png';
 
 const Sidebar = (props) => {
 
@@ -24,9 +25,8 @@ const Sidebar = (props) => {
     return (
         <Fragment>
             <div className="sidebar">
-            <div className="logo-details">
-                <i className="bx bxl-c-plus-plus"></i>
-                <span className="logo_name">TheDoctorsWeb</span>
+            <div className="logo-details" style={{backgroundColor:'#FFF'}}>
+             <img src={TDW_logo} className="logoImg" alt="logo" />
             </div>
 
             <ul className="nav-links">

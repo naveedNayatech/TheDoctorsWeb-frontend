@@ -992,11 +992,14 @@ export const getAllDevices = (resperpage, currentpage) => async(dispatch) => {
 }
 
 // Get All Logs
-export const getAllLogs = () => async(dispatch) => {
+export const getAllLogs = (todayDate) => async(dispatch) => {
     try {
         dispatch({ type: GET_LOGS_REQUEST })
 
-        const { data } = await axios.post(`${Prod01}/admin/logs`)
+        const { data } = await axios.post(`${Prod01}/admin/logs`, {
+            startDate: todayDate,
+            endDate: todayDate
+        })
 
         dispatch({
             type: GET_LOGS_SUCCESS,
@@ -1622,6 +1625,34 @@ export const searchAdminLogsByHR = (hrId, type) => async(dispatch) => {
        })
     }   
 }
+
+
+export const searchAdminLogsByPatient = (patientId, type) => async(dispatch) => {
+    
+    try {
+       dispatch({ 
+           type: SEARCH_LOG_REQUEST
+       });
+   
+        const { data } = await axios.post(`${Prod01}/admin/logs`, {
+            type: "patient",
+            patient_id: patientId
+            });
+    
+        dispatch({
+            type: SEARCH_LOG_SUCCESS,
+            payload: data
+        })      
+   
+    } catch (error) {
+       dispatch({
+           type: SEARCH_LOG_FAIL,
+           payload: error.message
+       })
+    }   
+}
+
+
 // Clear errors
 export const clearErrors = () => async(dispatch) => {
     dispatch({

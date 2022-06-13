@@ -307,7 +307,6 @@
   width: 210px;
   height: 80px;
   margin: 0px auto;
-  margin-top:20px;
 }
 
 .landingPageHeaderLogo {
@@ -987,8 +986,7 @@ How it works
   height: 100%;
   width: 280px;
   margin-top: -25px;
-  /* background-color: #E8FFC2; */
-  background-color: #88E0EF;
+  background-color: #0F4068;
   transition: all 0.5s ease;
 }
 
@@ -1005,7 +1003,7 @@ How it works
 
 .sidebar .logo-details i {
   font-size: 24px;
-  color: #004aad;
+  color: #FFF;
   min-width: 50px;
   text-align: center;
   margin-top: 20px;
@@ -1036,18 +1034,18 @@ How it works
 .sidebar .nav-links li a i {
   min-width: 60px;
   text-align: center;
-  color: #000;
+  color: #FFF;
   font-size: 22px;
 }
 
 .sidebar .nav-links li a .link_name{
-  color: #454545;
+  color: #FFF;
   font-size: 12px;
   text-transform: uppercase; 
 }
 
 .link-name-active {
-  background-color: #D5F3FE;
+  background-color: #004aad;
 }
 
 .sidebarBtn {

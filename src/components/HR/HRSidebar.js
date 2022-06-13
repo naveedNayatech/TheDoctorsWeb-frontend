@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { hrLogout } from '../../actions/authActions';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import TDW_logo from '../../assets/Images/official_logo.png';
 
 const HRSidebar = (props) => {
 
@@ -24,9 +25,8 @@ const HRSidebar = (props) => {
     return (
         <Fragment>
             <div className="sidebar">
-            <div className="logo-details">
-            <i className='bx bx-plus-medical'></i>
-                <span className="logo_name">THEDOCTORS<span style={{color: '#004aad'}}>WEB</span></span>
+            <div className="logo-details" style={{backgroundColor:'#FFF'}}>
+                <img src={TDW_logo} className="logoImg" alt="logo" />
             </div>
 
             <ul className="nav-links">

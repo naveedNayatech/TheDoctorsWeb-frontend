@@ -15,11 +15,10 @@ const Sidebar = () => {
     return (
         <Fragment>
             <div className="sidebar">
-            <div className="logo-details">
+            <div className="logo-details" style={{backgroundColor:'#FFF'}}>
                 <img src={TDW_logo} className="logoImg" alt="logo" />
             </div>
 
-            <hr className="blue-hr"/>
             <ul className="nav-links">
                 <li className="nav_link">
                     <NavLink key="admindashboard" to="/adminDashboard" activeClassName="link-name-active">

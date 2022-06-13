@@ -47,7 +47,7 @@ const TopBar = () => {
                     <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}>Logout</Link>
                 </div>
             </nav>
-            <hr className="blue-hr"/>
+            <br />
         </Fragment>
     )
 }

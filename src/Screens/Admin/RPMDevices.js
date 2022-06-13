@@ -96,7 +96,7 @@ const RPMDevices = (props) => {
                     
                     <div className="row-display">
                         
-                        <h5 className="pt-2">Inventory <span style={{color: '#004aad'}}>( {deviceCount && deviceCount < 10 ? '0'+deviceCount : 'N/A'} )</span> </h5>
+                        <h5 className="pt-2">Inventory <span style={{color: '#004aad'}}>Management</span></h5>
                             
                             
                             <div className="row-display">

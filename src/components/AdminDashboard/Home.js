@@ -1,7 +1,6 @@
 import React, { useEffect,  Fragment } from 'react';
 import TopBar from '../AdminDashboard/TopBar';
 import { useSelector, useDispatch } from 'react-redux';
-import { useAlert } from 'react-alert';
 import { getPatients, getAllLogs, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
 import {Table, Badge, Image} from 'react-bootstrap';
@@ -12,17 +11,19 @@ import doctorIcon from '../../assets/Images/doctorIcon.png';
 import patientIcon from '../../assets/Images/patientIcon.png';
 import heartIcon from '../../assets/Images/heart.png';
 
+
 const Home = () => {
     const dispatch = useDispatch();
-    const alert = useAlert();
 
     const { patients} = useSelector(state => state.admin);
     const { loading, logs} = useSelector(state => state.log);
     const { totalPatients, totalHrs, totalDrs, totalDevices } = useSelector(state => state.adminStat)
 
+    const todayDate = moment().format("ll");
+
     useEffect(() => {
           dispatch(getPatients());
-          dispatch(getAllLogs());
+          dispatch(getAllLogs(todayDate));
           dispatch(getAdminStats())
     }, [dispatch]);
 
@@ -138,7 +139,7 @@ const Home = () => {
                             
                                 <div className="col-md-4 col-lg-4 logs-card">
                                     <div className="row-display">
-                                     <h5 className="title">   Logs </h5>
+                                     <h5 className="title">Logs ( {todayDate} )</h5>
                                      <Link to="/logs" className="link">
                                         <span className="manage_logs_btn"><i className='bx bx-slider-alt'></i> Manage Logs</span>
                                      </Link>
@@ -147,7 +148,7 @@ const Home = () => {
                                     {logs && logs.slice(0,50).map((log, index) => (     
                                              <ul key={index}>
                                                 {loading ? <Spinner animation="border" style={{height: '20px', width: '20px'}}/> : <>
-                                                    <ol><small>{log?.text}.</small> 
+                                                    <ol><small>{index +1 +" )"} {log?.text}.</small> 
                                                     &nbsp;&nbsp;&nbsp;<span><small>
                                                     {moment(log.createdAt).tz("America/New_York").format("lll")}
                                                     </small></span></ol>

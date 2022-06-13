@@ -11,7 +11,7 @@ import { ADDING_CARE_PLAN_RESET, ADDING_TIME_SPENT_RESET } from '../../constants
 import patientProfileImg from '../../assets/Images/patientProfile.png';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
-
+import { Link } from 'react-router-dom';
 
 const HRPatientInfo = ({patient, healthData}) => {
 
@@ -111,6 +111,10 @@ const [addTimeShow, setAddTimeShow] = useState(false);
         dispatch(timeSpentOnPatient(patient?._id, hr?._id ,values));
     }
 
+    const sendEmail = (email) => {
+        window.open(`mailto:${email}`)
+    }
+
   return (
     <>
       <div className="row-display header-wrapper">
@@ -144,10 +148,10 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                     <div>
                         <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
                         
-                            <p className="patient-profile-name">{patient?.firstname} {patient?.lastname} </p>
+                            <p className="patient-profile-name" style={{fontWeight: 'bold'}}>{patient?.firstname} {patient?.lastname} </p>
                             
                             <Fragment>
-                                <p className="patient-email">{patient?.email}</p>
+                                <Link className="link" style={{marginLeft: "10%"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
 
                                 <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span> 
                             </Fragment>
@@ -162,22 +166,22 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                             <span className="profile-label">Address: </span>
                             <p className="patient-profile-card-text">{patient?.address}, {patient?.city}</p>
 
-                            <span className="profile-label">State: </span>
-                            <p className="patient-profile-card-text">{patient?.state} , {patient?.zipCode}</p>
-
                             <span className="profile-label">Line 2: </span>
                             <p className="patient-profile-card-text">{patient?.line2}</p>
+
+                            <span className="profile-label">City, State & Zipcode:  </span>
+                            <p className="patient-profile-card-text">{patient?.city}, {patient?.state} - {patient?.zipCode} </p>
                 </div>
 
                 <div className="col-md-3">
                         <span className="patient-profile-col-heading">Contact Information</span>                                 
                             <hr />
 
-                            <span className="profile-label">Phone 1 </span>
-                            <p className="patient-profile-card-text">{patient?.phone1 ? patient?.phone1 : 'N/A'}</p>
+                            <span className="profile-label">Primary Phone </span>
+                            <p className="patient-profile-card-text">{patient?.phone1 || 'N/A'}</p>
 
                             <span className="profile-label">Mobile No </span>
-                            <p className="patient-profile-card-text">{patient?.mobileNo ? patient?.mobileNo : 'N/A' } </p>
+                            <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A' } </p>
                 </div>
 
                 <div className="col-md-3 ">
@@ -229,11 +233,11 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                                     </>}
 
                                     {patient?.assigned_hr_id ? <>
-                                        <span className="profile-label">HR</span>
+                                        <span className="profile-label">Nurse</span>
                                     <p className="patient-profile-card-text">
                                         Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
                                     </> : <>
-                                        <small>No hr assigned yet</small>
+                                        <small>No Nurse assigned yet</small>
                                     </>}
                                     </div>
 
@@ -246,12 +250,16 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                                             </Fragment> : <Fragment>
                                             <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
                                             
-                                             {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
-                                                <div key={index}>
-                                                    <p key={index}><Badge bg="success text-white">{deviceass?.deviceObjectId?._id} </Badge>
-                                                </p>
+                                            {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
+                                            <div key={index}>
+                                                <div className="card" style={{padding: '5px', marginTop: '5px'}}>
+                                                    <div>
+                                                        <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
+                                                        <small className="mt-2"><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
+                                                    </div>
                                                 </div>
-                                            ))}           
+                                                </div>
+                                            ))}         
                                         </Fragment>}      
                                         </div>
 

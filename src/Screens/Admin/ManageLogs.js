@@ -4,23 +4,31 @@ import TopBar from '../../components/AdminDashboard/TopBar';
 import MetaData from '../../layouts/MetaData';
 import hrIcon from '../../assets/Images/network.png';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
+import patientIcon from '../../assets/Images/patientIcon.png';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector} from 'react-redux';
-import { getDoctors, getHrLists, searchAdminLogs, searchAdminLogsByHR} from '../../actions/adminActions';
+import { getDoctors, getHrLists, getPatients, searchAdminLogs, searchAdminLogsByHR, searchAdminLogsByPatient} from '../../actions/adminActions';
 import Select from 'react-select';
 import Loader from '../../layouts/Loader';
 import { SEARCH_LOG_RESET } from '../../constants/adminConstants';
 import LoginLogoutLogType from '../../components/AdminDashboard/LoginLogoutLogType';
 import ViewPatientProfileLogType from '../../components/AdminDashboard/ViewPatientProfileLogType';
+import TargetsLogType from '../../components/AdminDashboard/TargetsLogType';
+import GenerateReportLogType from '../../components/AdminDashboard/GenerateReportLogType';
+import AccountCreatedLogType from '../../components/AdminDashboard/AccountCreatedLogType';
+import PatientLogType from '../../components/AdminDashboard/PatientLogType';
 
 const ManageLogs = () => {
 const dispatch = useDispatch();
 const [reportBy, setReportBy] = useState("doctor");
 const alert = useAlert();
-const [doctorId, setDoctorId] = useState("");
-const [hrId, sethrId] = useState("");
 const [logType, setLogType] = useState("logs");
 
+const [doctorId, setDoctorId] = useState("");
+const [hrId, sethrId] = useState("");
+const [patientId, setPatientId] = useState("");
+
+const { patients} = useSelector(state => state.admin);
 const { error, doctors } = useSelector(state => state.doctor);
 const {  hrs } = useSelector(state => state.hrslist);
 const { loading, logs } = useSelector(state => state.searchLogResult);
@@ -29,12 +37,16 @@ useEffect(() => {
     if(error){
         alert.error(error);
     }
-
+    dispatch(getPatients());
     dispatch(getDoctors(10, 1));
     dispatch(getHrLists());
 }, [dispatch]);
 
 
+const options = []
+    patients && patients.map((patient) => (
+        options.push({ value: patient?._id, label: [patient?.firstname, patient?.lastname, patient?.ssn].join(" ")})
+    ))
 
 const doctorOptions = []
     doctors && doctors.map((doctor) => (
@@ -54,11 +66,32 @@ const doctorOptions = []
     sethrId(hr.value);
   }
 
+  const getPatientProfile = (patient) => {    
+    setPatientId(patient.value);
+}
+
   const searchLogs = () => {
     if(reportBy === 'doctor' && logType){
+        if(!doctorId){
+            alert.error('Please select doctor');
+            return;
+        }
         dispatch(searchAdminLogs(doctorId, logType))
+
     } else if(reportBy === 'nurse' && logType){
+        if(!hrId){
+            alert.error('Please select hr');
+            return;
+        }
         dispatch(searchAdminLogsByHR(hrId, logType))
+
+    } else if(reportBy === 'patient'){
+        if(!patientId){
+            alert.error('Please select patient');
+            return;
+        }  
+        setLogType('patientlog');
+        dispatch(searchAdminLogsByPatient(patientId, logType))
     }
   }
 
@@ -82,8 +115,7 @@ const doctorOptions = []
                         <h5 className="pt-2 mt-2">Manage Logs <span style={{color: '#004aad'}}></span></h5>
                         <hr />
 
-                    <span className="notes-header"><b>Note: </b> If you select only doctor / nurse and hit search, it will display all logs of that particular role. Also you can search between two dates.</span>
-
+                
                        <div className="row cardWrapper">
                         <div className={`card cardButton ${reportBy === "doctor" ? "cardActive" : ""}`}
                             onClick={() => setReportBy("doctor")}>
@@ -96,12 +128,17 @@ const doctorOptions = []
                         <img src={hrIcon} alt="" height="80" width="80"/>
                             Nurse
                         </div>
+
+                        <div className={`card cardButton ${reportBy === "patient" ? "cardActive" : ""}`}
+                            onClick={() => setReportBy("patient")}>
+                        <img src={patientIcon} alt="" height="80" width="80"/>
+                            Patient
+                        </div>
                     </div>
 
                     {/* See List */}
-                    <div>
+                <div>
                 {reportBy === "doctor" ?  <>
-                
                 <div className="row-display">
                 <div className="col-md-3 mt-4">
                 <label>Select Doctor  <span style={{color: '#004aad'}}> *</span>  </label>
@@ -119,13 +156,12 @@ const doctorOptions = []
                         value={logType}
                         onChange={(e) => setLogType(e.target.value)}
                     >
+                    <option value="default">Select Type</option>
                     <option value="logs">login/logout</option>
                     <option value="patient">View Patient Profile</option>
                     <option value="accountCreated">Account Created</option>
-                    <option value="device">RPM Device</option>
-                    <option value="targets">Add Time</option>
-                    <option value="report">Generate Report</option>
-                    <option value="report">Uploaded a document</option>
+                    <option value="report">Generated a Report</option>
+                    <option value="docUpload">Uploaded a document</option>
                     </select>
                 </div>
 
@@ -134,7 +170,7 @@ const doctorOptions = []
                     <button className="submit-btn" onClick={searchLogs}>Search</button>
                 </div>
                 </div>
-                </> : <>
+                </> : reportBy === "nurse" ? <>
                 
                 <div className="row-display">
                 <div className="col-md-4 mt-4">
@@ -153,23 +189,50 @@ const doctorOptions = []
                         value={logType}
                         onChange={(e) => setLogType(e.target.value)}
                     >
+                    <option value="default">Select Type</option>
                     <option value="logs">login/logout</option>
                     <option value="patient">View Patient Profile</option>
                     <option value="accountCreated">Account Created</option>
-                    <option value="device">RPM Device</option>
                     <option value="targets">Add Time</option>
-                    <option value="report">Generate Report</option>
+                    <option value="report">Generated a Report</option>
                     <option value="report">Uploaded a document</option>
                     </select>
                 </div>
-
-                
 
                 <div className="col-md-4 mt-4">
                     <label>Action</label>
                     <button className="submit-btn" onClick={searchLogs}>Search</button>
                 </div>
                 </div>
+                </> : <>  {/*Select patient */}
+                <div className="row-display">
+                <div className="col-md-4 mt-4">
+                <label>Select Patient  <span style={{color: '#004aad'}}> *</span>  </label>
+                <Select
+                    options={options}
+                    onChange={getPatientProfile}
+                    className="react-selectbox"
+                />
+                </div>
+
+                <div className="col-md-4 mt-4">
+                    <label>Select Type </label>
+                    <select
+                        className="form-control"
+                        value={logType}
+                        onChange={(e) => setLogType(e.target.value)}
+                    >
+                    <option value="patientlog">Complete logs</option>
+                    </select>
+                </div>
+
+                <div className="col-md-4 mt-4">
+                    <label>Action</label>
+                    <button className="submit-btn" onClick={searchLogs}>Search</button>
+                </div>
+                </div>
+                
+                
                 </>
                 }
                 </div>
@@ -190,6 +253,22 @@ const doctorOptions = []
 
                     {logType === 'patient' ? <>
                         <ViewPatientProfileLogType reportBy={reportBy} logType={logType} logs={logs} />
+                    </> : ""}
+
+                    {logType === 'targets' ? <>
+                        <TargetsLogType reportBy={reportBy} logType={logType} logs={logs} />
+                    </> : ""}
+
+                    {logType === 'report' ? <>
+                        <GenerateReportLogType reportBy={reportBy} logType={logType} logs={logs} />
+                    </> : ""}
+
+                    {logType === 'accountCreated' ? <>
+                        <AccountCreatedLogType reportBy={reportBy} logType={logType} logs={logs} />
+                    </> : ""}
+
+                    {logType === 'patientlog' ? <>
+                        <PatientLogType reportBy={reportBy} logType={logType} logs={logs} />
                     </> : ""} 
                 </> : <>
                     <p className="text-center" style={{color: 'red'}}><small>No Result Found.</small></p>

@@ -17,7 +17,7 @@ const CompleteInventoryList = () => {
     const [currentPage, setCurrentPage] = useState(1); //for pagination, current page
     const [resPerPage, setResPerPage] = useState(2000); 
 
-    const { loading, error, deviceCount, devices, isDeleted } = useSelector(state => state.devices);
+    const { loading, error, devices, isDeleted } = useSelector(state => state.devices);
 
     useEffect(() => {
         if(error){
@@ -41,7 +41,7 @@ const CompleteInventoryList = () => {
         <div className="shadow-lg p-3 mb-2 mr-4 ml-4 rounded">
             <div className="home-content">
                 <div className="row-display"> 
-                        <h5 className="pt-2">Inventory List <span></span> </h5>
+                        <h5 className="pt-2">Inventory List </h5>
                         
                         {devices && devices.length > 0 && (<>
                             <ExportInventoryTOCSV csvData={devices} className="add-staff-btn" fileName="Inventory.csv" />
