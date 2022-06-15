@@ -6,7 +6,7 @@ import CuffTelemetaryData from '../../components/Patient/CuffTelemetaryData';
 import WeightTelemetaryData from '../../components/Patient/WeightTelemetaryData';
 import PatientInfo from '../../components/Patient/PatientInfo';
 import { patientProfile, getRemainingReadings, getPatientTelemetryData, sortTelemetartData} from '../../actions/adminActions';
-import { getPatientCarePlan } from '../../actions/HRActions';
+// import { getPatientCarePlan } from '../../actions/HRActions';
 import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
@@ -47,7 +47,7 @@ const PatientProfile = (props) => {
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort));
         
-        dispatch(getPatientCarePlan(patientid));
+        // dispatch(getPatientCarePlan(patientid));
         dispatch(getRemainingReadings(patientid));
         
         
@@ -64,7 +64,7 @@ const PatientProfile = (props) => {
     const refreshHandler = () => {
         dispatch(patientProfile(patientid));
         dispatch(getPatientTelemetryData(patientid, readingPerPage, currentPage, sort))
-        dispatch(getPatientCarePlan(patientid));
+        // dispatch(getPatientCarePlan(patientid));
         setStartDate('');
         setEndDate('');
         // setSort('')
@@ -101,7 +101,7 @@ const PatientProfile = (props) => {
                                     patient={patient}
                                     ReadingsperMonth={ReadingsperMonth}
                                     readingsThisMonth={readingsThisMonth}
-                                    careplan={careplan}
+                                    // careplan={careplan}
                                     telemetaryReadings={deviceData}
                                     patientid={patientid}
                                 />

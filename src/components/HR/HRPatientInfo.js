@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import clockImg from '../../assets/Images/clockImg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Modal, Button, Image } from 'react-bootstrap';
+import { ProgressBar, Modal, Button, Image } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import TextField from '../../components/Form/TextField';
 import { carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth, timeSpentOnPatient } from '../../actions/HRActions';
@@ -119,11 +119,11 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     <>
       <div className="row-display header-wrapper">
             
-            <h5 className="pt-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#004aad'}}> Details </span></h5>
+            <h5 className="pt-2 pl-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#004aad'}}> Details </span></h5>
         
             <div>
                 <img src={clockImg} className="img-responsive" width="50" height="50"/>
-                <small className="total-time-spent">{totalTime} mins spent in month of <span style={{color: '#007673'}}>{currMonthName}</span> </small>
+                <small className="total-time-spent">{totalTime} mins spent in month of <span style={{color: '#004aad'}}>{currMonthName}</span> </small>
             </div>
 
             <div className="row-display">    
@@ -133,11 +133,11 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                     </div>
                 </Fragment> : <Fragment>
                     <div>
-                        <button className="reset-btn mt-2" onClick={handleCarePlanModalShow}>Add Careplan</button>
+                        <button className="manage_logs_btn mt-2" onClick={handleCarePlanModalShow}><i className='bx bxs-paper-plane' ></i> Add Careplan</button>
                     </div>    
                 </Fragment>}
 
-                <button className="submit-btn shadow-none ml-3 mt-2" onClick={handleShow}><small>Add Time Manually</small></button>
+                <button className="manage_logs_btn shadow-none ml-3 mt-2" onClick={handleShow}><small> <i className='bx bx-time'></i> Add Time Manually</small></button>
             </div>
 
             </div>
@@ -184,37 +184,31 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                             <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A' } </p>
                 </div>
 
-                <div className="col-md-3 ">
-                    <span className="patient-profile-col-heading">Patient Analytics</span>                                 
+                <div className="card card-bordered pt-3 col-md-3 ">
+                    <span style={{color: '#004aad', fontWeight: 'bold'}}>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
                     <hr />
 
-                    
-                    <div className="patient-profile-data-div">
-                        <p style={{fontSize: 14}} className="text-center mt-2">RPM Consent : </p>
-                        <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
-                    </div>
+                    <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
+                    <hr />
+                    {totalTime >=0 && totalTime <= 20 ? <>
+                        <small><b>99457 : </b> {totalTime} / 20 mins</small>
+                        <ProgressBar animated min="0" max="20" variant='info' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
+                    </> : <>
+                    <small><b>99457 : </b> 20 / 20 mins</small>
+                        <ProgressBar animated min="0" max="20" variant='info' label="100%" now="20" />
+                    </>}
+                     
 
-                    {careplan ? <>
-                    <div className="patient-profile-data-div mt-2">
-                    <p style={{fontSize: 14}} className="text-center mt-2">Readings /mo : </p>
-                    <span className="check-icon mt-2">{careplan?.data?.readingsPerMonth}</span>
-                    </div>
-                    </> : ''}
+                    <br />
+                    {totalTime >=21 ? <>
+                        <small><b>99458 : </b> {totalTime > 40 ? "40" : totalTime} / 40 mins</small>
+                        <ProgressBar animated min="21" max="40" variant='success' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
+                    </> : <>
+                    <small><b>99458 : </b> 0 / 40 mins</small>
+                        <ProgressBar animated min="21" max="40" variant='dangar' now="21" />
+                    </>}
                     
-                    {careplan ? <>
-                        <div className="patient-profile-data-div mt-2">
-                            <p style={{fontSize: 14}} className="text-center mt-2">Remaining : </p>
-                            
-                            <span className="check-icon mt-2">{ReadingsperMonth - readingsThisMonth}</span>
-                        </div>
-                    </> : ''}
-                    
-
-                    <div className="patient-profile-data-div mt-2">
-                        <p style={{fontSize: 14}} className="text-center mt-2">Initial Month : </p>
-                        <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
-                    </div>
-                            
+                    <p style={{marginTop: "14px", fontSize:"12px"}}>Total {totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
                 </div>
                 </div> {/* first row ends here */}
 

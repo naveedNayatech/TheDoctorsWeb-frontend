@@ -136,10 +136,6 @@ const AdminTimeReport = () => {
                     <img src={patientIcon} alt="" height="80" width="80"/>
                         By Patient
                 </div>
-                {/* <button className={`btn + ${reportBy === 'patient' ?'submit-btn shadow-none' : 'link'} m-3`} 
-                    onClick={() => setReportBy("patient")}> By Patient
-                </button> */}
-
                 
                 <div className={`card cardButton ${reportBy === "doctor" ? "cardActive" : ""}`}
                    onClick={() => setReportBy("doctor")}>
@@ -147,20 +143,12 @@ const AdminTimeReport = () => {
                         By Doctor
                 </div>
                 
-                {/* <button 
-                    className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
-                    onClick={() => setReportBy("hr")}> By HR
-                </button> */}
                 
                 <div className={`card cardButton ${reportBy === "hr" ? "cardActive" : ""}`}
                    onClick={() => setReportBy("hr")}>
                     <img src={hrIcon} alt="" height="80" width="80"/>
                         By HR
                 </div>
-                {/* <button 
-                    className={`btn + ${reportBy === 'hr' ? 'submit-btn shadow-none' : 'link'} m-3`}
-                    onClick={() => setReportBy("hr")}> By HR
-                </button> */}
             </div>
            <hr />
 
@@ -279,9 +267,7 @@ const AdminTimeReport = () => {
  
                                 {targets && targets.map((trgt, index) => ( 
                                   <div className="m-5" key={index}>
-                                      {/* <br/>
-                                      <p className="reportsHeading">{index + 1}</p> 
-                                      <br /><br /> */}
+                                  
                                       <div className="row-display">
                                           <div>
                                              <label className="profile-label">Patient Name: </label> 
@@ -297,17 +283,9 @@ const AdminTimeReport = () => {
                                              <label className="profile-label">Patient DOB: </label> 
                                              <label className="report-label ml-2">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
                                           </div>
-
-                                          <div>
-                                                 {/* <label className="profile-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes} Mins</label> */}
-                                             </div>
                                       </div>
  
-                                      <div className="row-display">
-                                             
-
-                                     </div>
-
+                             
                                          <div className="notes">
                                             <div className="row-display">
                                                <p className="ml-2 mt-2"><small><b> HR. {trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname} </b></small></p>  

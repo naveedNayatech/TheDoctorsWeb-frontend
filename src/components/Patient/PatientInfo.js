@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Image} from 'react-bootstrap';
+import { Image, ProgressBar} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
 import { useDispatch, useSelector} from 'react-redux';
 import systolicImg from '../../assets/Images/blood-pressure.png';
@@ -83,40 +83,31 @@ const PatientInfo = ({patient, ReadingsperMonth, readingsThisMonth, careplan, pa
                 </div>
 
 
-                <div className="col-md-3 ">
-                    <span className="patient-profile-col-heading">Patient Analytics</span>
+                <div className="card card-bordered pt-3 col-md-3 ">
+                    <span style={{color: '#004aad', fontWeight: 'bold'}}>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
                     <hr />
 
-                    <div className="patient-profile-data-div">
-                        <p style={{ fontSize: 14 }} className="text-center mt-2">RPM Consent : </p>
-                        <span className="check-icon mt-2">{patient?.rpmconsent === true ? 'Signed' : 'Not Signed'}</span>
-                    </div>
-
-                    {careplan !== undefined && <>
-                        <div className="patient-profile-data-div mt-2">
-                            <p style={{ fontSize: 14 }} className="text-center mt-2">Readings /mo : </p>
-                            <span className="check-icon mt-2">{ReadingsperMonth}</span>
-                        </div>
+                    <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
+                    <hr />
+                    {totalTime >=0 && totalTime <= 20 ? <>
+                        <small><b>99457 : </b> {totalTime} / 20 mins</small>
+                        <ProgressBar animated min="0" max="20" variant='info' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
+                    </> : <>
+                    <small><b>99457 : </b> 20 / 20 mins</small>
+                        <ProgressBar animated min="0" max="20" variant='info' label="100%" now="20" />
                     </>}
+                     
 
-
-                    {careplan !== undefined && <>
-                        <div className="patient-profile-data-div mt-2">
-                            <p style={{ fontSize: 14 }} className="text-center mt-2">Remaining : </p>
-
-                            <span className="check-icon mt-2">{ReadingsperMonth - readingsThisMonth}</span>
-                        </div>
+                    <br />
+                    {totalTime >=21 ? <>
+                        <small><b>99458 : </b> {totalTime > 40 ? "40" : totalTime} / 40 mins</small>
+                        <ProgressBar animated min="21" max="40" variant='success' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
+                    </> : <>
+                    <small><b>99458 : </b> 0 / 40 mins</small>
+                        <ProgressBar animated min="21" max="40" variant='dangar' now="21" />
                     </>}
-
-                    <div className="patient-profile-data-div mt-2">
-                        <p style={{ fontSize: 14 }} className="text-center mt-2">Initial Month : </p>
-                        <span className="check-icon mt-2">{patient?.initialsetup ? patient?.initialsetup : 'N/A'}</span>
-                    </div>
                     
-                    <br/>
-                    <span className="patient-profile-col-heading">Nurse Engagement Time </span>
-                    <p style={{marginTop: "14px", fontSize:"12px"}}>{totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
-                   
+                    <p style={{marginTop: "14px", fontSize:"12px"}}>Total {totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
                 </div>
             </div>
             <br />

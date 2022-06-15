@@ -23,9 +23,7 @@ const TimeReport = () => {
     const {  error, hrpatients} = useSelector(state => state.hrPatients);
     const {  loading, targets, totalTime} = useSelector(state => state.target);
 
-
     let id = hr._id;
-
 
     useEffect(() => {
 		if(error) {
@@ -42,7 +40,18 @@ const TimeReport = () => {
         month = Number(month)
         var year = check.format('YYYY');
 
-        dispatch(getTimeReport(patientId, id, startDate, endDate));
+        if(!patientId) {
+            alert.error('Please select patient');
+            return;
+        } else if (!startDate) {
+            alert.error('Please select start date');
+            return;
+        } else if(!endDate) {
+            alert.error('Please select end date');
+            return;
+        } else {
+            dispatch(getTimeReport(patientId, startDate, endDate));
+        }    
     }
 
     const resetData = () => {
@@ -65,7 +74,7 @@ const TimeReport = () => {
                             <div className="container">
                                 <div className="row-display">
                                     
-                                    <h5 className="pt-2 mt-2">Time <span style={{color: '#007673'}}>Report </span> </h5> 
+                                    <h5 className="pt-2 mt-2">Time <span style={{color: '#004aad'}}>Report </span> </h5> 
                                     
                                     <div className="row-display">
                                         <Link to="/HrDashboard">
@@ -128,14 +137,14 @@ const TimeReport = () => {
                                 </div>
 
                                 <div className="col-md-3 mt-1">     
-                                <label>&nbsp;&nbsp;&nbsp;</label>
+                                
                                 <button  
                                     name="submit" 
                                     type="submit" 
-                                    className="btn submit-btn shadow-none"
+                                    className="manage_logs_btn mt-4 shadow-none"
                                     onClick={submitHandler}
                                 >
-                                    Generate Report
+                                   <i className='bx bx-paper-plane'></i> Generate Report
                                 </button>
                                 </div>
                              </div>  {/* First Row Ends Here */}
@@ -147,9 +156,11 @@ const TimeReport = () => {
                                  <hr/>
                                 <div className="row-display">
                                     
-                                    <h5>Report <span style={{color: '#007673'}}>Result</span></h5>
+                                    <h5>Report <span style={{color: '#004aad'}}>Result</span></h5>
                                     
-                                    <span>Total Time Spent: <span style={{color: '#007673', fontWeight: 'bold'}}>{totalTime} Mins</span></span>
+                                    <small><b>({startDate} to {endDate})</b></small>                                
+                                    
+                                    <span>Total Time Spent: <span style={{color: '#004aad', fontWeight: 'bold'}}>{totalTime} mins</span></span>
                                     
                                     <div className="row-display">
                                     <Link to={{ pathname: "/printReport", state: 
@@ -171,51 +182,41 @@ const TimeReport = () => {
 
                                 {targets.map((trgt, index) => ( 
                                  <div key={index}>
-                                     <br/>
-                                     <p className="reportsHeading">{index + 1}</p> 
-                                     <div className="row">
-                                         <div className="col-md-3">
-                                            <label className="form-label">Name: </label> <label className="report-label">{trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
-                                         </div>
+                                     {/* <br/>
+                                     <p className="reportsHeading">{index + 1}</p>  */}
+                                     <div className="row-display">
+                                        <div>
+                                             <label className="profile-label">Patient Name: </label> 
+                                             <label className="report-label ml-2"> Pt. {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
+                                          </div>
 
-                                         <div className="col-md-5">
-                                            <label className="form-label">Email: </label> <label className="report-label">{trgt?.assigned_patient_id?.email}</label>
-                                         </div>
+                                          <div>
+                                             <label className="profile-label">Patient Email: </label> 
+                                             <label className="report-label ml-2">{trgt?.assigned_patient_id?.email}</label>
+                                          </div>
 
-                                         <div className="col-md-4">
-                                            <label className="form-label">DOB: </label> <label className="report-label">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
-                                             
-                                         </div>
+                                          <div>
+                                             <label className="profile-label">Patient DOB: </label> 
+                                             <label className="report-label ml-2">{moment(trgt?.assigned_patient_id?.DOB).format("ll")}</label>
+                                          </div>
                                      </div>
 
-                                     <div className="row">
-                                         <div className="col-md-3">
-                                            <label className="form-label">Conclusion: </label>
-                                         </div>
-
-                                         <div className="col-md-2">
-                                            <label className="form-label">Time Spent: </label> <label className="spentTime">{trgt?.timeSpentInMinutes}</label>
-                                         </div>
-
-                                         <div className="col-md-4">
-                                            <label className="form-label">By: </label> <label className="report-label">{trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname}</label>
-                                         </div>
-
-                                         <div className="col-md-3">
-                                            <label className="form-label">Created At: </label> <label className="report-label">{moment(trgt?.createdAt).format("ll")}</label>
-                                         </div>
-
-                                         <div className="col-md-12">
-                                            <label className="bubble bubble-alt bubble-green">{trgt?.conclusion}</label>
-                                         </div>
-                                     </div>
+                                    <div className="notes">
+                                        <div className="row-display">
+                                            <p className="ml-2 mt-2"><small><b> HR. {trgt?.assigned_hr_id?.firstname} {trgt?.assigned_hr_id?.lastname} </b></small></p>  
+                                            <label className="spentTime">{trgt?.timeSpentInMinutes} mins</label>
+                                            </div>
+                                            
+                                            <b>Notes : </b> 
+                                        {trgt?.conclusion}
+                                        <p className="mt-2" style={{float: 'right'}}><small><b>{moment(trgt?.createdAt).format("lll")} EST</b></small></p>
+                                    </div>
+                                    <br />
                                  </div>
                              ))}
-
+                             
                              </Fragment> : ''}
-
                              </>}
-
                              
                         </div>
                     </div>

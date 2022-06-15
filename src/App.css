@@ -43,6 +43,23 @@
 .rounded-card {
   border-radius: 25px;
 }
+
+.card-bordered {
+  background-color: #FAFAFA;
+  border-radius: 20px;
+  -webkit-box-shadow: -1px -3px 13px 0px rgba(0,0,0,0.44);
+  -moz-box-shadow: -1px -3px 13px 0px rgba(0,0,0,0.44);
+  box-shadow: -1px -3px 13px 0px rgba(0,0,0,0.44);
+}
+
+.activeRPMStatus {
+  background-color: green;
+  padding: 6px;
+  color: #FFF;
+  border-radius:10px;
+}
+
+
  /* Comment Bubble  */
  .bubble {
   box-sizing: border-box;
@@ -1924,7 +1941,7 @@ tr {
 
 /* HR & DR Reports */
 .reportsHeading {
-  background-color: #eb1b24;
+  background-color: #004aad;
   color: white;
   padding: 3px;
   border-radius: 50px;
@@ -1936,6 +1953,7 @@ tr {
   font-size: 14px;
   color: #000;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 .spentTime {
@@ -2095,10 +2113,9 @@ tr {
 }
 
 .header-wrapper {
-  background-color: #D3D3D3;
-  padding: 12px;
+  background-color: #ddd;
+  padding: 5px;
   border-radius: 10px;
-  color: #004aad
 }
 
 .notes-header {
