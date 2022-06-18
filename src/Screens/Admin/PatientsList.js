@@ -237,6 +237,7 @@ const PatientsList = () => {
                                 <th>Acc Status</th>
                                 <th>Physician</th>
                                 <th>Consent Status</th>
+                                <th>Last Reading </th>
                                 <th>ACTION</th> 
                                 </tr>
                             </thead>
@@ -278,6 +279,8 @@ const PatientsList = () => {
                                             </label>
                                         </div>
                                     </td>
+
+                                    <td>{patient?.lastReading || 'N/A'}</td>
                                     
                                     <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                     <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>
