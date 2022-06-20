@@ -185,7 +185,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                 </div>
 
                 <div className="card card-bordered pt-3 col-md-3 ">
-                    <span style={{color: '#004aad', fontWeight: 'bold'}}>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
+                    <span style={{color: '#FFF'}}>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
                     <hr />
 
                     <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 

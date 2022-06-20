@@ -1474,7 +1474,7 @@ tr {
   display: table;
   margin: 0 auto;
   width: 40%;
-  border: 2px solid #F95800;
+  border: 2px solid #222;
   padding: 5px
 
 } 
@@ -1583,7 +1583,7 @@ tr {
 }
 
 .patient-profile-disease-span {
-  background-color: #F95800;
+  background-color: #004aad;
   display: inline-block;
   padding: 8px;
   border-radius: 5px;
@@ -2228,14 +2228,15 @@ tr {
   stroke-dashoffset: 440;
   stroke-linecap: round;
 }
+
 .circularbox .percent svg circle:nth-child(1) {
   stroke-dashoffset: 0;
   stroke: #f3f3f3;
 }
 
 .circularbox .percent svg circle:nth-child(2) {
-  stroke-dashoffset: calc(440 - (440 * 40) / 100);
-  stroke: #F95800;
+  stroke-dashoffset: calc(440 - (440 * 50) / 100);
+  stroke: #004aad;
 }
 
 
@@ -2249,22 +2250,16 @@ tr {
   justify-content: center;
   align-items: center;
   color: #111;
-   
+  font-weight: bold;
+  letter-spacing: 3px;
 }
 
 .circularbox .percent .number h5 {
   font-size: 20px;
 }
 
-.circularbox .percent .number span {
-  font-size: 24px;
-}
-
 .circularbox .text {
-  padding: 10px 0 0;
-  color: #999;
+  color: #222;
   font-weight: 700;
   font-size: 14px;
-
-
 }

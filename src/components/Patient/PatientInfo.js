@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import hrIcon from '../../assets/Images/network.png';
 
-const PatientInfo = ({patient,patientid, telemetaryReadings}) => {
+const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
 
     const dispatch = useDispatch();
 
@@ -20,6 +20,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings}) => {
     }
     const { totalTime } = useSelector(state => state.totalTimeSpent);
     const { loading, logs } = useSelector(state => state.searchLogResult);
+
 
     useEffect(() => {
         var check = moment(new Date(), 'YYYY/MM/DD');
@@ -65,12 +66,14 @@ const PatientInfo = ({patient,patientid, telemetaryReadings}) => {
                         <hr />
                         <>
 
-                            <span>{moment(patient?.DOB).format("ll")} <span><b>( {moment().diff(moment(patient?.DOB).format("ll"), 'years')} Years. )</b></span></span>
+                            <span>{moment(patient?.DOB).format("ll")} </span>
+                            <span style={{backgroundColor: "#004aad", padding: '5px', color: "#FFF"}}><small>Age: {moment().diff(moment(patient?.DOB).format("ll"), 'years')} yrs</small></span>
 
-                            <span className="text-center mt-3"><small><b>Account Created Date: </b></small></span>
+                            <span className="text-center mt-2"><small><b>Account Created Date: </b></small></span>
                             <span className="text-center "><small>{moment(patient?.createdAt).tz("America/New_York").format("lll")}</small></span>
-                            <b><small>Diseases: </small></b>
-                            <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
+
+                            <span className="text-center mt-2"><small><b>Account Status: </b></small></span>
+                            <span className="text-center "><small>{patient?.block === false ? <span style={{color: "green"}}>Active</span> : <span style={{color: "red"}}>Blocked </span>}</small></span>
                         </>
                     </div>
                 </div>
@@ -159,9 +162,11 @@ const PatientInfo = ({patient,patientid, telemetaryReadings}) => {
 
                                 </div>
                                 <div className="col-md-6">
+                                <b><small>Diseases: </small></b>
+                                <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
+
                                 <small><b>Insurance Companies</b></small>
-                                
-                                <p className="patient-profile-card-text pt-3">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</p>
+                                <p className="patient-profile-card-text pt-1">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</p>
 
                                 </div>
                             </div>
@@ -178,29 +183,29 @@ const PatientInfo = ({patient,patientid, telemetaryReadings}) => {
                     <small>RPM Status: <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
                     <hr />
 
-                    <small>99453 : Setup DOS - 16/8/2022 </small>
+                    {/* <small>99453 : Setup DOS - 16/8/2022 </small> */}
                     <br />
-                    <small>99454 : 8 / 16 days</small>
-                    <ProgressBar min="0" max="16" variant='danger' label="50%" now="8" />
+                    <small>99454 : {count} / 16 days</small>
+                    <ProgressBar min="0" max="16" variant='primary' label={(count / 16) * 100 + "%"} now={count} />
 
                     <br />
 
                     {totalTime >=0 && totalTime <= 20 ? <>
                         <small>99457 :  {totalTime} / 20 mins</small>
-                        <ProgressBar min="0" max="20" variant='danger' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
+                        <ProgressBar min="0" max="20" variant='primary' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
                     </> : <>
                     <small> 99457 : 20 / 20 mins</small>
-                        <ProgressBar min="0" max="20" variant='danger' label="100%" now="20" />
+                        <ProgressBar min="0" max="20" variant='primary' label="100%" now="20" />
                     </>}
                      
 
                     <br />
                     {totalTime >=21 ? <>
                         <small>99458 :  {totalTime > 40 ? "40" : totalTime} / 40 mins</small>
-                        <ProgressBar min="21" max="40" variant='danger' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
+                        <ProgressBar min="21" max="40" variant='primary' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
                     </> : <>
                     <small>99458 :  0 / 40 mins</small>
-                        <ProgressBar min="21" max="40" variant='dangar' now="21" />
+                        <ProgressBar min="21" max="40" variant='primary' now="21" />
                     </>}
                     
                     <p style={{marginTop: "14px", fontSize:"12px"}}>Total {totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>

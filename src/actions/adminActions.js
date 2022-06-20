@@ -83,12 +83,14 @@ const moment = require('moment-timezone');
 
 
 export const getPatients = (resPerPage, currentPage) => async(dispatch) => {
+  
     try {
         dispatch({
             type: ALL_PATIENTS_REQUEST,
         })
+
     
-        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`, );
+        const { data } = await axios.get(`${Prod01}/patient/list/${resPerPage}/${currentPage}`);
         
         dispatch({
             type: ALL_PATIENTS_SUCCESS,

@@ -67,7 +67,7 @@ const HRList = () => {
 
                         <div className="row">
                             <div className="col-md-7">
-                                <h5 className="pt-2">HRs List <span style={{color: '#F95800'}}>( 04 )</span></h5> 
+                                <h5 className="pt-2">HRs List <span style={{color: '#004aad'}}>( 04 )</span></h5> 
                             </div>
                             <div className="row-display">
                                 <Link to="/adminDashboard" className="go-back-btn"><i className='bx bx-arrow-back' ></i></Link> &nbsp;
@@ -84,7 +84,7 @@ const HRList = () => {
                                 </button>
 
                                 &nbsp;&nbsp;&nbsp;
-                                <Link to="/addhr" className="add-staff-btn">Add New HR</Link>
+                                <Link to="/addhr" className="add-staff-btn">Add New Nurse</Link>
                             </div>
                         </div>
 

@@ -43,7 +43,7 @@ const PatientsList = () => {
     const [isSearch, setIsSearch] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [resPerPage, setResPerPage] = useState(10);
-        
+
     useEffect(() =>{
         if(error){
             return alert.error(error);
@@ -53,7 +53,6 @@ const PatientsList = () => {
             alert.success('Status Changed');
             dispatch({type: UPDATE_PATIENT_RESET});
             dispatch(getPatients(resPerPage, currentPage));
-
             setSmShow(false);
         }
 
@@ -152,7 +151,7 @@ const PatientsList = () => {
                         <div className="row-display">
                             
                             <h5 className="pt-2 mt-2">Patients List <span style={{color: '#004aad'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
-                            
+            
 
                             <div className="mt-2">
                                 <select 
@@ -173,7 +172,7 @@ const PatientsList = () => {
                                 value={hrId}
                                 onChange={(e) => {searchPatientByHR(e.target.value); setHrId(e.target.value)}} 
                                 >
-                                    <option value="undefined">Search By Nurse Resource</option>
+                                    <option value="undefined">Sort By Nurse</option>
                                     {hrs && hrs.map((hr, index) => (
                                         <option value={hr?._id} key={index}> {hr?.firstname} {hr?.lastname}</option>
                                     ))}
@@ -242,60 +241,63 @@ const PatientsList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {patients && patients.length > 0 ? <Fragment> 
-                                    {patients && patients.map((patient, index) => (
-                                    <tr key={index}>  
-                                    <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                            
+                            {patients && patients.length > 0 ? <Fragment> 
+                                {patients && patients.map((patient, index) => (
+                                <tr key={index}>  
+                                <td><Link style={{textDecoration: 'none'}} to={{ pathname: "/patientProfile", state: {patientid: patient?._id }}}>{patient?.firstname} {patient?.lastname} <p>{patient?.phone1}</p></Link></td>
+                                
+                                <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
+                                
+                                <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
+                                
+                                {patient?.block === false ? <td>
+                                    <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
+                                    </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
+                                </td>}
                                     
-                                    <td> {moment(patient?.DOB).format("ll")} <p><Badge bg="dark text-white">{patient?.gender}</Badge></p></td> 
-                                    
-                                    <td style={{wordWrap: 'break-word'}}>{patient?.email}</td>
-                                    
-                                    {patient?.block === false ? <td>
-                                        <i className='bx bxs-circle' style={{color: 'green'}}></i> <p style={{color: 'green'}}>Activated</p>
-                                        </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
-                                    </td>}
-                                        
-                                     {patient?.assigned_doctor_id ? <>
-                                        <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
-                                    </> : <>
-                                    <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
-                                    </>}
-                                    
-                                    <td>
-                                        <div className="form-check">
-                                            <input 
-                                                type="checkbox"
-                                                id={index}
-                                                className="form-check-input"
-                                                defaultChecked={patient?.rpmconsent === true ? true : false}
-                                                onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
-                                            />
+                                    {patient?.assigned_doctor_id ? <>
+                                    <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                </> : <>
+                                <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
+                                </>}
+                                
+                                <td>
+                                    <div className="form-check">
+                                        <input 
+                                            type="checkbox"
+                                            id={index}
+                                            className="form-check-input"
+                                            defaultChecked={patient?.rpmconsent === true ? true : false}
+                                            onClick={(event) => changeConsentStatus(patient?._id, event.target.checked ? true : false) }
+                                        />
 
-                                            <label style={{ cursor: 'pointer' }} htmlFor={index}>
-                                            {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
-                                                Signed</span>
-                                                : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}
-                                            </label>
-                                        </div>
-                                    </td>
+                                        <label style={{ cursor: 'pointer' }} htmlFor={index}>
+                                        {patient?.rpmconsent === true ? <span style={{color: 'green', fontWeight: 'bold'}}>
+                                            Signed</span>
+                                            : <span style={{color: 'red', fontWeight: 'bold'}}>Not Signed</span>}
+                                        </label>
+                                    </div>
+                                </td>
 
-                                    <td>{patient?.lastReading || 'N/A'}</td>
-                                    
-                                    <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
-                                    <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>
-                                    
-                                    {patient?.block === false ? <Link className="rounded-button-delete" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-alt'></i></Link> 
-                                    : 
-                                    <Link className="rounded-button-activate" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-open'></i></Link>
-                                     }
-                                    </td>
-                                </tr>    
-                                ))}
-                                </Fragment> : <div>
-                                    <small className="not-found-text">Patients Not Found</small>
-                                </div> }
+                                <td>{patient?.lastReading || 'N/A'}</td>
+                                
+                                <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
+                                <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>
+                                
+                                {patient?.block === false ? <Link className="rounded-button-delete" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-alt'></i></Link> 
+                                : 
+                                <Link className="rounded-button-activate" to="/patients" onClick={() => {setSmShow(true); setPatientModel(patient?._id); setPatientToDelete(patient?.lastname)}}><i className='bx bx-lock-open'></i></Link>
+                                    }
+                                </td>
+                            </tr>    
+                            ))}
+                            </Fragment> : <div>
+                                <small className="not-found-text">Patients Not Found</small>
+                            </div> }
+                            
                             </tbody>
+                            
                             </Table>
                             <small style={{color: 'gray'}}>Showing {resPerPage} records per page</small> 
 

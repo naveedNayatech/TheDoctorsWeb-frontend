@@ -99,7 +99,7 @@ const PatientProfile = (props) => {
                                 {/* Patient Info Component */}
                                 <PatientInfo 
                                     patient={patient}
-                                    // careplan={careplan}
+                                    count={count}
                                     telemetaryReadings={deviceData}
                                     patientid={patientid}
                                 />

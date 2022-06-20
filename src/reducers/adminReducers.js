@@ -527,7 +527,7 @@ export const remainingReadingsReducer = (state={count:0}, action) => {
     switch(action.type) {
         case GET_PATIENT_REMAINING_READINGS: 
         return {
-            count: action.payload.count
+            count: action.payload.Readings  
         }
 
         default: 
