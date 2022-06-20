@@ -910,7 +910,10 @@ export const sortTelemetartData = (patientId, startDate, endDate) => async(dispa
 
 export const getRemainingReadings = (id) => async(dispatch) => {
     try{
-    const {data} =  await axios.get(`${Prod01}/patient/getReadingCount/${id}`);
+    const {data} =  await axios.post(`${Prod01}/patient/getReadingCount/${id}`, {
+        startDate:"2022/06/01",
+        endDate:"2022/06/30"
+    });
     
     dispatch({
         type: GET_PATIENT_REMAINING_READINGS,
