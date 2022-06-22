@@ -184,7 +184,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                     <hr />
 
                     {/* <small>99453 : Setup DOS - 16/8/2022 </small> */}
-                    <br />
+                    
                     <small>99454 : {count} / 16 days</small>
                     <ProgressBar min="0" max="16" variant='primary' label={(count / 16) * 100 + "%"} now={count} />
 

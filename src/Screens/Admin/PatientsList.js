@@ -85,11 +85,6 @@ const PatientsList = () => {
             setDoctorId('');
         }
        
-    
-    
-    // const getPatientsList = () => {
-    //    dispatch(getPatients(resPerPage, currentPage));
-    // }
 
     const changeConsentStatus = (id, value) => {
         dispatch(updatePatientConsentStatus(id, value));

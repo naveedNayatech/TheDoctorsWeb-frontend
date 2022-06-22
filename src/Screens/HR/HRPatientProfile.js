@@ -30,7 +30,6 @@ const HRPatientProfile = (props) => {
   const { loading, error, patient} = useSelector(state => state.patientProfile);
   const { deviceData, Count } = useSelector(state => state.deviceData);
   const { commentSuccess} = useSelector(state => state.comments);
-//   const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent); 
   const [accordion, setAccordion] = useState(false);
 
   const [readingPerPage, setReadingsPerPage] = useState(10);
@@ -91,7 +90,7 @@ const HRPatientProfile = (props) => {
                             {patient && <Fragment>
                                 <HRPatientInfo 
                                     patient={patient}
-                                    healthData={deviceData}
+                                    telemetaryReadings={deviceData}
                                 />
 
 

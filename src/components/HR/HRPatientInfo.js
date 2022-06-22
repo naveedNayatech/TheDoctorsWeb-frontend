@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ProgressBar, Modal, Button, Image } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import TextField from '../../components/Form/TextField';
-import { carePlanOfPatient, getPatientCarePlan, hrTimeSpentOfCurrentMonth, timeSpentOnPatient } from '../../actions/HRActions';
+import { carePlanOfPatient, hrTimeSpentOfCurrentMonth, timeSpentOnPatient, getTimeReport } from '../../actions/HRActions';
 import { getRemainingReadings} from '../../actions/adminActions';
 import moment from 'moment';
 import { ADDING_CARE_PLAN_RESET, ADDING_TIME_SPENT_RESET } from '../../constants/HRConstants';
@@ -12,8 +12,11 @@ import patientProfileImg from '../../assets/Images/patientProfile.png';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
+import doctorIcon from '../../assets/Images/doctorIcon.png';
+import hrIcon from '../../assets/Images/network.png';
 
-const HRPatientInfo = ({patient, healthData}) => {
+
+const HRPatientInfo = ({patient, telemetaryReadings}) => {
 
  const dispatch = useDispatch();   
  const alert = useAlert();
@@ -46,10 +49,13 @@ const [addTimeShow, setAddTimeShow] = useState(false);
  const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
  const { count } = useSelector(state => state.readingsCount);
  const {hr} = useSelector(state => state.hrAuth); 
+ const {  loading, targets} = useSelector(state => state.target);
  let hrId = hr?._id;
  let patientid = patient?._id;
-  
-    // dispatches
+
+ let startDate = moment().clone().startOf('month').format('YYYY-MM-DD');
+ let endDate = moment().clone().endOf('month').format('YYYY-MM-DD');
+
     useEffect(() => {
     if(careplanerror){
         return alert.error(careplanerror);
@@ -70,9 +76,10 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     setDescription(''); 
     }
 
-    dispatch(getPatientCarePlan(patientid));
+    // dispatch(getPatientCarePlan(patientid));
     dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
     dispatch(getRemainingReadings(patientid));
+    dispatch(getTimeReport(patientid, startDate, endDate));
 
     },[dispatch, careplanerror, isSuccessful, carePlanAdded]);
 
@@ -115,6 +122,14 @@ const [addTimeShow, setAddTimeShow] = useState(false);
         window.open(`mailto:${email}`)
     }
 
+    let filteredReadings = calcTotalReadings();
+
+    function calcTotalReadings() {
+       return telemetaryReadings && telemetaryReadings.filter(healthData => healthData?.deviceId?.deviceType === "bp").reduce((sum, a) =>  
+        sum + 1, 0
+      )
+    }
+
   return (
     <>
       <div className="row-display header-wrapper">
@@ -145,43 +160,110 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     
             <div className="row container">
                 <div className="col-md-3">
-                    <div>
-                        <img src={patientProfileImg} className="img-responsive profile-card-img" alt="patientProfile" />
-                        
-                            <p className="patient-profile-name" style={{fontWeight: 'bold'}}>{patient?.firstname} {patient?.lastname} </p>
-                            
-                            <Fragment>
-                                <Link className="link" style={{marginLeft: "10%"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
+                <div className="card card-bordered-01">
+                        <img src={patientProfileImg} className="img-responsive profile-card-img mt-4" alt="patientProfile" />
 
-                                <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span> 
-                            </Fragment>
-                    </div>    
+                        <b className="mt-3">Pt. {patient?.firstname} {patient?.lastname}  </b>
+                        <Link to="/patientProfile" className="link" style={{marginLeft: "10%", fontSize: "14px", marginTop: "7px"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
+                        <hr />
+                        <>
+
+                            <span>{moment(patient?.DOB).format("ll")} </span>
+                            <span style={{backgroundColor: "#004aad", padding: '5px', color: "#FFF"}}><small>Age: {moment().diff(moment(patient?.DOB).format("ll"), 'years')} yrs</small></span>
+
+                            <span className="text-center mt-2"><small><b>Account Created Date: </b></small></span>
+                            <span className="text-center "><small>{moment(patient?.createdAt).tz("America/New_York").format("lll")}</small></span>
+
+                            <span className="text-center mt-2"><small><b>Account Status: </b></small></span>
+                            <span className="text-center "><small>{patient?.block === false ? <span style={{color: "green"}}>Active</span> : <span style={{color: "red"}}>Blocked </span>}</small></span>
+                        </>
+                    </div>  
                 </div>
 
-
-                <div className="col-md-3">
-                        <span className="patient-profile-col-heading">Address Details</span>                                 
-                            <hr />
-
-                            <span className="profile-label">Address: </span>
-                            <p className="patient-profile-card-text">{patient?.address}, {patient?.city}</p>
-
-                            <span className="profile-label">Line 2: </span>
-                            <p className="patient-profile-card-text">{patient?.line2}</p>
-
-                            <span className="profile-label">City, State & Zipcode:  </span>
-                            <p className="patient-profile-card-text">{patient?.city}, {patient?.state} - {patient?.zipCode} </p>
-                </div>
-
-                <div className="col-md-3">
-                        <span className="patient-profile-col-heading">Contact Information</span>                                 
-                            <hr />
-
+                <div className="col-md-6">
+                    <div className="card card-bordered-01">
+                        <span className="mt-3"> <small>{patient?.address}, {patient?.city} - {patient?.line2} - {patient?.city}, {patient?.state} - {patient?.zipCode} </small></span>
+                        <hr />
+                        <div className="row">
+                        <div className="col-md-6">
                             <span className="profile-label">Primary Phone </span>
-                            <p className="patient-profile-card-text">{patient?.phone1 || 'N/A'}</p>
+                            <p className="patient-profile-card-text" style={{color: 'dodgerblue'}}>{patient?.phone1 || 'N/A'}</p>
 
-                            <span className="profile-label">Mobile No </span>
-                            <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A' } </p>
+                            <span className="profile-label">Mobile</span>
+                            <p className="patient-profile-card-text">{patient?.mobileNo || 'N/A'} </p>
+
+
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="row">
+                                <img src={doctorIcon} alt="" width="60" height="60"/>
+                                <span className="ml-4"><b>Assigned Doctor</b>
+                                {patient?.assigned_doctor_id ? <>
+                                    <p className="patient-profile-card-text">Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
+                                </> : <>
+                                <br />
+                                    <span className="profile-label">Doctor Not Assigned</span>
+                                </>}
+                                </span>
+                                
+                            </div>
+                            
+                            <br />
+
+                            <div className="row">
+                                <img src={hrIcon} alt="" width="60" height="60"/>
+                                <span className="ml-4"><b>Assigned Nurse</b>
+                                {patient?.assigned_hr_id ? <>
+                                    <p className="patient-profile-card-text">Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
+                                </> : <>
+                                <br />
+                                    <span className="profile-label">HR Not Assigned Yet</span>
+                                </>}
+                                </span>
+                            </div>
+                        </div>    
+                        </div>
+                        <hr />
+
+                        <div className="col-md-12">
+                            <div className="row">
+                                <div className="col-md-6">
+                                
+                                {/*  */}
+                                {patient?.assigned_devices && patient?.assigned_devices?.length === 0 ? <>
+                                <span className="profile-label">No Device Assigned Yet</span>
+
+                                </> : <>
+                                <small><b>Devices Assigned</b> ( 0{patient?.assigned_devices && patient?.assigned_devices?.length} ) </small>
+
+                                {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
+                                    <div key={index}>
+                                        <div style={{padding: '5px', marginTop: '5px'}}>
+                                            <div className="row-display">
+                                                <div style={{marginLeft: '30px'}}>
+                                                <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
+                                                <small><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    ))}
+                                    </>}
+                            
+                            {/*  */}
+                                </div>
+                                <div className="col-md-6">
+                                    <b><small>Diseases: </small></b>
+                                    <br/>
+                                    <span className="patient-profile-disease-span"> {patient?.diseases ? patient?.diseases : 'N/A'} </span>
+                                    <br/>    
+                                    <small><b>Insurance Companies</b></small>
+                                    <p className="patient-profile-card-text pt-1">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="card card-bordered pt-3 col-md-3 ">
@@ -190,6 +272,12 @@ const [addTimeShow, setAddTimeShow] = useState(false);
 
                     <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
                     <hr />
+
+                    <small>99454 : {count} / 16 days</small>
+                    <ProgressBar min="0" max="16" variant='primary' label={(count / 16) * 100 + "%"} now={count} />
+
+                    <br />
+
                     {totalTime >=0 && totalTime <= 20 ? <>
                         <small><b>99457 : </b> {totalTime} / 20 mins</small>
                         <ProgressBar animated min="0" max="20" variant='info' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
@@ -214,77 +302,99 @@ const [addTimeShow, setAddTimeShow] = useState(false);
 
                 
                 <br />   
-                            <div className="row container">
-                                <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Physician Information</span>                                 
-                                        <hr />
-                                    {patient?.assigned_doctor_id ? <>
-                                        <span className="profile-label">Doctor</span>
-                                    <p className="patient-profile-card-text">
-                                        Dr. {patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</p>
-                                    </> : <>
-                                        <small>No doctor assigned yet</small>
-                                    </>}
+                {/* Second rows starts here */}
+               
+                <div className="container row-display">
+                <div className="card card-bordered-02 col-md-8">
+                    <div className="row">
+                        <div className="col-md-6"> 
+                        <small><b>Telemetary Readings (Last 5)</b></small>
+                        <hr />
+                        {telemetaryReadings && telemetaryReadings.length > 0 ? <>
+                            {telemetaryReadings && telemetaryReadings.filter(healthData => healthData?.deviceId?.deviceType === "bp").slice(0,5).map((devicedata, index) => (
+                                <div key={index} className="row-display mt-2" >
+                                    {devicedata.telemetaryData?.sys && devicedata.telemetaryData?.dia !== undefined ? <>
+                                        <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
+                                            {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
+                                        <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
+                                    </> : " "}
+                                </div>
+                            ))}
+                        </> : 'N/A' }
+                        </div>
 
-                                    {patient?.assigned_hr_id ? <>
-                                        <span className="profile-label">Nurse</span>
-                                    <p className="patient-profile-card-text">
-                                        Hr. {patient?.assigned_hr_id?.firstname} {patient?.assigned_hr_id?.lastname}</p>
-                                    </> : <>
-                                        <small>No Nurse assigned yet</small>
-                                    </>}
-                                    </div>
+                        <div className="col-md-6">
+                            <small><b>Average B.P</b></small>
+                            <hr />
+                            
+                            <div className="row-display">
+                           <div className="circularbox">
+                            <div className="percent">
+                               <svg>
+                                    <circle cx="70" cy="70" r="50"></circle>
+                                    <circle cx="70" cy="70" r="50"></circle>  
+                                </svg> 
 
-                                <div className="col-md-3">
-                                    <span className="patient-profile-col-heading">Devices Assigned</span>                                 
-                                        <hr />
-                                         {patient?.assigned_devices && patient?.assigned_devices.length === 0 ? <Fragment>
-                                            <b>No Device Assigned Yet</b>
-                                           
-                                            </Fragment> : <Fragment>
-                                            <span className="profile-label">Assigned Devices (0{patient?.assigned_devices && patient?.assigned_devices.length})</span>
-                                            
-                                            {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
-                                            <div key={index}>
-                                                <div className="card" style={{padding: '5px', marginTop: '5px'}}>
-                                                    <div>
-                                                        <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
-                                                        <small className="mt-2"><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
-                                                    </div>
-                                                </div>
-                                                </div>
-                                            ))}         
-                                        </Fragment>}      
-                                        </div>
+                                <div className="number">
+                            
 
+                                {telemetaryReadings && telemetaryReadings.filter(healthData => healthData?.deviceId?.deviceType === "bp").slice(0,10).reduce((total, devicedata) =>  
+                                   (Number(total) + Number(devicedata?.telemetaryData?.sys) / filteredReadings).toFixed(), 0
+                                 )}
+                                
+                                </div>
+                            </div>
+                            <h5 className="text">Avg. Systolic</h5>
+                           </div>
 
-                                        <div className="col-md-3">
-                                            <span className="patient-profile-col-heading">Insurance companies</span>                                 
-                                            <hr />
-                                                <div className="row">    
-                                                    <div className="col-md-7">
-                                                        <p className="patient-profile-card-text">{patient?.insurancecompany ? patient?.insurancecompany : 'N/A'}</p>   
-                                                    </div>
-                                                </div>                      
-                                        </div>
+                           <div className="circularbox">
+                            <div className="percent">
+                               <svg>
+                                    <circle cx="70" cy="70" r="50"></circle>
+                                    <circle cx="70" cy="70" r="50"></circle>  
+                                </svg> 
 
-                                        <div className="col-md-3">
-                                        <span className="patient-profile-col-heading">Telemetary Readings (Last 5)</span>                                 
-                                        <hr /> 
-                                        {healthData && healthData.length > 0 ? <>
-                                            {healthData && healthData.filter(healthdata => healthdata?.deviceId?.deviceType === "bp").slice(0,5).map((devicedata, index) => (
-                                                <div key={index} className="row-display mt-2">
-                                                    {devicedata.telemetaryData?.sys && devicedata.telemetaryData?.dia !== undefined ? <>
-                                                    <Image src={systolicImg} style={{width: '20px', height: '20px'}} /> 
-                                                        {devicedata?.telemetaryData?.sys} / {devicedata?.telemetaryData?.dia} 
-                                                    <small> {moment(devicedata?.createdAt).tz("America/New_York").format("lll")}</small>
-                                                    </> : " "}
-                                                </div>
-                                            ))}
-                                        </> : 'N/A' }
-                                        
-                                    </div>
-                                </div> {/* Second row ends here*/}
+                                <div className="number">
+                                {telemetaryReadings && telemetaryReadings.filter(healthData => healthData?.deviceId?.deviceType === "bp").slice(0,10).reduce((total, devicedata) =>  
+                                   (Number(total) + Number(devicedata?.telemetaryData?.dia) / filteredReadings).toFixed(), 0
+                                 )}
+                                </div>
+                            </div>
+                            <h5 className="text">Avg. Diastolic</h5>
+                           </div>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="patient-logs-card col-md-3 mr-4">
+                    <small><b>Time added ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</b></small> 
+                    <hr />
+                    <small><b>Total Time Added: <span style={{backgroundColor:'crimson', color: '#FFF', padding: '6px', borderRadius: '4px'}}>{totalTime} mins</span></b></small>
+                    
+                    {targets && targets.length > 0 ? <>
+                        {targets.map((trgt, index) => ( 
+                                 <div key={index} style={{background: '#004aad', 
+                                    padding: '5px', 
+                                    listStyle:"none", 
+                                    borderRadius: '10px', 
+                                    color: '#FFF',
+                                    marginTop: '8px'
+                                    }}
+                                  >
+                                    <small>Added <b>{trgt?.timeSpentInMinutes}</b> mins &nbsp;&nbsp;&nbsp; {moment(trgt?.createdAt).tz('America/New_York').format("lll")}</small>
+
+                                 </div>
+                        )).reverse()} 
+                    </>
+                    : <span>
+                        No record added this month
+                    </span>}
+
+                    </div>
+                </div>
+
+                 {/* Second row ends here*/}
 
 
              {/* Careplan Modal */}
