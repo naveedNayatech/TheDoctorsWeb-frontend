@@ -8,6 +8,7 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector} from 'react-redux';
 import { getTimeSummaryReportByHR } from '../../actions/adminActions';
 import ExportSummaryReportToCSV from '../../components/ExportSummaryReportToCSV';
+import { Table } from 'react-bootstrap';
 
 const HRSummaryReport = () => {
 
@@ -124,19 +125,76 @@ const HRSummaryReport = () => {
                 </div>
               </> : null }
 
-                  <br />
+                <br />
+                <br />
                 {loading ? <Loader /> : <>
-                   {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
-                        <div className="text-center"><span style={{ 
-                            color: '#004aad',
-                            fontSize: '16px',
-                            fontWeight: 'bold'
-                        }}>{timeSummaryReport?.length}</span> records found.</div>
+                {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
+                        <div className="row-display">
+                          <div style={{ 
+                              fontSize: '14px',
+                              backgroundColor: 'gray',
+                              color: '#FFF',
+                              padding: '5px',
+                              width: '180px',
+                              borderRadius: '20px', 
+                              textAlign: 'center',
+                              height: '30px'
+                          }}><span>{timeSummaryReport?.length}</span> record(s) found.
+                          </div>
+                          
+                          <span><b>Report Preview</b></span>
+                          
+                          <div>
+                            <span style={{color: '#9B111E'}}>
+                              <small>
+                                <i class='bx bxs-circle'></i> Shows reading {'<'} 16 | minutes {'<'} 20
+                              </small>
+                            </span> 
+                            
+                            <br />
+
+                            <span style={{color: '#009150'}}>
+                              <small>
+                                <i class='bx bxs-circle'></i> Shows reading {'>'} 16 | minutes {'>'} 20
+                                </small>
+                              </span>
+                          </div>
+                        </div>
+
+                        <div className="col-md-12">
+                          <br />
+                        <Table striped hover bordered>
+                            <thead align="center">
+                                <tr>
+                                <th>Sr.</th>
+                                <th>Patient Name</th>
+                                <th>Total Readings Received </th>
+                                <th>Total Minutes</th>
+                                <th>Month</th>
+                                </tr>
+
+                                {timeSummaryReport && timeSummaryReport.map((summaryReport, index) => (
+                                  <tr key={index}> 
+                                    <td>{index + 1}</td>
+                                    <td style={{wordWrap: 'break-word'}}>{summaryReport?.patientName}</td>
+                                    {summaryReport.totalReadings > 16 ? <td style={{backgroundColor: '#009150', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td> : <td style={{backgroundColor: '#9B111E', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td>}
+                                    {summaryReport?.totalMinutes < 20 ? <td style={{backgroundColor: '#9B111E', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td> : <td style={{backgroundColor: '#009150', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td>}
+                                    <td style={{wordWrap: 'break-word'}}>{summaryReport?.Month}</td>
+                                  </tr>
+                                ))}
+                            </thead>
+                            <tbody>
+                                  
+                            </tbody>
+                          </Table>
+                        </div>
+
+
                    </> : <>
                    <div className="text-center">
                        <b>No Result Found.</b>
                    </div>
-                   </>} 
+                   </>}
                 </>}
 
               </div>

@@ -243,7 +243,6 @@ const TimeSummaryReport = () => {
                 }
                 </div>
             </div>
-            
 
             {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
                     <hr />
@@ -269,7 +268,7 @@ const TimeSummaryReport = () => {
             <br />
             <br />
                 {loading ? <Loader /> : <>
-                   {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
+                {timeSummaryReport && timeSummaryReport?.length > 0 ? <>
                         <div className="row-display">
                           <div style={{ 
                               fontSize: '14px',
