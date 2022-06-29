@@ -17,7 +17,6 @@ import {
     HR_LOGIN_SUCCESS,
     HR_LOGIN_FAIL,
     ADMIN_PASSWORD_UPDATE_REQUEST,
-    ADMIN_PASSWORD_UPDATE_SUCCESS,
     ADMIN_PASSWORD_UPDATE_FAIL,
     HR_LOGOUT_SUCCESS,
     HR_LOGOUT_FAIL,
@@ -164,33 +163,33 @@ export const hrLogout = () => async(dispatch) => {
 }
 
 // Update Password -> ADMIN 
-export const updatePassword = (id, oldpassword, password) => async(dispatch) => {
+export const updatePassword = (id, name, email, password) => async(dispatch) => {
     try {
        dispatch({
            type: ADMIN_PASSWORD_UPDATE_REQUEST
        })     
 
-       const config = {
-           headers: {
-               'Content-Type': 'application/json'
-           }
-       }
-
-       const { data } = await axios.put(`${Prod}/v1/admin/update`, {
-           id,
-           oldpassword,
-           password
-       }, config);
+        await axios.put(`${Prod}/admin/edit/${id}`, {
+           name: name,
+           email: email,
+           password: password
+       });
 
        dispatch({
-           type: ADMIN_PASSWORD_UPDATE_SUCCESS,
-           payload: data.admin
-       })
-       
+        type: SHOW_ALERT_MESSAGE,
+        payload: "Account Information updated"
+        });
+        
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+        })
+
+        dispatch(logout());
+
     } catch (error) {
         dispatch({
             type: ADMIN_PASSWORD_UPDATE_FAIL,
-            payload: error.response.data.message
+            payload: "unable to update"
         })
     }
 }
@@ -288,19 +287,39 @@ export const resetpassword = (values, queryToken) => async(dispatch) => {
     }
 }
 
+export const adminSignup = (values) => async(dispatch) => {
+
+    
+    try {
+        const res = await axios.post(`${Prod01}/admin/signup`, values);
+
+        if(res){
+            dispatch({
+                type: SHOW_ALERT_MESSAGE,
+                payload: "New Admin Added"
+              });
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
+            })
+        }
+    }
+     catch (error) {
+        dispatch({
+        type: FETCH_ERROR,
+        payload: 'Email already exists'
+      })
+      dispatch({
+        type: HIDE_ALERT_MESSAGE
+      })
+    }
+}
 
 export const resetpasswordById = (password, id) => async(dispatch) => {  
-    
-    const token = JSON. parse(localStorage.getItem('token'));
 
     try {
        const res = await axios.post(`${Prod01}/general/resetpasswordanyuser`, {
            id: id,
            password: password
-       }, {
-        headers: {
-            "Authorization":`Bearer ${token}`
-        } 
        });
       
        if(res){

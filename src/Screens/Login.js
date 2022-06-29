@@ -16,7 +16,7 @@ const Login = ({ history }) => {
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
-	const {message, error : loginError } = useSelector(state => state.common);
+	const {error : loginError } = useSelector(state => state.common);
     
 	const validate = Yup.object().shape({
 		email: Yup.string().email('Invalid email').required('Email is Required'),
@@ -36,7 +36,7 @@ const Login = ({ history }) => {
 		}
 
 		if(error){
-			alert.error(<div style={{ width: 230 }}>{error}</div>);
+			alert.error(error);
 			dispatch(clearErrors());
 		}
 

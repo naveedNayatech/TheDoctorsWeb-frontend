@@ -33,6 +33,7 @@ import { careplanListReducers } from './reducers/HRReducers'; //Get list of care
 import {doctorTelemetaryReportReducer} from './reducers/adminReducers';
 import { timeSummaryReportReducer } from './reducers/adminReducers';
 import {searchLogReducer} from './reducers/adminReducers';
+import {adminsListReducers} from './reducers/adminReducers';
 
 // COMMON REDUCERS
 import { commonReducers } from './reducers/Common';
@@ -70,8 +71,8 @@ const reducer = combineReducers({
     careplans: careplanListReducers,
     telemetaryReport: doctorTelemetaryReportReducer,
     summaryReport: timeSummaryReportReducer,
-    searchLogResult: searchLogReducer
-
+    searchLogResult: searchLogReducer,
+    adminsList: adminsListReducers
 })
 
 let initialState = {}
@@ -80,7 +81,7 @@ const middleware = [thunk];
 
 // const store = createStore(reducer, initialState, disableReactDevTools(applyMiddleware(...middleware)))
 
-let mode = "production"
+let mode = "deve"
 const devTools =
   mode === "production"
     ? applyMiddleware(...middleware)

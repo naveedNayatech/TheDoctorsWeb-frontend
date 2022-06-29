@@ -68,6 +68,9 @@ import {
     SEARCH_LOG_REQUEST,
     SEARCH_LOG_SUCCESS,
     SEARCH_LOG_FAIL,
+    ALL_ADMINS_REQUEST,
+    ALL_ADMINS_SUCCESS,
+    ALL_ADMINS_FAIL,
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -366,6 +369,53 @@ export const getDoctors = (resPerPage, currentPage) => async(dispatch) => {
             type: ALL_DOCTORS_FAIL,
             payload: error.response.data.message
         })
+    }
+}
+
+export const getAdmins = () => async(dispatch) => {
+    try {
+        dispatch({ type: ALL_ADMINS_REQUEST })
+
+        const { data } = await axios.get(`${Prod01}/admin/adminlist`, );
+        
+        dispatch({
+            type: ALL_ADMINS_SUCCESS,
+            payload: data
+        })
+        
+    } catch (error) {
+        dispatch({
+            type: ALL_ADMINS_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
+
+export const deleteAdminAccount = (id) => async(dispatch) => {
+    try {
+
+        const data = await axios.delete(`${Prod01}/admin/delete/${id}`);
+        
+        if(data){
+            dispatch({
+                type: SHOW_ALERT_MESSAGE,
+                payload: "Admin Account has been deleted"
+                });
+            
+            dispatch({
+                type: HIDE_ALERT_MESSAGE
+            })
+        }
+        
+        
+    } catch (error) {
+        dispatch({
+            type: FETCH_ERROR,
+            payload: 'Admin not found'
+          })
+        dispatch({
+            type: HIDE_ALERT_MESSAGE
+          })
     }
 }
 

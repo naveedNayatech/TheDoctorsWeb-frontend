@@ -6,6 +6,7 @@ import StaffProtectedRoute from './components/route/StaffProtectedRoute';
 import HRProtectedRoute from './components/route/HRProtectedRoute';
 // Admin Dashboard Components
 import AdminDashboard from './components/AdminDashboard/Dashboard';
+import Admins from './Screens/Admin/Admins';
 import Profile from './Screens/Admin/Profile';
 import LandingPage from './Screens/LandingPage';
 import Login from './Screens/Login';
@@ -72,9 +73,11 @@ function App() {
         <Route exact path='/login' component={Login} />,
         <Route exact path='/auth/forgot' component={ForgotPassword} />
         <Route exact path="/v1/auth/reset-password" component={ResetPassword} />
+
         <ProtectedRoute exact path='/patients' isAdmin={true} component={PatientsList} />
         <ProtectedRoute exact path='/doctors' component={DoctorsList} />
         <ProtectedRoute exact path='/adminDashboard' isAdmin={true} component={AdminDashboard} />
+        <ProtectedRoute exact path='/admins' isAdmin={true} component={Admins} />
         <ProtectedRoute exact path='/doctorProfile' isAdmin={true} component={DoctorProfile} />
         <ProtectedRoute exact path='/me' isAdmin={true} component={Profile} />
         <ProtectedRoute exact path='/adddoctor' isAdmin={true} component={AddNewDoctor} />

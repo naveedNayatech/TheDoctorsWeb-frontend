@@ -71,6 +71,9 @@ import {
     SEARCH_LOG_SUCCESS,
     SEARCH_LOG_FAIL,
     SEARCH_LOG_RESET,
+    ALL_ADMINS_REQUEST,
+    ALL_ADMINS_SUCCESS,
+    ALL_ADMINS_FAIL, 
     CLEAR_ERRORS
 } from '../constants/adminConstants';
 
@@ -433,7 +436,9 @@ export const adminStatsReducers = (state = { totalPatients:0, totalHrs: 0, total
                 totalPatients: action.payload.totalPatients,
                 totalHrs: action.payload.totalHrs, 
                 totalDrs: action.payload.totalDrs,
-                totalDevices: action.payload.totalDevices
+                totalDevices: action.payload.totalDevices,
+                activePts: action.payload.activePts,
+                blockPts: action.payload.blockpts
             }
 
         case ADMIN_STATS_FAIL:
@@ -693,5 +698,36 @@ export const searchLogReducer = (state = {logs: []}, action) => {
         default:{
             return state
             }     
+    }
+}
+
+export const adminsListReducers = (state = {adminsList: []}, action) => {
+    switch(action.type) {
+        case ALL_ADMINS_REQUEST:
+            return { 
+                loading: true,     
+        }
+
+        case ALL_ADMINS_SUCCESS:
+            return { 
+                loading: false,  
+                admins: action.payload 
+        }
+            
+        case ALL_ADMINS_FAIL:
+            return { 
+                loading: false,  
+                error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+            return {
+               ...state,
+               error: null   
+        }        
+        
+        default:{
+            return state
+        }     
     }
 }

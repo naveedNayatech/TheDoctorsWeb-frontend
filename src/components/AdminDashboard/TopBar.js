@@ -102,6 +102,10 @@ const TopBar = () => {
                                 <Dropdown.Item>
                                     <Link className="dropdown-item" to="/me"><small>My Profile</small></Link>
                                 </Dropdown.Item>
+
+                                <Dropdown.Item>
+                                    <Link className="dropdown-item" to="/admins"><small>Admins</small></Link>
+                                </Dropdown.Item>
                                 
                                 <Dropdown.Item >
                                     <Link className="dropdown-item" to="#" onClick={logoutHandler} style={{color: "red"}}><small>Logout</small></Link>

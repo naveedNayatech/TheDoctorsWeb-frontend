@@ -1,5 +1,5 @@
 *{
-  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Montserrat', sans-serif; */
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -1539,7 +1539,7 @@ tr {
 }
 
 .jumbotron-blur-img {
-  background-color: #09425A;
+  background-color: #F95800;
   opacity: 1;
 }
 
@@ -1549,12 +1549,12 @@ tr {
   border-radius: 50%;
   margin-left: 42%;
   margin-top: -10%;
-  border: 6px solid #88E0EF;
+  border: 3px solid #004aad;
 }
 
 .profile-value-bottom-border {
   letter-spacing: 1px;
-  border-bottom: 4px solid #88E0EF;
+  border-bottom: 4px solid #004aad;
   margin: 3px;
   padding: 5px
 }
@@ -2095,7 +2095,7 @@ tr {
   border-radius: 10px;
   padding: 10px;
   color: #FFF;
-  max-height: 680px;
+  max-height: 760px;
   overflow-y: auto;
 }
 
@@ -2262,4 +2262,10 @@ tr {
   color: #222;
   font-weight: 700;
   font-size: 14px;
+}
+
+.number {
+  font-size: 22px;
+  font-weight: 600;
+  display: inline-block;
 }

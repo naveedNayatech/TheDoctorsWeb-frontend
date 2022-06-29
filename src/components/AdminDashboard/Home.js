@@ -10,14 +10,15 @@ import hrIcon from '../../assets/Images/network.png';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import patientIcon from '../../assets/Images/patientIcon.png';
 import heartIcon from '../../assets/Images/heart.png';
-
+import verifiedIcon from "../../assets/Images/verified-user.png";
+import banIcon from "../../assets/Images/ban-user.png";
 
 const Home = () => {
     const dispatch = useDispatch();
 
     const { patients} = useSelector(state => state.admin);
     const { loading, logs} = useSelector(state => state.log);
-    const { totalPatients, totalHrs, totalDrs, totalDevices } = useSelector(state => state.adminStat)
+    const { totalPatients, totalHrs, totalDrs, totalDevices, activePts, blockPts } = useSelector(state => state.adminStat)
 
     const todayDate = moment().format("ll");
 
@@ -94,8 +95,30 @@ const Home = () => {
 
                 {/* Graphs & Alerts Section */}
                 <div className="container-fluid row">
-                    <div className="col-lg-12">
+                    <div className="col-lg-9">
                         <DashboardGraphs />
+                    </div>
+                    <div className="col-lg-3">
+                        <div className="card card-bordered-01" style={{backgroundColor: '#E9FFF2'}}>
+                            <div className="row-display">
+                                <div className="container">
+                                    <h5 className="mt-2" style={{color: '#009150'}}><b>Active <br/> patients</b></h5> 
+                                    <p className="number">{activePts}</p>
+                                </div>
+                                <img src={verifiedIcon} alt="" width="100" height="100"/>
+                            </div>                            
+                        </div>
+                        <hr />
+
+                        <div className="card card-bordered-01" style={{backgroundColor: '#E9FFF2'}}>
+                            <div className="row-display">
+                                <div className="container">
+                                    <h5 className="mt-2" style={{color: '#9B111E'}}><b>Blocked <br />Patients</b></h5>
+                                    <p className="number">{blockPts < 10 ? '0'+blockPts : blockPts}</p>    
+                                </div>
+                                <img src={banIcon} alt="" width="100" height="100"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

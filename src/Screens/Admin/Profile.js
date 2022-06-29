@@ -1,26 +1,26 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react';
 import MetaData from '../../layouts/MetaData';
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import Sidebar from '../../components/AdminDashboard/Sidebar';
 import TopBar from '../../components/AdminDashboard/TopBar';
-import { updatePassword } from '../../actions/authActions';
-import { Link } from 'react-router-dom';
+import { updatePassword, logout } from '../../actions/authActions';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from "moment";
+import profilePic from "../../assets/Images/defaultUser.png";
+import { useAlert } from 'react-alert';
 
 const Profile = () => {
 
     const dispatch = useDispatch();
+    const alert = useAlert();
 
-    const { isAuthenticated, user } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
     
     const [showEditModal, setShowEditModal] = useState(false);
-    const [oldpassword, setOldPassword] = useState('');
+    const [id, setId] = useState(user?._id);
+    const [name, setName] = useState(user.name);
+    const [email, setEmail] = useState(user.email);
     const [password, setPassword] = useState('');
-
-    let id = user?._id;
-
-    console.log('id is ' + id);
 
     const handleShowEditModal = () => setShowEditModal(true);
 
@@ -28,10 +28,13 @@ const Profile = () => {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
+        if(email === "" || password === "" || name === ""){
+            alert.error('Please fill all fields.');
+            handleCloseEditModal();
+            return;
+        }
 
-        console.log('Submitting form');
-        dispatch(updatePassword(id, oldpassword, password));
-        // handleCloseEditModal();
+         dispatch(updatePassword(id, name, email, password));
       };
 
     return (
@@ -45,17 +48,24 @@ const Profile = () => {
 
                 
                 <div className="jumbotron jumbotron-blur-img"></div> 
-                  <div className="">
-                  <img src="https://i.pinimg.com/originals/a2/de/39/a2de3954697c636276192afea0a6f661.jpg" className="profile-img" alt="profileimg" />
+                  <small style={{
+                    backgroundColor: '#004aad',
+                    padding: '8px',
+                    color: '#FFF'
+                  }}>Note: If you update admin details, you need to login again.</small>
+                  <div>  
 
+                    
+                  <img src={profilePic} className="profile-img" alt="profileimg" />
   
                   <div className="d-flex justify-content-center">
-                      <b style={{fontSize: 22, marginTop: 10}}> {user && user.name} 
-                        <button className="btn btn-info ml-2"onClick={handleShowEditModal}>
+                      <b style={{fontSize: 20, marginTop: 10}}> {user && user.name} - ( Admin ) 
+                        <button className="btn btn-danger ml-2"onClick={handleShowEditModal}>
                             <i className='bx bx-edit-alt' data-toggle="tooltip" 
                             data-placement="top" title="Change Password">
                             </i>
-                        </button></b>
+                        </button>
+                      </b>
                   </div>
 
                   <br />
@@ -69,27 +79,42 @@ const Profile = () => {
                   </div>
 
                   <br />
-                  <div className="d-flex justify-content-center">
-                   <span className="profile-value-bottom-border"><b>Created At : </b>{moment(user?.createdAt).format("lll")}</span>
+                    <div className="d-flex justify-content-center">
+                    <span className="profile-value-bottom-border"><b>Created At : </b>{moment(user?.createdAt).format("lll")}</span>
+                    
                   </div>
 
+                  
+
                 <Modal show={showEditModal}>
-                <form onSubmit={onFormSubmit}>
+                <form>
                    <Modal.Header>
-                        <Modal.Title>Change Password</Modal.Title>
+                        <Modal.Title>Edit Profile</Modal.Title>
                     </Modal.Header>
                     
                     <Modal.Body>
-                        <label htmlFor="oldPassword">Enter Old Password: </label>
+                    <label htmlFor="name">Name: </label>
                         <input
-                            type="password"
-                            name="oldpassword"
+                            type="input"
+                            name="name"
                             className="form-control"
-                            placeholder="Enter Old Password"
-                            value={oldpassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
+                            placeholder="Enter Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                         <br />
+
+                    <label htmlFor="name">Email Address: </label>
+                        <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            placeholder="Enter Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <br />
+
 
                         <label htmlFor="newPassword">Enter New Password</label>
                         <input
@@ -104,15 +129,14 @@ const Profile = () => {
                     </Modal.Body>
                     
                     <Modal.Footer>
-                        <button className="btn btn-primary" type="submit">Save</button>
+                        <button className="submit-btn" onClick={onFormSubmit}>Save</button>
                             
-                        <Button variant="danger" onClick={handleCloseEditModal}>Cancel</Button>
+                        <Button className="submit-btn" onClick={handleCloseEditModal}>Cancel</Button>
                     </Modal.Footer>
                     </form>
                 </Modal>
-
                 </div>
-
+                
 
                </section>     
         </Fragment>

@@ -48,10 +48,10 @@ const DashboardGraphs = () => {
         <Fragment>
             <section className="alerts-section rounded-card graph-card">
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <h5 className="title">B.P Analytics </h5>
+            <h5 className="title">B.P </h5>
               <select 
               className="form-control" 
-              style={{width: '250px'}}
+              style={{width: '180px'}}
               name="patientlist"
               value={patientId}
               onChange={(e) => setPatientId(e.target.value)}
@@ -64,7 +64,7 @@ const DashboardGraphs = () => {
 
               <select 
               className="form-control"
-              style={{width: '250px'}}
+              style={{width: '180px'}}
               onChange={e => setRecordsPerPage(e.target.value)}
               >
                 <option value="5">Last 5 Readings</option>
@@ -76,7 +76,7 @@ const DashboardGraphs = () => {
 
               <select 
                 className="form-control"
-                style={{width: '250px'}}
+                style={{width: '180px'}}
                 onChange={e => setGraphType(e.target.value)}
                 >
                 <option value="bar"> Bar Graph</option>

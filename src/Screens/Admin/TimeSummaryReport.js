@@ -317,8 +317,8 @@ const TimeSummaryReport = () => {
                                   <tr key={index}> 
                                     <td>{index + 1}</td>
                                     <td style={{wordWrap: 'break-word'}}>{summaryReport?.patientName}</td>
-                                    {summaryReport.totalReadings > 16 ? <td style={{backgroundColor: '#009150', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td> : <td style={{backgroundColor: '#9B111E', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td>}
-                                    {summaryReport?.totalMinutes < 20 ? <td style={{backgroundColor: '#9B111E', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td> : <td style={{backgroundColor: '#009150', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td>}
+                                    {summaryReport.totalReadings >= 16 ? <td style={{backgroundColor: '#009150', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td> : <td style={{backgroundColor: '#9B111E', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td>}
+                                    {summaryReport?.totalMinutes <= 20 ? <td style={{backgroundColor: '#9B111E', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td> : <td style={{backgroundColor: '#009150', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td>}
                                     <td style={{wordWrap: 'break-word'}}>{summaryReport?.Month}</td>
                                   </tr>
                                 ))}
