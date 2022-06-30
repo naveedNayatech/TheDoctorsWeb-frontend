@@ -12,6 +12,7 @@ import {
     patientActivate, 
     getDoctors,
     getHrLists,
+    getAdminStats,
     getDoctorsPatientList,
     getHrsPatientList
 } from '../../actions/adminActions';
@@ -104,7 +105,7 @@ const PatientsList = () => {
     }
 
     const activatePatient = () => {
-        dispatch(patientActivate(patientModel))
+        dispatch(patientActivate(patientModel));
     }
 
     const refreshHandler = () => {
@@ -145,7 +146,7 @@ const PatientsList = () => {
 
                         <div className="row-display">
                             
-                            <h5 className="pt-2 mt-2">Patients List <span style={{color: '#004aad'}}>( {totalPatients && totalPatients < 10 ? '0'+totalPatients : totalPatients} )</span></h5>
+                            <h5 className="pt-2 mt-2">Patients List </h5>
             
 
                             <div className="mt-2">
