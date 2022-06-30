@@ -19,7 +19,7 @@ const TargetsLogType = ({reportBy, logType, logs}) => {
                 {logs && logs.map((log, index) => (
                 <tr key={index}>
                     {reportBy === 'nurse' && logType === 'targets' ? <>
-                        <td>Pt. {log?.patient_id?.firstname} {log?.patient_id?.lastname}
+                        <td>{log?.patient_id?.firstname} {log?.patient_id?.lastname}
                             <p style={{color: 'gray'}}>{log?.patient_id?.gender}</p>
                         </td>
                         <td>Hr. {log?.hr_id?.firstname} {log?.hr_id?.lastname}</td>

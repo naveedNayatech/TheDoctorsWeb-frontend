@@ -18,7 +18,7 @@ const PatientLogType = ({ reportBy, logType, logs} ) => {
             <tbody>
             {logs && logs.map((log, index) => (
             <tr key={index}>
-                    <td>Pt. {log?.patient_id?.firstname} {log?.patient_id?.lastname}
+                    <td>{log?.patient_id?.firstname} {log?.patient_id?.lastname}
                         <p style={{color: 'gray'}}>{log?.patient_id?.gender}</p>
                     </td>
                     <td style={{wordWrap: 'break-word'}}>{log?.patient_id?.email}</td>

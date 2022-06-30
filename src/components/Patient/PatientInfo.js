@@ -61,7 +61,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                     <div className="card card-bordered-01">
                         <img src={patientProfileImg} className="img-responsive profile-card-img mt-4" alt="patientProfile" />
 
-                        <b className="mt-3">Pt. {patient?.firstname} {patient?.lastname}  </b>
+                        <b className="mt-3">{patient?.firstname} {patient?.lastname}  </b>
                         <Link to="/patientProfile" className="link" style={{marginLeft: "10%", fontSize: "14px", marginTop: "7px"}} onClick={() => sendEmail(patient?.email)}>{patient?.email}</Link>
                         <hr />
                         <>
@@ -146,7 +146,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                                                 </div>
 
                                                 <button className="btn" style={{ color: 'red' }}
-                                                onClick={() => removeAssignDevice(deviceass, patientid)}
+                                                // onClick={() => removeAssignDevice(deviceass, patientid)}
                                                 >
                                                 <i className="bx bx-trash"></i>
                                                 </button>

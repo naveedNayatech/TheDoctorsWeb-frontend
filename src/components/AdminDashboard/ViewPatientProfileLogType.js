@@ -19,7 +19,7 @@ const ViewPatientProfileLogType = ({reportBy, logType, logs}) => {
                 {logs && logs.map((log, index) => (
                 <tr key={index}>
                     {reportBy === 'doctor' && logType === 'patient' ? <>
-                        <td>Pt. {log?.patient_id?.firstname} {log?.patient_id?.lastname}
+                        <td>{log?.patient_id?.firstname} {log?.patient_id?.lastname}
                             <p style={{color: 'gray'}}>{log?.patient_id?.gender}</p>
                         </td>
                         <td>Dr. {log?.doctor_id?.firstname} {log?.doctor_id?.lastname}</td>
@@ -27,7 +27,7 @@ const ViewPatientProfileLogType = ({reportBy, logType, logs}) => {
                         <td>{log?.text}</td>
                         <td>{moment(log?.createdAt).tz('America/New_York').format("lll")} (EST)</td>
                     </> : <>
-                        <td>Pt. {log?.patient_id?.firstname} {log?.patient_id?.lastname}
+                        <td>{log?.patient_id?.firstname} {log?.patient_id?.lastname}
                             <p style={{color: 'gray'}}>{log?.patient_id?.gender}</p>
                         </td>
                         <td>HR. {log?.hr_id?.firstname} {log?.hr_id?.lastname}</td>

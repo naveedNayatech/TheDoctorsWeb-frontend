@@ -38,7 +38,7 @@ export default class MyDocument extends React.PureComponent {
                         <b>Patient Name: </b>
                     </div>
                     <div>
-                        Pt. {data?.assigned_patient_id?.firstname}  {data?.assigned_patient_id?.lastname}
+                        {data?.assigned_patient_id?.firstname}  {data?.assigned_patient_id?.lastname}
                     </div>
                 </div>
 

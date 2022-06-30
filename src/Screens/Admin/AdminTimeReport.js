@@ -271,7 +271,7 @@ const AdminTimeReport = () => {
                                       <div className="row-display">
                                           <div>
                                              <label className="profile-label">Patient Name: </label> 
-                                             <label className="report-label ml-2"> Pt. {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
+                                             <label className="report-label ml-2"> {trgt?.assigned_patient_id?.firstname} {trgt?.assigned_patient_id?.lastname}</label>
                                           </div>
  
                                           <div>
