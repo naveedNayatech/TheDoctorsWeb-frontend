@@ -51,7 +51,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
     return (
         <>
             <div className="col-md-3">
-                <h5 className="pt-2 mt-2">Patient <span style={{ color: '# ' }}>Details </span>
+                <h5 className="pt-2 mt-2">Patient <span style={{ color: '#004aad' }}>Details </span>
                 </h5>
             </div>
             <hr />
