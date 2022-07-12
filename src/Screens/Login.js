@@ -7,7 +7,7 @@ import { useAlert } from 'react-alert';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Spinner, Image } from 'react-bootstrap';
-import TDW_logo from '../assets/Images/horizontal_logo.png';
+import TDW_logo from '../assets/Images/official_logo.png';
 
 import { login, clearErrors } from '../actions/authActions'; 
 

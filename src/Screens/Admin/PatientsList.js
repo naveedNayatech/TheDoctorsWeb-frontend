@@ -276,7 +276,7 @@ const PatientsList = () => {
                                     </div>
                                 </td>
 
-                                <td>{patient?.lastReading || 'N/A'}</td>
+                                <td>{patient?.lastReading ? moment(patient?.lastReading).format("MM/DD/YYYY") : 'N/A'}</td>
                                 
                                 <td><Link to={{ pathname: "/patientProfile", state: {patientid: patient?._id}}} className="rounded-button-profile"><i className='bx bx-user'></i></Link>
                                 <Link className="rounded-button-edit" to={{pathname: '/Patients/Edit', state: {patientDetails: patient}}}><i className='bx bx-edit-alt'></i></Link>

@@ -11,11 +11,19 @@ import Loader from '../../layouts/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import moment from 'moment';
-import { Tab, Row, Col, Nav} from 'react-bootstrap';
+import { Tab, Row, Col, Nav, Image, Modal } from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import Pagination from 'react-js-pagination';
 import PatientProfileGraph from '../../components/PatientProfileGraph';
- 
+import systolicImg from '../../assets/Images/blood-pressure.png'; 
+import weightScale from '../../assets/Images/bmi.png';
+import heartRate from '../../assets/Images/heart.png';
+import o2 from '../../assets/Images/o2.png';
+import bpChartImg from '../../assets/Images/charts/BPCategories.jpg';
+import bloodGlucoseChartImg from '../../assets/Images/charts/BloodGlucoseChart.jpg';
+import heartRateChart from '../../assets/Images/charts/HeartRateChart.jpg';
+import spo2Chart from '../../assets/Images/charts/spo2Chart.jpg';
+
 
 const PatientProfile = (props) => {
 
@@ -37,7 +45,8 @@ const PatientProfile = (props) => {
     const [readingPerPage, setReadingsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [sort, sortBy] = useState(-1);
-
+    const [smShow, setSmShow] = useState(false); //charts modal
+    const [imageToShow, setImageToShow] = useState();
     
     useEffect(() => {
         if(error){
@@ -106,10 +115,50 @@ const PatientProfile = (props) => {
 
                             {deviceData && deviceData.length > 0 ? <Fragment>
                             <br/><br/>
-                        
-                            <div className="col-md-12">
-                                <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#004aad'}}>(Total Readings: {Count}) </span></h5>
+
+                                
+                            {/* Charts for Determination */}
+                            <h5 className="pt-2 mt-2">Charts for <span style={{ color: '#004aad'}}> Determination </span></h5>
+                            <hr/>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <button className="btn bpChartButton"
+                                            onClick={() => {setSmShow(true); setImageToShow(bpChartImg)}}
+                                        >
+                                        <Image src={systolicImg} style={{width: '25px', height: '25px'}} /> 
+                                         &nbsp;&nbsp;&nbsp;B.P Chart</button>
+                                    </div>
+
+                                    <div className="col-md-3">
+                                    <button className="btn bpChartButton"
+                                            onClick={() => {setSmShow(true); setImageToShow(bloodGlucoseChartImg)}}
+                                        >
+                                        <Image src={weightScale} style={{width: '25px', height: '25px'}} /> 
+                                         &nbsp;&nbsp;&nbsp;Blood Glucose Chart</button>
+                                    </div>
+
+                                    <div className="col-md-3">
+                                    <button className="btn bpChartButton"
+                                            onClick={() => {setSmShow(true); setImageToShow(heartRateChart)}}
+                                        >
+                                        <Image src={heartRate} style={{width: '25px', height: '25px'}} /> 
+                                         &nbsp;&nbsp;&nbsp; Resting Heart Rate Chart</button>
+                                    </div>
+
+                                    <div className="col-md-3">
+                                    <button className="btn bpChartButton"
+                                            onClick={() => {setSmShow(true); setImageToShow(spo2Chart)}}
+                                    >
+                                    <Image src={o2} style={{width: '25px', height: '25px'}} /> 
+                                         &nbsp;&nbsp;&nbsp;Spo2 Chart</button>
+                                    </div>
+                                </div>
                             </div>
+                            {/* Charts for determination exit */}
+                            <hr />
+                            <h5 className="pt-2 mt-2">Telemetary Data <span style={{ color: '#004aad'}}>(Total Readings: {Count}) </span></h5>
+                            
 
                             <div className="row-display patient-profile-col-heading" style={{ 
                                 padding: 10,
@@ -259,12 +308,22 @@ const PatientProfile = (props) => {
             </div>                           
         </div>
     </Fragment> 
-
-    
     }         
     </section>
-                            
-        </Fragment>
+    
+    <Modal
+        size="md"
+        show={smShow}
+        onHide={() => setSmShow(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+    >
+        <Modal.Body>
+            {/* <AddNewAdminForm onHandleClose={setSmShow} />   */}
+            <Image src={imageToShow} className="determinationChartsImages" /> 
+        </Modal.Body>
+    </Modal>
+
+    </Fragment>
     )
 }
 

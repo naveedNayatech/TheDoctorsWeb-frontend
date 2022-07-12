@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Image, ProgressBar, Badge} from 'react-bootstrap';
+import { Image, ProgressBar} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
 import { useDispatch, useSelector} from 'react-redux';
 import systolicImg from '../../assets/Images/blood-pressure.png';
@@ -212,6 +212,8 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                 </div>
             </div>
             <br />
+            
+           
 
             {/* Second Row */}
             <div className="row-display">

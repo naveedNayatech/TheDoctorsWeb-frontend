@@ -113,7 +113,7 @@ const Home = () => {
                         <div className="card card-bordered-01" style={{backgroundColor: '#E9FFF2'}}>
                             <div className="row-display">
                                 <div className="container">
-                                    <h5 className="mt-2" style={{color: '#9B111E'}}><b>Blocked <br />Patients</b></h5>
+                                    <h5 className="mt-2" style={{color: '#9B111E'}}><b>Inactive <br />Patients</b></h5>
                                     <p className="number">{blockPts < 10 ? '0'+blockPts : blockPts}</p>    
                                 </div>
                                 <img src={banIcon} alt="" width="100" height="100"/>

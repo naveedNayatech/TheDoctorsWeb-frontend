@@ -8,7 +8,7 @@ import { hrLogin, clearErrors } from '../../actions/authActions';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Spinner, Image } from 'react-bootstrap'
-import TDW_logo from '../../assets/Images/horizontal_logo.png';
+import TDW_logo from '../../assets/Images/official_logo.png';
 
 const HrLogin = ({ history }) => {
 
