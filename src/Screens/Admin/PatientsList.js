@@ -252,8 +252,8 @@ const PatientsList = () => {
                                     </td> : <td><i className='bx bxs-circle'style={{color: 'red'}}></i> <p style={{color: 'red'}}>De-Activated</p>
                                 </td>}
                                     
-                                    {patient?.assigned_doctor_id ? <>
-                                    <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
+                                {patient?.assigned_doctor_id ? <>
+                                <td style={{fontWeight: 'bold', color: '#23408e'}}>Dr.{patient?.assigned_doctor_id?.firstname} {patient?.assigned_doctor_id?.lastname}</td>
                                 </> : <>
                                 <td><Badge bg="danger text-white" className="not-assigned-tag">Not Assigned</Badge></td>
                                 </>}

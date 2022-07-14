@@ -70,8 +70,6 @@ export const commentOnReading = (readingId, hrId, comment) => async (dispatch) =
             type: ADDING_COMMENT_REQUEST
         });
 
-        const token = JSON.parse(localStorage.getItem('token'));
-
         const { data } = await axios.put(`${Prod01}/patient/commentonreading/${readingId}`, {
             conclusion_hr_id: hrId,
             conclusion: comment
@@ -90,7 +88,30 @@ export const commentOnReading = (readingId, hrId, comment) => async (dispatch) =
     }
 }
 
+export const commentOnReadingByStaff = (readingId, staffId, comment) => async (dispatch) => {
 
+    try {
+        dispatch({
+            type: ADDING_COMMENT_REQUEST
+        });
+
+        const { data } = await axios.put(`${Prod01}/patient/commentonreading/${readingId}`, {
+            conclusion_doctor_id: staffId,
+            conclusion: comment
+        });
+
+        dispatch({
+            type: ADDING_COMMENT_SUCCESS,
+            payload: data
+        });
+
+    } catch (error) {
+        dispatch({
+            type: ADDING_COMMENT_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 // Time Spent on Patient
 export const timeSpentOnPatient = (patientId, hrId, values) => async (dispatch) => {

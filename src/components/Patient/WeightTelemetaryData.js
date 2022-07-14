@@ -3,14 +3,17 @@ import weightImg from '../../assets/Images/scale.png';
 import fatImg from '../../assets/Images/fat.png';
 import bmiImg from '../../assets/Images/bmi.png';
 import { Image, Badge } from 'react-bootstrap';
-import { commentOnReading } from '../../actions/HRActions';
+import { commentOnReading, commentOnReadingByStaff } from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
 const moment = require('moment-timezone');
+import patientProfileImg from '../../assets/Images/doctorIcon.png';
+import { useAlert } from 'react-alert';
+
 
 const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const dispatch = useDispatch();
-
+    const alert = useAlert();
 
     const { hr} = useSelector(state => state.hrAuth);
     const { staff} = useSelector(state => state.staffAuth);
@@ -24,11 +27,17 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 
     const commentHandler = (readingId) => {
         if(hr?._id === undefined){
-            // console.log('Doctor is commenting')
-            dispatch(commentOnReading(readingId, staff?.id, comment));
+            if(comment.length == 0 ){
+                alert.error('You cannot add empty commment');
+                return;
+            }
+            dispatch(commentOnReadingByStaff(readingId, staff?._id, comment));
         } else {
-            // console.log('HR is commenting')
-            dispatch(commentOnReading(readingId, hr?.id, comment));
+            if(comment.length == 0 ){
+                alert.error('You cannot add empty commment');
+                return;
+            }
+            dispatch(commentOnReading(readingId, hr?._id, comment));
         }
     }
 
@@ -106,22 +115,26 @@ const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 
             {/* Comment */}
             {notes.length > 0 && notes.map((note, index) => ( <div key={index}>
+                <div className="row-display-secondary">
+                <div className="mt-3 mr-3">
+                    <img src={patientProfileImg} alt="hr/drImg" style={{width: '50px', height: '50px', borderRadius: '50%'}}/>
+                </div>
                 <div className="bubble bubble-alt bubble-green"> <p>
-                    {note?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).tz("America/New_York").format("lll")}</span> 
+                <b>{note?.conclusion_hr_id ? (<span>{note?.conclusion_hr_id?.firstname}  {note?.conclusion_hr_id?.lastname}</span>) : (<span>
+                            {note?.conclusion_doctor_id?.firstname}  {note?.conclusion_doctor_id?.lastname}
+                        </span>)}</b><br/>
+                        <p className="mt-1 mr-3">{note?.conclusion} <br/> 
+                        <p className="mt-1"><b>{moment(note?.dateTime).tz('America/New_York').format("MM-DD-YYYY")}</b></p>
+                      </p>
                     </p>
                 </div>
-                <br/><br/><br/>
+                <br/><br/><br/><br/>
             </div> 
+            </div>
             ))}
 
 
-            {/* Comment */}
-            {healthData?.conclusion ? <Fragment>
-                    <div className="bubble bubble-alt bubble-green"> <p>
-                        {healthData?.conclusion} &nbsp;&nbsp;&nbsp; <span style={{fontWeight: 'bold'}}>{healthData?.conslusionTimeDate}</span> 
-                        </p>
-                        </div>
-            </Fragment> : ''}
+           
       
       </> }
       </div>

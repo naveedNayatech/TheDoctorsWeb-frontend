@@ -358,11 +358,9 @@ const StaffPatientProfile = (props) => {
                         <Col sm={12}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                {deviceData && deviceData.map((devicedata, index) => (
+                                {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((devicedata, index) => (
                                     <div key={index}>
-                                    {deviceData && deviceData.filter(healthdata => healthdata?.deviceId?.deviceType === 'bp').map((devicedata, index) => (
-                                        <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />    
-                                    ))}
+                                        <CuffTelemetaryData healthData={devicedata} count={Count} readingsPerPage={readingPerPage} currentPage={currentPage} isAdmin={false} />
                                     </div>
                                 ))}
 

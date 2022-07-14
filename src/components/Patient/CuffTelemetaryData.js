@@ -4,8 +4,8 @@ import diastolicImg from '../../assets/Images/diastolic.png';
 import pulseImg from '../../assets/Images/pulse.png';
 import { Image, Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { commentOnReading } from '../../actions/HRActions';
-
+import { commentOnReading, commentOnReadingByStaff } from '../../actions/HRActions';
+import { useAlert } from 'react-alert';
 import patientProfileImg from '../../assets/Images/doctorIcon.png';
 
 const moment = require('moment-timezone');
@@ -13,6 +13,7 @@ const moment = require('moment-timezone');
 const CuffTelemetaryData = ({ healthData, isAdmin}) => {
     let color;
     const  dispatch = useDispatch();
+    const alert = useAlert();
 
     const { hr} = useSelector(state => state.hrAuth);
     const { staff} = useSelector(state => state.staffAuth);
@@ -26,9 +27,17 @@ const CuffTelemetaryData = ({ healthData, isAdmin}) => {
 
     const commentHandler = (readingId) => {
         if(hr?._id === undefined){
-            dispatch(commentOnReading(readingId, staff?.id, comment));
+            if(comment.length == 0 ){
+                alert.error('You cannot add empty commment');
+                return;
+            }
+            dispatch(commentOnReadingByStaff(readingId, staff?._id, comment));
         } else {
-            dispatch(commentOnReading(readingId, hr?.id, comment));
+            if(comment.length == 0 ){
+                alert.error('You cannot add empty commment');
+                return;
+            }
+            dispatch(commentOnReading(readingId, hr?._id, comment));
         }
     }
 
@@ -153,6 +162,16 @@ const CuffTelemetaryData = ({ healthData, isAdmin}) => {
             } 
         }
 
+        function convertUTCDateToLocalDate(date) {
+            var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+        
+            var offset = date.getTimezoneOffset() / 60;
+            var hours = date.getHours();
+        
+            newDate.setHours(hours - offset);
+        
+            return newDate;   
+        }
     
 
   return <Fragment>
@@ -243,8 +262,14 @@ const CuffTelemetaryData = ({ healthData, isAdmin}) => {
                     <div className="mt-3 mr-3">
                         <img src={patientProfileImg} alt="hr/drImg" style={{width: '50px', height: '50px', borderRadius: '50%'}}/>
                     </div>
-                    <div className="bubble bubble-alt"> <p className="mr-3"> 
-                        {note?.conclusion} <br/> <span style={{fontWeight: 'bold'}}>{moment(note?.dateTime).tz('America/New_York').format("ll")}</span> 
+                    <div className="bubble bubble-alt">  
+                        
+                        <b>{note?.conclusion_hr_id ? (<span>{note?.conclusion_hr_id?.firstname}  {note?.conclusion_hr_id?.lastname}</span>) : (<span>
+                            {note?.conclusion_doctor_id?.firstname}  {note?.conclusion_doctor_id?.lastname}
+                        </span>)}</b><br/>
+                                               
+                        <p className="mt-1 mr-3">{note?.conclusion} <br/> 
+                         <p className="mt-1"><b>{moment(note?.dateTime).tz("America/New_York").format("MM-DD-YYYY")}</b></p>
                         </p>
                     </div>
                 </div>
