@@ -1,6 +1,5 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import { CSVLink } from 'react-csv'
-const moment = require('moment-timezone');
 
 const ExportSummaryReportToCSV = ({csvData, fileName}) => {
 
@@ -11,6 +10,7 @@ const ExportSummaryReportToCSV = ({csvData, fileName}) => {
             'Total Readings':report?.totalReadings,
             'Total Minutes': report?.totalMinutes,
             'Month': report?.Month,
+            'Category': report?.category == true ? 'CCM' : 'RPM' 
         }
     })
 

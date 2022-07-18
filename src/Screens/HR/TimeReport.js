@@ -23,6 +23,7 @@ const TimeReport = () => {
     const {  error, hrpatients} = useSelector(state => state.hrPatients);
     const {  loading, targets, totalTime} = useSelector(state => state.target);
 
+
     let id = hr._id;
 
     useEffect(() => {

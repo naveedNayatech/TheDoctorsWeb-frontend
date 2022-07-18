@@ -25,8 +25,9 @@ const TimeSummaryReport = () => {
   const [doctorId, setDoctorId] = useState("");
   const [hrId, sethrId] = useState("");
 
-  const [month, setMonth] = useState('06');
+  const [month, setMonth] = useState('07');
   const [year, setYear] = useState('2022');
+  const [category, setCategory] = useState('RPM');
 
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const TimeSummaryReport = () => {
       alert.error('Please select month');
       return;
     } else {
-      dispatch(getTimeSummaryReportByDoctor(doctorId, month, year));
+      dispatch(getTimeSummaryReportByDoctor(doctorId, month, year, category));
     }
   }
 
@@ -83,7 +84,7 @@ const TimeSummaryReport = () => {
       alert.error('Please select month');
       return;
     } else {
-      dispatch(getTimeSummaryReportByHR(hrId, month, year));
+      dispatch(getTimeSummaryReportByHR(hrId, month, year, category));
     }
   }
 
@@ -130,8 +131,8 @@ const TimeSummaryReport = () => {
                 <span className="notes-header"><b>Note: </b> Please select doctor, start date and end date to generate report.</span>
                 
                 <div className="row-display">
-                <div className="col-md-4 mt-4">
-                <label>Select Doctor  <span style={{color: '#004aad'}}> *</span>  </label>
+                <div className="col-md-3 mt-4">
+                <label className="form-label">Select Doctor  <span style={{color: '#004aad'}}> *</span>  </label>
                 <Select
                     options={doctorOptions}
                     onChange={getDoctorProfile}
@@ -139,8 +140,8 @@ const TimeSummaryReport = () => {
                 />
                 </div>
 
-                <div className="col-md-3 mt-4">
-                    <label>Month  <span style={{color: '#004aad'}}> *</span>  </label>
+                <div className="col-md-2 mt-4">
+                    <label className="form-label">Month  <span style={{color: '#004aad'}}> *</span>  </label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -162,8 +163,8 @@ const TimeSummaryReport = () => {
                     </select>
                 </div>
 
-                <div className="col-md-3 mt-4">
-                    <label>Year <span style={{color: '#004aad'}}> *</span></label>
+                <div className="col-md-2 mt-4">
+                    <label className="form-label">Year <span style={{color: '#004aad'}}> *</span></label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -175,7 +176,14 @@ const TimeSummaryReport = () => {
                       <option value="2024">2024</option>
                       <option value="2025">2025</option>
                     </select>
-                        
+                </div>
+
+                <div className="col-md-2 mt-4">
+                    <label className="form-label">Category <span style={{color: '#004aad'}}> *</span></label>
+                    <select className="form-control" value={category} onChange={e => setCategory(e.target.value)}>
+                      <option value="RPM">RPM Category</option>
+                      <option value="CCM">CCM Category</option>
+                    </select>
                 </div>
 
                 <div className="col-md-3 mt-4">
@@ -187,8 +195,8 @@ const TimeSummaryReport = () => {
                 <span className="notes-header"><b>Note: </b> Please select HR, start date and end date to generate report.</span>
                 
                 <div className="row-display">
-                <div className="col-md-4 mt-4">
-                <label>Select HR  <span style={{color: '#004aad'}}> *</span>  </label>
+                <div className="col-md-3 mt-4">
+                <label className="form-label">Select HR  <span style={{color: '#004aad'}}> *</span>  </label>
                 <Select
                     options={hrOptions}
                     onChange={getHRProfile}
@@ -196,8 +204,8 @@ const TimeSummaryReport = () => {
                 />
                 </div>
 
-                <div className="col-md-3 mt-4">
-                <label>Month  <span style={{color: '#004aad'}}> *</span>  </label>
+                <div className="col-md-2 mt-4">
+                <label className="form-label">Month  <span style={{color: '#004aad'}}> *</span>  </label>
                     <select 
                       name="month" 
                       className="form-control"
@@ -219,8 +227,8 @@ const TimeSummaryReport = () => {
                     </select>
                 </div>
 
-                <div className="col-md-3 mt-4">
-                <label>Year <span style={{color: '#004aad'}}> *</span></label>
+                <div className="col-md-2 mt-4">
+                <label className="form-label">Year <span style={{color: '#004aad'}}> *</span></label>
                     <select 
                        name="month" 
                        className="form-control"
@@ -234,8 +242,17 @@ const TimeSummaryReport = () => {
                     </select>
                 </div>
 
+                <div className="col-md-2 mt-4">
+                    <label className="form-label">Category <span style={{color: '#004aad'}}> *</span></label>
+                    <select className="form-control" value={category} onChange={e => setCategory(e.target.value)}>
+                      <option value="RPM">RPM Category</option>
+                      <option value="CCM">CCM Category</option>
+                    </select>
+                </div>
+
+
                 <div className="col-md-3 mt-4">
-                    <label>Action</label>
+                    <label className="form-label">Action</label>
                     <button className="submit-btn" onClick={generateTimeSummaryByHR}>Generate</button>
                 </div>
                 </div>
@@ -311,6 +328,7 @@ const TimeSummaryReport = () => {
                                 <th>Total Readings Received </th>
                                 <th>Total Minutes</th>
                                 <th>Month</th>
+                                <th>Category</th>
                                 </tr>
 
                                 {timeSummaryReport && timeSummaryReport.map((summaryReport, index) => (
@@ -320,6 +338,7 @@ const TimeSummaryReport = () => {
                                     {summaryReport.totalReadings >= 16 ? <td style={{backgroundColor: '#009150', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td> : <td style={{backgroundColor: '#9B111E', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td>}
                                     {summaryReport?.totalMinutes <= 20 ? <td style={{backgroundColor: '#9B111E', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td> : <td style={{backgroundColor: '#009150', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td>}
                                     <td style={{wordWrap: 'break-word'}}>{summaryReport?.Month}</td>
+                                    <td style={{fontWeight: 'bold'}}>{summaryReport?.category == true ? 'CCM' : 'RPM'}</td>
                                   </tr>
                                 ))}
                             </thead>

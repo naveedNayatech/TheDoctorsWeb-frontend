@@ -1,10 +1,10 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import clockImg from '../../assets/Images/clockImg.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { ProgressBar, Modal, Button, Image } from 'react-bootstrap';
+import { Modal, Button, Image } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import TextField from '../../components/Form/TextField';
-import { carePlanOfPatient, hrTimeSpentOfCurrentMonth, timeSpentOnPatient, getTimeReport } from '../../actions/HRActions';
+import { carePlanOfPatient, hrTimeSpentOfCurrentMonth, hrTimeSpentOfCurrentMonthinCCMCategory, getTimeReport } from '../../actions/HRActions';
 import { getRemainingReadings} from '../../actions/adminActions';
 import moment from 'moment';
 import { ADDING_CARE_PLAN_RESET, ADDING_TIME_SPENT_RESET } from '../../constants/HRConstants';
@@ -14,6 +14,9 @@ import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import hrIcon from '../../assets/Images/network.png';
+import AddTimeManually from '../../components/HR/AddTimeManually';
+import RPMMinutesProgress from '../../components/HR/RPMMinutesProgress';
+import CCMMinutesProgress from '../../components/HR/CCMMinutesProgress';
 
 
 const HRPatientInfo = ({patient, telemetaryReadings}) => {
@@ -35,6 +38,7 @@ const [readingsInDay, setReadingsInDay] = useState('');
 const [readingsInNight, setReadingsInNight] = useState('');
 const [readingsPerMonth, setReadingsPerMonth] = useState('');
 const [fileName, setFileName] = useState({});
+const [minutesCategory, setMinutesCategory] = useState('RPM');
 
 
 
@@ -46,12 +50,14 @@ const [addTimeShow, setAddTimeShow] = useState(false);
 
  const { careplan } = useSelector(state => state.careplan);
  const { totalTime } = useSelector(state => state.totalTimeSpent);
+ const { totalTimeinCCM } = useSelector(state => state.totalTimeSpentInCCM);
  const {isSuccessful, carePlanAdded, error: careplanerror } = useSelector(state => state.timeSpent);
  const { count } = useSelector(state => state.readingsCount);
  const {hr} = useSelector(state => state.hrAuth); 
  const {  loading, targets} = useSelector(state => state.target);
  let hrId = hr?._id;
  let patientid = patient?._id;
+
 
  let startDate = moment().clone().startOf('month').format('YYYY-MM-DD');
  let endDate = moment().clone().endOf('month').format('YYYY-MM-DD');
@@ -77,7 +83,8 @@ const [addTimeShow, setAddTimeShow] = useState(false);
     }
 
     // dispatch(getPatientCarePlan(patientid));
-    dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
+    dispatch(hrTimeSpentOfCurrentMonth(patientid, hrId, startDate, endDate));
+    dispatch(hrTimeSpentOfCurrentMonthinCCMCategory(patientid, hrId, startDate, endDate));
     dispatch(getRemainingReadings(patientid));
     dispatch(getTimeReport(patientid, startDate, endDate));
 
@@ -111,12 +118,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
             fileName))
         }
 
-    const submitTimeSpent = (values) => {
-        if(values.timespent === ''){
-            return
-        } 
-        dispatch(timeSpentOnPatient(patient?._id, hr?._id ,values));
-    }
+    
 
     const sendEmail = (email) => {
         window.open(`mailto:${email}`)
@@ -136,10 +138,6 @@ const [addTimeShow, setAddTimeShow] = useState(false);
             
             <h5 className="pt-2 pl-2 mt-2">{patient?.firstname} {patient?.lastname}<span style={{ color: '#004aad'}}> Details </span></h5>
         
-            <div>
-                <img src={clockImg} className="img-responsive" width="50" height="50"/>
-                <small className="total-time-spent">{totalTime} mins spent in month of <span style={{color: '#004aad'}}>{currMonthName}</span> </small>
-            </div>
 
             <div className="row-display">    
                 {careplan ? <Fragment>
@@ -148,7 +146,7 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                     </div>
                 </Fragment> : <Fragment>
                     <div>
-                        <button className="manage_logs_btn mt-2" onClick={handleCarePlanModalShow}><i className='bx bxs-paper-plane' ></i> Add Careplan</button>
+                        <button disabled className="manage_logs_btn mt-2" onClick={handleCarePlanModalShow}><i className='bx bxs-paper-plane' ></i> Add Careplan</button>
                     </div>    
                 </Fragment>}
 
@@ -156,8 +154,21 @@ const [addTimeShow, setAddTimeShow] = useState(false);
             </div>
 
             </div>
-            <br/><br/>
-    
+            <br/>
+            
+            <div className="container row">
+                <div className="row-display card timeSpentCard">
+                    <img src={clockImg} className="img-responsive" width="50" height="50"/>
+                    <small className="total-time-spent">{totalTime} mins spent in RPM Category in <span style={{color: '#004aad'}}>{currMonthName}</span> </small>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div className="row-display card timeSpentCard">
+                    <img src={clockImg} className="img-responsive" width="50" height="50"/>
+                    <small className="total-time-spent">{totalTimeinCCM} mins spent in CCM Category in <span style={{color: '#004aad'}}>{currMonthName}</span> </small>
+                </div>
+            </div>
+            <br />
+
             <div className="row container">
                 <div className="col-md-3">
                 <div className="card card-bordered-01">
@@ -269,34 +280,22 @@ const [addTimeShow, setAddTimeShow] = useState(false);
                 <div className="card card-bordered pt-3 col-md-3 ">
                     <span style={{color: '#FFF'}}>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
                     <hr />
+                    
+                    <select className="form-control" value={minutesCategory} onChange={e => setMinutesCategory(e.target.value)}>
+                        <option value="RPM">RPM Category</option>
+                        <option value="CCM">CCM Category</option>
+                    </select>
+                    <br/>
+
 
                     <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
                     <hr />
-
-                    <small>99454 : {count} / 16 days</small>
-                    <ProgressBar min="0" max="16" variant='primary' label={(count / 16) * 100 + "%"} now={count} />
-
-                    <br />
-
-                    {totalTime >=0 && totalTime <= 20 ? <>
-                        <small><b>99457 : </b> {totalTime} / 20 mins</small>
-                        <ProgressBar animated min="0" max="20" variant='info' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
-                    </> : <>
-                    <small><b>99457 : </b> 20 / 20 mins</small>
-                        <ProgressBar animated min="0" max="20" variant='info' label="100%" now="20" />
-                    </>}
-                     
-
-                    <br />
-                    {totalTime >=21 ? <>
-                        <small><b>99458 : </b> {totalTime > 40 ? "40" : totalTime} / 40 mins</small>
-                        <ProgressBar animated min="21" max="40" variant='success' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
-                    </> : <>
-                    <small><b>99458 : </b> 0 / 40 mins</small>
-                        <ProgressBar animated min="21" max="40" variant='dangar' now="21" />
-                    </>}
+                    {minutesCategory === 'RPM' ? <RPMMinutesProgress count={count} totalTime={totalTime} /> 
+                    : 
+                    <CCMMinutesProgress totalTimeinCCM={totalTimeinCCM}/>
+                    }
                     
-                    <p style={{marginTop: "14px", fontSize:"12px"}}>Total {totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
+
                 </div>
                 </div> {/* first row ends here */}
 
@@ -479,46 +478,14 @@ const [addTimeShow, setAddTimeShow] = useState(false);
         {/* Careplan Modal ends here*/}
 
          {/* Time spent Modal */}
-         <Modal show={addTimeShow} onHide={handleClose}>
+         <Modal size="md" show={addTimeShow} onHide={handleClose}>
          <Modal.Header >
-            <Modal.Title>Add Time (Manually)</Modal.Title> 
+            <Modal.Title>Add Time Manually</Modal.Title> 
             <Button variant="danger" onClick={handleClose}><i className='bx bx-x'></i></Button>
          </Modal.Header>
 
             <Modal.Body>
-                <Formik initialValues={{
-                    timeSpent: '',
-                    colclusion: '', 
-                }}
-                onSubmit={values => {
-                    submitTimeSpent(values)
-                }}
-                >
-                { formik => (
-                    <div>
-                        <Form>
-                            <TextField 
-                                label="Time Spent (In Mins)" 
-                                name="timespent" 
-                                type="text" 
-                                placeholder="Time Spent"
-                            />
-                            <small style={{color: 'red', fontSize: '12px'}}>Note: Time should not be greater than 30 mins </small>
-                            
-                            <TextField 
-                                label="Conclusion" 
-                                name="conclusion" 
-                                type="text"	
-                                placeholder="Type your conclusion here .... "
-                            />
-
-                        <div className="row-class" style={{justifyContent: 'space-between'}}>
-                            <button className="reset-btn ml-3" type="submit">Submit</button>
-                        </div>
-                        </Form>
-                    </div>
-                )}   
-                </Formik>   
+                <AddTimeManually hrId={hrId} patientId={patientid} />   
             </Modal.Body>
         </Modal>
         {/* Time spent Modal ended here */}

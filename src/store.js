@@ -34,6 +34,8 @@ import {doctorTelemetaryReportReducer} from './reducers/adminReducers';
 import { timeSummaryReportReducer } from './reducers/adminReducers';
 import {searchLogReducer} from './reducers/adminReducers';
 import {adminsListReducers} from './reducers/adminReducers';
+import {timeSpentCurrentMonthinCCMReducer} from './reducers/HRReducers';
+
 
 // COMMON REDUCERS
 import { commonReducers } from './reducers/Common';
@@ -61,6 +63,7 @@ const reducer = combineReducers({
     initialMonthReport:initialMonthReportReducers,
     adminNoti: adminNotificationsReducers,
     totalTimeSpent: timeSpentCurrentMonthReducer,
+    totalTimeSpentInCCM:timeSpentCurrentMonthinCCMReducer,
     completeCP : patientCPReportReducers,
     inventoryStats: inventoryStatsReducers,
     hrNoti: hrNotificationsReducers,
@@ -81,7 +84,7 @@ const middleware = [thunk];
 
 // const store = createStore(reducer, initialState, disableReactDevTools(applyMiddleware(...middleware)))
 
-let mode = "deve"
+let mode = "production"
 const devTools =
   mode === "production"
     ? applyMiddleware(...middleware)

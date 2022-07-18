@@ -14,8 +14,10 @@ const HRSummaryReport = () => {
 
   const alert = useAlert();
   const dispatch = useDispatch();
-  const [month, setMonth] = useState('06');
+  const [month, setMonth] = useState('07');
   const [year, setYear] = useState('2022');
+  const [category, setCategory] = useState('RPM');
+
 
   const { hr } = useSelector(state => state.hrAuth);
   const {loading, timeSummaryReport} = useSelector(state => state.summaryReport);
@@ -28,7 +30,7 @@ const HRSummaryReport = () => {
       alert.error('Please select month');
       return;
     } else {
-      dispatch(getTimeSummaryReportByHR(hr?._id, month, year));
+      dispatch(getTimeSummaryReportByHR(hr?._id, month, year,category));
     }
   }
 
@@ -93,6 +95,14 @@ const HRSummaryReport = () => {
                                   <option value="2024">2024</option>
                                   <option value="2025">2025</option>
                                 </select>              
+                            </div>
+                          
+                            <div className="col-md-3 mt-4">
+                            <label>Category <span style={{color: '#004aad'}}> *</span></label>
+                              <select className="form-control" value={category} onChange={e => setCategory(e.target.value)}>
+                                <option value="RPM">RPM Category</option>
+                                <option value="CCM">CCM Category</option>
+                              </select>
                             </div>
 
                             <div className="col-md-3 mt-4">
@@ -171,6 +181,7 @@ const HRSummaryReport = () => {
                                 <th>Total Readings Received </th>
                                 <th>Total Minutes</th>
                                 <th>Month</th>
+                                <th>Category</th>
                                 </tr>
 
                                 {timeSummaryReport && timeSummaryReport.map((summaryReport, index) => (
@@ -180,6 +191,7 @@ const HRSummaryReport = () => {
                                     {summaryReport.totalReadings > 16 ? <td style={{backgroundColor: '#009150', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td> : <td style={{backgroundColor: '#9B111E', color: '#FFF', wordWrap: 'break-word'}}>{summaryReport?.totalReadings}</td>}
                                     {summaryReport?.totalMinutes < 20 ? <td style={{backgroundColor: '#9B111E', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td> : <td style={{backgroundColor: '#009150', color: '#FFF'}}>{summaryReport?.totalMinutes} mins</td>}
                                     <td style={{wordWrap: 'break-word'}}>{summaryReport?.Month}</td>
+                                    <td style={{fontWeight: 'bold'}}>{summaryReport?.category == true ? 'CCM' : 'RPM'}</td>
                                   </tr>
                                 ))}
                             </thead>

@@ -1,26 +1,34 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import patientProfileImg from '../../assets/Images/patientProfile.png';
-import { Image, ProgressBar} from 'react-bootstrap';
+import { Image} from 'react-bootstrap';
 import { removeAssignedDevice} from '../../actions/adminActions';
 import { useDispatch, useSelector} from 'react-redux';
 import systolicImg from '../../assets/Images/blood-pressure.png';
-import { hrTimeSpentOfCurrentMonth } from '../../actions/HRActions';
+import { hrTimeSpentOfCurrentMonth, hrTimeSpentOfCurrentMonthinCCMCategory } from '../../actions/HRActions';
 import { searchAdminLogsByPatient } from '../../actions/adminActions';
 const moment = require('moment-timezone');
 import { Link } from 'react-router-dom';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import hrIcon from '../../assets/Images/network.png';
+import RPMMinutesProgress from '../../components/HR/RPMMinutesProgress';
+import CCMMinutesProgress from '../../components/HR/CCMMinutesProgress';
 
 const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
 
     const dispatch = useDispatch();
 
+    const [minutesCategory, setMinutesCategory] = useState('RPM');
+    
     const removeAssignDevice = (device, patientid) => {
         dispatch(removeAssignedDevice(device, patientid));
     }
+
     const { totalTime } = useSelector(state => state.totalTimeSpent);
     const { loading, logs } = useSelector(state => state.searchLogResult);
+    const { totalTimeinCCM } = useSelector(state => state.totalTimeSpentInCCM);
 
+    let startDate = moment().clone().startOf('month').format('YYYY-MM-DD');
+   let endDate = moment().clone().endOf('month').format('YYYY-MM-DD');
 
     useEffect(() => {
         var check = moment(new Date(), 'YYYY/MM/DD');
@@ -29,8 +37,8 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
         month = Number(month)
         var year = check.format('YYYY');
         
-        dispatch(hrTimeSpentOfCurrentMonth(patient?._id, patient?.assigned_hr_id?._id, `${year}-${month}-01`, `${year}-${month=month+1}-01`));
-
+        dispatch(hrTimeSpentOfCurrentMonth(patient?._id, patient?.assigned_hr_id?._id, startDate, endDate));
+        dispatch(hrTimeSpentOfCurrentMonthinCCMCategory(patient?._id, patient?.assigned_hr_id?._id, startDate, endDate));
         dispatch(searchAdminLogsByPatient(patientid));
 
     }, [])
@@ -180,35 +188,19 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                     <span>Monthly Target ( {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})} )</span>
                     <hr className="white-hr"/>
 
-                    <small>RPM Status: <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
+                    <select className="form-control" value={minutesCategory} onChange={e => setMinutesCategory(e.target.value)}>
+                        <option value="RPM">RPM Category</option>
+                        <option value="CCM">CCM Category</option>
+                    </select>
+                    <br/>
+
+                    <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
                     <hr />
+                    {minutesCategory === 'RPM' ? <RPMMinutesProgress count={count} totalTime={totalTime} /> 
+                    : 
+                    <CCMMinutesProgress totalTimeinCCM={totalTimeinCCM} />
+                    }
 
-                    {/* <small>99453 : Setup DOS - 16/8/2022 </small> */}
-                    
-                    <small>99454 : {count} / 16 days</small>
-                    <ProgressBar min="0" max="16" variant='primary' label={(count / 16) * 100 + "%"} now={count} />
-
-                    <br />
-
-                    {totalTime >=0 && totalTime <= 20 ? <>
-                        <small>99457 :  {totalTime} / 20 mins</small>
-                        <ProgressBar min="0" max="20" variant='primary' label={(totalTime / 20) * 100 + "%"} now={totalTime} />
-                    </> : <>
-                    <small> 99457 : 20 / 20 mins</small>
-                        <ProgressBar min="0" max="20" variant='primary' label="100%" now="20" />
-                    </>}
-                     
-
-                    <br />
-                    {totalTime >=21 ? <>
-                        <small>99458 :  {totalTime > 40 ? "40" : totalTime} / 40 mins</small>
-                        <ProgressBar min="21" max="40" variant='primary' label={totalTime > 40 ? "100%" : (totalTime / 40) * 100 + "%"} now={totalTime} />
-                    </> : <>
-                    <small>99458 :  0 / 40 mins</small>
-                        <ProgressBar min="21" max="40" variant='primary' now="21" />
-                    </>}
-                    
-                    <p style={{marginTop: "14px", fontSize:"12px"}}>Total {totalTime || 0} Mins - Month of {new Date().toLocaleString('en-us',{month:'short', year:'numeric'})}</p>
                 </div>
             </div>
             <br />

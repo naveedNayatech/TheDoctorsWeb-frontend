@@ -33,6 +33,8 @@ import {
     GET_CAREPLAN_LIST_REQUEST,
     GET_CAREPLAN_LIST_SUCCESS,
     GET_CAREPLAN_LIST_FAIL,
+    TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_SUCCESS,
+    TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_FAIL,
     CLEAR_ERRORS
 } from '../constants/HRConstants';
 
@@ -114,13 +116,33 @@ export const commentOnReadingByStaff = (readingId, staffId, comment) => async (d
 }
 
 // Time Spent on Patient
-export const timeSpentOnPatient = (patientId, hrId, values) => async (dispatch) => {
+export const timeSpentOnPatient = (patientId, hrId, isCCM, minutes, values) => async (dispatch) => {
+    const {startDate, endDate, startTime, endTime, conclusion} = values;
+    let data = {};
     try {
-        const { data } = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
-            assigned_patient_id: patientId,
-            timeSpentInMinutes: values.timespent,
-            conclusion: values.conclusion
-        });
+        if(isCCM == false){
+             data = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
+                assigned_patient_id: patientId,
+                startDate: startDate,
+                endDate: endDate,
+                startTime: startTime,
+                endTime: endTime,
+                timeSpentInMinutes: minutes,
+                conclusion: conclusion
+            });
+        } else {
+            data = await axios.post(`${Prod01}/hr/addtimeforpatient/${hrId}`, {
+                assigned_patient_id: patientId,
+                startDate: startDate,
+                endDate: endDate,
+                startTime: startTime,
+                endTime: endTime,
+                isCCM:isCCM,
+                timeSpentInMinutes: minutes,
+                conclusion: conclusion
+            });
+        }
+        
 
         dispatch({
             type: ADDING_TIME_SPENT_SUCCESS,
@@ -291,6 +313,29 @@ export const hrTimeSpentOfCurrentMonth = (patientId, hrId, startDate, endDate) =
     } catch (error) {
         dispatch({
             type: TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+export const hrTimeSpentOfCurrentMonthinCCMCategory = (patientId, hrId, startDate, endDate) => async (dispatch) => {
+    try {
+
+        const { data } = await axios.post(`${Prod01}/hr/listtargets&totaltimeofCCMCategory`, {
+            hrId: hrId,
+            patientId: patientId,
+            startDate: startDate,
+            endDate: endDate
+        });
+
+        dispatch({
+            type: TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_FAIL,
             payload: error.message
         })
     }

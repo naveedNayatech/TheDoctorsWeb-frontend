@@ -1579,8 +1579,7 @@ export const getPatientTelemetaryReport = (patientId, startDate, endDate) => asy
     }   
 }
 
-export const getTimeSummaryReportByDoctor = (doctorId, month, year) => async(dispatch) => {
-    
+export const getTimeSummaryReportByDoctor = (doctorId, month, year, category) => async(dispatch) => {
     try {
        dispatch({ 
            type: TIME_SUMMARY_REPORT_REQUEST
@@ -1590,8 +1589,11 @@ export const getTimeSummaryReportByDoctor = (doctorId, month, year) => async(dis
         drId: doctorId,
         month: month,
         year: year,
+        category: category == 'RPM' ? null : true
         });
-   
+        
+        // if category is RPM, its mean isCCM is null otherwise it is true.
+
        dispatch({
            type: TIME_SUMMARY_REPORT_SUCCESS,
            payload: data
@@ -1605,7 +1607,7 @@ export const getTimeSummaryReportByDoctor = (doctorId, month, year) => async(dis
     }   
 }
 
-export const getTimeSummaryReportByHR = (hrId, month, year) => async(dispatch) => {
+export const getTimeSummaryReportByHR = (hrId, month, year, category) => async(dispatch) => {
     
     try {
        dispatch({ 
@@ -1616,6 +1618,7 @@ export const getTimeSummaryReportByHR = (hrId, month, year) => async(dispatch) =
         hrId: hrId,
         month: month,
         year: year,
+        category: category == 'RPM' ? null : true
         });
    
        dispatch({

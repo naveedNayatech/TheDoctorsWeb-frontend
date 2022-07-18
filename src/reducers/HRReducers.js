@@ -27,6 +27,8 @@ import {
     UPDATE_CARE_PLAN_RESET,
     TIME_SPENT_OF_CURRENT_MONTH_SUCCESS,
     TIME_SPENT_OF_CURRENT_MONTH_FAIL,
+    TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_SUCCESS,
+    TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_FAIL,
     PATIENT_CP_REPORT_REQUEST,
     PATIENT_CP_REPORT_SUCCESS,
     PATIENT_CP_REPORT_FAIL,
@@ -316,6 +318,31 @@ export const timeSpentCurrentMonthReducer = (state={totalTime:0 }, action) => {
             }
         
         case TIME_SPENT_OF_CURRENT_MONTH_FAIL: 
+        return {
+            ...state,
+            loading: false,
+            error: action.payload
+        }
+
+        case CLEAR_ERRORS: 
+         return {
+            ...state,
+            error: null   
+         }
+         
+    default: 
+    return state;
+    }
+}
+
+export const timeSpentCurrentMonthinCCMReducer = (state={totalTimeinCCM:0 }, action) => {
+    switch (action.type) {
+        case TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_SUCCESS:
+            return {
+                totalTimeinCCM: action.payload.totalTime
+            }
+        
+        case TIME_SPENT_OF_CURRENT_MONTH_IN_CCM_FAIL: 
         return {
             ...state,
             loading: false,
