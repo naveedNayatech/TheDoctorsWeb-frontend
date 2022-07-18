@@ -134,7 +134,7 @@ const Admins = () => {
                         <Modal.Header>
                             Add New Admin
                         </Modal.Header>
-
+                        
                         <Modal.Body>
                             <AddNewAdminForm onHandleClose={setSmShow} />  
                         </Modal.Body>
