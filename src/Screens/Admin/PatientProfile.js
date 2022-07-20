@@ -25,6 +25,7 @@ import heartRateChart from '../../assets/Images/charts/HeartRateChart.jpg';
 import spo2Chart from '../../assets/Images/charts/spo2Chart.jpg';
 
 
+
 const PatientProfile = (props) => {
 
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const PatientProfile = (props) => {
         
         
         if(isUpdated) {
-            alert.success('Updated Successfully');
+            alert.success('Updated Successfully'); 
         }
 
     }, [dispatch, alert, error, isUpdated, currentPage, sort]);

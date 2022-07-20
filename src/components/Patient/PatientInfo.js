@@ -14,6 +14,9 @@ import CCMMinutesProgress from '../../components/HR/CCMMinutesProgress';
 const moment = require('moment-timezone');
 
 
+const moment = require('moment-timezone');
+
+
 const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
 
     const dispatch = useDispatch();

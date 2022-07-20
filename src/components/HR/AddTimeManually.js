@@ -42,7 +42,7 @@ const AddTimeManually = ({hrId, patientId}) => {
                 }
                 dispatch(timeSpentOnPatient(patientId, hrId, isCCM, minutes, values));       
             } 
-    }
+        }
 
   return (
     <>
