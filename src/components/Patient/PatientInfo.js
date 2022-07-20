@@ -6,12 +6,13 @@ import { useDispatch, useSelector} from 'react-redux';
 import systolicImg from '../../assets/Images/blood-pressure.png';
 import { hrTimeSpentOfCurrentMonth, hrTimeSpentOfCurrentMonthinCCMCategory } from '../../actions/HRActions';
 import { searchAdminLogsByPatient } from '../../actions/adminActions';
-const moment = require('moment-timezone');
 import { Link } from 'react-router-dom';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import hrIcon from '../../assets/Images/network.png';
 import RPMMinutesProgress from '../../components/HR/RPMMinutesProgress';
 import CCMMinutesProgress from '../../components/HR/CCMMinutesProgress';
+const moment = require('moment-timezone');
+
 
 const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
 
@@ -24,23 +25,22 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
     }
 
     const { totalTime } = useSelector(state => state.totalTimeSpent);
-    const { loading, logs } = useSelector(state => state.searchLogResult);
+    const { logs } = useSelector(state => state.searchLogResult);
     const { totalTimeinCCM } = useSelector(state => state.totalTimeSpentInCCM);
 
     let startDate = moment().clone().startOf('month').format('YYYY-MM-DD');
    let endDate = moment().clone().endOf('month').format('YYYY-MM-DD');
 
     useEffect(() => {
-        var check = moment(new Date(), 'YYYY/MM/DD');
+        // var check = moment(new Date(), 'YYYY/MM/DD');
 
-        let month = check.format('M');
-        month = Number(month)
-        var year = check.format('YYYY');
+        // let month = check.format('M');
+        // month = Number(month)
+        // var year = check.format('YYYY');
         
         dispatch(hrTimeSpentOfCurrentMonth(patient?._id, patient?.assigned_hr_id?._id, startDate, endDate));
         dispatch(hrTimeSpentOfCurrentMonthinCCMCategory(patient?._id, patient?.assigned_hr_id?._id, startDate, endDate));
         dispatch(searchAdminLogsByPatient(patientid));
-
     }, [])
 
     const sendEmail = (email) => {
@@ -145,22 +145,28 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
 
                                 {patient?.assigned_devices && patient?.assigned_devices.map((deviceass, index) => (
                                     <div key={index}>
-                                        <Link className="link" to="/devices">
                                         <div style={{padding: '5px', marginTop: '5px'}}>
                                             <div className="row-display">
                                                 <div style={{marginLeft: '30px'}}>
-                                                <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
-                                                <small><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
+                                                <Link className="link" to="/devices">    
+                                                    <small>IMEI: {deviceass?.deviceObjectId?.imei}</small>
+                                                    <small><br />Type: {deviceass?.deviceObjectId?.deviceType}</small> 
+                                                </Link>
                                                 </div>
+                                                
+                                                <button className="btn" style={{ color: 'blue' }}
+                                                 onClick={() => {navigator.clipboard.writeText(deviceass?.deviceObjectId?.imei)}}
+                                                >
+                                                <i className="bx bx-copy"></i>
+                                                </button>
 
                                                 <button className="btn" style={{ color: 'red' }}
-                                                // onClick={() => removeAssignDevice(deviceass, patientid)}
+                                                 onClick={() => removeAssignDevice(deviceass, patientid)}
                                                 >
                                                 <i className="bx bx-trash"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        </Link>
                                     </div>
                                     ))}
                                     </>}
@@ -194,7 +200,7 @@ const PatientInfo = ({patient,patientid, telemetaryReadings, count}) => {
                     </select>
                     <br/>
 
-                    <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent == true ? "Active" : "In-Active"}</span></small> 
+                    <small><b>RPM Status: </b> <span className="activeRPMStatus">{patient?.rpmconsent === true ? "Active" : "In-Active"}</span></small> 
                     <hr />
                     {minutesCategory === 'RPM' ? <RPMMinutesProgress count={count} totalTime={totalTime} /> 
                     : 

@@ -34,10 +34,10 @@ const AddTimeManually = ({hrId, patientId}) => {
         // duration in minutes
         var minutes = parseInt(duration.asMinutes()) % 60;
 
-        var confirmation = confirm(`${minutes} mins would be added to patient profile, Ok ?`);
+        var confirmation = window.confirm(`${minutes} mins would be added to patient profile, Ok ?`);
             if(confirmation == true){
                 if(minutes < 0) {
-                    alert('Invalid minutes cannot be added.');
+                    window.alert('Invalid minutes cannot be added.');
                     return;
                 }
                 dispatch(timeSpentOnPatient(patientId, hrId, isCCM, minutes, values));       
