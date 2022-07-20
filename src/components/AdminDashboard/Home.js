@@ -3,15 +3,15 @@ import TopBar from '../AdminDashboard/TopBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPatients, getAllLogs, getAdminStats } from '../../actions/adminActions';
 import { Link } from 'react-router-dom';
-import {Table, Badge, Image} from 'react-bootstrap';
+import {Table, Badge, Image, Spinner} from 'react-bootstrap';
 import DashboardGraphs from '../AdminDashboard/DashboardGraphs';
-const moment = require('moment-timezone');
 import hrIcon from '../../assets/Images/network.png';
 import doctorIcon from '../../assets/Images/doctorIcon.png';
 import patientIcon from '../../assets/Images/patientIcon.png';
 import heartIcon from '../../assets/Images/heart.png';
 import verifiedIcon from "../../assets/Images/verified-user.png";
 import banIcon from "../../assets/Images/ban-user.png";
+const moment = require('moment-timezone');
 
 const Home = () => {
     const dispatch = useDispatch();

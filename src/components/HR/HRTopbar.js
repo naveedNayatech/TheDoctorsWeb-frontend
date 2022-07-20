@@ -4,10 +4,10 @@ import { hrLogout } from '../../actions/authActions';
 import { getHRNotifications, timeSpentOnPatientAuto} from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Alert } from 'react-bootstrap';
-const moment = require('moment-timezone');
 import { Modal, Button } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import {useAlert} from 'react-alert';
+const moment = require('moment-timezone');
 
 const TopBar = ({displayTimer, patientid}) => {
     

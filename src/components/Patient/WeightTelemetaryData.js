@@ -5,10 +5,9 @@ import bmiImg from '../../assets/Images/bmi.png';
 import { Image, Badge } from 'react-bootstrap';
 import { commentOnReading, commentOnReadingByStaff } from '../../actions/HRActions';
 import { useSelector, useDispatch } from 'react-redux';
-const moment = require('moment-timezone');
 import patientProfileImg from '../../assets/Images/doctorIcon.png';
 import { useAlert } from 'react-alert';
-
+const moment = require('moment-timezone');
 
 const WeightTelemetaryData = ({props, healthData, isAdmin}) => {
 

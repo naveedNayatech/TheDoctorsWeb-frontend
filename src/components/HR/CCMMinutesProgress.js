@@ -31,7 +31,7 @@ const CCMMinutesProgress = ({totalTimeinCCM}) => {
             <ProgressBar min="41" max="60" variant='danger' label={((totalTimeinCCM / 60) * 100).toFixed() + "%"} now={totalTimeinCCM} />
         </> : totalTimeinCCM >= 61 ? <>
             <small><b>99439 : </b> 60 / 60 mins</small>
-            <ProgressBar variant='danger' label="100%" />
+            <ProgressBar variant='danger' min="41" max="60" now="60" label="100%" />
         </> : <>
         <small><b>99487  : </b> 0 / 60 mins</small>
             <ProgressBar variant='danger' now="0" />

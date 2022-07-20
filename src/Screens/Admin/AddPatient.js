@@ -90,9 +90,9 @@ const AddPatient = (props) => {
         optionsForHr.push({ value: hr?._id, label: [hr?.firstname, hr?.lastname].join(" ") })
     ))
     
-    const childToParent = () => {
-        console.log('Helloo' + value);
-    }
+    // const childToParent = () => {
+    //     console.log('Helloo' + value);
+    // }
 
 
     return <Fragment>
